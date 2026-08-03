@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aula 02 de Inteligência Artificial Aplicada: fundamentos, evolução, agentes, tipos de problemas, aplicações, limites, riscos e uso crítico de IA generativa.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Aula 02 — Inteligência Artificial Aplicada</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #647087;
+      --line: #dfe5ef;
+      --soft: #f4f7fb;
+      --paper: #ffffff;
+      --navy: #0f172a;
+      --blue: #3157d5;
+      --blue-soft: #edf2ff;
+      --violet: #7357d8;
+      --violet-soft: #f2efff;
+      --teal: #17857b;
+      --teal-soft: #eaf8f6;
+      --amber: #b66a07;
+      --amber-soft: #fff7e8;
+      --rose: #b23b58;
+      --rose-soft: #fff0f4;
+      --radius: 22px;
+      --shadow: 0 18px 48px rgba(35, 50, 78, .09);
+      --content: 1160px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+    button, input, textarea { font: inherit; }
+    a { color: inherit; }
+    img, svg { max-width: 100%; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { line-height: 1.15; letter-spacing: -.025em; }
+    h1 { font-size: clamp(2.6rem, 6vw, 5.8rem); max-width: 12ch; margin-bottom: 1.2rem; }
+    h2 { font-size: clamp(2rem, 4vw, 3.55rem); margin-bottom: 1rem; }
+    h3 { font-size: 1.18rem; }
+    p { color: var(--muted); }
+
+    .skip-link {
+      position: fixed; left: 12px; top: -60px; z-index: 1000;
+      background: white; padding: .7rem 1rem; border-radius: 10px; box-shadow: var(--shadow);
+    }
+    .skip-link:focus { top: 12px; }
+
+    .progress {
+      position: fixed; inset: 0 auto auto 0; height: 4px; width: 0;
+      z-index: 999; background: linear-gradient(90deg, var(--blue), var(--violet), var(--teal));
+    }
+
+    .container { width: min(var(--content), calc(100% - 40px)); margin-inline: auto; }
+    .section { padding: 92px 0; scroll-margin-top: 90px; }
+    .section-soft { background: var(--soft); }
+    .section-dark { background: var(--navy); color: white; }
+    .section-dark p { color: #b9c3d7; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem;
+      margin-bottom: 1rem; color: var(--blue); font-size: .78rem;
+      font-weight: 800; letter-spacing: .13em; text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 2px; background: currentColor; border-radius: 999px; }
+    .section-dark .eyebrow { color: #92a9ff; }
+
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(255,255,255,.88);
+      border-bottom: 1px solid rgba(223,229,239,.85);
+    }
+    .nav {
+      min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .brand { text-decoration: none; display: flex; align-items: center; gap: .8rem; font-weight: 800; }
+    .brand-mark {
+      display: grid; place-items: center; width: 40px; height: 40px; border-radius: 13px;
+      color: white; background: linear-gradient(145deg, var(--blue), var(--violet)); box-shadow: 0 10px 24px rgba(49,87,213,.24);
+      font-size: .92rem;
+    }
+    .brand small { display: block; font-size: .68rem; color: var(--muted); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .main-nav a.active { color: var(--blue); }
+
+    .hero {
+      position: relative; overflow: hidden; padding: 92px 0 76px;
+      background:
+        radial-gradient(circle at 87% 20%, rgba(115,87,216,.14), transparent 27%),
+        radial-gradient(circle at 75% 75%, rgba(23,133,123,.12), transparent 22%),
+        linear-gradient(180deg, #fbfcff 0%, #fff 100%);
+    }
+    .hero::after {
+      content: ""; position: absolute; width: 520px; height: 520px; right: -250px; top: -180px;
+      border: 1px solid rgba(49,87,213,.13); border-radius: 50%; box-shadow: 0 0 0 70px rgba(49,87,213,.025), 0 0 0 140px rgba(115,87,216,.018);
+    }
+    .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr); align-items: end; gap: 52px; }
+    .hero-lead { font-size: clamp(1.1rem, 2vw, 1.35rem); max-width: 680px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      min-height: 48px; padding: .8rem 1.15rem; border-radius: 13px; text-decoration: none; font-weight: 800; border: 1px solid transparent;
+    }
+    .button-primary { background: var(--navy); color: white; box-shadow: 0 12px 28px rgba(15,23,42,.18); }
+    .button-secondary { background: white; border-color: var(--line); color: var(--ink); }
+    .guiding-card {
+      background: rgba(255,255,255,.9); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow);
+    }
+    .guiding-card span { display: block; color: var(--blue); font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; margin-bottom: .8rem; }
+    .guiding-card blockquote { margin: 0; font-size: 1.2rem; line-height: 1.45; font-weight: 750; }
+
+    .section-heading { max-width: 760px; margin-bottom: 2.4rem; }
+    .section-heading p { font-size: 1.05rem; }
+    .split-heading { max-width: none; display: grid; grid-template-columns: 1fr .75fr; gap: 48px; align-items: end; }
+    .split-heading > p { margin-bottom: 1rem; }
+
+    .overview-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 22px; }
+    .card {
+      background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; box-shadow: 0 12px 32px rgba(35,50,78,.055);
+    }
+    .card h3 { margin-bottom: .65rem; }
+    .topics-card { grid-row: span 2; }
+    .topic-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: 1.2rem; }
+    .topic-list div { padding: .9rem 1rem; border-radius: 14px; background: var(--soft); font-weight: 750; }
+    .topic-list div:last-child { grid-column: span 2; }
+    .competency { border-left: 4px solid var(--blue); }
+    .competency.c13 { border-left-color: var(--violet); }
+    .skill { display: grid; grid-template-columns: 48px 1fr; gap: .7rem; align-items: start; margin-top: .9rem; }
+    .skill strong { display: grid; place-items: center; min-height: 38px; border-radius: 11px; background: var(--blue-soft); color: var(--blue); }
+    .c13 .skill strong { background: var(--violet-soft); color: var(--violet); }
+    .skill span { color: var(--muted); }
+
+    .journey { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; counter-reset: journey; }
+    .journey a {
+      counter-increment: journey; position: relative; min-height: 142px; padding: 1rem; text-decoration: none;
+      border: 1px solid var(--line); background: white; border-radius: 17px; transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .journey a::before { content: counter(journey, decimal-leading-zero); display: block; color: var(--blue); font-weight: 850; font-size: .74rem; letter-spacing: .08em; margin-bottom: 2rem; }
+    .journey a:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .journey strong { display: block; font-size: .97rem; line-height: 1.3; }
+
+    .warmup {
+      display: grid; grid-template-columns: .75fr 1.25fr; gap: 28px; align-items: stretch;
+      background: linear-gradient(135deg, var(--navy), #172554); border-radius: 28px; padding: 2rem; color: white;
+    }
+    .warmup p { color: #cbd5e1; }
+    .question-cloud { display: grid; gap: .75rem; }
+    .question-cloud div { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); padding: 1rem 1.1rem; border-radius: 15px; }
+
+    .concept-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .concept-card { padding: 1.35rem; border-radius: 19px; border: 1px solid var(--line); background: white; }
+    .concept-card span { display: inline-block; padding: .35rem .55rem; border-radius: 999px; color: var(--blue); background: var(--blue-soft); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+    .concept-card h3 { margin-top: 1.3rem; }
+    .concept-card.featured { border-color: #b9c7ff; box-shadow: 0 18px 44px rgba(49,87,213,.12); }
+    .mini-example { margin-top: 1rem; padding: .8rem; background: var(--soft); border-radius: 12px; font-size: .9rem; color: var(--muted); }
+
+    .history-line { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; position: relative; }
+    .history-line::before { content: ""; position: absolute; left: 7%; right: 7%; top: 19px; height: 2px; background: linear-gradient(90deg, var(--blue), var(--violet), var(--teal)); }
+    .history-item { position: relative; padding-top: 54px; }
+    .history-item::before { content: ""; position: absolute; top: 12px; left: 8px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 5px solid var(--blue); z-index: 1; }
+    .history-item:nth-child(2)::before, .history-item:nth-child(3)::before { border-color: var(--violet); }
+    .history-item:nth-child(4)::before, .history-item:nth-child(5)::before { border-color: var(--teal); }
+    .history-item small { color: var(--blue); font-weight: 850; }
+    .history-item p { font-size: .9rem; }
+
+    .inquiry {
+      margin: 34px 0; border: 1px solid #cbd6ff; background: linear-gradient(135deg, #f5f7ff, #fff); border-radius: 24px; overflow: hidden;
+      box-shadow: 0 15px 36px rgba(49,87,213,.07);
+    }
+    .inquiry-head { padding: 1.25rem 1.4rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid #dce4ff; }
+    .inquiry-kicker { display: inline-flex; align-items: center; gap: .45rem; color: var(--blue); font-size: .72rem; text-transform: uppercase; letter-spacing: .11em; font-weight: 850; }
+    .inquiry-kicker::before { content: "?"; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: white; background: var(--blue); }
+    .inquiry-head h3 { margin: .35rem 0 0; }
+    .inquiry-tag { white-space: nowrap; padding: .45rem .7rem; border-radius: 999px; background: white; border: 1px solid var(--line); color: var(--muted); font-size: .78rem; font-weight: 800; }
+    .inquiry-body { padding: 1.4rem; display: grid; grid-template-columns: .9fr 1.1fr; gap: 28px; }
+    .prompt-list { margin: 0; padding-left: 1.25rem; color: var(--muted); }
+    .prompt-list li + li { margin-top: .45rem; }
+    .worksheet { display: grid; gap: .7rem; }
+    .worksheet label { color: var(--ink); font-size: .82rem; font-weight: 800; }
+    textarea {
+      width: 100%; min-height: 92px; resize: vertical; border: 1px solid var(--line); border-radius: 13px; padding: .85rem; background: rgba(255,255,255,.9); color: var(--ink); outline: none;
+    }
+    textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(49,87,213,.09); }
+    .save-note { color: var(--muted); font-size: .76rem; }
+    details.teacher-note { margin-top: 1rem; border-top: 1px dashed #cbd6ff; padding-top: .85rem; }
+    details.teacher-note summary { cursor: pointer; color: var(--blue); font-weight: 800; }
+    details.teacher-note p { margin: .8rem 0 0; }
+
+    .agent-layout { display: grid; grid-template-columns: .9fr 1.1fr; gap: 42px; align-items: center; }
+    .agent-flow { display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; gap: 8px; }
+    .agent-node { min-height: 110px; display: grid; place-items: center; text-align: center; padding: 1rem; background: white; border: 1px solid var(--line); border-radius: 18px; font-weight: 850; }
+    .agent-node.core { color: white; background: linear-gradient(145deg, var(--blue), var(--violet)); border: 0; box-shadow: 0 16px 34px rgba(49,87,213,.22); }
+    .agent-arrow { text-align: center; color: var(--blue); font-size: 1.3rem; }
+    .agent-loop { grid-column: 1 / -1; text-align: center; padding: .65rem; color: var(--muted); font-size: .86rem; }
+    .clean-list { list-style: none; padding: 0; margin: 1.3rem 0 0; }
+    .clean-list li { position: relative; padding-left: 1.55rem; margin: .55rem 0; color: var(--muted); }
+    .clean-list li::before { content: ""; position: absolute; left: 0; top: .65em; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
+
+    .problem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+    .problem-card { min-height: 185px; padding: 1.2rem; background: white; border: 1px solid var(--line); border-radius: 18px; }
+    .problem-card .icon { font-size: 1.45rem; }
+    .problem-card small { display: block; color: var(--blue); font-weight: 850; letter-spacing: .06em; text-transform: uppercase; margin: .75rem 0 .45rem; }
+    .problem-card p { font-size: .9rem; }
+
+    .applications { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .application-card { padding: 1.25rem; border-radius: 18px; background: var(--navy); color: white; min-height: 190px; }
+    .application-card p { color: #b9c3d7; font-size: .92rem; }
+    .application-card span { color: #9bb0ff; font-weight: 800; font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
+
+    .decision-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .decision-card { padding: 1.4rem; border-radius: 20px; border: 1px solid var(--line); background: white; }
+    .decision-card.good { border-top: 5px solid var(--teal); }
+    .decision-card.alert { border-top: 5px solid var(--amber); }
+    .decision-card ul { margin: 1rem 0 0; padding-left: 1.2rem; color: var(--muted); }
+    .decision-card li + li { margin-top: .45rem; }
+
+    .risk-board { display: grid; grid-template-columns: .9fr 1.1fr; gap: 22px; }
+    .risk-column { border-radius: 22px; padding: 1.4rem; }
+    .risk-column.technical { background: var(--amber-soft); border: 1px solid #f2d39c; }
+    .risk-column.impact { background: var(--rose-soft); border: 1px solid #f2c2cd; }
+    .risk-tags { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1rem; }
+    .risk-tags span { background: white; border: 1px solid rgba(0,0,0,.08); border-radius: 999px; padding: .45rem .7rem; font-size: .82rem; font-weight: 750; }
+    .big-question { margin-top: 24px; padding: 1.3rem 1.5rem; border-radius: 18px; background: var(--navy); color: white; font-size: 1.25rem; font-weight: 750; text-align: center; }
+
+    .protocol { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; counter-reset: protocol; }
+    .protocol article { counter-increment: protocol; padding: 1.25rem; border: 1px solid rgba(255,255,255,.14); border-radius: 18px; background: rgba(255,255,255,.055); }
+    .protocol article::before { content: counter(protocol, decimal-leading-zero); display: block; color: #9bb0ff; font-weight: 850; font-size: .75rem; margin-bottom: 2rem; }
+    .protocol h3 { color: white; }
+    .protocol p { font-size: .88rem; }
+
+    .closing-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 24px; }
+    .summary-card { padding: 1.6rem; border-radius: 22px; background: var(--blue-soft); border: 1px solid #cbd6ff; }
+    .summary-card p { color: var(--ink); font-size: 1.08rem; }
+    .exit-card { padding: 1.6rem; border-radius: 22px; background: white; border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .sentence-starters { display: grid; gap: .75rem; margin-top: 1.2rem; }
+    .sentence-starters div { padding: .85rem 1rem; background: var(--soft); border-radius: 13px; color: var(--muted); }
+
+    .footer { padding: 36px 0; border-top: 1px solid var(--line); }
+    .footer-wrap { display: flex; justify-content: space-between; gap: 1rem; align-items: center; color: var(--muted); font-size: .86rem; }
+    .top-link { text-decoration: none; color: var(--blue); font-weight: 800; }
+
+    .note-banner { padding: .85rem 1rem; border: 1px solid var(--line); border-radius: 14px; background: white; color: var(--muted); font-size: .87rem; }
+
+    body.theme-dark {
+      --ink: #eef4ff;
+      --muted: #aab7cc;
+      --line: #2a3750;
+      --soft: #0d1422;
+      --paper: #101725;
+      --navy: #070b14;
+      --blue: #84a2ff;
+      --blue-soft: #111a2b;
+      --violet: #a994ff;
+      --violet-soft: #19162c;
+      --teal: #43d0c8;
+      --teal-soft: #0f2b2a;
+      --amber: #f4b45f;
+      --amber-soft: #2b2113;
+      --rose: #ff91aa;
+      --rose-soft: #2d1620;
+      --shadow: 0 18px 48px rgba(0, 0, 0, .32);
+    }
+    body.theme-dark .site-header {
+      background: rgba(16, 23, 37, .92);
+      border-bottom-color: rgba(42, 55, 80, .9);
+    }
+    body.theme-dark .hero {
+      background:
+        radial-gradient(circle at 87% 20%, rgba(169,148,255,.16), transparent 27%),
+        radial-gradient(circle at 75% 75%, rgba(67,208,200,.10), transparent 22%),
+        var(--paper);
+    }
+    body.theme-dark .guiding-card,
+    body.theme-dark .card,
+    body.theme-dark .journey a,
+    body.theme-dark .concept-card,
+    body.theme-dark .inquiry,
+    body.theme-dark .agent-node,
+    body.theme-dark .problem-card,
+    body.theme-dark .decision-card,
+    body.theme-dark .exit-card,
+    body.theme-dark .note-banner,
+    body.theme-dark textarea,
+    body.theme-dark .risk-tags span {
+      background: #172033;
+      border-color: var(--line);
+      color: var(--ink);
+    }
+    body.theme-dark .topic-list div,
+    body.theme-dark .mini-example,
+    body.theme-dark .sentence-starters div,
+    body.theme-dark .inquiry-tag,
+    body.theme-dark .summary-card {
+      background: #111a2b;
+      border-color: var(--line);
+      color: var(--muted);
+    }
+    body.theme-dark .button-secondary {
+      background: #172033;
+      border-color: var(--line);
+      color: var(--ink);
+    }
+    body.theme-dark .button-primary {
+      background: var(--blue);
+      color: #07101f;
+    }
+    body.theme-dark .skill strong,
+    body.theme-dark .c13 .skill strong {
+      background: #111a2b;
+      color: var(--blue);
+    }
+    body.theme-dark .summary-card p,
+    body.theme-dark .worksheet label {
+      color: var(--ink);
+    }
+    body.theme-dark .warmup,
+    body.theme-dark .application-card,
+    body.theme-dark .big-question {
+      background: #070b14;
+    }
+    body.theme-dark .risk-column.technical,
+    body.theme-dark .risk-column.impact {
+      background: #172033;
+      border-color: var(--line);
+    }
+    body.theme-dark .agent-node.core {
+      color: #07101f;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid, .overview-grid, .split-heading, .warmup, .inquiry-body, .agent-layout, .risk-board, .closing-grid { grid-template-columns: 1fr; }
+      .journey { grid-template-columns: repeat(3, 1fr); }
+      .concept-grid, .problem-grid { grid-template-columns: repeat(2, 1fr); }
+      .history-line { grid-template-columns: 1fr; }
+      .history-line::before { left: 15px; top: 12px; bottom: 12px; width: 2px; height: auto; }
+      .history-item { padding: 0 0 0 48px; }
+      .history-item::before { top: 3px; left: 8px; }
+      .applications { grid-template-columns: repeat(2, 1fr); }
+      .protocol { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 28px, var(--content)); }
+      .section { padding: 70px 0; }
+      .hero { padding-top: 68px; }
+      .journey, .concept-grid, .problem-grid, .applications, .decision-grid, .protocol, .topic-list { grid-template-columns: 1fr; }
+      .topic-list div:last-child { grid-column: auto; }
+      .agent-flow { grid-template-columns: 1fr; }
+      .agent-arrow { transform: rotate(90deg); }
+      .footer-wrap { align-items: flex-start; flex-direction: column; }
+      .inquiry-head { align-items: flex-start; flex-direction: column; }
+      .inquiry-tag { white-space: normal; }
+    }
+
+    @media print {
+      .site-header, .progress, .hero-actions, .save-note, .nav-toggle, .theme-toggle { display: none !important; }
+      .section { padding: 32px 0; break-inside: avoid; }
+      .hero { padding: 35px 0; }
+      .card, .inquiry, .concept-card, .problem-card, .decision-card, .exit-card { box-shadow: none; }
+      body { font-size: 11pt; }
+    }
+  </style>
+</head>
+<body class="lesson-page">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="IA Aplicada — página principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span><strong>IA Aplicada</strong><small>Aula 02</small></span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">
+        <span class="sr-only">Abrir menu</span><span></span><span></span><span></span>
+      </button>
+
+      <nav id="menu-principal" class="main-nav" aria-label="Navegação da aula">
+        <a href="index.html">Página principal</a>
+        <a href="curso.html">Visão geral</a>
+        <a href="#visao">Visão</a>
+        <a href="#fundamentos">Fundamentos</a>
+        <a href="#agentes">Agentes</a>
+        <a href="#problemas">Problemas</a>
+        <a href="#aplicacoes">Aplicações</a>
+        <a href="#riscos">Riscos</a>
+        <a class="nav-highlight" href="#ia-first">IA-First</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-text">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Aula 02 · Primeiro encontro efetivo</p>
+          <h1>O que realmente é Inteligência Artificial?</h1>
+          <p class="hero-lead">Nem toda automação é IA. Nem toda IA aprende. E nem todo problema precisa de uma solução inteligente.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#visao">Começar a aula</a>
+            <a class="button button-secondary" href="#percurso">Ver percurso</a>
+          </div>
+        </div>
+        <aside class="guiding-card">
+          <span>Pergunta orientadora</span>
+          <blockquote>O que faz uma solução ser considerada inteligência artificial — e quando a IA realmente é necessária?</blockquote>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="visao">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Visão da aula</p>
+          <h2>O que vamos explorar</h2>
+          <p>A aula apresenta o campo de IA em perspectiva ampla e inicia os critérios que serão usados ao longo da disciplina para analisar tecnologias, problemas, riscos e decisões.</p>
+        </div>
+
+        <div class="overview-grid">
+          <article class="card topics-card">
+            <h3>Conteúdo programático</h3>
+            <div class="topic-list">
+              <div>Fundamentos e evolução da IA</div>
+              <div>Agentes e sistemas inteligentes</div>
+              <div>Tipos de problemas</div>
+              <div>Aplicações contemporâneas</div>
+              <div>Limites técnicos e riscos</div>
+              <div>Uso crítico de IA generativa</div>
+            </div>
+          </article>
+
+          <article class="card competency">
+            <h3>C3 — Analisar e selecionar tecnologias</h3>
+            <div class="skill"><strong>H9</strong><span>Identificar necessidades tecnológicas de problemas passíveis de solução por IA.</span></div>
+            <div class="skill"><strong>H10</strong><span>Comparar vantagens e limitações de diferentes abordagens.</span></div>
+            <div class="skill"><strong>H11</strong><span>Reconhecer tendências tecnológicas emergentes.</span></div>
+          </article>
+
+          <article class="card competency c13">
+            <h3>C13 — Analisar cenários complexos e inovar com responsabilidade</h3>
+            <div class="skill"><strong>H43</strong><span>Enfrentar cenários complexos com autonomia diante dos avanços tecnológicos.</span></div>
+            <div class="skill"><strong>H45</strong><span>Avaliar a pertinência, os riscos e os impactos da adoção de IA.</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="percurso">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow">Percurso flexível</p>
+            <h2>Uma aula guiada por investigação</h2>
+          </div>
+          <p>A página alterna explicações curtas, pesquisas orientadas e conversas coletivas. O ritmo pode ser ajustado conforme as perguntas e descobertas da turma.</p>
+        </div>
+        <div class="journey">
+          <a href="#aquecimento"><strong>Concepções iniciais</strong></a>
+          <a href="#fundamentos"><strong>Fundamentos e evolução</strong></a>
+          <a href="#agentes"><strong>Agentes inteligentes</strong></a>
+          <a href="#problemas"><strong>Tipos de problemas</strong></a>
+          <a href="#aplicacoes"><strong>Aplicações atuais</strong></a>
+          <a href="#riscos"><strong>Limites, riscos e IA-First</strong></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="aquecimento">
+      <div class="container">
+        <div class="warmup">
+          <div>
+            <p class="eyebrow" style="color:#9bb0ff">Antes de definir</p>
+            <h2>O que a turma já chama de IA?</h2>
+            <p>Comece pelas concepções existentes. Registre exemplos, critérios e dúvidas no quadro. Não corrija tudo imediatamente: parte da aula será usada para revisar essas respostas.</p>
+          </div>
+          <div class="question-cloud">
+            <div>Qual foi a última aplicação de IA que você utilizou?</div>
+            <div>Todo sistema automatizado pode ser considerado inteligente?</div>
+            <div>Um sistema precisa aprender para ser considerado IA?</div>
+            <div>ChatGPT representa toda a área de Inteligência Artificial?</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="fundamentos">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Fundamentos</p>
+          <h2>IA é um campo, não uma ferramenta específica</h2>
+          <p>A Inteligência Artificial reúne diferentes métodos para executar tarefas relacionadas a busca, raciocínio, representação de conhecimento, percepção, aprendizagem, tomada de decisão, otimização e geração.</p>
+        </div>
+
+        <div class="concept-grid">
+          <article class="concept-card">
+            <span>Automação</span>
+            <h3>Passos previamente definidos</h3>
+            <p>Executa uma sequência programada, geralmente determinística.</p>
+            <div class="mini-example"><strong>Exemplo:</strong> renomear arquivos segundo um padrão fixo.</div>
+          </article>
+          <article class="concept-card">
+            <span>Regras</span>
+            <h3>Condições explicitamente codificadas</h3>
+            <p>Aplica decisões do tipo “se–então”, sem necessariamente aprender.</p>
+            <div class="mini-example"><strong>Exemplo:</strong> bloquear cadastro com campo obrigatório vazio.</div>
+          </article>
+          <article class="concept-card featured">
+            <span>Inteligência Artificial</span>
+            <h3>Busca, inferência, aprendizagem ou otimização</h3>
+            <p>Trabalha com problemas complexos, incertos ou difíceis de expressar completamente por regras fixas.</p>
+            <div class="mini-example"><strong>Exemplo:</strong> classificar spam a partir de padrões aprendidos.</div>
+          </article>
+          <article class="concept-card">
+            <span>Híbrido</span>
+            <h3>Combinação de mecanismos</h3>
+            <p>Integra automação, regras, modelos de IA e revisão humana.</p>
+            <div class="mini-example"><strong>Exemplo:</strong> pontuação de fraude seguida por regras de bloqueio.</div>
+          </article>
+        </div>
+
+        <div style="height:48px"></div>
+        <div class="section-heading">
+          <p class="eyebrow">Evolução da área</p>
+          <h2>De regras e símbolos a modelos generativos</h2>
+          <p>A evolução não é uma linha de substituição simples. Abordagens diferentes continuam úteis e frequentemente aparecem combinadas.</p>
+        </div>
+        <div class="history-line">
+          <article class="history-item"><small>Fundação</small><h3>IA simbólica</h3><p>Raciocínio, lógica, jogos, busca e resolução formal de problemas.</p></article>
+          <article class="history-item"><small>Conhecimento</small><h3>Sistemas especialistas</h3><p>Fatos, regras e mecanismos de inferência em domínios específicos.</p></article>
+          <article class="history-item"><small>Dados</small><h3>Aprendizado de máquina</h3><p>Modelos estatísticos aprendem padrões para classificar e prever.</p></article>
+          <article class="history-item"><small>Escala</small><h3>Redes profundas</h3><p>Avanços em visão, linguagem, voz e reconhecimento de padrões.</p></article>
+          <article class="history-item"><small>Interação</small><h3>IA generativa e agentes</h3><p>Produção de conteúdo, uso de ferramentas e fluxos mais autônomos.</p></article>
+        </div>
+
+        <article class="inquiry">
+          <div class="inquiry-head">
+            <div><span class="inquiry-kicker">Parada investigativa</span><h3>Investigue um momento da evolução da IA</h3></div>
+            <span class="inquiry-tag">Pesquisa em pequenos grupos</span>
+          </div>
+          <div class="inquiry-body">
+            <div>
+              <p>Escolha uma abordagem ou marco: IA simbólica, sistemas especialistas, aprendizado de máquina, redes neurais profundas, IA generativa ou agentes.</p>
+              <ol class="prompt-list">
+                <li>Que problema essa abordagem procura resolver?</li>
+                <li>Como ela funciona em termos gerais?</li>
+                <li>Qual foi sua principal contribuição?</li>
+                <li>Que limitações possui?</li>
+                <li>Onde ainda é usada?</li>
+              </ol>
+              <details class="teacher-note">
+                <summary>Pista para a conversa coletiva</summary>
+                <p>Organize as descobertas como uma linha do tempo e destaque que avanços recentes não tornam automaticamente as abordagens anteriores inúteis.</p>
+              </details>
+            </div>
+            <div class="worksheet">
+              <label for="pesquisa-historia">Síntese do grupo</label>
+              <textarea id="pesquisa-historia" data-save="historia" placeholder="Registre a abordagem, o avanço, uma limitação e uma dúvida para compartilhar..."></textarea>
+              <span class="save-note">O texto fica salvo somente neste navegador.</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="agentes">
+      <div class="container">
+        <div class="agent-layout">
+          <div>
+            <p class="eyebrow">Agentes e sistemas inteligentes</p>
+            <h2>Perceber, decidir e agir</h2>
+            <p>Um agente recebe informações do ambiente, processa a situação e seleciona ações orientadas por um objetivo ou critério de desempenho.</p>
+            <ul class="clean-list">
+              <li><strong>Ambiente:</strong> onde o sistema opera.</li>
+              <li><strong>Percepções:</strong> dados ou sinais recebidos.</li>
+              <li><strong>Estado ou conhecimento:</strong> representação da situação.</li>
+              <li><strong>Objetivo:</strong> resultado desejado.</li>
+              <li><strong>Ação:</strong> resposta produzida no ambiente.</li>
+            </ul>
+          </div>
+          <div class="agent-flow" aria-label="Fluxo simplificado de um agente inteligente">
+            <div class="agent-node">Ambiente</div><div class="agent-arrow">→</div>
+            <div class="agent-node">Percepção</div><div class="agent-arrow">→</div>
+            <div class="agent-node core">Agente</div><div class="agent-arrow">→</div>
+            <div class="agent-node">Ação</div>
+            <div class="agent-loop">O resultado altera o ambiente e produz novas percepções.</div>
+          </div>
+        </div>
+
+        <article class="inquiry">
+          <div class="inquiry-head">
+            <div><span class="inquiry-kicker">Parada investigativa</span><h3>Desmonte um sistema inteligente</h3></div>
+            <span class="inquiry-tag">Análise de um caso real</span>
+          </div>
+          <div class="inquiry-body">
+            <div>
+              <p>Escolha um sistema: GPS, aspirador robô, recomendador, detector de fraude, assistente generativo, personagem de jogo ou controle industrial.</p>
+              <ol class="prompt-list">
+                <li>Qual é seu objetivo?</li>
+                <li>Em qual ambiente opera?</li>
+                <li>Quais entradas ou percepções recebe?</li>
+                <li>Que ações ou respostas produz?</li>
+                <li>Como seu desempenho pode ser avaliado?</li>
+                <li>Ele aprende, aplica regras ou combina mecanismos?</li>
+              </ol>
+              <details class="teacher-note">
+                <summary>Pergunta para aprofundar</summary>
+                <p>Um sistema precisa aprender para ser considerado IA? Use as respostas para conectar agentes à busca, inferência, planejamento, regras e aprendizado.</p>
+              </details>
+            </div>
+            <div class="worksheet">
+              <label for="pesquisa-agente">Mapa do sistema</label>
+              <textarea id="pesquisa-agente" data-save="agente" placeholder="Objetivo, ambiente, percepções, ações, avaliação e possíveis falhas..."></textarea>
+              <span class="save-note">O texto fica salvo somente neste navegador.</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="problemas">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Tipos de problemas</p>
+          <h2>Diferentes problemas exigem diferentes abordagens</h2>
+          <p>O objetivo nesta aula não é aprofundar cada técnica, mas reconhecer a estrutura do problema antes de escolher uma tecnologia.</p>
+        </div>
+        <div class="problem-grid">
+          <article class="problem-card"><div class="icon">🧭</div><small>Busca</small><h3>Encontrar um caminho ou sequência</h3><p>Rotas, jogos, planejamento e exploração de possibilidades.</p></article>
+          <article class="problem-card"><div class="icon">🏷️</div><small>Classificação</small><h3>Escolher uma categoria</h3><p>Spam, fraude, diagnóstico, malware e análise documental.</p></article>
+          <article class="problem-card"><div class="icon">📈</div><small>Previsão</small><h3>Estimar um valor ou evento</h3><p>Demanda, falha, risco, custo ou comportamento futuro.</p></article>
+          <article class="problem-card"><div class="icon">🎯</div><small>Recomendação</small><h3>Selecionar opções relevantes</h3><p>Conteúdo, produto, ação, recurso ou apoio à decisão.</p></article>
+          <article class="problem-card"><div class="icon">⚙️</div><small>Otimização</small><h3>Comparar muitas configurações</h3><p>Escalas, parâmetros, alocação e projeto de soluções.</p></article>
+          <article class="problem-card"><div class="icon">🧠</div><small>Inferência</small><h3>Concluir a partir de conhecimento</h3><p>Fatos, regras, evidências e relações entre conceitos.</p></article>
+          <article class="problem-card"><div class="icon">✨</div><small>Geração</small><h3>Produzir um novo artefato</h3><p>Texto, imagem, código, áudio, vídeo ou sínteses.</p></article>
+          <article class="problem-card"><div class="icon">🎛️</div><small>Controle</small><h3>Ajustar ações ao ambiente</h3><p>Robótica, energia, processos industriais e sistemas autônomos.</p></article>
+        </div>
+
+        <article class="inquiry">
+          <div class="inquiry-head">
+            <div><span class="inquiry-kicker">Parada para decidir</span><h3>Este problema realmente precisa de IA?</h3></div>
+            <span class="inquiry-tag">Comparação de alternativas</span>
+          </div>
+          <div class="inquiry-body">
+            <div>
+              <p>Escolha dois cenários e compare uma solução de IA com uma alternativa mais simples.</p>
+              <ol class="prompt-list">
+                <li>Enviar lembrete antes do vencimento de uma fatura.</li>
+                <li>Recomendar conteúdos personalizados.</li>
+                <li>Impedir cadastro com campo obrigatório vazio.</li>
+                <li>Prever falhas em uma máquina.</li>
+                <li>Organizar rotas de entrega.</li>
+                <li>Identificar estudantes com risco de evasão.</li>
+              </ol>
+              <details class="teacher-note">
+                <summary>Critérios para orientar a conversa</summary>
+                <p>Complexidade, regras claras, disponibilidade de dados, adaptação, custo do erro, explicabilidade, privacidade, impacto sobre pessoas e possibilidade de validação.</p>
+              </details>
+            </div>
+            <div class="worksheet">
+              <label for="decisao-ia">Decisão fundamentada</label>
+              <textarea id="decisao-ia" data-save="decisao" placeholder="Recomendamos... porque... Uma alternativa mais simples seria... O principal risco é... A validação poderia ser feita por..."></textarea>
+              <span class="save-note">O texto fica salvo somente neste navegador.</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="aplicacoes">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Aplicações contemporâneas</p>
+          <h2>Onde a IA aparece hoje?</h2>
+          <p>As aplicações devem ser analisadas pelo problema que resolvem, pelo mecanismo utilizado e pelos efeitos que produzem — não apenas pelo rótulo “inteligente”.</p>
+        </div>
+        <div class="applications">
+          <article class="application-card"><span>Engenharia de Software</span><h3>Código, testes e documentação</h3><p>Geração, revisão, classificação de defeitos, análise de requisitos e apoio ao desenvolvimento.</p></article>
+          <article class="application-card"><span>Indústria</span><h3>Manutenção e otimização</h3><p>Previsão de falhas, inspeção visual, controle de qualidade e planejamento de produção.</p></article>
+          <article class="application-card"><span>Saúde</span><h3>Apoio à decisão</h3><p>Análise de imagens, estratificação de risco, triagem e descoberta de padrões.</p></article>
+          <article class="application-card"><span>Educação</span><h3>Personalização e acompanhamento</h3><p>Recomendação de conteúdo, tutores, análise de aprendizagem e geração de materiais.</p></article>
+          <article class="application-card"><span>Segurança</span><h3>Detecção de ameaças</h3><p>Fraude, anomalias, comportamento suspeito, classificação de malware e priorização de alertas.</p></article>
+          <article class="application-card"><span>Mídia e criação</span><h3>Conteúdo generativo</h3><p>Texto, imagem, áudio, vídeo, design, síntese, tradução e prototipação.</p></article>
+        </div>
+
+        <article class="inquiry" style="color:var(--ink); margin-top:36px">
+          <div class="inquiry-head">
+            <div><span class="inquiry-kicker">Parada investigativa</span><h3>Mapeie uma aplicação contemporânea</h3></div>
+            <span class="inquiry-tag">Tendências e impacto</span>
+          </div>
+          <div class="inquiry-body">
+            <div>
+              <p>Escolha uma aplicação atual de IA em uma área de interesse do grupo.</p>
+              <ol class="prompt-list">
+                <li>Qual problema é resolvido?</li>
+                <li>Que tipo de problema de IA está envolvido?</li>
+                <li>Qual é o benefício esperado?</li>
+                <li>Qual é uma limitação técnica?</li>
+                <li>Quem é afetado quando o sistema acerta ou erra?</li>
+              </ol>
+              <details class="teacher-note">
+                <summary>Conexão com as competências</summary>
+                <p>A atividade mobiliza H11 ao reconhecer tendências e H43/H45 ao analisar cenários, riscos e impactos.</p>
+              </details>
+            </div>
+            <div class="worksheet">
+              <label for="aplicacao-atual">Registro da aplicação</label>
+              <textarea id="aplicacao-atual" data-save="aplicacao" placeholder="Área, problema, tipo de tarefa, benefício, limitação e impacto..."></textarea>
+              <span class="save-note">O texto fica salvo somente neste navegador.</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="riscos">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Limites técnicos e riscos</p>
+          <h2>Desempenho não é o único critério</h2>
+          <p>Uma solução tecnicamente impressionante ainda pode ser inadequada, injusta, insegura, cara ou impossível de validar no contexto real.</p>
+        </div>
+        <div class="risk-board">
+          <article class="risk-column technical">
+            <h3>Limites técnicos</h3>
+            <p>Relacionados à qualidade, estabilidade e validade do sistema.</p>
+            <div class="risk-tags">
+              <span>Dados insuficientes</span><span>Baixa generalização</span><span>Respostas inconsistentes</span><span>Sobreajuste</span><span>Custo computacional</span><span>Opacidade</span><span>Sensibilidade ao contexto</span>
+            </div>
+          </article>
+          <article class="risk-column impact">
+            <h3>Riscos e impactos</h3>
+            <p>Relacionados às pessoas, organizações e responsabilidades envolvidas.</p>
+            <div class="risk-tags">
+              <span>Viés</span><span>Discriminação</span><span>Privacidade</span><span>Segurança</span><span>Automação de decisões sensíveis</span><span>Excesso de confiança</span><span>Responsabilização</span>
+            </div>
+          </article>
+        </div>
+        <div class="big-question">Um sistema com 95% de acerto é necessariamente uma boa solução?</div>
+
+        <div style="height:42px"></div>
+        <div class="section-heading">
+          <p class="eyebrow">Decisão tecnológica</p>
+          <h2>Quando a IA faz sentido?</h2>
+        </div>
+        <div class="decision-grid">
+          <article class="decision-card good">
+            <h3>Sinais favoráveis</h3>
+            <ul>
+              <li>Existem padrões, incerteza ou muitas combinações.</li>
+              <li>Regras completas seriam difíceis de escrever.</li>
+              <li>Há dados ou conhecimento adequados.</li>
+              <li>Existe uma métrica clara de sucesso.</li>
+              <li>Os erros podem ser detectados e controlados.</li>
+            </ul>
+          </article>
+          <article class="decision-card alert">
+            <h3>Sinais de alerta</h3>
+            <ul>
+              <li>Uma regra simples já resolve o problema.</li>
+              <li>O objetivo ou a saída não estão definidos.</li>
+              <li>Os dados são inadequados ou inexistentes.</li>
+              <li>O custo do erro é alto e não há supervisão.</li>
+              <li>Não existe uma forma confiável de validar.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="ia-first">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Introdução ao uso crítico de IA generativa</p>
+          <h2>IA-First não significa aceitar a primeira resposta</h2>
+          <p>Ferramentas generativas podem apoiar investigação, escrita, programação e aprendizagem, mas suas respostas precisam ser tratadas como hipóteses que exigem análise.</p>
+        </div>
+        <div class="protocol">
+          <article><h3>Perguntar</h3><p>Definir o problema, o contexto, as restrições e o resultado esperado.</p></article>
+          <article><h3>Verificar</h3><p>Conferir conceitos, fatos, fontes, premissas e afirmações produzidas.</p></article>
+          <article><h3>Testar</h3><p>Usar casos diferentes, exemplos conhecidos e situações-limite.</p></article>
+          <article><h3>Corrigir</h3><p>Ajustar o prompt, a interpretação, o código, os dados ou a solução.</p></article>
+          <article><h3>Documentar</h3><p>Registrar o uso da ferramenta, as validações e as decisões humanas.</p></article>
+        </div>
+
+        <article class="inquiry" style="color:var(--ink); margin-top:36px">
+          <div class="inquiry-head">
+            <div><span class="inquiry-kicker">Atividade de auditoria</span><h3>Analise uma resposta de IA generativa</h3></div>
+            <span class="inquiry-tag">Perguntar · verificar · testar · corrigir</span>
+          </div>
+          <div class="inquiry-body">
+            <div>
+              <p>Use uma ferramenta autorizada com o pedido:</p>
+              <div class="note-banner"><strong>“Explique a diferença entre automação convencional, sistema baseado em regras e inteligência artificial, apresentando exemplos.”</strong></div>
+              <ol class="prompt-list" style="margin-top:1rem">
+                <li>O que está correto?</li>
+                <li>O que está genérico ou incompleto?</li>
+                <li>Há alguma afirmação que precisa ser verificada?</li>
+                <li>Os exemplos realmente sustentam as categorias?</li>
+                <li>Como a resposta pode ser corrigida?</li>
+              </ol>
+            </div>
+            <div class="worksheet">
+              <label for="auditoria">Auditoria da resposta</label>
+              <textarea id="auditoria" data-save="auditoria" placeholder="Uma afirmação adequada; uma afirmação imprecisa; uma correção; uma conclusão elaborada pelo grupo..."></textarea>
+              <span class="save-note">O texto fica salvo somente neste navegador.</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="fechamento">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Fechamento</p>
+          <h2>Retomando a pergunta inicial</h2>
+          <p>Volte às respostas registradas no início da aula e verifique quais critérios mudaram ou ficaram mais precisos.</p>
+        </div>
+        <div class="closing-grid">
+          <article class="summary-card">
+            <h3>Síntese da aula</h3>
+            <p>Inteligência Artificial é um campo amplo que reúne diferentes técnicas para resolver problemas envolvendo busca, conhecimento, incerteza, aprendizagem, otimização, percepção e geração. A escolha da IA deve ser justificada pelo problema, e não apenas pela disponibilidade ou popularidade da tecnologia.</p>
+          </article>
+          <article class="exit-card">
+            <h3>Registro final individual</h3>
+            <p>Complete as frases com um exemplo próprio.</p>
+            <div class="sentence-starters">
+              <div>Um problema que poderia utilizar IA é __________ porque __________.</div>
+              <div>Uma solução mais simples poderia ser __________.</div>
+              <div>O principal risco seria __________.</div>
+              <div>Eu validaria a solução por meio de __________.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>Inteligência Artificial Aplicada</strong>
+        <p>Engenharia de Software · Aula 02</p>
+      </div>
+      <a href="#inicio">Voltar ao início ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    const progress = document.getElementById('progress');
+    const anchors = [...document.querySelectorAll('.main-nav a[href^="#"]')];
+    const sections = anchors.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+    function updateProgress() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      if (progress) progress.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+    }
+
+    function updateActiveLink() {
+      const marker = window.scrollY + 130;
+      let active = sections[0]?.id;
+      sections.forEach(section => {
+        if (section.offsetTop <= marker) active = section.id;
+      });
+      anchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${active}`));
+    }
+
+    document.querySelectorAll('[data-save]').forEach(field => {
+      const key = `aula02:${field.dataset.save}`;
+      field.value = localStorage.getItem(key) || '';
+      field.addEventListener('input', () => localStorage.setItem(key, field.value));
+    });
+
+    updateProgress();
+    updateActiveLink();
+    window.addEventListener('scroll', () => {
+      updateProgress();
+      updateActiveLink();
+    }, { passive: true });
+  </script>
+</body>
+</html>

@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Página da disciplina Inteligência Artificial Aplicada — Engenharia de Software, 6º período, 2026/2.">
+  <title>IA Aplicada — Visão geral do curso</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="site-header" id="inicio">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="IA Aplicada — página principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span>
+          <strong>IA Aplicada</strong>
+          <small>Engenharia de Software</small>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">
+        <span class="sr-only">Abrir menu</span>
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="menu-principal" class="main-nav" aria-label="Navegação principal">
+        <a href="index.html">Página principal</a>
+        <a href="#jornada">Jornada</a>
+        <a href="#calendario">Calendário</a>
+        <a href="#conteudos">Conteúdos</a>
+        <a href="#avaliacao">Avaliação</a>
+        <a href="#desafio">Trabalho geral</a>
+        <a href="#ia-first">IA-First</a>
+        <a class="nav-highlight" href="aula-02.html">Aula 02</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-text">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero section-pad">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Engenharia de Software · 6º período · 2026/2</p>
+          <h1>Inteligência Artificial Aplicada</h1>
+          <p class="hero-lead">Da formulação de problemas à implementação, validação e defesa de soluções com inteligência artificial.</p>
+          <p class="hero-text">Nesta disciplina, você aprenderá a reconhecer problemas adequados ao uso de IA, selecionar técnicas, desenvolver experimentos, interpretar resultados e justificar decisões com responsabilidade técnica.</p>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="#jornada">Conhecer a jornada</a>
+            <a class="button button-secondary" href="aula-02.html">Ir para a Aula 02</a>
+          </div>
+
+          <dl class="course-facts" aria-label="Informações da disciplina">
+            <div><dt>Carga horária</dt><dd>80 horas</dd></div>
+            <div><dt>Teoria</dt><dd>50 horas</dd></div>
+            <div><dt>Prática</dt><dd>30 horas</dd></div>
+          </dl>
+        </div>
+
+        <div class="hero-panel" aria-label="Ciclo de aprendizagem da disciplina">
+          <div class="hero-orbit" aria-hidden="true">
+            <span>Formular</span>
+            <span>Implementar</span>
+            <span>Validar</span>
+            <span>Justificar</span>
+            <div class="hero-core">IA</div>
+          </div>
+          <p>O foco não é apenas executar uma ferramenta, mas compreender o problema, produzir evidências e defender as escolhas realizadas.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad section-soft" aria-labelledby="proposito-title">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow">Propósito</p>
+            <h2 id="proposito-title">O que você desenvolverá</h2>
+          </div>
+          <p>A disciplina articula fundamentos, resolução de problemas, experimentação computacional e avaliação crítica de soluções.</p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-number">01</span>
+            <h3>Formular</h3>
+            <p>Transformar situações reais em problemas computacionais com objetivos, entradas, saídas, restrições e critérios de sucesso.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-number">02</span>
+            <h3>Selecionar</h3>
+            <p>Comparar técnicas e escolher uma abordagem coerente com os requisitos, os dados e os limites do problema.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-number">03</span>
+            <h3>Experimentar</h3>
+            <p>Implementar soluções, testar configurações e registrar resultados de maneira organizada e reprodutível.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-number">04</span>
+            <h3>Validar</h3>
+            <p>Usar baselines, métricas e análise de erros para sustentar conclusões e reconhecer limitações.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="jornada" class="section-pad" aria-labelledby="jornada-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Visão macro</p>
+          <h2 id="jornada-title">Jornada de aprendizagem</h2>
+          <p>O semestre foi organizado como uma progressão: primeiro aprendemos a formular e representar problemas; depois estudamos técnicas; por fim, validamos e defendemos soluções.</p>
+        </div>
+
+        <figure class="media-card journey-figure">
+          <button class="image-button" type="button" data-dialog-target="dialog-infografico" aria-label="Ampliar infográfico da jornada">
+            <img src="assets/infografico.png" alt="Infográfico com os sete blocos da jornada de aprendizagem em Inteligência Artificial Aplicada e os principais momentos avaliativos.">
+          </button>
+          <figcaption>Clique na imagem para ampliar.</figcaption>
+        </figure>
+
+      </div>
+    </section>
+
+    <section id="calendario" class="section-pad section-soft" aria-labelledby="calendario-title">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow">Cronograma</p>
+            <h2 id="calendario-title">Calendário das aulas</h2>
+          </div>
+          <p>As aulas presenciais acontecem às segundas-feiras. Os sábados letivos indicados no calendário serão destinados a atividades assíncronas.</p>
+        </div>
+
+        <div class="calendar-card">
+          <div class="calendar-overview" aria-label="Resumo do calendário">
+            <div class="calendar-stat stat-primary">
+              <span>20</span>
+              <strong>aulas no semestre</strong>
+            </div>
+            <div class="calendar-stat stat-accent">
+              <span>4</span>
+              <strong>sábados letivos assíncronos</strong>
+            </div>
+            <div class="calendar-stat stat-event">
+              <span>1</span>
+              <strong>evento institucional</strong>
+            </div>
+          </div>
+
+          <div class="calendar-legend" aria-label="Legenda do calendário">
+            <span><i class="legend-dot legend-presencial" aria-hidden="true"></i> Presencial</span>
+            <span><i class="legend-dot legend-assincrona" aria-hidden="true"></i> Sábado letivo · atividade assíncrona</span>
+            <span><i class="legend-dot legend-evento" aria-hidden="true"></i> Evento institucional</span>
+          </div>
+
+          <div class="calendar-board" aria-label="Calendário das aulas da disciplina">
+            <section class="month-calendar" aria-labelledby="mes-julho">
+              <h3 id="mes-julho">Julho</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell has-event event-day"><time datetime="2026-07-27">27</time><strong>Aula 01</strong><small>OPEN UniSENAI</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-07-28">28</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-07-29">29</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-07-30">30</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-07-31">31</time></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+              </div>
+            </section>
+
+            <section class="month-calendar" aria-labelledby="mes-agosto">
+              <h3 id="mes-agosto">Agosto</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-01">1</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-02">2</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-03">3</time><strong>Aula 02</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-04">4</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-05">5</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-06">6</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-07">7</time></div>
+                <div class="day-cell has-event async-day"><time datetime="2026-08-08">8</time><strong>Aula 03</strong><small>Assíncrona</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-09">9</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-10">10</time><strong>Aula 04</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-11">11</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-12">12</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-13">13</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-14">14</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-15">15</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-16">16</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-17">17</time><strong>Aula 05</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-18">18</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-19">19</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-20">20</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-21">21</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-22">22</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-23">23</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-24">24</time><strong>Aula 06</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-25">25</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-26">26</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-27">27</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-28">28</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-29">29</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-30">30</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-31">31</time><strong>Aula 07</strong><small>Presencial</small></div>
+              </div>
+            </section>
+
+            <section class="month-calendar" aria-labelledby="mes-setembro">
+              <h3 id="mes-setembro">Setembro</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-01">1</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-02">2</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-03">3</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-04">4</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-05">5</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-06">6</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-07">7</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-08">8</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-09">9</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-10">10</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-11">11</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-12">12</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-13">13</time></div>
+                <div class="day-cell has-event"><time datetime="2026-09-14">14</time><strong>Aula 08</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-15">15</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-16">16</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-17">17</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-18">18</time></div>
+                <div class="day-cell has-event async-day"><time datetime="2026-09-19">19</time><strong>Aula 09</strong><small>Assíncrona</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-20">20</time></div>
+                <div class="day-cell has-event"><time datetime="2026-09-21">21</time><strong>Aula 10</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-22">22</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-23">23</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-24">24</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-25">25</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-26">26</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-27">27</time></div>
+                <div class="day-cell has-event"><time datetime="2026-09-28">28</time><strong>Aula 11</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-29">29</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-30">30</time></div>
+              </div>
+            </section>
+
+            <section class="month-calendar" aria-labelledby="mes-outubro">
+              <h3 id="mes-outubro">Outubro</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-01">1</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-02">2</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-03">3</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-04">4</time></div>
+                <div class="day-cell has-event"><time datetime="2026-10-05">5</time><strong>Aula 12</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-06">6</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-07">7</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-08">8</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-09">9</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-10">10</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-11">11</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-12">12</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-13">13</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-14">14</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-15">15</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-16">16</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-17">17</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-18">18</time></div>
+                <div class="day-cell has-event"><time datetime="2026-10-19">19</time><strong>Aula 13</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-20">20</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-21">21</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-22">22</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-23">23</time></div>
+                <div class="day-cell has-event async-day"><time datetime="2026-10-24">24</time><strong>Aula 14</strong><small>Assíncrona</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-25">25</time></div>
+                <div class="day-cell has-event"><time datetime="2026-10-26">26</time><strong>Aula 15</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-27">27</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-28">28</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-29">29</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-30">30</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-31">31</time></div>
+              </div>
+            </section>
+
+            <section class="month-calendar" aria-labelledby="mes-novembro">
+              <h3 id="mes-novembro">Novembro</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-01">1</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-02">2</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-03">3</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-04">4</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-05">5</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-06">6</time></div>
+                <div class="day-cell has-event async-day"><time datetime="2026-11-07">7</time><strong>Aula 16</strong><small>Assíncrona</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-08">8</time></div>
+                <div class="day-cell has-event"><time datetime="2026-11-09">9</time><strong>Aula 17</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-10">10</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-11">11</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-12">12</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-13">13</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-14">14</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-15">15</time></div>
+                <div class="day-cell has-event"><time datetime="2026-11-16">16</time><strong>Aula 18</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-17">17</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-18">18</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-19">19</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-20">20</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-21">21</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-22">22</time></div>
+                <div class="day-cell has-event"><time datetime="2026-11-23">23</time><strong>Aula 19</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-24">24</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-25">25</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-26">26</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-27">27</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-28">28</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-29">29</time></div>
+                <div class="day-cell has-event"><time datetime="2026-11-30">30</time><strong>Aula 20</strong><small>Presencial</small></div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="conteudos" class="section-pad section-soft" aria-labelledby="conteudos-title">
+      <div class="container content-map-grid">
+        <div>
+          <div class="section-heading left-heading">
+            <p class="eyebrow">Visão detalhada</p>
+            <h2 id="conteudos-title">Mapa dos conteúdos</h2>
+            <p>Abra os blocos para consultar os principais conceitos de cada etapa.</p>
+          </div>
+
+          <div class="accordion-list">
+            <details open>
+              <summary>Fundamentos e formulação</summary>
+              <ul>
+                <li>Histórico e evolução da IA</li>
+                <li>Agentes e sistemas inteligentes</li>
+                <li>Tipos de problemas e limites</li>
+                <li>Espaço de estados, ações, objetivos, entradas, saídas e restrições</li>
+                <li>Critérios de sucesso e de avaliação</li>
+              </ul>
+            </details>
+            <details>
+              <summary>Métodos de busca e representação do conhecimento</summary>
+              <ul>
+                <li>Busca em largura e busca em profundidade</li>
+                <li>Estados visitados, completude e custo</li>
+                <li>Funções heurísticas, busca gulosa e algoritmo A*</li>
+                <li>Sistemas especialistas, fatos, regras e mecanismos de inferência</li>
+              </ul>
+            </details>
+            <details>
+              <summary>Raciocínio sob incerteza</summary>
+              <ul>
+                <li>Probabilidade condicional</li>
+                <li>Teorema de Bayes</li>
+                <li>Atualização de crenças</li>
+                <li>Evidências, independência e interpretação de resultados</li>
+              </ul>
+            </details>
+            <details>
+              <summary>Computação evolucionária</summary>
+              <ul>
+                <li>Algoritmos genéticos, indivíduos e população</li>
+                <li>Função de aptidão</li>
+                <li>Seleção, elitismo, cruzamento e mutação</li>
+                <li>Convergência, diversidade e hiperparâmetros</li>
+              </ul>
+            </details>
+            <details>
+              <summary>Lógica fuzzy</summary>
+              <ul>
+                <li>Lógica clássica e lógica fuzzy</li>
+                <li>Variáveis linguísticas e funções de pertinência</li>
+                <li>Regras, agregação, inferência e defuzzificação</li>
+              </ul>
+            </details>
+            <details>
+              <summary>Redes neurais, avaliação e IA responsável</summary>
+              <ul>
+                <li>Neurônio artificial, pesos, bias, funções de ativação e camadas</li>
+                <li>Treinamento, função de perda, otimização e épocas</li>
+                <li>Treino, validação, teste, sobreajuste e generalização</li>
+                <li>Baseline, métricas, matriz de confusão e análise de erros</li>
+                <li>Ética, vieses, explicabilidade, reprodutibilidade e documentação</li>
+              </ul>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="avaliacao" class="section-pad" aria-labelledby="avaliacao-title">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow">Evidências de aprendizagem</p>
+            <h2 id="avaliacao-title">Como o conhecimento será validado</h2>
+          </div>
+          <p>As provas verificam domínio individual; as APS consolidam aplicação e análise; o trabalho geral integra implementação, experimentação, documentação e defesa.</p>
+        </div>
+
+        <div class="assessment-layout">
+          <div class="score-card">
+            <div class="score-row"><span>Prova 1</span><strong>2,0</strong></div>
+            <div class="score-row"><span>Prova 2</span><strong>2,0</strong></div>
+            <div class="score-row"><span>Trabalho geral</span><strong>4,0</strong></div>
+            <div class="score-row"><span>APS 1</span><strong>0,5</strong></div>
+            <div class="score-row"><span>APS 2</span><strong>0,5</strong></div>
+            <div class="score-row"><span>ProdCad</span><strong>1,0</strong></div>
+            <div class="score-total"><span>Total</span><strong>10,0</strong></div>
+          </div>
+
+          <div class="assessment-bars" aria-label="Distribuição da nota">
+            <div class="bar-item">
+              <div><span>Provas individuais</span><strong>40%</strong></div>
+              <div class="bar"><span style="--value: 40%"></span></div>
+            </div>
+            <div class="bar-item">
+              <div><span>Trabalho geral</span><strong>40%</strong></div>
+              <div class="bar"><span style="--value: 40%"></span></div>
+            </div>
+            <div class="bar-item">
+              <div><span>APS</span><strong>10%</strong></div>
+              <div class="bar"><span style="--value: 10%"></span></div>
+            </div>
+            <div class="bar-item">
+              <div><span>ProdCad</span><strong>10%</strong></div>
+              <div class="bar"><span style="--value: 10%"></span></div>
+            </div>
+            <p class="muted-note">Nas provas, não será permitido o uso de IA generativa.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="desafio" class="section-pad section-dark" aria-labelledby="desafio-title">
+      <div class="container challenge-grid">
+        <div>
+          <p class="eyebrow eyebrow-light">Trabalho geral</p>
+          <h2 id="desafio-title">Do problema ao protótipo validado</h2>
+          <p>Em equipe, você desenvolverá uma solução computacional baseada em IA para um problema contextualizado, selecionando e justificando uma técnica adequada entre as estudadas.</p>
+          <p>O objetivo não é apenas apresentar algo que funcione, mas construir uma solução tecnicamente defensável.</p>
+        </div>
+
+        <ol class="deliverable-list">
+          <li><span>01</span>Problema e critérios de sucesso</li>
+          <li><span>02</span>Escolha e justificativa da técnica</li>
+          <li><span>03</span>Baseline e implementação funcional</li>
+          <li><span>04</span>Experimentos, testes e métricas</li>
+          <li><span>05</span>Análise de erros e limitações</li>
+          <li><span>06</span>Repositório, documentação e defesa</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="ia-first" class="section-pad" aria-labelledby="ia-first-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Uso crítico de IA generativa</p>
+          <h2 id="ia-first-title">Protocolo IA-First</h2>
+          <p>A resposta de uma IA pode ser usada como hipótese de trabalho. Ela não substitui compreensão, teste, correção ou responsabilidade técnica.</p>
+        </div>
+
+        <div class="protocol-grid">
+          <article><span>1</span><h3>Perguntar</h3><p>Definir claramente o problema, o contexto, o resultado esperado e as restrições.</p></article>
+          <article><span>2</span><h3>Verificar</h3><p>Conferir conceitos, fatos, referências, premissas e trechos de código.</p></article>
+          <article><span>3</span><h3>Testar</h3><p>Executar exemplos comuns, casos-limite e comparações com resultados conhecidos.</p></article>
+          <article><span>4</span><h3>Corrigir</h3><p>Ajustar prompts, dados, código, parâmetros ou interpretações equivocadas.</p></article>
+          <article><span>5</span><h3>Documentar</h3><p>Registrar a finalidade do uso, os resultados, os erros encontrados e as decisões tomadas.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="aula-atual" class="section-pad section-soft" aria-labelledby="aula-title">
+      <div class="container lesson-preview">
+        <div>
+          <p class="eyebrow">Aula atual · Primeiro encontro efetivo</p>
+          <h2 id="aula-title">Aula 02 — O que realmente é Inteligência Artificial?</h2>
+          <p>Uma aula investigativa sobre fundamentos e evolução da IA, agentes inteligentes, tipos de problemas, aplicações, limites e uso crítico de IA generativa.</p>
+        </div>
+        <a class="button button-primary" href="aula-02.html">Abrir a aula</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>Inteligência Artificial Aplicada</strong>
+        <p>Engenharia de Software · 6º período · 2026/2</p>
+      </div>
+      <a href="#inicio">Voltar ao início ↑</a>
+    </div>
+  </footer>
+
+  <dialog id="dialog-infografico" class="image-dialog">
+    <button class="dialog-close" type="button" aria-label="Fechar imagem">×</button>
+    <img src="assets/infografico.png" alt="Infográfico ampliado da jornada de aprendizagem.">
+  </dialog>
+
+</body>
+</html>
