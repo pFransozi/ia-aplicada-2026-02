@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -24,8 +24,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -34,36 +32,7 @@ jobs:
         run: |
           rm -rf dist
           mkdir -p dist
-          if [ -d base-b ]; then
-            rsync -av --exclude='.git' --exclude='*_old' base-b/ dist/
-            python build_site.py
-          else
-            rsync -av --exclude='.git' --exclude='.github' --exclude='dist' ./ dist/
-          fi
-
-      - name: Materialize consolidated site
-        if: ${{ hashFiles('.gitmodules') != '' }}
-        run: |
-          rm -rf assets
-          cp -a dist/assets ./assets
-          cp dist/.nojekyll ./.nojekyll
-          cp dist/README.md ./README.md
-          cp dist/index.html ./index.html
-          cp dist/curso.html ./curso.html
-          cp dist/aula-02.html ./aula-02.html
-          cp dist/calendario-a.html ./calendario-a.html
-          cp dist/calendario-b.html ./calendario-b.html
-          cp dist/atividade-isso-e-ia-mesmo.md ./atividade-isso-e-ia-mesmo.md
-          cp dist/styles.css ./styles.css
-          cp dist/script.js ./script.js
-
-          git rm -f base-b
-          git rm -f .gitmodules build_site.py calendario-a-source.html
-          git add -A
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: incorporar material consolidado ao repositório principal"
-          git push origin HEAD:main
+          rsync -av --exclude='.git' --exclude='.github' --exclude='dist' ./ dist/
 
       - name: Validate generated site
         run: |
