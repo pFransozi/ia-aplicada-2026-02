@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Calendário da Turma A da disciplina Inteligência Artificial Aplicada — 2026/2.">
+  <title>IA Aplicada — Calendário da Turma A</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="site-header" id="inicio">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="IA Aplicada — página principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span><strong>IA Aplicada</strong><small>Calendário · Turma A</small></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">
+        <span class="sr-only">Abrir menu</span><span></span><span></span><span></span>
+      </button>
+      <nav id="menu-principal" class="main-nav" aria-label="Navegação principal">
+        <a href="index.html">Página principal</a>
+        <a href="curso.html">Visão geral</a>
+        <a class="nav-highlight" href="#calendario">Turma A</a>
+        <a href="aula-02.html">Aula 02</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-text">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero section-pad">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Inteligência Artificial Aplicada · Turma A</p>
+          <h1>Calendário da Turma A</h1>
+          <p class="hero-lead">Aulas presenciais às segundas-feiras.</p>
+          <p class="hero-text">Consulte abaixo as datas dos encontros presenciais, sábados letivos e demais eventos previstos para esta turma.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#calendario">Ver calendário</a>
+            <a class="button button-secondary" href="curso.html">Voltar para a visão geral</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<section id="calendario" class="section-pad section-soft" aria-labelledby="calendario-title">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow">Cronograma</p>
+            <h2 id="calendario-title">Calendário das aulas</h2>
+          </div>
+          <p>As aulas presenciais acontecem às segundas-feiras. Os sábados letivos indicados no calendário serão destinados a atividades assíncronas.</p>
+        </div>
+
+        <div class="calendar-card">
+          <div class="calendar-overview" aria-label="Resumo do calendário">
+            <div class="calendar-stat stat-primary">
+              <span>20</span>
+              <strong>aulas no semestre</strong>
+            </div>
+            <div class="calendar-stat stat-accent">
+              <span>4</span>
+              <strong>sábados letivos assíncronos</strong>
+            </div>
+            <div class="calendar-stat stat-event">
+              <span>1</span>
+              <strong>evento institucional</strong>
+            </div>
+          </div>
+
+          <div class="calendar-legend" aria-label="Legenda do calendário">
+            <span><i class="legend-dot legend-presencial" aria-hidden="true"></i> Presencial</span>
+            <span><i class="legend-dot legend-assincrona" aria-hidden="true"></i> Sábado letivo · atividade assíncrona</span>
+            <span><i class="legend-dot legend-evento" aria-hidden="true"></i> Evento institucional</span>
+          </div>
+
+          <div class="calendar-board" aria-label="Calendário das aulas da disciplina">
+            <section class="month-calendar" aria-labelledby="mes-julho">
+              <h3 id="mes-julho">Julho</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell has-event event-day"><time datetime="2026-07-27">27</time><strong>Aula 01</strong><small>OPEN UniSENAI</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-07-28">28</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-07-29">29</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-07-30">30</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-07-31">31</time></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+              </div>
+            </section>
+
+            <section class="month-calendar" aria-labelledby="mes-agosto">
+              <h3 id="mes-agosto">Agosto</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-01">1</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-02">2</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-03">3</time><strong>Aula 02</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-04">4</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-05">5</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-06">6</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-07">7</time></div>
+                <div class="day-cell has-event async-day"><time datetime="2026-08-08">8</time><strong>Aula 03</strong><small>Assíncrona</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-09">9</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-10">10</time><strong>Aula 04</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-11">11</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-12">12</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-13">13</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-14">14</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-15">15</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-16">16</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-17">17</time><strong>Aula 05</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-18">18</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-19">19</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-20">20</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-21">21</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-22">22</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-23">23</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-24">24</time><strong>Aula 06</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-25">25</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-26">26</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-27">27</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-28">28</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-29">29</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-08-30">30</time></div>
+                <div class="day-cell has-event"><time datetime="2026-08-31">31</time><strong>Aula 07</strong><small>Presencial</small></div>
+              </div>
+            </section>
+
+            <section class="month-calendar" aria-labelledby="mes-setembro">
+              <h3 id="mes-setembro">Setembro</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-01">1</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-02">2</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-03">3</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-04">4</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-05">5</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-06">6</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-07">7</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-08">8</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-09">9</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-10">10</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-11">11</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-12">12</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-13">13</time></div>
+                <div class="day-cell has-event"><time datetime="2026-09-14">14</time><strong>Aula 08</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-15">15</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-16">16</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-17">17</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-18">18</time></div>
+                <div class="day-cell has-event async-day"><time datetime="2026-09-19">19</time><strong>Aula 09</strong><small>Assíncrona</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-20">20</time></div>
+                <div class="day-cell has-event"><time datetime="2026-09-21">21</time><strong>Aula 10</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-22">22</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-23">23</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-24">24</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-25">25</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-26">26</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-27">27</time></div>
+                <div class="day-cell has-event"><time datetime="2026-09-28">28</time><strong>Aula 11</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-29">29</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-09-30">30</time></div>
+              </div>
+            </section>
+
+            <section class="month-calendar" aria-labelledby="mes-outubro">
+              <h3 id="mes-outubro">Outubro</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-01">1</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-02">2</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-03">3</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-04">4</time></div>
+                <div class="day-cell has-event"><time datetime="2026-10-05">5</time><strong>Aula 12</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-06">6</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-07">7</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-08">8</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-09">9</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-10">10</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-11">11</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-12">12</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-13">13</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-14">14</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-15">15</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-16">16</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-17">17</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-18">18</time></div>
+                <div class="day-cell has-event"><time datetime="2026-10-19">19</time><strong>Aula 13</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-20">20</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-21">21</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-22">22</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-23">23</time></div>
+                <div class="day-cell has-event async-day"><time datetime="2026-10-24">24</time><strong>Aula 14</strong><small>Assíncrona</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-25">25</time></div>
+                <div class="day-cell has-event"><time datetime="2026-10-26">26</time><strong>Aula 15</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-27">27</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-28">28</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-29">29</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-30">30</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-10-31">31</time></div>
+              </div>
+            </section>
+
+            <section class="month-calendar" aria-labelledby="mes-novembro">
+              <h3 id="mes-novembro">Novembro</h3>
+              <div class="weekdays" aria-hidden="true">
+                <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+              </div>
+              <div class="month-grid">
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell blank-day" aria-hidden="true"></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-01">1</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-02">2</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-03">3</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-04">4</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-05">5</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-06">6</time></div>
+                <div class="day-cell has-event async-day"><time datetime="2026-11-07">7</time><strong>Aula 16</strong><small>Assíncrona</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-08">8</time></div>
+                <div class="day-cell has-event"><time datetime="2026-11-09">9</time><strong>Aula 17</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-10">10</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-11">11</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-12">12</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-13">13</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-14">14</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-15">15</time></div>
+                <div class="day-cell has-event"><time datetime="2026-11-16">16</time><strong>Aula 18</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-17">17</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-18">18</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-19">19</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-20">20</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-21">21</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-22">22</time></div>
+                <div class="day-cell has-event"><time datetime="2026-11-23">23</time><strong>Aula 19</strong><small>Presencial</small></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-24">24</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-25">25</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-26">26</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-27">27</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-28">28</time></div>
+                <div class="day-cell muted-day"><time datetime="2026-11-29">29</time></div>
+                <div class="day-cell has-event"><time datetime="2026-11-30">30</time><strong>Aula 20</strong><small>Presencial</small></div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Inteligência Artificial Aplicada</strong><p>Engenharia de Software · 2026/2</p></div>
+      <a href="curso.html">Voltar para a visão geral</a>
+    </div>
+  </footer>
+</body>
+</html>
