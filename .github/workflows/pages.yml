@@ -24,14 +24,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Prepare static files
         run: |
+          rm -rf dist
           mkdir -p dist
-          rsync -av --exclude='.git' --exclude='.github' --exclude='dist' ./ dist/
+          rsync -av --exclude='.git' --exclude='*_old' base-b/ dist/
+          python build_site.py
+
+      - name: Validate generated site
+        run: |
+          test -f dist/index.html
+          test -f dist/curso.html
+          test -f dist/aula-02.html
+          test -f dist/calendario-a.html
+          test -f dist/calendario-b.html
+          grep -q 'calendario-a.html' dist/curso.html
+          grep -q 'calendario-b.html' dist/curso.html
 
       - name: Upload static files
         uses: actions/upload-pages-artifact@v3
