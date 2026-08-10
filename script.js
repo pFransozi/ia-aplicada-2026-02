@@ -72,7 +72,6 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
     mapFigure.className = 'warmup-map-figure';
     mapFigure.innerHTML = `
       <img src="assets/aula-03-mapa.svg" alt="Mapa simplificado com Recepção, Corredor, Laboratório, Sala 101 e Copa. A Recepção é o ponto inicial e o Laboratório é o destino.">
-      <figcaption>Um primeiro olhar sobre o ambiente: ainda não estamos procurando o caminho.</figcaption>
     `;
     warmupIntro.appendChild(mapFigure);
   }
@@ -90,8 +89,8 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
           precisamos decidir quais elementos dessa situação serão transformados em estruturas manipuláveis pelo computador.
         </p>
         <div class="scenario-question">
-          <strong>Por enquanto, não procure o caminho.</strong>
-          <span>A pergunta da aula é anterior: como representar o problema de maneira suficiente para que uma busca possa acontecer depois?</span>
+          <strong>Antes de buscar uma solução, precisamos construir o problema que o algoritmo vai enxergar.</strong>
+          <span>Isso significa definir estados, ações, restrições e um objetivo verificável. Só depois faz sentido escolher como explorar as possibilidades.</span>
         </div>
       </div>
 
@@ -152,13 +151,6 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
       max-height: 300px;
       object-fit: contain;
       border-radius: 15px;
-    }
-
-    .warmup-map-figure figcaption {
-      margin: .65rem .3rem .1rem;
-      color: #aebbd0;
-      font-size: .79rem;
-      line-height: 1.45;
     }
 
     #aquecimento .question-cloud {
