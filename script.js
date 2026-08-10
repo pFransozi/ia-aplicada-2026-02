@@ -295,6 +295,8 @@ const setupDeepDiveFigures = () => {
 setupDeepDiveFigures();
 
 if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathname.endsWith('aula-03.html')) {
+  document.querySelector('#fechamento .knowledge-exit')?.remove();
+
   const lessonAdjustments = document.createElement('script');
   lessonAdjustments.src = 'aula-03-ajustes.js';
   lessonAdjustments.async = false;
