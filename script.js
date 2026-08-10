@@ -63,10 +63,20 @@ document.querySelectorAll('.image-dialog').forEach((dialog) => {
   });
 });
 
-/* Ajuste específico da abertura da Aula 03.
-   Mantém o HTML-base da aula e substitui apenas o bloco visual do cenário,
-   evitando um painel grande com diagrama pouco informativo. */
+/* Ajustes específicos da Aula 03. */
 if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathname.endsWith('aula-03.html')) {
+  const warmupIntro = document.querySelector('#aquecimento .warmup > div:first-child');
+
+  if (warmupIntro && !warmupIntro.querySelector('.warmup-map-figure')) {
+    const mapFigure = document.createElement('figure');
+    mapFigure.className = 'warmup-map-figure';
+    mapFigure.innerHTML = `
+      <img src="assets/aula-03-mapa.svg" alt="Mapa simplificado com Recepção, Corredor, Laboratório, Sala 101 e Copa. A Recepção é o ponto inicial e o Laboratório é o destino.">
+      <figcaption>Um primeiro olhar sobre o ambiente: ainda não estamos procurando o caminho.</figcaption>
+    `;
+    warmupIntro.appendChild(mapFigure);
+  }
+
   const scenario = document.querySelector('.scenario');
 
   if (scenario) {
@@ -105,121 +115,182 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
         </article>
       </div>
     `;
+  }
 
-    const style = document.createElement('style');
-    style.id = 'aula03-scenario-adjustment';
-    style.textContent = `
-      .scenario.scenario-reworked {
-        display: block;
-        padding: 0;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
+  const style = document.createElement('style');
+  style.id = 'aula03-adjustments';
+  style.textContent = `
+    #aquecimento .warmup {
+      grid-template-columns: minmax(0, .96fr) minmax(0, 1.04fr);
+      gap: 30px;
+      align-items: stretch;
+    }
+
+    #aquecimento .warmup > div:first-child {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    #aquecimento .warmup > div:first-child > p:not(.eyebrow) {
+      max-width: 620px;
+      margin-bottom: 0;
+    }
+
+    .warmup-map-figure {
+      margin: 1.35rem 0 0;
+      padding: .7rem;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .warmup-map-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: contain;
+      border-radius: 15px;
+    }
+
+    .warmup-map-figure figcaption {
+      margin: .65rem .3rem .1rem;
+      color: #aebbd0;
+      font-size: .79rem;
+      line-height: 1.45;
+    }
+
+    #aquecimento .question-cloud {
+      align-content: stretch;
+    }
+
+    #aquecimento .question-cloud > div {
+      display: flex;
+      align-items: center;
+      min-height: 0;
+    }
+
+    .scenario.scenario-reworked {
+      display: block;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .scenario-reworked .scenario-intro {
+      max-width: 980px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .scenario-reworked .scenario-intro .eyebrow {
+      justify-content: center;
+    }
+
+    .scenario-reworked .scenario-intro h2 {
+      max-width: 860px;
+      margin: 0 auto 1.15rem;
+      font-size: clamp(2.35rem, 4.6vw, 4.4rem);
+    }
+
+    .scenario-reworked .scenario-lead {
+      max-width: 850px;
+      margin: 0 auto;
+      font-size: 1.08rem;
+    }
+
+    .scenario-reworked .scenario-question {
+      display: grid;
+      gap: .3rem;
+      max-width: 850px;
+      margin: 1.45rem auto 0;
+      padding: 1rem 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      text-align: left;
+      color: var(--muted);
+    }
+
+    .scenario-reworked .scenario-question strong {
+      color: var(--ink);
+    }
+
+    .scenario-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 2.1rem;
+    }
+
+    .scenario-summary-card {
+      min-height: 190px;
+      padding: 1.35rem;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: var(--paper);
+      box-shadow: 0 12px 30px rgba(35,50,78,.05);
+    }
+
+    .scenario-summary-card small {
+      display: block;
+      margin-bottom: .85rem;
+      color: var(--blue);
+      font-size: .72rem;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .scenario-summary-card h3 {
+      margin-bottom: .55rem;
+      font-size: 1.14rem;
+    }
+
+    .scenario-summary-card p {
+      margin-bottom: 0;
+      font-size: .94rem;
+    }
+
+    .scenario-summary-card-accent {
+      border-color: #cbd6ff;
+      background: linear-gradient(145deg, var(--blue-soft), var(--paper));
+    }
+
+    body.theme-dark .scenario-reworked .scenario-question,
+    body.theme-dark .scenario-summary-card {
+      background: #172033;
+      border-color: var(--line);
+    }
+
+    body.theme-dark .scenario-summary-card-accent {
+      background: linear-gradient(145deg, #111a2b, #172033);
+      border-color: #3b4f78;
+    }
+
+    @media (max-width: 1000px) {
+      #aquecimento .warmup {
+        grid-template-columns: 1fr;
       }
 
-      .scenario-reworked .scenario-intro {
-        max-width: 980px;
-        margin: 0 auto;
-        text-align: center;
+      .warmup-map-figure img {
+        max-height: 360px;
       }
+    }
 
-      .scenario-reworked .scenario-intro .eyebrow {
-        justify-content: center;
-      }
-
-      .scenario-reworked .scenario-intro h2 {
-        max-width: 860px;
-        margin: 0 auto 1.15rem;
-        font-size: clamp(2.35rem, 4.6vw, 4.4rem);
-      }
-
-      .scenario-reworked .scenario-lead {
-        max-width: 850px;
-        margin: 0 auto;
-        font-size: 1.08rem;
-      }
-
-      .scenario-reworked .scenario-question {
-        display: grid;
-        gap: .3rem;
-        max-width: 850px;
-        margin: 1.45rem auto 0;
-        padding: 1rem 1.15rem;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        background: var(--paper);
-        text-align: left;
-        color: var(--muted);
-      }
-
-      .scenario-reworked .scenario-question strong {
-        color: var(--ink);
-      }
-
+    @media (max-width: 900px) {
       .scenario-summary-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 16px;
-        margin-top: 2.1rem;
+        grid-template-columns: 1fr;
       }
 
       .scenario-summary-card {
-        min-height: 190px;
-        padding: 1.35rem;
-        border: 1px solid var(--line);
-        border-radius: 19px;
-        background: var(--paper);
-        box-shadow: 0 12px 30px rgba(35,50,78,.05);
+        min-height: auto;
       }
+    }
+  `;
 
-      .scenario-summary-card small {
-        display: block;
-        margin-bottom: .85rem;
-        color: var(--blue);
-        font-size: .72rem;
-        font-weight: 850;
-        letter-spacing: .09em;
-        text-transform: uppercase;
-      }
-
-      .scenario-summary-card h3 {
-        margin-bottom: .55rem;
-        font-size: 1.14rem;
-      }
-
-      .scenario-summary-card p {
-        margin-bottom: 0;
-        font-size: .94rem;
-      }
-
-      .scenario-summary-card-accent {
-        border-color: #cbd6ff;
-        background: linear-gradient(145deg, var(--blue-soft), var(--paper));
-      }
-
-      body.theme-dark .scenario-reworked .scenario-question,
-      body.theme-dark .scenario-summary-card {
-        background: #172033;
-        border-color: var(--line);
-      }
-
-      body.theme-dark .scenario-summary-card-accent {
-        background: linear-gradient(145deg, #111a2b, #172033);
-        border-color: #3b4f78;
-      }
-
-      @media (max-width: 900px) {
-        .scenario-summary-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .scenario-summary-card {
-          min-height: auto;
-        }
-      }
-    `;
-
-    document.head.appendChild(style);
-  }
+  document.head.appendChild(style);
 }
