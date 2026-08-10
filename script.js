@@ -66,6 +66,37 @@ document.querySelectorAll('.image-dialog').forEach((dialog) => {
 const setupDeepDiveFigures = () => {
   if (!window.location.pathname.endsWith('aula-02-aprofundamento.html')) return;
 
+  // Usa os PNGs originais em alta definição. Mantém compatibilidade com
+  // referências antigas em WebP que ainda estejam presentes no HTML.
+  const deepDiveImages = Array.from(
+    document.querySelectorAll('.study-page .figure-light img[src*="assets/aula-02-aprofundamento/"]')
+  );
+
+  deepDiveImages.forEach((image) => {
+    const currentSrc = image.getAttribute('src');
+    if (!currentSrc) return;
+
+    const lightSrc = currentSrc.replace(/\.webp$/i, '.png');
+    image.setAttribute('src', lightSrc);
+    image.dataset.lightSrc = lightSrc;
+
+    // Convenção já preparada para futuras versões noturnas:
+    // aula-02-aprofundamento-01-dark.png, ...-08-dark.png.
+    // O data-dark-src só é habilitado se o arquivo realmente existir,
+    // evitando imagens quebradas enquanto os arquivos dark não forem publicados.
+    const darkSrc = lightSrc.replace(/\.png$/i, '-dark.png');
+    const probe = new Image();
+
+    probe.onload = () => {
+      image.dataset.darkSrc = darkSrc;
+      if (document.body.classList.contains('theme-dark')) {
+        image.setAttribute('src', darkSrc);
+      }
+    };
+
+    probe.src = darkSrc;
+  });
+
   const fundamentalsSection = document.querySelector('#fundamentos');
   const fundamentalsGrid = fundamentalsSection?.querySelector('.study-grid');
   const firstProse = fundamentalsGrid?.querySelector('.study-prose');
