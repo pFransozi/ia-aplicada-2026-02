@@ -116,6 +116,75 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
     `;
   }
 
+  const abstraction = document.querySelector('#abstracao');
+
+  if (abstraction) {
+    const heading = abstraction.querySelector('.section-heading');
+    const worldGrid = abstraction.querySelector('.world-grid');
+    const flowCards = abstraction.querySelectorAll('.flow-card');
+    const inquiryText = abstraction.querySelector('.inquiry-body > div:first-child > p');
+
+    if (heading) {
+      const title = heading.querySelector('h2');
+      const description = heading.querySelector('p:last-child');
+      if (title) title.textContent = 'O modelo representa apenas o que importa para o problema';
+      if (description) {
+        description.innerHTML = 'Uma representação computacional não tenta reproduzir todos os detalhes do mundo real. Ela seleciona aquilo que é relevante para resolver <strong>um problema específico</strong>. Abstrair é decidir deliberadamente o que representar e o que deixar de fora.';
+      }
+    }
+
+    if (worldGrid) {
+      worldGrid.classList.add('world-grid-reworked');
+      worldGrid.innerHTML = `
+        <article class="world-card real">
+          <p class="eyebrow">Cenário observado</p>
+          <h3>O mundo oferece muitos detalhes</h3>
+          <p>O prédio pode ser descrito de inúmeras maneiras. Nem todas essas informações alteram a solução que estamos tentando construir.</p>
+          <div class="tag-cloud">
+            <span>cor das paredes</span>
+            <span>temperatura</span>
+            <span>pessoas</span>
+            <span>móveis</span>
+            <span>iluminação</span>
+            <span>marca do robô</span>
+            <span class="keep">posição do robô</span>
+            <span class="keep">locais conectados</span>
+            <span class="keep">destino</span>
+            <span class="keep">passagens bloqueadas</span>
+          </div>
+          <div class="abstraction-rule">
+            <strong>A pergunta não é “o que existe no mundo?”</strong>
+            <span>É “o que precisa ser representado para resolver este problema?”.</span>
+          </div>
+        </article>
+
+        <article class="world-card model abstraction-model-card">
+          <p class="eyebrow">Representação para este problema</p>
+          <h3>Do elemento real ao conceito computacional</h3>
+          <div class="abstraction-map">
+            <div><span>Posição do robô</span><b>→</b><strong>Estado</strong></div>
+            <div><span>Locais conectados</span><b>→</b><strong>Ações e transições</strong></div>
+            <div><span>Laboratório</span><b>→</b><strong>Objetivo</strong></div>
+            <div><span>Passagens bloqueadas</span><b>→</b><strong>Restrições</strong></div>
+          </div>
+          <div class="abstraction-excluded">
+            <small>Ficam de fora, nesta versão</small>
+            <p>Cor das paredes, marca do robô e iluminação, porque não alteram as ações disponíveis nem o critério de sucesso.</p>
+          </div>
+        </article>
+      `;
+    }
+
+    if (flowCards.length >= 3) {
+      const last = flowCards[2].querySelector('p');
+      if (last) last.textContent = 'Transformamos os elementos relevantes em estados, ações, transições, objetivos e restrições.';
+    }
+
+    if (inquiryText) {
+      inquiryText.textContent = 'Considere novamente o robô de entrega. Escolha três informações que devem entrar no modelo e três que podem ser ignoradas nesta versão. Para cada escolha, explique como ela se relaciona com o objetivo, as ações ou as restrições do problema.';
+    }
+  }
+
   const style = document.createElement('style');
   style.id = 'aula03-adjustments';
   style.textContent = `
@@ -252,8 +321,90 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
       background: linear-gradient(145deg, var(--blue-soft), var(--paper));
     }
 
+    #abstracao .world-grid-reworked {
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      align-items: stretch;
+    }
+
+    #abstracao .world-grid-reworked .world-card {
+      min-width: 0;
+    }
+
+    #abstracao .world-card .eyebrow {
+      margin-bottom: .65rem;
+    }
+
+    .abstraction-rule {
+      display: grid;
+      gap: .25rem;
+      margin-top: 1.3rem;
+      padding: 1rem;
+      border-left: 4px solid var(--blue);
+      border-radius: 0 14px 14px 0;
+      background: var(--blue-soft);
+      color: var(--muted);
+    }
+
+    .abstraction-rule strong {
+      color: var(--ink);
+    }
+
+    .abstraction-map {
+      display: grid;
+      gap: .7rem;
+      margin-top: 1.15rem;
+    }
+
+    .abstraction-map > div {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr);
+      align-items: center;
+      gap: .65rem;
+      padding: .85rem .95rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+    }
+
+    .abstraction-map span {
+      color: var(--muted);
+    }
+
+    .abstraction-map b {
+      color: var(--blue);
+      text-align: center;
+      font-size: 1.15rem;
+    }
+
+    .abstraction-map strong {
+      color: var(--ink);
+    }
+
+    .abstraction-excluded {
+      margin-top: 1rem;
+      padding: .95rem 1rem;
+      border-radius: 14px;
+      background: var(--amber-soft);
+    }
+
+    .abstraction-excluded small {
+      display: block;
+      margin-bottom: .3rem;
+      color: var(--amber);
+      font-size: .7rem;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .abstraction-excluded p {
+      margin: 0;
+      font-size: .9rem;
+    }
+
     body.theme-dark .scenario-reworked .scenario-question,
-    body.theme-dark .scenario-summary-card {
+    body.theme-dark .scenario-summary-card,
+    body.theme-dark .abstraction-map > div {
       background: #172033;
       border-color: var(--line);
     }
@@ -263,8 +414,17 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
       border-color: #3b4f78;
     }
 
+    body.theme-dark .abstraction-rule {
+      background: #111a2b;
+    }
+
+    body.theme-dark .abstraction-excluded {
+      background: #2b2113;
+    }
+
     @media (max-width: 1000px) {
-      #aquecimento .warmup {
+      #aquecimento .warmup,
+      #abstracao .world-grid-reworked {
         grid-template-columns: 1fr;
       }
 
@@ -280,6 +440,18 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
 
       .scenario-summary-card {
         min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .abstraction-map > div {
+        grid-template-columns: 1fr;
+        gap: .25rem;
+      }
+
+      .abstraction-map b {
+        transform: rotate(90deg);
+        justify-self: start;
       }
     }
   `;
