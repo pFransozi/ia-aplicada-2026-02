@@ -1,7 +1,13 @@
 /* Ajustes específicos da Aula 03. */
 (() => {
-  const warmupIntro = document.querySelector('#aquecimento .warmup > div:first-child');
+  const saveField = (field, key) => {
+    if (!field) return;
+    field.value = localStorage.getItem(key) || '';
+    field.addEventListener('input', () => localStorage.setItem(key, field.value));
+  };
 
+  /* Problema disparador: mapa simplificado. */
+  const warmupIntro = document.querySelector('#aquecimento .warmup > div:first-child');
   if (warmupIntro && !warmupIntro.querySelector('.warmup-map-figure')) {
     const mapFigure = document.createElement('figure');
     mapFigure.className = 'warmup-map-figure';
@@ -11,8 +17,8 @@
     warmupIntro.appendChild(mapFigure);
   }
 
+  /* Primeira análise: retirar o mapa duplicado e organizar a ideia central. */
   const scenario = document.querySelector('.scenario');
-
   if (scenario) {
     scenario.classList.add('scenario-reworked');
     scenario.innerHTML = `
@@ -35,13 +41,11 @@
           <h3>Qual é a tarefa?</h3>
           <p>Um robô precisa sair da <strong>Recepção</strong> e chegar ao <strong>Laboratório</strong>.</p>
         </article>
-
         <article class="scenario-summary-card">
           <small>02 · O que já sabemos</small>
           <h3>Elementos do cenário</h3>
           <p>Existem <strong>Recepção</strong>, <strong>Corredor</strong>, <strong>Laboratório</strong>, <strong>Sala 101</strong> e <strong>Copa</strong>, ligados por passagens possíveis.</p>
         </article>
-
         <article class="scenario-summary-card scenario-summary-card-accent">
           <small>03 · O que ainda falta</small>
           <h3>Descrição não é representação</h3>
@@ -51,8 +55,8 @@
     `;
   }
 
+  /* Abstração: relevância depende do problema. */
   const abstraction = document.querySelector('#abstracao');
-
   if (abstraction) {
     const heading = abstraction.querySelector('.section-heading');
     const worldGrid = abstraction.querySelector('.world-grid');
@@ -76,16 +80,8 @@
           <h3>O mundo oferece muitos detalhes</h3>
           <p>O prédio pode ser descrito de inúmeras maneiras. Nem todas essas informações alteram a solução que estamos tentando construir.</p>
           <div class="tag-cloud">
-            <span>cor das paredes</span>
-            <span>temperatura</span>
-            <span>pessoas</span>
-            <span>móveis</span>
-            <span>iluminação</span>
-            <span>marca do robô</span>
-            <span class="keep">posição do robô</span>
-            <span class="keep">locais conectados</span>
-            <span class="keep">destino</span>
-            <span class="keep">passagens bloqueadas</span>
+            <span>cor das paredes</span><span>temperatura</span><span>pessoas</span><span>móveis</span><span>iluminação</span><span>marca do robô</span>
+            <span class="keep">posição do robô</span><span class="keep">locais conectados</span><span class="keep">destino</span><span class="keep">passagens bloqueadas</span>
           </div>
           <div class="abstraction-rule">
             <strong>A pergunta não é “o que existe no mundo?”</strong>
@@ -119,13 +115,9 @@
       inquiry.classList.add('abstraction-challenge');
       inquiry.innerHTML = `
         <div class="inquiry-head">
-          <div>
-            <span class="inquiry-kicker">Teste a abstração</span>
-            <h3>O problema mudou. O modelo também precisa mudar?</h3>
-          </div>
+          <div><span class="inquiry-kicker">Teste a abstração</span><h3>O problema mudou. O modelo também precisa mudar?</h3></div>
           <span class="inquiry-tag">Transfira o conceito</span>
         </div>
-
         <div class="inquiry-body abstraction-challenge-body">
           <div>
             <div class="challenge-change">
@@ -140,25 +132,108 @@
               <li>Que informações do prédio ainda podem continuar de fora?</li>
             </ol>
           </div>
-
           <div class="worksheet">
             <label for="abstracao-registro">Reformule a abstração</label>
             <textarea id="abstracao-registro" data-save="abstracao" placeholder="Agora a temperatura precisa entrar porque... Eu a representaria como... Do modelo anterior, manteria... Ainda deixaria de fora..."></textarea>
             <span class="save-note">O texto fica salvo somente neste navegador.</span>
           </div>
         </div>
-
         <div class="abstraction-takeaway">
           <strong>Ideia central</strong>
           <span>Uma característica não é relevante ou irrelevante por si só. Sua relevância depende do objetivo, das ações possíveis e das restrições do problema.</span>
         </div>
       `;
+      saveField(inquiry.querySelector('[data-save="abstracao"]'), 'aula03:abstracao');
+    }
+  }
 
-      const abstractionField = inquiry.querySelector('[data-save="abstracao"]');
-      if (abstractionField) {
-        const key = 'aula03:abstracao';
-        abstractionField.value = localStorage.getItem(key) || '';
-        abstractionField.addEventListener('input', () => localStorage.setItem(key, abstractionField.value));
+  /* Formulação: explicar a passagem da descrição informal para um problema de busca. */
+  const formulation = document.querySelector('#formulacao');
+  if (formulation) {
+    const heading = formulation.querySelector('.section-heading');
+    const anatomyGrid = formulation.querySelector('.anatomy-grid');
+
+    if (heading) {
+      const title = heading.querySelector('h2');
+      const description = heading.querySelector('p:last-child');
+      if (title) title.textContent = 'Como transformar a descrição em um problema de busca';
+      if (description) {
+        description.innerHTML = 'Até aqui sabemos que o robô deve sair da <strong>Recepção</strong> e chegar ao <strong>Laboratório</strong>. Para que um algoritmo possa trabalhar com esse problema, a descrição precisa se tornar precisa: devemos representar uma situação, dizer quais mudanças são permitidas, definir quando o objetivo foi atingido e estabelecer o que conta como solução válida.';
+      }
+    }
+
+    if (anatomyGrid) {
+      anatomyGrid.classList.add('formulation-steps');
+      anatomyGrid.innerHTML = `
+        <article class="formulation-step">
+          <div class="formulation-step-number">01</div>
+          <div class="formulation-step-content">
+            <small>Descrever a situação</small>
+            <h3>Como o programa distingue uma situação de outra?</h3>
+            <div class="formulation-concepts">
+              <div><strong>Estado</strong><span>As informações necessárias para descrever uma situação relevante do problema.</span></div>
+              <div><strong>Estado inicial</strong><span>A situação a partir da qual a resolução começa.</span></div>
+            </div>
+            <div class="formulation-example"><b>No exemplo</b><span>Podemos começar representando o estado pela <strong>posição atual do robô</strong>. O estado inicial é <strong>Recepção</strong>.</span></div>
+          </div>
+        </article>
+
+        <article class="formulation-step">
+          <div class="formulation-step-number">02</div>
+          <div class="formulation-step-content">
+            <small>Descrever o que pode acontecer</small>
+            <h3>Como uma situação pode mudar?</h3>
+            <div class="formulation-concepts formulation-concepts-three">
+              <div><strong>Ações</strong><span>O que pode ser feito a partir de um determinado estado.</span></div>
+              <div><strong>Transição</strong><span>Qual novo estado resulta quando uma ação é executada.</span></div>
+              <div><strong>Restrições</strong><span>Quais ações ou situações não são permitidas.</span></div>
+            </div>
+            <div class="formulation-example"><b>No exemplo</b><span>Da <strong>Recepção</strong>, o robô pode ir ao <strong>Corredor</strong>. Ele não pode atravessar paredes nem ir diretamente para um local sem conexão.</span></div>
+          </div>
+        </article>
+
+        <article class="formulation-step">
+          <div class="formulation-step-number">03</div>
+          <div class="formulation-step-content">
+            <small>Definir onde queremos chegar</small>
+            <h3>Como o programa sabe que terminou?</h3>
+            <div class="formulation-concepts">
+              <div><strong>Objetivo</strong><span>A situação desejada que queremos alcançar.</span></div>
+              <div><strong>Teste de objetivo</strong><span>Uma condição verificável que permite ao programa reconhecer que o objetivo foi atingido.</span></div>
+            </div>
+            <div class="formulation-example"><b>No exemplo</b><span>O objetivo é estar no <strong>Laboratório</strong>. Um teste simples seria verificar se <code>estado_atual == "laboratorio"</code>.</span></div>
+          </div>
+        </article>
+
+        <article class="formulation-step formulation-step-final">
+          <div class="formulation-step-number">04</div>
+          <div class="formulation-step-content">
+            <small>Definir o que conta como solução</small>
+            <h3>Chegar ao objetivo basta? E se houver várias maneiras?</h3>
+            <div class="formulation-concepts formulation-concepts-three">
+              <div><strong>Solução</strong><span>Uma sequência válida de ações que leva do estado inicial a um estado objetivo.</span></div>
+              <div><strong>Critério de sucesso</strong><span>Verifica se a solução alcançou o objetivo sem violar as restrições.</span></div>
+              <div><strong>Critério de avaliação</strong><span>Permite comparar soluções válidas, por exemplo por distância, tempo ou quantidade de movimentos.</span></div>
+            </div>
+            <div class="formulation-example"><b>No exemplo</b><span><strong>Recepção → Corredor → Laboratório</strong> é uma solução válida. Se existissem vários caminhos, poderíamos preferir o de menor custo.</span></div>
+          </div>
+        </article>
+      `;
+
+      if (!formulation.querySelector('.software-interface')) {
+        anatomyGrid.insertAdjacentHTML('afterend', `
+          <article class="software-interface">
+            <div>
+              <p class="eyebrow">O problema visto como software</p>
+              <h3>Entrada e saída são importantes, mas cumprem outro papel</h3>
+              <p>Os elementos acima formulam o <strong>problema de busca</strong>. Ao implementar esse problema em um programa, também precisamos definir como os dados chegam ao sistema e como a solução será devolvida.</p>
+            </div>
+            <div class="software-interface-grid">
+              <div><small>Entrada</small><strong>O que o programa recebe?</strong><span>No exemplo: mapa, posição inicial, destino e demais dados necessários.</span></div>
+              <div><small>Saída</small><strong>O que o programa produz?</strong><span>No exemplo: uma sequência de movimentos que representa um caminho válido.</span></div>
+            </div>
+          </article>
+        `);
       }
     }
   }
@@ -166,330 +241,113 @@
   const style = document.createElement('style');
   style.id = 'aula03-adjustments';
   style.textContent = `
-    #aquecimento .warmup {
-      grid-template-columns: minmax(0, .96fr) minmax(0, 1.04fr);
-      gap: 30px;
-      align-items: stretch;
-    }
+    #aquecimento .warmup { grid-template-columns:minmax(0,.96fr) minmax(0,1.04fr); gap:30px; align-items:stretch; }
+    #aquecimento .warmup > div:first-child { display:flex; flex-direction:column; min-width:0; }
+    #aquecimento .warmup > div:first-child > p:not(.eyebrow) { max-width:620px; margin-bottom:0; }
+    .warmup-map-figure { margin:1.35rem 0 0; padding:.7rem; border:1px solid rgba(255,255,255,.12); border-radius:20px; background:rgba(255,255,255,.045); }
+    .warmup-map-figure img { display:block; width:100%; height:auto; max-height:300px; object-fit:contain; border-radius:15px; }
+    #aquecimento .question-cloud { align-content:stretch; }
+    #aquecimento .question-cloud > div { display:flex; align-items:center; min-height:0; }
 
-    #aquecimento .warmup > div:first-child {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
+    .scenario.scenario-reworked { display:block; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; }
+    .scenario-reworked .scenario-intro { max-width:980px; margin:0 auto; text-align:center; }
+    .scenario-reworked .scenario-intro .eyebrow { justify-content:center; }
+    .scenario-reworked .scenario-intro h2 { max-width:860px; margin:0 auto 1.15rem; font-size:clamp(2.35rem,4.6vw,4.4rem); }
+    .scenario-reworked .scenario-lead { max-width:850px; margin:0 auto; font-size:1.08rem; }
+    .scenario-reworked .scenario-question { display:grid; gap:.3rem; max-width:850px; margin:1.45rem auto 0; padding:1rem 1.15rem; border:1px solid var(--line); border-radius:16px; background:var(--paper); text-align:left; color:var(--muted); }
+    .scenario-reworked .scenario-question strong { color:var(--ink); }
+    .scenario-summary-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-top:2.1rem; }
+    .scenario-summary-card { min-height:190px; padding:1.35rem; border:1px solid var(--line); border-radius:19px; background:var(--paper); box-shadow:0 12px 30px rgba(35,50,78,.05); }
+    .scenario-summary-card small { display:block; margin-bottom:.85rem; color:var(--blue); font-size:.72rem; font-weight:850; letter-spacing:.09em; text-transform:uppercase; }
+    .scenario-summary-card h3 { margin-bottom:.55rem; font-size:1.14rem; }
+    .scenario-summary-card p { margin-bottom:0; font-size:.94rem; }
+    .scenario-summary-card-accent { border-color:#cbd6ff; background:linear-gradient(145deg,var(--blue-soft),var(--paper)); }
 
-    #aquecimento .warmup > div:first-child > p:not(.eyebrow) {
-      max-width: 620px;
-      margin-bottom: 0;
-    }
+    #abstracao .world-grid-reworked { grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); align-items:stretch; }
+    #abstracao .world-grid-reworked .world-card { min-width:0; }
+    #abstracao .world-card .eyebrow { margin-bottom:.65rem; }
+    .abstraction-rule { display:grid; gap:.25rem; margin-top:1.3rem; padding:1rem; border-left:4px solid var(--blue); border-radius:0 14px 14px 0; background:var(--blue-soft); color:var(--muted); }
+    .abstraction-rule strong { color:var(--ink); }
+    .abstraction-map { display:grid; gap:.7rem; margin-top:1.15rem; }
+    .abstraction-map > div { display:grid; grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr); align-items:center; gap:.65rem; padding:.85rem .95rem; border:1px solid var(--line); border-radius:14px; background:var(--paper); }
+    .abstraction-map span { color:var(--muted); }
+    .abstraction-map b { color:var(--blue); text-align:center; font-size:1.15rem; }
+    .abstraction-map strong { color:var(--ink); }
+    .abstraction-excluded { margin-top:1rem; padding:.95rem 1rem; border-radius:14px; background:var(--amber-soft); }
+    .abstraction-excluded small { display:block; margin-bottom:.3rem; color:var(--amber); font-size:.7rem; font-weight:850; letter-spacing:.08em; text-transform:uppercase; }
+    .abstraction-excluded p { margin:0; font-size:.9rem; }
+    .abstraction-challenge-body { align-items:stretch; }
+    .challenge-change { padding:1.05rem 1.1rem; border:1px solid #efd5a7; border-radius:16px; background:var(--amber-soft); }
+    .challenge-change small { display:block; margin-bottom:.4rem; color:var(--amber); font-size:.7rem; font-weight:850; letter-spacing:.09em; text-transform:uppercase; }
+    .challenge-change p { margin:0; color:var(--ink); font-size:1rem; }
+    .challenge-context { margin:1rem 0 .35rem; }
+    .abstraction-takeaway { display:grid; grid-template-columns:auto 1fr; gap:.8rem 1rem; align-items:start; margin:0 1.4rem 1.4rem; padding:1rem 1.1rem; border:1px solid #b8e5df; border-radius:15px; background:var(--teal-soft); }
+    .abstraction-takeaway strong { color:var(--teal); }
+    .abstraction-takeaway span { color:var(--ink); }
 
-    .warmup-map-figure {
-      margin: 1.35rem 0 0;
-      padding: .7rem;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 20px;
-      background: rgba(255,255,255,.045);
-    }
+    /* Formulação em quatro etapas. */
+    #formulacao .formulation-steps { display:grid; grid-template-columns:1fr; gap:16px; }
+    .formulation-step { display:grid; grid-template-columns:72px minmax(0,1fr); gap:1.25rem; padding:1.45rem; border:1px solid var(--line); border-radius:22px; background:var(--paper); box-shadow:0 12px 32px rgba(35,50,78,.045); }
+    .formulation-step-number { display:grid; place-items:center; width:58px; height:58px; border-radius:18px; background:var(--blue-soft); color:var(--blue); font-size:1rem; font-weight:900; }
+    .formulation-step-content > small { display:block; margin-bottom:.35rem; color:var(--blue); font-size:.72rem; font-weight:850; letter-spacing:.09em; text-transform:uppercase; }
+    .formulation-step-content > h3 { margin-bottom:1rem; font-size:1.35rem; }
+    .formulation-concepts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .formulation-concepts-three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .formulation-concepts > div { padding:1rem; border:1px solid var(--line); border-radius:15px; background:var(--soft); }
+    .formulation-concepts strong { display:block; margin-bottom:.3rem; color:var(--ink); }
+    .formulation-concepts span { display:block; color:var(--muted); font-size:.9rem; line-height:1.5; }
+    .formulation-example { display:grid; grid-template-columns:auto 1fr; gap:.7rem; margin-top:1rem; padding:.9rem 1rem; border-left:4px solid var(--teal); border-radius:0 13px 13px 0; background:var(--teal-soft); }
+    .formulation-example b { color:var(--teal); white-space:nowrap; }
+    .formulation-example span { color:var(--ink); }
+    .formulation-example code { padding:.12rem .35rem; border-radius:6px; background:rgba(49,87,213,.08); }
+    .formulation-step-final { border-color:#cbd6ff; }
 
-    .warmup-map-figure img {
-      display: block;
-      width: 100%;
-      height: auto;
-      max-height: 300px;
-      object-fit: contain;
-      border-radius: 15px;
-    }
-
-    #aquecimento .question-cloud {
-      align-content: stretch;
-    }
-
-    #aquecimento .question-cloud > div {
-      display: flex;
-      align-items: center;
-      min-height: 0;
-    }
-
-    .scenario.scenario-reworked {
-      display: block;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .scenario-reworked .scenario-intro {
-      max-width: 980px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .scenario-reworked .scenario-intro .eyebrow {
-      justify-content: center;
-    }
-
-    .scenario-reworked .scenario-intro h2 {
-      max-width: 860px;
-      margin: 0 auto 1.15rem;
-      font-size: clamp(2.35rem, 4.6vw, 4.4rem);
-    }
-
-    .scenario-reworked .scenario-lead {
-      max-width: 850px;
-      margin: 0 auto;
-      font-size: 1.08rem;
-    }
-
-    .scenario-reworked .scenario-question {
-      display: grid;
-      gap: .3rem;
-      max-width: 850px;
-      margin: 1.45rem auto 0;
-      padding: 1rem 1.15rem;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--paper);
-      text-align: left;
-      color: var(--muted);
-    }
-
-    .scenario-reworked .scenario-question strong {
-      color: var(--ink);
-    }
-
-    .scenario-summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 2.1rem;
-    }
-
-    .scenario-summary-card {
-      min-height: 190px;
-      padding: 1.35rem;
-      border: 1px solid var(--line);
-      border-radius: 19px;
-      background: var(--paper);
-      box-shadow: 0 12px 30px rgba(35,50,78,.05);
-    }
-
-    .scenario-summary-card small {
-      display: block;
-      margin-bottom: .85rem;
-      color: var(--blue);
-      font-size: .72rem;
-      font-weight: 850;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-    }
-
-    .scenario-summary-card h3 {
-      margin-bottom: .55rem;
-      font-size: 1.14rem;
-    }
-
-    .scenario-summary-card p {
-      margin-bottom: 0;
-      font-size: .94rem;
-    }
-
-    .scenario-summary-card-accent {
-      border-color: #cbd6ff;
-      background: linear-gradient(145deg, var(--blue-soft), var(--paper));
-    }
-
-    #abstracao .world-grid-reworked {
-      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-      align-items: stretch;
-    }
-
-    #abstracao .world-grid-reworked .world-card {
-      min-width: 0;
-    }
-
-    #abstracao .world-card .eyebrow {
-      margin-bottom: .65rem;
-    }
-
-    .abstraction-rule {
-      display: grid;
-      gap: .25rem;
-      margin-top: 1.3rem;
-      padding: 1rem;
-      border-left: 4px solid var(--blue);
-      border-radius: 0 14px 14px 0;
-      background: var(--blue-soft);
-      color: var(--muted);
-    }
-
-    .abstraction-rule strong {
-      color: var(--ink);
-    }
-
-    .abstraction-map {
-      display: grid;
-      gap: .7rem;
-      margin-top: 1.15rem;
-    }
-
-    .abstraction-map > div {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr);
-      align-items: center;
-      gap: .65rem;
-      padding: .85rem .95rem;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--paper);
-    }
-
-    .abstraction-map span {
-      color: var(--muted);
-    }
-
-    .abstraction-map b {
-      color: var(--blue);
-      text-align: center;
-      font-size: 1.15rem;
-    }
-
-    .abstraction-map strong {
-      color: var(--ink);
-    }
-
-    .abstraction-excluded {
-      margin-top: 1rem;
-      padding: .95rem 1rem;
-      border-radius: 14px;
-      background: var(--amber-soft);
-    }
-
-    .abstraction-excluded small {
-      display: block;
-      margin-bottom: .3rem;
-      color: var(--amber);
-      font-size: .7rem;
-      font-weight: 850;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
-    .abstraction-excluded p {
-      margin: 0;
-      font-size: .9rem;
-    }
-
-    .abstraction-challenge-body {
-      align-items: stretch;
-    }
-
-    .challenge-change {
-      padding: 1.05rem 1.1rem;
-      border: 1px solid #efd5a7;
-      border-radius: 16px;
-      background: var(--amber-soft);
-    }
-
-    .challenge-change small {
-      display: block;
-      margin-bottom: .4rem;
-      color: var(--amber);
-      font-size: .7rem;
-      font-weight: 850;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-    }
-
-    .challenge-change p {
-      margin: 0;
-      color: var(--ink);
-      font-size: 1rem;
-    }
-
-    .challenge-context {
-      margin: 1rem 0 .35rem;
-    }
-
-    .abstraction-takeaway {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: .8rem 1rem;
-      align-items: start;
-      margin: 0 1.4rem 1.4rem;
-      padding: 1rem 1.1rem;
-      border: 1px solid #b8e5df;
-      border-radius: 15px;
-      background: var(--teal-soft);
-    }
-
-    .abstraction-takeaway strong {
-      color: var(--teal);
-    }
-
-    .abstraction-takeaway span {
-      color: var(--ink);
-    }
+    .software-interface { display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); gap:22px; align-items:center; margin-top:1.4rem; padding:1.35rem; border:1px solid var(--line); border-radius:20px; background:linear-gradient(145deg,var(--blue-soft),var(--paper)); }
+    .software-interface .eyebrow { margin-bottom:.55rem; }
+    .software-interface h3 { margin-bottom:.55rem; }
+    .software-interface p { margin-bottom:0; }
+    .software-interface-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .software-interface-grid > div { padding:1rem; border:1px solid var(--line); border-radius:15px; background:var(--paper); }
+    .software-interface-grid small { display:block; margin-bottom:.45rem; color:var(--violet); font-size:.7rem; font-weight:850; letter-spacing:.09em; text-transform:uppercase; }
+    .software-interface-grid strong { display:block; margin-bottom:.35rem; color:var(--ink); }
+    .software-interface-grid span { display:block; color:var(--muted); font-size:.88rem; line-height:1.5; }
 
     body.theme-dark .scenario-reworked .scenario-question,
     body.theme-dark .scenario-summary-card,
-    body.theme-dark .abstraction-map > div {
-      background: #172033;
-      border-color: var(--line);
-    }
-
-    body.theme-dark .scenario-summary-card-accent {
-      background: linear-gradient(145deg, #111a2b, #172033);
-      border-color: #3b4f78;
-    }
-
-    body.theme-dark .abstraction-rule {
-      background: #111a2b;
-    }
-
+    body.theme-dark .abstraction-map > div,
+    body.theme-dark .formulation-step,
+    body.theme-dark .software-interface-grid > div { background:#172033; border-color:var(--line); }
+    body.theme-dark .scenario-summary-card-accent { background:linear-gradient(145deg,#111a2b,#172033); border-color:#3b4f78; }
+    body.theme-dark .abstraction-rule { background:#111a2b; }
     body.theme-dark .abstraction-excluded,
-    body.theme-dark .challenge-change {
-      background: #2b2113;
-      border-color: #60451f;
-    }
+    body.theme-dark .challenge-change { background:#2b2113; border-color:#60451f; }
+    body.theme-dark .abstraction-takeaway,
+    body.theme-dark .formulation-example { background:#0f2b2a; border-color:#245d59; }
+    body.theme-dark .formulation-concepts > div { background:#111a2b; border-color:var(--line); }
+    body.theme-dark .software-interface { background:linear-gradient(145deg,#111a2b,#172033); border-color:var(--line); }
 
-    body.theme-dark .abstraction-takeaway {
-      background: #0f2b2a;
-      border-color: #245d59;
-    }
-
-    @media (max-width: 1000px) {
+    @media (max-width:1000px) {
       #aquecimento .warmup,
-      #abstracao .world-grid-reworked {
-        grid-template-columns: 1fr;
-      }
-
-      .warmup-map-figure img {
-        max-height: 360px;
-      }
+      #abstracao .world-grid-reworked,
+      .software-interface { grid-template-columns:1fr; }
+      .warmup-map-figure img { max-height:360px; }
+      .formulation-concepts-three { grid-template-columns:1fr; }
     }
 
-    @media (max-width: 900px) {
-      .scenario-summary-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .scenario-summary-card {
-        min-height: auto;
-      }
+    @media (max-width:900px) {
+      .scenario-summary-grid { grid-template-columns:1fr; }
+      .scenario-summary-card { min-height:auto; }
+      .formulation-concepts,
+      .software-interface-grid { grid-template-columns:1fr; }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width:640px) {
       .abstraction-map > div,
-      .abstraction-takeaway {
-        grid-template-columns: 1fr;
-        gap: .25rem;
-      }
-
-      .abstraction-map b {
-        transform: rotate(90deg);
-        justify-self: start;
-      }
+      .abstraction-takeaway { grid-template-columns:1fr; gap:.25rem; }
+      .abstraction-map b { transform:rotate(90deg); justify-self:start; }
+      .formulation-step { grid-template-columns:1fr; }
+      .formulation-step-number { width:48px; height:48px; border-radius:15px; }
+      .formulation-example { grid-template-columns:1fr; gap:.3rem; }
     }
   `;
 
