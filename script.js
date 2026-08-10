@@ -63,6 +63,13 @@ document.querySelectorAll('.image-dialog').forEach((dialog) => {
   });
 });
 
+if (window.location.pathname.endsWith('/aula-02-aprofundamento.html') || window.location.pathname.endsWith('aula-02-aprofundamento.html')) {
+  const firstDeepDiveFigure = document.querySelector('img[src$="aula-02-aprofundamento-01.webp"]');
+  if (firstDeepDiveFigure) {
+    firstDeepDiveFigure.setAttribute('src', 'assets/aula-02-aprofundamento/aula-02-aprofundamento-01.png');
+  }
+}
+
 if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathname.endsWith('aula-03.html')) {
   const lessonAdjustments = document.createElement('script');
   lessonAdjustments.src = 'aula-03-ajustes.js';
