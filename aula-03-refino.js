@@ -85,7 +85,7 @@
         <div class="state-graph-canvas">
           <svg class="state-graph-svg" viewBox="0 0 820 430" role="img" aria-labelledby="state-graph-title state-graph-desc">
             <title id="state-graph-title">Grafo do espaço de estados do robô</title>
-            <desc id="state-graph-desc">O estado Corredor está conectado a Recepção, Sala 101, Copa e Laboratório. Recepção é o estado inicial e Laboratório é o objetivo.</desc>
+            <desc id="state-graph-desc">O estado Corredor está conectado a Recepção, Sala 101, Copa e Laboratório. Recepção é o estado inicial, Laboratório é o objetivo e o caminho Recepção, Corredor, Laboratório está destacado.</desc>
 
             <defs>
               <filter id="state-node-shadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -94,8 +94,8 @@
             </defs>
 
             <g class="state-graph-edges" aria-hidden="true">
-              <line x1="195" y1="215" x2="345" y2="215"></line>
-              <line x1="475" y1="215" x2="625" y2="215"></line>
+              <line class="state-path-edge" x1="195" y1="215" x2="345" y2="215"></line>
+              <line class="state-path-edge" x1="475" y1="215" x2="625" y2="215"></line>
               <line x1="392" y1="175" x2="365" y2="111"></line>
               <line x1="392" y1="255" x2="365" y2="319"></line>
             </g>
@@ -106,7 +106,7 @@
               <text class="node-role" x="70" y="61">estado inicial</text>
             </g>
 
-            <g class="state-node state-node-core" transform="translate(345 175)" filter="url(#state-node-shadow)">
+            <g class="state-node state-node-core state-node-on-path" transform="translate(345 175)" filter="url(#state-node-shadow)">
               <rect width="130" height="80" rx="20"></rect>
               <text x="65" y="47">Corredor</text>
             </g>
@@ -129,10 +129,16 @@
           </svg>
         </div>
 
+        <div class="state-path-example">
+          <span class="state-path-example-mark"></span>
+          <div><small>Caminho destacado</small><strong>Recepção → Corredor → Laboratório</strong></div>
+          <p>É uma sequência válida de estados que conecta o estado inicial ao objetivo; neste problema, portanto, também constitui uma solução.</p>
+        </div>
+
         <div class="state-graph-reading">
-          <div><span class="reading-mark reading-node"></span><strong>Nó</strong><p>representa um estado possível.</p></div>
-          <div><span class="reading-mark reading-edge"></span><strong>Aresta</strong><p>representa uma transição permitida.</p></div>
-          <div><span class="reading-mark reading-path"></span><strong>Caminho</strong><p>é uma sequência de estados conectados.</p></div>
+          <div><span class="reading-mark reading-node"></span><strong>Nó</strong><p>representa um estado do problema.</p></div>
+          <div><span class="reading-mark reading-edge"></span><strong>Aresta</strong><p>representa uma transição possível entre dois estados.</p></div>
+          <div><span class="reading-mark reading-path"></span><strong>Caminho</strong><p>é uma sequência de estados ligados por transições.</p></div>
         </div>
       `;
     }
@@ -229,6 +235,12 @@
       stroke-linecap: round;
     }
 
+    .state-graph-edges line.state-path-edge {
+      stroke: #3aa797;
+      stroke-width: 7;
+      filter: drop-shadow(0 0 5px rgba(58, 167, 151, .26));
+    }
+
     .state-node rect {
       stroke-width: 2;
     }
@@ -259,6 +271,11 @@
       stroke: #8da0c3;
     }
 
+    .state-node-on-path rect {
+      stroke: #3aa797;
+      stroke-width: 3;
+    }
+
     .state-node-regular rect {
       fill: var(--paper);
       stroke: #c5cede;
@@ -271,6 +288,52 @@
 
     .state-node-goal text:first-of-type {
       fill: var(--teal);
+    }
+
+    .state-path-example {
+      display: grid;
+      grid-template-columns: auto auto minmax(0, 1fr);
+      gap: .7rem 1rem;
+      align-items: center;
+      margin-top: 10px;
+      padding: .85rem 1rem;
+      border: 1px solid #a9ddd5;
+      border-radius: 14px;
+      background: var(--teal-soft);
+    }
+
+    .state-path-example-mark {
+      width: 22px;
+      height: 6px;
+      border-radius: 999px;
+      background: #3aa797;
+      box-shadow: 0 0 0 4px rgba(58, 167, 151, .12);
+    }
+
+    .state-path-example small,
+    .state-path-example strong {
+      display: block;
+    }
+
+    .state-path-example small {
+      margin-bottom: .12rem;
+      color: var(--teal);
+      font-size: .68rem;
+      font-weight: 850;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .state-path-example strong {
+      color: var(--ink);
+      font-size: .9rem;
+    }
+
+    .state-path-example p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .8rem;
+      line-height: 1.4;
     }
 
     .state-graph-reading {
@@ -371,6 +434,10 @@
       stroke: #65799f;
     }
 
+    body.theme-dark .state-graph-edges line.state-path-edge {
+      stroke: #45b3a2;
+    }
+
     body.theme-dark .state-node text {
       fill: #e9eef9;
     }
@@ -390,6 +457,10 @@
       stroke: #647798;
     }
 
+    body.theme-dark .state-node-on-path rect {
+      stroke: #45b3a2;
+    }
+
     body.theme-dark .state-node-goal rect {
       fill: #0f302d;
       stroke: #45b3a2;
@@ -397,6 +468,11 @@
 
     body.theme-dark .state-node-goal text:first-of-type {
       fill: #61d4c2;
+    }
+
+    body.theme-dark .state-path-example {
+      background: #0f2b2a;
+      border-color: #245d59;
     }
 
     body.theme-dark .state-graph-reading > div {
@@ -429,6 +505,14 @@
 
       .state-graph-canvas {
         overflow-x: auto;
+      }
+
+      .state-path-example {
+        grid-template-columns: auto 1fr;
+      }
+
+      .state-path-example p {
+        grid-column: 1 / -1;
       }
 
       .state-graph-reading {
