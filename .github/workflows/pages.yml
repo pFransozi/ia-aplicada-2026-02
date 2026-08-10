@@ -59,7 +59,7 @@ jobs:
               mn = arr.min(axis=2)
               delta = mx - mn
               value = mx
-              sat = np.where(mx > 1e-6, delta / mx, 0)
+              sat = np.divide(delta, mx, out=np.zeros_like(delta), where=mx > 1e-6)
 
               hue = np.zeros_like(value)
               mask = delta > 1e-6
@@ -154,7 +154,8 @@ jobs:
           test -f dist/calendario-b.html
           test -f dist/assets/infografico.png
           test -f dist/assets/infografico-dark.png
-          for i in $(seq -w 1 8); do
+          for n in 1 2 3 4 5 6 7 8; do
+            i=$(printf '%02d' "$n")
             test -f "dist/assets/aula-02-aprofundamento/aula-02-aprofundamento-${i}.png"
             test -f "dist/assets/aula-02-aprofundamento/aula-02-aprofundamento-${i}-dark.png"
           done
