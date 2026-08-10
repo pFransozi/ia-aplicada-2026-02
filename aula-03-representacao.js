@@ -410,4 +410,9 @@
   `;
 
   document.head.appendChild(style);
+
+  const activityRefinement = document.createElement('script');
+  activityRefinement.src = 'aula-03-atividade.js';
+  activityRefinement.async = false;
+  document.head.appendChild(activityRefinement);
 })();
