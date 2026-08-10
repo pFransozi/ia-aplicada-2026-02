@@ -303,6 +303,14 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
     const lessonRefinement = document.createElement('script');
     lessonRefinement.src = 'aula-03-refino.js';
     lessonRefinement.async = false;
+
+    lessonRefinement.addEventListener('load', () => {
+      const representationRefinement = document.createElement('script');
+      representationRefinement.src = 'aula-03-representacao.js';
+      representationRefinement.async = false;
+      document.head.appendChild(representationRefinement);
+    });
+
     document.head.appendChild(lessonRefinement);
   });
 
