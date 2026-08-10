@@ -2,6 +2,25 @@ const navToggle = document.querySelector('.nav-toggle');
 const mainNav = document.querySelector('.main-nav');
 const themeToggle = document.querySelector('.theme-toggle');
 
+const removeDuplicateRussellNorvigReference = () => {
+  if (!window.location.pathname.endsWith('aula-02-aprofundamento.html')) return;
+
+  document.querySelectorAll('#referencias .references li').forEach((item) => {
+    const text = item.textContent.replace(/\s+/g, ' ').trim();
+    if (
+      text.includes('RUSSELL, Stuart J.; NORVIG, Peter.') &&
+      text.includes('Inteligência Artificial') &&
+      text.includes('Elsevier, 2013')
+    ) {
+      item.remove();
+    }
+  });
+};
+
+removeDuplicateRussellNorvigReference();
+document.addEventListener('DOMContentLoaded', removeDuplicateRussellNorvigReference);
+window.addEventListener('load', removeDuplicateRussellNorvigReference);
+
 const applyTheme = (theme) => {
   const isDark = theme === 'dark';
   document.body.classList.toggle('theme-dark', isDark);
@@ -66,10 +85,7 @@ document.querySelectorAll('.image-dialog').forEach((dialog) => {
 const setupDeepDiveFigures = () => {
   if (!window.location.pathname.endsWith('aula-02-aprofundamento.html')) return;
 
-  const duplicateReference = Array.from(
-    document.querySelectorAll('#referencias .references li')
-  ).find((item) => item.textContent.includes('Tradução da 3. ed. Elsevier, 2013'));
-  duplicateReference?.remove();
+  removeDuplicateRussellNorvigReference();
 
   // Usa os PNGs originais em alta definição. Mantém compatibilidade com
   // referências antigas em WebP que ainda estejam presentes no HTML.
