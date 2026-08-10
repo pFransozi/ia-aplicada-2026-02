@@ -74,5 +74,13 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
   const lessonAdjustments = document.createElement('script');
   lessonAdjustments.src = 'aula-03-ajustes.js';
   lessonAdjustments.async = false;
+
+  lessonAdjustments.addEventListener('load', () => {
+    const lessonRefinement = document.createElement('script');
+    lessonRefinement.src = 'aula-03-refino.js';
+    lessonRefinement.async = false;
+    document.head.appendChild(lessonRefinement);
+  });
+
   document.head.appendChild(lessonAdjustments);
 }
