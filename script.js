@@ -66,6 +66,11 @@ document.querySelectorAll('.image-dialog').forEach((dialog) => {
 const setupDeepDiveFigures = () => {
   if (!window.location.pathname.endsWith('aula-02-aprofundamento.html')) return;
 
+  const duplicateReference = Array.from(
+    document.querySelectorAll('#referencias .references li')
+  ).find((item) => item.textContent.includes('Tradução da 3. ed. Elsevier, 2013'));
+  duplicateReference?.remove();
+
   // Usa os PNGs originais em alta definição. Mantém compatibilidade com
   // referências antigas em WebP que ainda estejam presentes no HTML.
   const deepDiveImages = Array.from(
