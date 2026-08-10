@@ -63,12 +63,184 @@ document.querySelectorAll('.image-dialog').forEach((dialog) => {
   });
 });
 
-if (window.location.pathname.endsWith('/aula-02-aprofundamento.html') || window.location.pathname.endsWith('aula-02-aprofundamento.html')) {
-  const firstDeepDiveFigure = document.querySelector('img[src$="aula-02-aprofundamento-01.webp"]');
-  if (firstDeepDiveFigure) {
-    firstDeepDiveFigure.setAttribute('src', 'assets/aula-02-aprofundamento/aula-02-aprofundamento-01.png');
+const setupDeepDiveFigures = () => {
+  if (!window.location.pathname.endsWith('aula-02-aprofundamento.html')) return;
+
+  const fundamentalsSection = document.querySelector('#fundamentos');
+  const fundamentalsGrid = fundamentalsSection?.querySelector('.study-grid');
+  const firstProse = fundamentalsGrid?.querySelector('.study-prose');
+  const firstFigure = firstProse?.querySelector('.figure-light');
+
+  if (fundamentalsGrid && firstProse && firstFigure) {
+    const continuation = document.createElement('div');
+    continuation.className = 'study-prose study-prose-continuation';
+
+    let nextNode = firstFigure.nextElementSibling;
+    while (nextNode) {
+      const nodeToMove = nextNode;
+      nextNode = nextNode.nextElementSibling;
+      continuation.appendChild(nodeToMove);
+    }
+
+    fundamentalsGrid.insertAdjacentElement('afterend', firstFigure);
+    firstFigure.classList.add('figure-featured');
+    firstFigure.insertAdjacentElement('afterend', continuation);
   }
-}
+
+  const style = document.createElement('style');
+  style.id = 'deep-dive-figure-enhancements';
+  style.textContent = `
+    .study-page .figure-featured {
+      width: 100%;
+      max-width: 1180px;
+      margin: 2.35rem auto 3rem;
+      padding: .75rem;
+    }
+
+    .study-page .study-prose-continuation {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .study-page .figure-light {
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .study-page .figure-light[data-zoomable="true"] {
+      cursor: zoom-in;
+    }
+
+    .study-page .figure-light[data-zoomable="true"]:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--primary) 48%, #d9e1ec);
+      box-shadow: 0 18px 42px rgba(30,50,80,.14);
+    }
+
+    .study-page .figure-light[data-zoomable="true"]:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--primary) 65%, white);
+      outline-offset: 5px;
+    }
+
+    .deep-dive-image-dialog {
+      width: min(96vw, 1600px);
+      max-width: none;
+      height: min(94vh, 1050px);
+      max-height: none;
+      padding: 0;
+      border: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0b1020;
+      box-shadow: 0 28px 80px rgba(0,0,0,.45);
+    }
+
+    .deep-dive-image-dialog::backdrop {
+      background: rgba(3,7,18,.82);
+      backdrop-filter: blur(5px);
+    }
+
+    .deep-dive-dialog-shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 3.25rem 1.25rem 1.25rem;
+      box-sizing: border-box;
+      overflow: auto;
+    }
+
+    .deep-dive-dialog-shell img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(94vh - 5rem);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 10px;
+    }
+
+    .deep-dive-dialog-close {
+      position: absolute;
+      top: .8rem;
+      right: .9rem;
+      width: 2.35rem;
+      height: 2.35rem;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 999px;
+      background: rgba(15,23,42,.82);
+      color: #fff;
+      font: inherit;
+      font-size: 1.35rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .deep-dive-dialog-close:hover {
+      background: rgba(30,41,59,.98);
+    }
+
+    @media (max-width: 680px) {
+      .study-page .figure-featured {
+        margin: 1.6rem auto 2.2rem;
+        padding: .45rem;
+      }
+
+      .deep-dive-image-dialog {
+        width: 98vw;
+        height: 92vh;
+        border-radius: 12px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  const dialog = document.createElement('dialog');
+  dialog.className = 'deep-dive-image-dialog';
+  dialog.setAttribute('aria-label', 'Visualização ampliada da figura');
+  dialog.innerHTML = `
+    <div class="deep-dive-dialog-shell">
+      <button class="deep-dive-dialog-close" type="button" aria-label="Fechar imagem ampliada">×</button>
+      <img alt="">
+    </div>
+  `;
+  document.body.appendChild(dialog);
+
+  const dialogImage = dialog.querySelector('img');
+  const closeButton = dialog.querySelector('.deep-dive-dialog-close');
+
+  const openFigure = (figure) => {
+    const image = figure.querySelector('img');
+    if (!image || !dialogImage) return;
+    dialogImage.src = image.currentSrc || image.src;
+    dialogImage.alt = image.alt || 'Figura ampliada';
+    dialog.showModal();
+  };
+
+  document.querySelectorAll('.study-page .figure-light').forEach((figure) => {
+    figure.dataset.zoomable = 'true';
+    figure.tabIndex = 0;
+    figure.setAttribute('role', 'button');
+    figure.setAttribute('aria-label', 'Ampliar figura');
+
+    figure.addEventListener('click', () => openFigure(figure));
+    figure.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      openFigure(figure);
+    });
+  });
+
+  closeButton?.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+};
+
+setupDeepDiveFigures();
 
 if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathname.endsWith('aula-03.html')) {
   const lessonAdjustments = document.createElement('script');
