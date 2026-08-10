@@ -94,46 +94,34 @@
             </defs>
 
             <g class="state-graph-edges" aria-hidden="true">
-              <line x1="195" y1="210" x2="345" y2="210"></line>
-              <line x1="475" y1="210" x2="625" y2="210"></line>
-              <line x1="400" y1="170" x2="285" y2="95"></line>
-              <line x1="420" y1="170" x2="535" y2="95"></line>
-              <line x1="400" y1="250" x2="285" y2="335"></line>
-              <line x1="420" y1="250" x2="535" y2="335"></line>
+              <line x1="195" y1="215" x2="345" y2="215"></line>
+              <line x1="475" y1="215" x2="625" y2="215"></line>
+              <line x1="392" y1="175" x2="365" y2="111"></line>
+              <line x1="392" y1="255" x2="365" y2="319"></line>
             </g>
 
-            <g class="state-node state-node-start" transform="translate(55 170)" filter="url(#state-node-shadow)">
+            <g class="state-node state-node-start" transform="translate(55 175)" filter="url(#state-node-shadow)">
               <rect width="140" height="80" rx="20"></rect>
               <text x="70" y="39">Recepção</text>
               <text class="node-role" x="70" y="61">estado inicial</text>
             </g>
 
-            <g class="state-node state-node-core" transform="translate(345 170)" filter="url(#state-node-shadow)">
+            <g class="state-node state-node-core" transform="translate(345 175)" filter="url(#state-node-shadow)">
               <rect width="130" height="80" rx="20"></rect>
               <text x="65" y="47">Corredor</text>
             </g>
 
-            <g class="state-node state-node-regular" transform="translate(210 45)" filter="url(#state-node-shadow)">
+            <g class="state-node state-node-regular" transform="translate(285 35)" filter="url(#state-node-shadow)">
               <rect width="150" height="76" rx="19"></rect>
               <text x="75" y="44">Sala 101</text>
             </g>
 
-            <g class="state-node state-node-regular" transform="translate(460 45)" filter="url(#state-node-shadow)">
+            <g class="state-node state-node-regular" transform="translate(285 319)" filter="url(#state-node-shadow)">
               <rect width="150" height="76" rx="19"></rect>
               <text x="75" y="44">Copa</text>
             </g>
 
-            <g class="state-node state-node-regular" transform="translate(210 309)" filter="url(#state-node-shadow)">
-              <rect width="150" height="76" rx="19"></rect>
-              <text x="75" y="44">Sala 101</text>
-            </g>
-
-            <g class="state-node state-node-regular" transform="translate(460 309)" filter="url(#state-node-shadow)">
-              <rect width="150" height="76" rx="19"></rect>
-              <text x="75" y="44">Copa</text>
-            </g>
-
-            <g class="state-node state-node-goal" transform="translate(625 170)" filter="url(#state-node-shadow)">
+            <g class="state-node state-node-goal" transform="translate(625 175)" filter="url(#state-node-shadow)">
               <rect width="140" height="80" rx="20"></rect>
               <text x="70" y="39">Laboratório</text>
               <text class="node-role" x="70" y="61">objetivo</text>
