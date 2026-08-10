@@ -9,135 +9,578 @@
   <link rel="stylesheet" href="styles.css">
   <script defer src="script.js"></script>
   <style>
-    :root {
-      --ink: #172033;
-      --muted: #647087;
-      --line: #dfe5ef;
-       --soft: #f4f7fb;
-       --paper: #ffffff;
-      --navy: #0f172a;
-      --blue: #3157d5;
-      --blue-soft: #edf2ff;
-       --violet: #7357d8;
-      --violet-soft: #f2efff;
-      --teal: #17857b;
-      --teal-soft: #eaf8f6;
-      --amber: #9c5a00;
-      --amber-soft: #fff7e8;
-      --rose: #a63753;
-      --rose-soft: #fff0f4;
-      --content: 1160px;
-      --radius: 22px;
-      --shadow: 0 18px 48px rgba(35, 50, 78, .09);
+    .study-page { background: var(--bg); color: var(--text); }
+    .study-page .site-header { background: color-mix(in srgb, var(--bg) 92%, transparent); }
+    .study-hero { padding: 6rem 0 5rem; background: radial-gradient(circle at 88% 18%, rgba(124,103,232,.15), transparent 27rem), radial-gradient(circle at 8% 78%, rgba(49,94,251,.11), transparent 24rem), var(--bg); }
+    .study-hero-grid { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(280px,.7fr); gap: 3.5rem; align-items: end; }
+    .study-hero h1 { margin: 0; max-width: 900px; font-size: clamp(3rem, 6.5vw, 6rem); line-height: .96; letter-spacing: -.055em; }
+    .study-lead { max-width: 760px; margin: 1.5rem 0 0; color: var(--muted); font-size: clamp(1.15rem, 2vw, 1.42rem); }
+    .study-card { padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .study-card strong { display: block; margin-bottom: .55rem; color: var(--primary); }
+    .study-card p:last-child { margin-bottom: 0; }
+    .study-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.7rem; }
+    .study-meta { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.3rem; }
+    .study-meta span { padding: .35rem .7rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--surface); font-size: .84rem; }
+    .study-toc-shell { position: sticky; top: 76px; z-index: 60; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(14px); }
+    .study-toc { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: .5rem; padding: .85rem 0; }
+    .study-toc a { padding: .72rem .7rem; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; text-align: center; color: var(--muted); background: var(--surface); font-size: .78rem; font-weight: 800; line-height: 1.2; }
+    .study-toc a:hover { color: var(--primary); border-color: var(--primary); }
+    .study-section { padding: 5.5rem 0; scroll-margin-top: 155px; }
+    .study-section.alt { background: var(--surface-soft); }
+    .study-heading { max-width: 850px; margin-bottom: 2.2rem; }
+    .study-heading h2 { margin: 0; font-size: clamp(2.15rem,4vw,3.6rem); line-height: 1.04; letter-spacing: -.045em; }
+    .study-heading > p:last-child { margin: 1rem 0 0; color: var(--muted); font-size: 1.05rem; }
+    .study-kicker { margin: 0 0 .65rem; color: var(--primary); font-size: .76rem; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+    .study-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(280px,.8fr); gap: 2rem; align-items: start; }
+    .study-prose { min-width: 0; }
+    .study-prose h3 { margin: 2.3rem 0 .8rem; font-size: 1.55rem; }
+    .study-prose h3:first-child { margin-top: 0; }
+    .study-prose h4 { margin: 1.65rem 0 .55rem; font-size: 1.08rem; }
+    .study-prose p, .study-prose li { color: var(--muted); }
+    .study-prose p { margin: 0 0 1.05rem; }
+    .study-prose ul, .study-prose ol { padding-left: 1.3rem; }
+    .study-prose li + li { margin-top: .42rem; }
+    .study-stack { display: grid; gap: 1rem; }
+    .study-callout { padding: 1.15rem 1.25rem; border-left: 4px solid var(--primary); border-radius: 0 16px 16px 0; background: color-mix(in srgb, var(--primary) 9%, var(--surface)); }
+    .study-callout strong { display: block; margin-bottom: .35rem; color: var(--primary); }
+    .study-callout p { margin: 0; color: var(--muted); }
+    .study-callout.violet { border-left-color: var(--secondary); background: color-mix(in srgb, var(--secondary) 10%, var(--surface)); }
+    .study-callout.violet strong { color: var(--secondary); }
+    .study-callout.teal { border-left-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+    .study-callout.teal strong { color: var(--accent); }
+    .figure-light { margin: 1.6rem 0; padding: 1rem; border: 1px solid #d9e1ec; border-radius: 20px; background: #fff; box-shadow: 0 14px 36px rgba(30,50,80,.08); }
+    .figure-light img { width: 100%; height: auto; border-radius: 12px; background: #fff; }
+    .figure-light figcaption { padding: .85rem .45rem .15rem; color: #5d6b82; text-align: center; font-size: .84rem; }
+    .mini-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .mini-card { padding: 1.2rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .mini-card h4 { margin: 0 0 .45rem; }
+    .mini-card p { margin: 0; }
+    .study-table-wrap { margin: 1.5rem 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .study-table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    .study-table th, .study-table td { padding: .85rem .9rem; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+    .study-table th { background: color-mix(in srgb, var(--primary) 10%, var(--surface)); color: var(--text); font-size: .82rem; }
+    .study-table td { color: var(--muted); font-size: .9rem; }
+    .study-table tr:last-child td { border-bottom: 0; }
+    .flow { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: .7rem; margin: 1.4rem 0; }
+    .flow span { padding: .85rem .75rem; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); text-align: center; color: var(--text); font-size: .82rem; font-weight: 800; }
+    .check-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .check-card { padding: 1.2rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .check-card span { display: inline-grid; place-items: center; width: 34px; height: 34px; margin-bottom: .8rem; border-radius: 10px; color: #fff; background: var(--primary); font-size: .78rem; font-weight: 900; }
+    .check-card strong { display: block; margin-bottom: .35rem; }
+    .check-card p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .references { padding-left: 1.2rem; }
+    .references li + li { margin-top: .55rem; }
+    .study-page .site-footer { border-top: 1px solid var(--line); }
+    body.theme-dark .figure-light { background: #fff; border-color: #42506a; }
+    body.theme-dark .figure-light img { background: #fff; }
+    @media (max-width: 980px) {
+      .study-hero-grid, .study-grid { grid-template-columns: 1fr; }
+      .study-toc { grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .flow { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .check-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
     }
+    @media (max-width: 680px) {
+      .study-hero { padding: 4.2rem 0 3.5rem; }
+      .study-toc-shell { position: static; }
+      .study-toc { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .study-section { padding: 4rem 0; scroll-margin-top: 90px; }
+      .mini-grid, .check-grid, .flow { grid-template-columns: 1fr; }
+      .study-nav .nav-label { display: none; }
+    }
+  </style>
+</head>
+<body class="study-page">
+  <a class="skip-link" href="#conteudo">Ir para o conte√∫do</a>
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.68;
-    }
-    a { color: inherit; }
-    h1, h2, h3, h4, p { margin-top: 0; }
-    h1, h2, h3, h4 { line-height: 1.16; letter-spacing: -.025em; }
-    h1 { font-size: clamp(2.6rem, 6vw, 5.3rem); max-width: 13ch; margin-bottom: 1.15rem; }
-    h2 { font-size: clamp(1.9rem, 4vw, 3.15rem); margin-bottom: 1rem; }
-    h3 { font-size: clamp(1.25rem, 2.2vw, 1.7rem); margin-bottom: .7rem; }
-    h4 { font-size: 1.08rem; margin-bottom: .45rem; }
-    p, li { color: var(--muted); }
-    strong { color: var(--ink); }
+  <header class="site-header" id="inicio">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="IA Aplicada ‚Äî p√°gina principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span><strong>IA Aplicada</strong><small>Engenharia de Software</small></span>
+      </a>
+      <nav class="main-nav study-nav" aria-label="Navega√ß√£o principal">
+        <a href="aula-02.html">Aula 02</a>
+        <a class="nav-highlight" href="aula-02-aprofundamento.html">Aprofundamento</a>
+        <a href="index.html">Portal</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">‚òæ</span>
+          <span class="theme-text nav-label">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
 
-    .skip-link {
-      position: fixed; left: 12px; top: -60px; z-index: 1000;
-      background: white; color: #111827; padding: .7rem 1rem; border-radius: 10px; box-shadow: var(--shadow);
-    }
-    .skip-link:focus { top: 12px; }
-    .progress {
-      position: fixed; inset: 0 auto auto 0; height: 4px; width: 0;
-      z-index: 999; background: linear-gradient(90deg, var(--blue), var(--violet), var(--teal));
-    }
-    .container { width: min(var(--content), calc(100% - 40px)); margin-inline: auto; }
-    .section { padding: 82px 0; scroll-margin-top: 88px; }
-    .section-soft { background: var(--soft); }
-    .section-dark { background: var(--navy); color: white; }
-    .section-dark p, .section-dark li { color: #cbd5e1; }
-    .section-dark strong { color: white; }
+  <main id="conteudo">
+    <section class="study-hero">
+      <div class="container study-hero-grid">
+        <div>
+          <p class="eyebrow">Aula 02 ¬∑ material de aprofundamento</p>
+          <h1>Introdu√ß√£o √† Intelig√™ncia Artificial</h1>
+          <p class="study-lead">Fundamentos, evolu√ß√£o, agentes, formula√ß√£o de problemas, aplica√ß√µes contempor√¢neas e crit√©rios para avaliar quando a IA realmente agrega valor a uma solu√ß√£o de software.</p>
+          <div class="study-meta">
+            <span>Engenharia de Software</span>
+            <span>2026/2</span>
+            <span>Leitura ampliada</span>
+          </div>
+          <div class="study-actions">
+            <a class="button button-primary" href="#fundamentos">Come√ßar a leitura</a>
+            <a class="button button-secondary" href="aula-02.html">Voltar √† aula principal</a>
+          </div>
+        </div>
+        <aside class="study-card">
+          <strong>Como usar este material</strong>
+          <p>Este texto aprofunda os conceitos apresentados em aula. O objetivo n√£o √© memorizar uma sequ√™ncia hist√≥rica, mas construir um repert√≥rio para analisar sistemas de IA como decis√µes de engenharia.</p>
+        </aside>
+      </div>
+    </section>
 
-    .site-header {
-      position: sticky; top: 0; z-index: 100;
-      backdrop-filter: blur(18px);
-      background: rgba(255,255,255,.9);
-      border-bottom: 1px solid rgba(223,229,239,.9);
-    }
-    .nav { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-    .brand { text-decoration: none; display: flex; align-items: center; gap: .8rem; font-weight: 800; }
-    .brand-mark {
-      display: grid; place-items: center; width: 40px; height: 40px; border-radius: 13px;
-      color: white; background: linear-gradient(145deg, var(--blue), var(--violet)); box-shadow: 0 10px 24px rgba(49,87,213,.24);
-      font-size: .92rem;
-    }
-    .brand small { display: block; font-size: .68rem; color: var(--muted); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-    .study-nav { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .85rem; }
-    .study-nav a { text-decoration: none; color: var(--muted); font-size: .92rem; font-weight: 700; }
-    .study-nav a:hover, .study-nav a.active { color: var(--blue); }
+    <div class="study-toc-shell" aria-label="Sum√°rio do aprofundamento">
+      <div class="container study-toc">
+        <a href="#fundamentos">Fundamentos e evolu√ß√£o</a>
+        <a href="#simbolica">IA simb√≥lica</a>
+        <a href="#aprendizado">Aprendizado e gera√ß√£o</a>
+        <a href="#agentes">Sistemas e agentes</a>
+        <a href="#problemas">Problemas e aplica√ß√µes</a>
+        <a href="#riscos">Limites e decis√£o</a>
+      </div>
+    </div>
 
-    .hero {
-      position: relative; overflow: hidden; padding: 90px 0 74px;
-      background:
-        radial-gradient(circle at 88% 18%, rgba(115,87,216,.14), transparent 28%),
-        radial-gradient(circle at 76% 76%, rgba(23,133,123,.11), transparent 24%),
-        linear-gradient(180deg, #fbfcff 0%, #fff 100%);
-    }
-    .hero::after {
-      content: ""; position: absolute; width: 520px; height: 520px; right: -250px; top: -180px;
-      border: 1px solid rgba(49,87,213,.13); border-radius: 50%; box-shadow: 0 0 0 70px rgba(49,87,213,.025), 0 0 0 140px rgba(115,87,216,.018);
-    }
-    .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(280px, .7fr); gap: 48px; align-items: end; }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: .5rem; margin-bottom: 1rem;
-      color: var(--blue); font-size: .78rem; font-weight: 850; letter-spacing: .13em; text-transform: uppercase;
-    }
-    .eyebrow::before { content: ""; width: 28px; height: 2px; background: currentColor; border-radius: 999px; }
-    .hero-lead { font-size: clamp(1.08rem, 2vw, 1.3rem); max-width: 760px; }
-    .hero-meta { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.5rem; }
-    .hero-meta span { border: 1px solid var(--line); border-radius: 999px; padding: .35rem .75rem; color: var(--muted); font-size: .86rem; background: rgba(255,255,255,.8); }
-    .hero-card { background: rgba(255,255,255,.92); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
-    .hero-card strong { display: block; margin-bottom: .6rem; color: var(--blue); }
-    .hero-card p:last-child { margin-bottom: 0; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.7rem; }
-    .button {
-      display: inline-flex; align-items: center; justify-content: center; min-height: 46px;
-      padding: .78rem 1.05rem; border-radius: 13px; text-decoration: none; font-weight: 800; border: 1px solid transparent;
-    }
-    .button-primary { color: white; background: var(--navy); box-shadow: 0 12px 28px rgba(15,23,42,.18); }
-    .button-secondary { color: var(--ink); background: white; border-color: var(--line); }
+    <section class="study-section" id="fundamentos">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Parte I ¬∑ Fundamentos e evolu√ß√£o</p>
+          <h2>O que estamos chamando de Intelig√™ncia Artificial?</h2>
+          <p>IA √© um campo de investiga√ß√£o e engenharia formado por diferentes tradi√ß√µes. N√£o existe uma √∫nica t√©cnica que, isoladamente, defina toda a √°rea.</p>
+        </div>
 
-    .toc-shell { padding: 26px 0; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.96); }
-    .toc { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; }
-    .toc a {
-      display: block; padding: .78rem .9rem; border: 1px solid var(--line); border-radius: 13px;
-      text-decoration: none; font-size: .84rem; font-weight: 800; line-height: 1.25; background: white;
-    }
-    .toc a:hover { border-color: #b9c7ff; color: var(--blue); box-shadow: 0 8px 20px rgba(49,87,213,.08); }
+        <div class="study-grid">
+          <div class="study-prose">
+            <h3>Quatro maneiras de formular o objetivo da IA</h3>
+            <p>Uma forma cl√°ssica de organizar o campo distingue sistemas interessados em <strong>pensar como humanos</strong>, <strong>agir como humanos</strong>, <strong>pensar racionalmente</strong> ou <strong>agir racionalmente</strong>. Essas perspectivas levam a crit√©rios de avalia√ß√£o diferentes e ajudam a evitar a ideia de que intelig√™ncia artificial significa apenas imitar uma pessoa.</p>
+            <p>Ao longo da hist√≥ria, sistemas de IA foram constru√≠dos com l√≥gica, busca, heur√≠sticas, representa√ß√£o do conhecimento, probabilidades, redes neurais, m√©todos evolucion√°rios e combina√ß√µes dessas abordagens. Um sistema tamb√©m n√£o precisa aprender continuamente, conversar como uma pessoa ou possuir consci√™ncia para pertencer ao campo.</p>
 
-    .section-heading { max-width: 830px; margin-bottom: 2.3rem; }
-    .section-heading p { font-size: 1.04rem; }
-    .reading-grid { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(260px,.75fr); gap: 28px; align-items: start; }
-    .prose p { margin-bottom: 1.15rem; }
-    .prose ul, .prose ol { padding-left: 1.25rem; }
-    .prose li + li { margin-top: .5rem; }
-    .stack { display: grid; gap: 16px; }
+            <h3>As ra√≠zes s√£o anteriores ao computador</h3>
+            <p>A IA moderna depende de contribui√ß√µes anteriores da filosofia, l√≥gica, matem√°tica, estat√≠stica, psicologia, neuroci√™ncia, economia, teoria de controle, lingu√≠stica e computa√ß√£o. O ponto comum √© a tentativa de descrever capacidades como racioc√≠nio, decis√£o, percep√ß√£o e linguagem de forma suficientemente precisa para que possam ser modeladas.</p>
 
-    .callout {
-      border-left: 4px solid var(--blue); background: var(--blue-soft); padding: 1.15rem 1.25rem; border-radius: 0 16px 16px 0;
-    }
-    .callout strong { display: block; margin-bottom: .35rem; color: var(--blue); }
-    .callout p:last-child { margin-bottom: 0; }
-    .callout.violet { border-left-color: var(--violet); background: var(--violet-soft); }
-    .callout.violet strong { color: var(--violet); }
-    .callout.teal { border-left-color: var(--teal); background: var(--teal-soft); }
-    .callout.teal strong { color: var(--tea≤»="25Ωëï±ºΩ—ê¯Ò—ê˘E’Ö∞É§ÅºÅëïÕïµ¡ïπ°º¸Å¥Å≈’îÅçÖÕΩÃÅï……Ñ¸Å<ÅçΩµ¡Ω…—Öµïπ—ºÉ§ÅïÕ”ÖŸï∞¸Å#ÑÅë•ôï…ïªùÖÃÅïπ—…îÅù…’¡ΩÃÅΩ‘ÅçïªÖ…•ΩÃ¸Ω—ê¯Ω—»¯(ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÒ—»¯Ò—ê˘MΩô—›Ö…îÄºÅÖ…≈’•—ï—’…ÑΩ—ê¯Ò—ê˘ΩµºÅºÅµΩëï±ºÉ§Å•π—ïù…Öëº¸Å·•Õ—ï¥ÅçΩπ—…Ö—ΩÃ∞Å—•µïΩ’—Ã∞ÅôÖ±±âÖç¨∞Å±ΩùÃ∞ÅŸï…Õ•ΩπÖµïπ—ºÅîÅ—ïÕ—ïÃ¸Ω—ê¯Ω—»¯(ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÒ—»¯Ò—ê˘=¡ï…áüçºΩ—ê¯Ò—ê˘ΩµºÅëï—ïç—Ö»Åëïù…Öëáüçº∞ÅÖâ’Õº∞ÅôÖ±°ÖÃÅëîÅëï¡ïπì©πç•ÑÅîÅµ’ëÖªùÑÅëîÅë•Õ—…•â’ßüçº¸ÅE’ï¥Å…ïÕ¡ΩπëîÅÑÅ•πç•ëïπ—ïÃ¸Ω—ê¯Ω—»¯(ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÒ—»¯Ò—ê˘=…ùÖπ•ÈáüçºÅîÅ¡ïÕÕΩÖÃΩ—ê¯Ò—ê˘E’ï¥Å¡ΩëîÅçΩπ—ïÕ—Ö»Å’µÑÅëïç•œçº¸Å·•Õ—îÅ—…ï•πÖµïπ—º∞ÅÕ’¡ï…Ÿ•œçºÅîÅ…ïô•π•”•…•ºÅëîÅëïÕïµ¡ïπ°º¸Ω—ê¯Ω—»¯(ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÒ—»¯Ò—ê˘MΩç•ïëÖëîÅîÅ±ïù•Õ±áüçºÄΩ—ê¯Ò—ê˘E’îÅëÖëΩÃÅîÅë•…ï•—ΩÃÅœçºÅÖôï—ÖëΩÃ¸Å#ÑÅ…ï≈’•Õ•—ΩÃÅëîÅ¡…•ŸÖç•ëÖëî∞ÅÕïù’…ÖªùÑ∞ÅÖ’—Ω…•ÑÅΩ‘ÅªçºÅë•Õç…•µ•πáüçº¸Ω—ê¯Ω—»¯(ÄÄÄÄÄÄÄÄÄÄÄÄΩ—âΩë‰¯(ÄÄÄÄÄÄÄÄÄÄΩ—Öâ±î¯(ÄÄÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄΩÕïç—•Ω∏¯((ÄÄÄÄÒÕïç—•Ω∏Åç±ÖÕÃÙâÕïç—•Ω∏àÅ•êÙâÕ•π—ïÕîà¯(ÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâçΩπ—Ö•πï»à¯(ÄÄÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâÕïç—•Ω∏µ°ïÖë•πúà¯(ÄÄÄÄÄÄÄÄÄÄÒ¿Åç±ÖÕÃÙâïÂïâ…Ω‹à˘Oµπ—ïÕîÅ¡Ö…ÑÅ’µÑÅ¡…•µï•…ÑÅëïç•œçºÅëîÅïπùïπ°Ö…•ÑΩ¿¯(ÄÄÄÄÄÄÄÄÄÄÒ†»˘π—ïÃÅëîÅÖô•…µÖ»Å≈’îÅ’¥Å¡…Ωâ±ïµÑÉäs§ÅëîÅ%ätΩ†»¯(ÄÄÄÄÄÄÄÄÄÄÒ¿˘<ÅΩâ©ï—•ŸºÅëîÅ’µÑÅÖ’±ÑÅ•π—…Ωë’”Õ…•ÑÅªçºÉ§ÅëΩµ•πÖ»ÅçÖëÑÅÖ±ùΩ…•—µº∞ÅµÖÃÅçΩπÕ—…’•»Å’µÑÅïÕ—…’—’…ÑÅëîÅ¡ï…ù’π—ÖÃÅ≈’îÅΩ…•ïπ—îÅëïç•œ’ïÃÅô’—’…ÖÃ∏Ω¿¯(ÄÄÄÄÄÄÄÄΩë•ÿ¯((ÄÄÄÄÄÄÄÄÒΩ∞Åç±ÖÕÃÙâ¡…ΩÕîà¯(ÄÄÄÄÄÄÄÄÄÄÒ±§˘E’Ö∞É§ÅºÅ¡…Ωâ±ïµÑÅëºÅëΩ∑µπ•ºÅîÅ≈’Ö∞Åëïç•œçºÅΩ‘Å…ïÕ’±—ÖëºÅ¡…ïç•ÕÑÅÕï»Å¡…Ωë’È•ëº¸Ω±§¯(ÄÄÄÄÄÄÄÄÄÄÒ±§˘·•Õ—îÅ’µÑÅÕΩ±◊üçºÅÕ•µ¡±ïÃ∞Åëï—ï…µ•ªµÕ—•çÑÅΩ‘ÅâÖÕïÖëÑÅï¥Å…ïù…ÖÃÅ≈’îÅÖ—ïπëîÅÖΩÃÅ…ï≈’•Õ•—ΩÃ¸Ω±§¯(ÄÄÄÄÄÄÄÄÄÄÒ±§˘E’îÅ—•¡ºÅëîÅ¡…Ωâ±ïµÑÅïÕ”ÑÅ¡…ïÕïπ—îËÅâ’ÕçÑ∞Åç±ÖÕÕ•ô•çáüçº∞Å¡…ïŸ•œçº∞Å…ïçΩµïπëáüçº∞ÅΩ—•µ•Èáüçº∞Å•πôïÀ©πç•Ñ∞Åùï…áüçºÅΩ‘ÅçΩπ—…Ω±î¸Ω±§¯(ÄÄÄÄÄÄÄÄÄÄÒ±§˘MîÅºÅÕ•Õ—ïµÑÅôΩ»ÅŸ•Õ—ºÅçΩµºÅÖùïπ—î∞Å≈’Ö•ÃÅœçºÅÖµâ•ïπ—î∞Å¡ï…çï√ü’ïÃ∞Åáü’ïÃ∞ÅΩâ©ï—•ŸºÅîÅç…•”•…•ºÅëîÅëïÕïµ¡ïπ°º¸Ω±§¯(ÄÄÄÄÄÄÄÄÄÄÒ±§˘E’Ö•ÃÅëÖëΩÃ∞ÅçΩπ°ïç•µïπ—ΩÃÅîÅ…ïç’…ÕΩÃÅïÕ—ÖÀçºÅë•Õ¡ΩªµŸï•ÃÅπºÅµΩµïπ—ºÅëÑÅï·ïç◊üçº¸Ω±§¯(ÄÄÄÄÄÄÄÄÄÄÒ±§˘ΩµºÅºÅ…ïÕ’±—ÖëºÅÕïÀÑÅŸÖ±•ëÖëºÅçΩπ—…ÑÅ’¥ÅâÖÕï±•πîÅîÅ≈’Ö•ÃÅï……ΩÃÅ”©¥ÅµÖ•Ω»Åç’Õ—º¸Ω±§¯(ÄÄÄÄÄÄÄÄÄÄÒ±§˘E’Ö•ÃÅ…•ÕçΩÃÅ”•çπ•çΩÃ∞ÅëîÅÕïù’…ÖªùÑ∞Å¡…•ŸÖç•ëÖëî∞ÅŸß•Ã∞Åï·¡±•çÖâ•±•ëÖëîÅîÅΩ¡ï…áüçºÅ¡…ïç•ÕÖ¥ÅÕï»Å—…Ö—ÖëΩÃ¸Ω±§¯(ÄÄÄÄÄÄÄÄÄÄÒ±§˘E’Ö∞ÅëïŸîÅÕï»ÅºÅ¡Ö¡ï∞Å°’µÖπºÅÖπ—ïÃ∞Åë’…Öπ—îÅîÅëï¡Ω•ÃÅëÑÅëïç•œçº¸Ω±§¯(ÄÄÄÄÄÄÄÄÄÄÒ±§˘ΩµºÅºÅÕ•Õ—ïµÑÅÕïÀÑÅµΩπ•—Ω…Öëº∞ÅÖ—’Ö±•ÈÖëº∞ÅÖ’ë•—ÖëºÅî∞ÅÕîÅπïçïÕœÖ…•º∞Å…ïŸï…—•ëº¸Ω±§¯(ÄÄÄÄÄÄÄÄΩΩ∞¯((ÄÄÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâçÖ±±Ω’–Å—ïÖ∞àÅÕ—Â±îÙâµÖ…ù•∏µ—Ω¿Ë……ï¥à¯(ÄÄÄÄÄÄÄÄÄÄÒÕ—…Ωπú˘5ïπÕÖùï¥ÅëîÅôïç°Öµïπ—ºΩÕ—…Ωπú¯(ÄÄÄÄÄÄÄÄÄÄÒ¿˘%ÅÖ¡±•çÖëÑÉ§Å’µÑÅëïç•œçºÅëîÅïπùïπ°Ö…•Ñ∏Å<ÅŸÖ±Ω»ÅªçºÅïÕ”ÑÅï¥Å’ÕÖ»ÅÑÅ”•çπ•çÑÅµÖ•ÃÅ…ïçïπ—î∞ÅµÖÃÅï¥ÅôΩ…µ’±Ö»Åâï¥ÅºÅ¡…Ωâ±ïµÑ∞ÅïÕçΩ±°ï»Å’µÑÅÖâΩ…ëÖùï¥ÅçΩµ¡Ö”µŸï∞ÅçΩ¥ÅΩÃÅ…ï≈’•Õ•—ΩÃ∞Åµïë•»ÅºÅ≈’îÅ•µ¡Ω…—ÑÅîÅµÖπ—ï»ÅçΩπ—…Ω±îÅÕΩâ…îÅΩÃÅ…•ÕçΩÃ∏Ω¿¯(ÄÄÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄΩÕïç—•Ω∏¯((ÄÄÄÄÒÕïç—•Ω∏Åç±ÖÕÃÙâÕïç—•Ω∏ÅÕïç—•Ω∏µëÖ…¨àÅ•êÙâç°ïç≠±•Õ–à¯(ÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâçΩπ—Ö•πï»à¯(ÄÄÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâÕïç—•Ω∏µ°ïÖë•πúà¯(ÄÄÄÄÄÄÄÄÄÄÒ¿Åç±ÖÕÃÙâïÂïâ…Ω‹àÅÕ—Â±îÙâçΩ±Ω»ËåÂïà…ôòà˘°ïç≠±•Õ–ÅëîÅçΩπ°ïç•µïπ—ºΩ¿¯(ÄÄÄÄÄÄÄÄÄÄÒ†»˘<Å≈’îÅŸΩè®ÅëïŸîÅçΩπÕïù’•»Åï·¡±•çÖ»ÅÖºÅô•πÖ∞Ω†»¯(ÄÄÄÄÄÄÄÄÄÄÒ¿˘UÕîÅΩÃÅ•—ïπÃÅÖâÖ•·ºÅçΩµºÅÖ’—ΩÖŸÖ±•áüçº∏Å<ÅΩâ©ï—•ŸºÉ§ÅŸï…•ô•çÖ»ÅçΩµ¡…ïïπœçºÅçΩπçï•—’Ö∞∞ÅªçºÅµïµΩ…•ÈáüçºÅëîÅëïô•πßü’ïÃÅ•ÕΩ±ÖëÖÃ∏Ω¿¯(ÄÄÄÄÄÄÄÄΩë•ÿ¯((ÄÄÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâç°ïç≠±•Õ–à¯(ÄÄÄÄÄÄÄÄÄÄÒÖ…—•ç±îÅç±ÖÕÃÙâç°ïç¨µ•—ï¥à¯Ò†–˘Öµ¡ºΩ†–¯Ò¿˘·¡±•çÖ»Å¡Ω»Å≈’îÅ%É§Å’¥ÅçÖµ¡ºÅÖµ¡±ºÅîÅ¡Ω»Å≈’îÅµΩëï±ΩÃÅùïπï…Ö—•ŸΩÃÅ…ï¡…ïÕïπ—Ö¥ÅÖ¡ïπÖÃÅ’µÑÅ¡Ö…—îÅëï±î∏Ω¿¯ΩÖ…—•ç±î¯(ÄÄÄÄÄÄÄÄÄÄÒÖ…—•ç±îÅç±ÖÕÃÙâç°ïç¨µ•—ï¥à¯Ò†–˘…Ωπ—ï•…ÖÃΩ†–¯Ò¿˘•Õ—•πù’•»ÅÖ’—Ωµáüçº∞Å…ïù…ÖÃ∞ÅµïçÖπ•ÕµΩÃÅëîÅ%ÅîÅÕΩ±◊ü’ïÃÅ£µâ…•ëÖÃ∞Å•πç±’•πëºÅºÅ¡Ö¡ï∞ÅëÖÃÅ…ïù…ÖÃÅπÑÅ%ÅÕ•µãÕ±•çÑ∏Ω¿¯ΩÖ…—•ç±î¯(ÄÄÄÄÄÄÄÄÄÄÒÖ…—•ç±îÅç±ÖÕÃÙâç°ïç¨µ•—ï¥à¯Ò†–˘¡…ïπë•ÈÖùï¥Ω†–¯Ò¿˘·¡±•çÖ»Å¡Ω»Å≈’îÅπï¥Å—ΩëÑÅ%Å¡…ïç•ÕÑÅÖ¡…ïπëï»ÅîÅç•—Ö»Åâ’ÕçÑ∞Å•πôïÀ©πç•Ñ∞Å¡±Öπï©Öµïπ—º∞ÅΩ—•µ•ÈáüçºÅîÅ…ï¡…ïÕïπ—áüçºÅëîÅçΩπ°ïç•µïπ—º∏Ω¿¯ΩÖ…—•ç±î¯(ÄÄÄÄÄÄÄÄÄÄÒÖ…—•ç±îÅç±ÖÕÃÙâç°ïç¨µ•—ï¥à¯Ò†–˘ŸΩ±◊üçºΩ†–¯Ò¿˘ïÕç…ïŸï»Åµ’ëÖªùÖÃÅëîÅôΩçºÅïπ—…îÅœµµâΩ±ΩÃ∞ÅçΩπ°ïç•µïπ—º∞ÅëÖëΩÃ∞Å…ïëïÃÅîÅùï…áüçºÅÕï¥Å—…Ö—Ö»ÅÑÅ°•Õ”Õ…•ÑÅçΩµºÅÕ’âÕ—•—’ßüçºÅ±•πïÖ»∏Ω¿¯ΩÖ…—•ç±î¯(ÄÄÄÄÄÄÄÄÄÄÒÖ…—•ç±îÅç±ÖÕÃÙâç°ïç¨µ•—ï¥à¯Ò†–˘ùïπ—ïÃΩ†–¯Ò¿˘%ëïπ—•ô•çÖ»ÅÖµâ•ïπ—î∞Å¡ï…çï√ü’ïÃ∞ÅïÕ—ÖëºÅΩ‘ÅçΩπ°ïç•µïπ—º∞ÅΩâ©ï—•Ÿº∞Åëïç•œçº∞Åáü’ïÃÅîÅç…•”•…•ºÅëîÅëïÕïµ¡ïπ°º∏Ω¿¯ΩÖ…—•ç±î¯(ÄÄÄÄÄÄÄÄÄÄÒÖ…—•ç±îÅç±ÖÕÃÙâç°ïç¨µ•—ï¥à¯Ò†–˘A…Ωâ±ïµÖÃΩ†–¯Ò¿˘IïçΩπ°ïçï»Åâ’ÕçÑ∞Åç±ÖÕÕ•ô•çáüçº∞Å¡…ïŸ•œçº∞Å…ïçΩµïπëáüçº∞ÅΩ—•µ•Èáüçº∞Å•πôïÀ©πç•Ñ∞Åùï…áüçºÅîÅçΩπ—…Ω±î∏Ω¿¯ΩÖ…—•ç±î¯(ÄÄÄÄÄÄÄÄÄÄÒÖ…—•ç±îÅç±ÖÕÃÙâç°ïç¨µ•—ï¥à¯Ò†–˘ïç•œçºÅ—ïçπΩ≥Õù•çÑΩ†–¯Ò¿˘Ωµ¡Ö…Ö»Å’µÑÅ¡…Ω¡ΩÕ—ÑÅëîÅ%ÅçΩ¥ÅÖ’—Ωµáüçº∞Å…ïù…ÖÃÅΩ‘ÅÖ±ùΩ…•—µΩÃÅçΩπŸïπç•ΩπÖ•ÃÅîÅ©’Õ—•ô•çÖ»ÅÑÅçΩµ¡±ï·•ëÖëîÅÖë•ç•ΩπÖ∞∏Ω¿¯ΩÖ…—•ç±î¯(ÄÄÄÄÄÄÄÄÄÄÒÖ…—•ç±îÅç±ÖÕÃÙâç°ïç¨µ•—ï¥à¯Ò†–˘ŸÖ±•áüçºΩ†–¯Ò¿˘ΩπÕ•ëï…Ö»ÅëÖëΩÃ∞Åç’Õ—ºÅëΩÃÅï……ΩÃ∞Åùïπï…Ö±•Èáüçº∞ÅÕΩâ…ïÖ©’Õ—î∞Åï·¡±•çÖâ•±•ëÖëî∞Åç’Õ—ºÅçΩµ¡’—Öç•ΩπÖ∞∞Å¡…•ŸÖç•ëÖëî∞ÅÕïù’…ÖªùÑÅîÅÕ’¡ï…Ÿ•œçºÅ°’µÖπÑ∏Ω¿¯ΩÖ…—•ç±î¯(ÄÄÄÄÄÄÄÄÄÄÒÖ…—•ç±îÅç±ÖÕÃÙâç°ïç¨µ•—ï¥à¯Ò†–˘%Åùïπï…Ö—•ŸÑΩ†–¯Ò¿˘Q…Ö—Ö»Å’µÑÅÕáµëÑÅùïπï…Ö—•ŸÑÅçΩµºÅ°•√Õ—ïÕî∞ÅŸï…•ô•çÖ»ÅÖô•…µáü’ïÃÅîÅÖ…—ïôÖ—ΩÃÅîÅëΩç’µïπ—Ö»ÅÑÅëïç•œçºÅ°’µÖπÑÅëîÅÖçï•—Ö»∞ÅçΩ……•ù•»ÅΩ‘Å…ï©ï•—Ö»∏Ω¿¯ΩÖ…—•ç±î¯(ÄÄÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄΩÕïç—•Ω∏¯((ÄÄÄÄÒÕïç—•Ω∏Åç±ÖÕÃÙâÕïç—•Ω∏àÅ•êÙâ…ïôï…ïπç•ÖÃà¯(ÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâçΩπ—Ö•πï»à¯(ÄÄÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâÕïç—•Ω∏µ°ïÖë•πúà¯(ÄÄÄÄÄÄÄÄÄÄÒ¿Åç±ÖÕÃÙâïÂïâ…Ω‹à˘IïôïÀ©πç•ÖÃÅ’—•±•ÈÖëÖÃΩ¿¯(ÄÄÄÄÄÄÄÄÄÄÒ†»˘1ï•—’…ÖÃÅ≈’îÅÕ’Õ—ïπ—Ö¥ÅïÕ—îÅµÖ—ï…•Ö∞Ω†»¯(ÄÄÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâ…ïôï…ïπçïÃà¯(ÄÄÄÄÄÄÄÄÄÄÒ¿˘1UH∞ÅïΩ…ùîÅ∏ÄÒÕ—…Ωπú˘…—•ô•ç•Ö∞Å%π—ï±±•ùïπçîËÅM—…’ç—’…ïÃÅÖπêÅM—…Ö—ïù•ïÃÅôΩ»ÅΩµ¡±ï‡ÅA…Ωâ±ï¥ÅMΩ±Ÿ•πú∏ΩÕ—…Ωπú¯Äÿ∏Åïê∏Å	ΩÕ—Ω∏ËÅAïÖ…ÕΩ∏Ωëë•ÕΩ∏µ]ïÕ±ï‰∞Ä»¿¿‰∏Ω¿¯(ÄÄÄÄÄÄÄÄÄÄÒ¿˘5ç=IU,∞ÅAÖµï±Ñ∏ÄÒÕ—…Ωπú˘5Öç°•πïÃÅ]°ºÅQ°•π¨ËÅÅAï…ÕΩπÖ∞Å%π≈’•…‰Å•π—ºÅ—°îÅ!•Õ—Ω…‰ÅÖπêÅA…ΩÕ¡ïç—ÃÅΩòÅ…—•ô•ç•Ö∞Å%π—ï±±•ùïπçî∏ΩÕ—…Ωπú¯Ä»∏Åïê∏Å9Ö—•ç¨ËÅÅ,ÅAï—ï…Ã∞Ä»¿¿–∏Ω¿¯(ÄÄÄÄÄÄÄÄÄÄÒ¿˘9%1MM=8∞Å9•±ÃÅ(∏ÄÒÕ—…Ωπú˘Q°îÅE’ïÕ–ÅôΩ»Å…—•ô•ç•Ö∞Å%π—ï±±•ùïπçîËÅÅ!•Õ—Ω…‰ÅΩòÅ%ëïÖÃÅÖπêÅç°•ïŸïµïπ—Ã∏ΩÕ—…Ωπú¯ÅÖµâ…•ëùîËÅÖµâ…•ëùîÅUπ•Ÿï…Õ•—‰ÅA…ïÕÃ∞Ä»¿ƒ¿∏Ω¿¯(ÄÄÄÄÄÄÄÄÄÄÒ¿˘IUMM10∞ÅM—’Ö…–Å(∏ÏÅ9=IY%∞ÅAï—ï»∏ÄÒÕ—…Ωπú˘%π—ï±•ü©πç•ÑÅ…—•ô•ç•Ö∞∏ΩÕ—…Ωπú¯ÅQ…Öë◊üçºÅëÑÄÃ∏Åïê∏ÅI•ºÅëîÅ)Öπï•…ºËÅ±ÕïŸ•ï»∞Ä»¿ƒÃ∏Ω¿¯(ÄÄÄÄÄÄÄÄÄÄÒ¿˘IUMM10∞ÅM—’Ö…–Å(∏ÏÅ9=IY%∞ÅAï—ï»∏ÄÒÕ—…Ωπú˘…—•ô•ç•Ö∞Å%π—ï±±•ùïπçîËÅÅ5Ωëï…∏Å¡¡…ΩÖç†∏ΩÕ—…Ωπú¯Ä–∏Åïê∏ÅAïÖ…ÕΩ∏∞Ä»¿»ƒ∏Ω¿¯(ÄÄÄÄÄÄÄÄÄÄÒ¿˘MQI<∞ÅπëÀ§Åï…≈’ï•…ÑÅï–ÅÖ∞∏ÄÒÕ—…Ωπú˘%π—…Ωë◊üçºÉÄÅ%π—ï±•ü©πç•ÑÅ…—•ô•ç•Ö∞∏ΩÕ—…Ωπú¯ÅΩßâπ•ÑËÅïù…ÖòÅU∞Ä»¿»‘∏Ω¿¯(ÄÄÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄÄÄÄÄÒë•ÿÅç±ÖÕÃÙâôΩΩ—ï»µÖç—•ΩπÃà¯(ÄÄÄÄÄÄÄÄÄÄÒÑÅç±ÖÕÃÙââ’——Ω∏Åâ’——Ω∏µ¡…•µÖ…‰àÅ°…ïòÙâÖ’±Ñ¥¿»π°—µ∞à˚ä@ÅYΩ±—Ö»ÉÄÅ’±ÑÄ¿»ΩÑ¯(ÄÄÄÄÄÄÄÄÄÄÒÑÅç±ÖÕÃÙââ’——Ω∏Åâ’——Ω∏µÕïçΩπëÖ…‰àÅ°…ïòÙâç’…Õºπ°—µ∞à˘Y•œçºÅùï…Ö∞ÅëºÅç’…ÕºΩÑ¯(ÄÄÄÄÄÄÄÄÄÄÒÑÅç±ÖÕÃÙââ’——Ω∏Åâ’——Ω∏µÕïçΩπëÖ…‰àÅ°…ïòÙàç•π•ç•ºà˘YΩ±—Ö»ÅÖºÅ•ªµç•ºÉäDΩÑ¯(ÄÄÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄÄÄΩë•ÿ¯(ÄÄÄÄΩÕïç—•Ω∏¯(ÄÄΩµÖ•∏¯((ÄÄÒôΩΩ—ï»Åç±ÖÕÃÙâÕ•—îµôΩΩ—ï»à¯(ÄÄÄÄÒë•ÿÅç±ÖÕÃÙâçΩπ—Ö•πï»ÅôΩΩ—ï»µù…•êà¯(ÄÄÄÄÄÄÒë•ÿ¯ÒÕ—…Ωπú˘%π—ï±•ü©πç•ÑÅ…—•ô•ç•Ö∞Å¡±•çÖëÑΩÕ—…Ωπú¯Ò¿˘πùïπ°Ö…•ÑÅëîÅMΩô—›Ö…îÉ
-‹Ä»¿»ÿº»Ω¿¯Ωë•ÿ¯(ÄÄÄÄÄÄÒÑÅ°…ïòÙàç•π•ç•ºà˘YΩ±—Ö»ÅÖºÅ•ªµç•ºÉäDΩÑ¯(ÄÄÄÄΩë•ÿ¯(ÄÄΩôΩΩ—ï»¯((ÄÄÒÕç…•¡–¯(ÄÄÄÄ††§ÄÙ¯ÅÏ(ÄÄÄÄÄÅçΩπÕ–ÅâÖ»ÄÙÅëΩç’µïπ–πùï—±ïµïπ—	Â%ê†ù…ïÖë•πúµ¡…Ωù…ïÕÃú§Ï(ÄÄÄÄÄÅçΩπÕ–Å’¡ëÖ—îÄÙÄ†§ÄÙ¯ÅÏ(ÄÄÄÄÄÄÄÅçΩπÕ–Å†ÄÙÅëΩç’µïπ–πëΩç’µïπ—±ïµïπ–Ï(ÄÄÄÄÄÄÄÅçΩπÕ–Å—Ω—Ö∞ÄÙÅ†πÕç…Ω±±!ï•ù°–Ä¥Å†πç±•ïπ—!ï•ù°–Ï(ÄÄÄÄÄÄÄÅâÖ»πÕ—Â±îπ›•ë—†ÄÙÅ—Ω—Ö∞Ä¯Ä¿Ä¸ÅÄëÏ°†πÕç…Ω±±QΩ¿ÄºÅ—Ω—Ö∞§Ä®Äƒ¿¡ÙïÄÄËÄú¿îúÏ(ÄÄÄÄÄÅÙÏ(ÄÄÄÄÄÅ’¡ëÖ—î†§Ï(ÄÄÄÄÄÅÖëëŸïπ—1•Õ—ïπï»†ùÕç…Ω±∞ú∞Å’¡ëÖ—î∞ÅÏÅ¡ÖÕÕ•ŸîËÅ—…’îÅÙ§Ï(ÄÄÄÄÄÅÖëëŸïπ—1•Õ—ïπï»†ù…ïÕ•Èîú∞Å’¡ëÖ—î§Ï(ÄÄÄÅÙ§†§Ï(ÄÄΩÕç…•¡–¯(ΩâΩë‰¯(Ω°—µ∞¯
+            <figure class="figure-light">
+              <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-01.webp" alt="Infogr√°fico sobre as bases multidisciplinares da Intelig√™ncia Artificial">
+              <figcaption>As oito bases multidisciplinares apresentadas no material de apoio.</figcaption>
+            </figure>
+
+            <h3>Computa√ß√£o, c√©rebro e comportamento: 1930‚Äì1950</h3>
+            <p>Com o computador program√°vel, perguntas antigas ganharam um meio t√©cnico concreto. Turing formalizou aspectos fundamentais da computa√ß√£o e, em 1950, prop√¥s deslocar a discuss√£o sobre m√°quinas inteligentes para o comportamento observ√°vel em intera√ß√£o. Em paralelo, McCulloch e Pitts apresentaram um modelo matem√°tico simplificado de neur√¥nio, aproximando opera√ß√µes l√≥gicas de unidades inspiradas no sistema nervoso.</p>
+            <p>Esses caminhos j√° mostram duas tradi√ß√µes que atravessariam a hist√≥ria da IA: uma mais orientada a s√≠mbolos, regras e procedimentos expl√≠citos e outra interessada em comportamento emergente de unidades conectadas.</p>
+
+            <h3>1956: Dartmouth e a consolida√ß√£o do campo</h3>
+            <p>O Dartmouth Summer Research Project on Artificial Intelligence √© usado como marco institucional porque reuniu pesquisadores em torno de um programa expl√≠cito de investiga√ß√£o sobre m√°quinas inteligentes. A import√¢ncia do evento n√£o est√° em ter criado do zero a ideia de m√°quinas inteligentes, mas em ajudar a consolidar uma comunidade, um vocabul√°rio e um problema cient√≠fico pr√≥prio.</p>
+          </div>
+
+          <aside class="study-stack">
+            <div class="study-callout">
+              <strong>Ideia-chave</strong>
+              <p>Machine learning, redes neurais, sistemas especialistas e modelos generativos s√£o abordagens dentro da IA; nenhuma delas representa toda a √°rea.</p>
+            </div>
+            <div class="study-callout violet">
+              <strong>Distin√ß√£o hist√≥rica</strong>
+              <p>1956 √© um marco de consolida√ß√£o institucional da IA, n√£o o in√≠cio da ideia de construir artefatos capazes de reproduzir capacidades humanas.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section alt" id="simbolica">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Representar ¬∑ raciocinar ¬∑ buscar</p>
+          <h2>IA simb√≥lica e sistemas baseados em conhecimento</h2>
+          <p>Nas primeiras d√©cadas, grande parte da IA trabalhou com representa√ß√µes expl√≠citas do problema, regras de transforma√ß√£o e mecanismos de busca.</p>
+        </div>
+
+        <div class="study-prose">
+          <h3>Representa√ß√£o, espa√ßo de busca e heur√≠stica</h3>
+          <p>Um problema do mundo real precisa ser convertido em uma abstra√ß√£o computacional. Nessa representa√ß√£o definimos estados, estado inicial, objetivo e operadores capazes de transformar um estado em outro. O conjunto de configura√ß√µes alcan√ß√°veis forma um <strong>espa√ßo de busca</strong>. Quando esse espa√ßo cresce, explorar todas as alternativas pode se tornar invi√°vel; heur√≠sticas ajudam a priorizar caminhos considerados mais promissores.</p>
+
+          <figure class="figure-light">
+            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-02.webp" alt="Infogr√°fico das etapas de resolu√ß√£o simb√≥lica de problemas em IA">
+            <figcaption>Do problema real √† representa√ß√£o, operadores, busca heur√≠stica e solu√ß√£o.</figcaption>
+          </figure>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h4>Logic Theorist</h4>
+              <p>Mostrou que a demonstra√ß√£o de teoremas poderia ser tratada como manipula√ß√£o simb√≥lica orientada por busca.</p>
+            </article>
+            <article class="mini-card">
+              <h4>General Problem Solver</h4>
+              <p>Buscou estrat√©gias mais gerais de resolu√ß√£o de problemas e refor√ßou a aproxima√ß√£o entre IA e modelos de racioc√≠nio.</p>
+            </article>
+          </div>
+
+          <h3>Por que m√©todos gerais n√£o eram suficientes?</h3>
+          <p>Os primeiros sucessos estimularam a expectativa de que mecanismos gerais de busca e racioc√≠nio resolveriam uma grande variedade de tarefas. A dificuldade apareceu quando o n√∫mero de alternativas come√ßou a crescer rapidamente. Esse fen√¥meno, conhecido como <strong>explos√£o combinat√≥ria</strong>, mostrou que intelig√™ncia computacional n√£o pode ser reduzida a testar todas as possibilidades.</p>
+          <p>Uma resposta importante foi incorporar conhecimento espec√≠fico do dom√≠nio: regras, restri√ß√µes e heur√≠sticas fornecidas por especialistas poderiam reduzir o espa√ßo de alternativas e orientar a resolu√ß√£o.</p>
+
+          <h3>Sistemas especialistas</h3>
+          <p>Nos sistemas especialistas, o conhecimento do dom√≠nio √© explicitamente representado e separado do mecanismo que o utiliza. Uma arquitetura conceitual t√≠pica inclui <strong>base de conhecimento</strong>, <strong>motor de infer√™ncia</strong>, <strong>mem√≥ria de trabalho</strong> e <strong>interface</strong>. Essa separa√ß√£o permite reutilizar regras e fatos gerais em diferentes consultas, mantendo os dados do caso atual na mem√≥ria de trabalho.</p>
+
+          <figure class="figure-light">
+            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-03.webp" alt="Arquitetura conceitual de um sistema especialista">
+            <figcaption>Arquitetura conceitual simplificada de um sistema especialista.</figcaption>
+          </figure>
+
+          <p>Considere um sistema de diagn√≥stico de falhas de software. A base pode conter uma regra como: se o servidor est√° acess√≠vel e o servi√ßo n√£o responde, h√° ind√≠cio de falha no servi√ßo. Os fatos do caso entram na mem√≥ria de trabalho, o motor verifica quais regras s√£o aplic√°veis e novas conclus√µes podem alimentar infer√™ncias seguintes.</p>
+
+          <figure class="figure-light">
+            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.webp" alt="Fluxo do especialista √† infer√™ncia em um sistema baseado em regras">
+            <figcaption>Nos sistemas especialistas cl√°ssicos, novos casos n√£o atualizam automaticamente as regras.</figcaption>
+          </figure>
+
+          <h3>Limites da abordagem simb√≥lica</h3>
+          <p>O sucesso da IA simb√≥lica tamb√©m evidenciou limita√ß√µes importantes: a representa√ß√£o sempre simplifica o mundo; adquirir conhecimento de especialistas √© dif√≠cil; bases extensas de regras tornam-se complexas de manter; espa√ßos de busca podem crescer rapidamente; dom√≠nios com muitas exce√ß√µes geram fragilidade; e incerteza nem sempre pode ser tratada por regras determin√≠sticas.</p>
+          <p>Tamb√©m existe o problema do <strong>senso comum</strong>: especialistas utilizam uma grande quantidade de conhecimento geral e contextual que √© dif√≠cil de explicitar manualmente. Al√©m disso, novos casos n√£o se convertem automaticamente em conhecimento novo; normalmente precisam ser analisados, formalizados e incorporados √† base.</p>
+        </div>
+
+        <div class="study-callout teal">
+          <strong>Leitura hist√≥rica correta</strong>
+          <p>IA simb√≥lica e sistemas especialistas n√£o ‚Äúfracassaram‚Äù. Eles continuam √∫teis quando regras expl√≠citas, controle e explicabilidade s√£o importantes. A li√ß√£o √© que nenhuma abordagem isolada resolve toda a diversidade de problemas associados √† intelig√™ncia.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section" id="aprendizado">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Conhecimento expl√≠cito ‚Üí padr√µes aprendidos</p>
+          <h2>Conexionismo, aprendizado de m√°quina e modelos generativos</h2>
+          <p>A hist√≥ria da IA n√£o √© uma sequ√™ncia simples de substitui√ß√µes. Abordagens simb√≥licas, estat√≠sticas e conexionistas coexistem e frequentemente s√£o combinadas.</p>
+        </div>
+
+        <div class="study-grid">
+          <div class="study-prose">
+            <h3>A tradi√ß√£o conexionista</h3>
+            <p>Modelos inspirados em redes de unidades simples existem desde as primeiras d√©cadas da IA. Perceptrons foram uma fam√≠lia inicial importante; a partir dos anos 1980, redes multicamadas e m√©todos de treinamento como backpropagation impulsionaram um novo ciclo de interesse.</p>
+            <p>A diferen√ßa conceitual central est√° na forma de representar conhecimento. Em muitos sistemas simb√≥licos, regras e rela√ß√µes s√£o expl√≠citas. Em redes neurais, o conhecimento aprendido fica distribu√≠do pela estrutura e pelos par√¢metros do modelo.</p>
+
+            <h3>A ascens√£o do aprendizado de m√°quina</h3>
+            <p>Aprendizado de m√°quina desloca parte da especifica√ß√£o manual para a identifica√ß√£o de regularidades em dados. No aprendizado supervisionado, exemplos com resultados conhecidos s√£o usados para ajustar um modelo que depois ser√° aplicado a novos casos. Isso n√£o elimina decis√µes humanas: ainda precisamos definir o problema, preparar dados, selecionar representa√ß√µes, escolher m√©tricas e avaliar erros.</p>
+
+            <h3>Deep learning e aprendizagem de representa√ß√µes</h3>
+            <p>Redes profundas ampliaram a capacidade de aprender representa√ß√µes intermedi√°rias diretamente dos dados. Isso foi especialmente relevante em vis√£o computacional, fala, linguagem e outros dom√≠nios nos quais caracter√≠sticas √∫teis s√£o dif√≠ceis de especificar manualmente.</p>
+
+            <h3>Modelos generativos</h3>
+            <p>Modelos generativos produzem novas estruturas ‚Äî texto, imagem, √°udio ou c√≥digo ‚Äî em vez de apenas escolher uma classe ou estimar um valor. Essa diferen√ßa torna a avalia√ß√£o mais complexa: uma sa√≠da pode parecer plaus√≠vel e ainda estar incorreta, incompleta ou inadequada ao contexto.</p>
+            <p>Por isso, qualidade precisa ser analisada considerando factualidade, ader√™ncia ao objetivo, seguran√ßa, utilidade, testes e revis√£o humana. Sistemas contempor√¢neos tamb√©m podem combinar gera√ß√£o com regras, busca, bancos de dados, ferramentas e outros modelos.</p>
+          </div>
+
+          <aside class="study-stack">
+            <div class="study-callout">
+              <strong>Mudan√ßa de pergunta</strong>
+              <p>De ‚Äúquais regras devemos programar?‚Äù para ‚Äúquais rela√ß√µes podem ser aprendidas a partir de dados e como saber se generalizam?‚Äù.</p>
+            </div>
+            <div class="study-callout violet">
+              <strong>N√£o √© substitui√ß√£o linear</strong>
+              <p>Deep learning n√£o torna l√≥gica, probabilidade, busca, regras ou conhecimento expl√≠cito obsoletos. A escolha depende do problema e das restri√ß√µes.</p>
+            </div>
+          </aside>
+        </div>
+
+        <figure class="figure-light">
+          <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-05.webp" alt="Cinco lentes para compreender a evolu√ß√£o da Intelig√™ncia Artificial">
+          <figcaption>Cinco lentes para comparar abordagens: representa√ß√£o, origem do conhecimento, produ√ß√£o da resposta, papel das pessoas e crit√©rio de desempenho.</figcaption>
+        </figure>
+
+        <div class="study-callout teal">
+          <strong>Pergunta de s√≠ntese</strong>
+          <p>Como o problema √© representado, de onde vem o conhecimento, como a resposta √© produzida, qual √© o papel das pessoas e como o desempenho ser√° avaliado?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section alt" id="agentes">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Parte II ¬∑ Sistemas inteligentes</p>
+          <h2>Automa√ß√£o, regras, IA, sistemas h√≠bridos e agentes</h2>
+          <p>Antes de classificar um sistema como inteligente, precisamos observar como o comportamento √© especificado e como decis√µes s√£o produzidas.</p>
+        </div>
+
+        <figure class="figure-light">
+          <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-06.webp" alt="Compara√ß√£o entre automa√ß√£o, regras, IA e sistemas h√≠bridos">
+          <figcaption>Quatro formas de estruturar solu√ß√µes computacionais e seus diferentes pap√©is.</figcaption>
+        </figure>
+
+        <div class="mini-grid">
+          <article class="mini-card"><h4>Automa√ß√£o convencional</h4><p>Executa um procedimento conhecido e determin√≠stico. Quando entradas e sequ√™ncia de a√ß√µes s√£o expl√≠citas, tende a ser a solu√ß√£o mais simples.</p></article>
+          <article class="mini-card"><h4>Sistemas baseados em regras</h4><p>Aplicam condi√ß√µes explicitamente codificadas. Regras de neg√≥cio comuns n√£o s√£o automaticamente IA; em IA simb√≥lica, regras podem participar de representa√ß√£o e infer√™ncia.</p></article>
+          <article class="mini-card"><h4>IA</h4><p>√â pertinente quando o problema exige busca, infer√™ncia, aprendizagem, otimiza√ß√£o, tratamento de incerteza ou gera√ß√£o. Aprender n√£o √© condi√ß√£o obrigat√≥ria.</p></article>
+          <article class="mini-card"><h4>Sistemas h√≠bridos</h4><p>Combinam modelos, regras, automa√ß√µes e revis√£o humana, colocando cada mecanismo no ponto em que oferece melhor rela√ß√£o entre desempenho e controle.</p></article>
+        </div>
+
+        <div class="study-callout violet">
+          <strong>Fronteira conceitual</strong>
+          <p>Uma solu√ß√£o mais complexa n√£o √© automaticamente mais inteligente ou adequada. Em Engenharia de Software, a escolha deve ser justificada pelos requisitos e comparada com alternativas mais simples.</p>
+        </div>
+
+        <div class="study-prose">
+          <h3>Agentes e sistemas inteligentes</h3>
+          <p>Um agente recebe informa√ß√µes de um ambiente e produz a√ß√µes capazes de modificar esse ambiente ou influenciar o que ocorrer√° em seguida. A ideia se aplica tanto a rob√¥s quanto a sistemas de software, recomendadores, navegadores, jogos e servi√ßos capazes de decidir prioridades.</p>
+          <p>Em software, percep√ß√µes podem ser eventos, arquivos, mensagens, chamadas de API, dados de sensores ou entradas do usu√°rio. A√ß√µes podem ser classifica√ß√µes, recomenda√ß√µes, comandos, atualiza√ß√µes de banco de dados ou chamadas de ferramentas.</p>
+
+          <figure class="figure-light">
+            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-07.webp" alt="Ciclo b√°sico de intera√ß√£o de um agente">
+            <figcaption>Ambiente, percep√ß√µes, agente, a√ß√µes e novo estado do ambiente formam um ciclo cont√≠nuo.</figcaption>
+          </figure>
+
+          <h3>Estado, objetivo, decis√£o e desempenho</h3>
+          <p>Entre perceber e agir, um agente pode manter estado interno ou conhecimento sobre situa√ß√µes anteriores. Seu comportamento √© orientado por algum objetivo, e a decis√£o consiste em selecionar uma a√ß√£o considerando percep√ß√µes, estado, restri√ß√µes e consequ√™ncias poss√≠veis. Para avaliar o agente, precisamos ainda de um crit√©rio de desempenho.</p>
+
+          <figure class="figure-light">
+            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-08.webp" alt="Estudo de caso de um aspirador rob√¥ como agente">
+            <figcaption>O aspirador rob√¥ ajuda a visualizar objetivo, ambiente, percep√ß√µes, estado, decis√£o, a√ß√µes e crit√©rios de desempenho.</figcaption>
+          </figure>
+
+          <h3>Racionalidade n√£o significa perfei√ß√£o</h3>
+          <p>Um agente racional n√£o precisa ser onisciente ou infal√≠vel. A racionalidade √© avaliada segundo as informa√ß√µes dispon√≠veis, as a√ß√µes poss√≠veis e um crit√©rio de desempenho. Em Engenharia de Software, isso inclui requisitos funcionais e n√£o funcionais, como lat√™ncia, custo, disponibilidade, privacidade, auditabilidade, seguran√ßa e manuten√ß√£o.</p>
+
+          <h3>PEAS como roteiro de descri√ß√£o</h3>
+          <div class="study-table-wrap">
+            <table class="study-table">
+              <thead><tr><th>Elemento</th><th>Pergunta de projeto</th><th>Exemplo: triagem de incidentes</th></tr></thead>
+              <tbody>
+                <tr><td>Desempenho</td><td>Como saberemos se o agente funciona bem?</td><td>Tempo de resposta, encaminhamento correto e redu√ß√£o de retrabalho.</td></tr>
+                <tr><td>Ambiente</td><td>Em que contexto o sistema opera?</td><td>Fila de incidentes, servi√ßos, usu√°rios, pol√≠ticas e estado da infraestrutura.</td></tr>
+                <tr><td>A√ß√µes</td><td>O que o agente pode fazer?</td><td>Classificar, priorizar, sugerir respons√°vel, abrir tarefa ou solicitar confirma√ß√£o.</td></tr>
+                <tr><td>Percep√ß√µes</td><td>Que informa√ß√µes est√£o dispon√≠veis?</td><td>T√≠tulo, descri√ß√£o, logs, hist√≥rico, m√©tricas e contexto do servi√ßo.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Tipos cl√°ssicos de agentes</h3>
+          <div class="study-table-wrap">
+            <table class="study-table">
+              <thead><tr><th>Tipo</th><th>Ideia central</th><th>Exemplo introdut√≥rio</th></tr></thead>
+              <tbody>
+                <tr><td>Reativo simples</td><td>Responde √† condi√ß√£o atual por regras condi√ß√£o‚Äìa√ß√£o.</td><td>Controle simples, personagem de jogo, automa√ß√£o local.</td></tr>
+                <tr><td>Baseado em modelo</td><td>Mant√©m representa√ß√£o do estado para lidar com informa√ß√£o incompleta.</td><td>Monitoramento, navega√ß√£o e diagn√≥stico.</td></tr>
+                <tr><td>Orientado a objetivos</td><td>Compara a√ß√µes considerando estados futuros desejados.</td><td>Planejamento de tarefas e rotas.</td></tr>
+                <tr><td>Orientado a utilidade</td><td>Compara alternativas por benef√≠cios, prefer√™ncias ou custos.</td><td>Escolha entre rotas, recursos e prioridades.</td></tr>
+                <tr><td>Agente que aprende</td><td>Modifica componentes do comportamento a partir de dados, experi√™ncia ou feedback.</td><td>Recomenda√ß√£o, adapta√ß√£o e classifica√ß√£o.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>O ambiente condiciona o projeto</h3>
+          <p>Observabilidade, determinismo, temporalidade, din√¢mica e intera√ß√£o com outras pessoas ou agentes alteram profundamente a arquitetura. Ambientes parcialmente observ√°veis podem exigir estado e infer√™ncia; ambientes incertos exigem an√°lise de risco; decis√µes sequenciais precisam considerar consequ√™ncias futuras; ambientes din√¢micos podem exigir replanejamento.</p>
+
+          <h3>‚ÄúAgente‚Äù moderno n√£o √© sin√¥nimo de LLM</h3>
+          <p>Um modelo de linguagem pode ser um componente de um agente, mas o sistema completo inclui objetivo, orquestra√ß√£o, estado, interfaces, permiss√µes, a√ß√µes dispon√≠veis, monitoramento e crit√©rios de parada. Para Engenharia de Software, √© essencial saber quais ferramentas o agente pode chamar, que dados recebe, que permiss√µes possui e como falhas s√£o contidas.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section" id="problemas">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Problema antes da t√©cnica</p>
+          <h2>Tipos de problemas e aplica√ß√µes contempor√¢neas</h2>
+          <p>‚ÄúUsar IA‚Äù n√£o √© uma especifica√ß√£o. Antes de escolher biblioteca, modelo ou servi√ßo, precisamos transformar uma necessidade do dom√≠nio em uma tarefa computacional verific√°vel.</p>
+        </div>
+
+        <div class="flow" aria-label="Fluxo para especificar uma solu√ß√£o de IA">
+          <span>Necessidade</span><span>Formula√ß√£o</span><span>Baseline</span><span>Abordagem</span><span>Valida√ß√£o</span>
+        </div>
+
+        <div class="study-table-wrap">
+          <table class="study-table">
+            <thead><tr><th>Tipo</th><th>Pergunta central</th><th>Exemplo</th><th>Como avaliar</th></tr></thead>
+            <tbody>
+              <tr><td>Busca / planejamento</td><td>Que sequ√™ncia de estados ou a√ß√µes leva ao objetivo?</td><td>Rota, agenda, jogo, plano de execu√ß√£o.</td><td>Custo, tempo e qualidade da solu√ß√£o.</td></tr>
+              <tr><td>Classifica√ß√£o</td><td>A qual categoria pertence esta entrada?</td><td>Spam, defeito, fraude, malware.</td><td>Taxa de acerto e custo de falsos positivos/negativos.</td></tr>
+              <tr><td>Previs√£o / regress√£o</td><td>Que valor ou evento √© esperado?</td><td>Demanda, lat√™ncia, tempo at√© falha.</td><td>Erro de previs√£o, calibra√ß√£o e horizonte.</td></tr>
+              <tr><td>Recomenda√ß√£o / ranking</td><td>Quais op√ß√µes s√£o mais relevantes?</td><td>Conte√∫do, produto, prioridade de chamados.</td><td>Relev√¢ncia, cobertura, diversidade e utilidade.</td></tr>
+              <tr><td>Otimiza√ß√£o</td><td>Que configura√ß√£o maximiza benef√≠cio ou minimiza custo sob restri√ß√µes?</td><td>Escalonamento, aloca√ß√£o, configura√ß√£o.</td><td>Fun√ß√£o objetivo e viola√ß√µes de restri√ß√£o.</td></tr>
+              <tr><td>Infer√™ncia</td><td>Que conclus√µes seguem de fatos, regras ou evid√™ncias?</td><td>Diagn√≥stico, consist√™ncia, apoio √† decis√£o.</td><td>Corre√ß√£o, coer√™ncia e cobertura.</td></tr>
+              <tr><td>Gera√ß√£o</td><td>Que novo artefato deve ser produzido?</td><td>Texto, c√≥digo, imagem, resumo.</td><td>Ader√™ncia, testes, seguran√ßa e avalia√ß√£o humana.</td></tr>
+              <tr><td>Controle</td><td>Que a√ß√£o deve ser ajustada conforme o ambiente muda?</td><td>Rob√≥tica, processo industrial, energia.</td><td>Estabilidade, seguran√ßa e custo acumulado.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="study-callout">
+          <strong>Ponto de aten√ß√£o</strong>
+          <p>Tipo de problema n√£o √© sin√¥nimo de algoritmo. Classifica√ß√£o descreve uma tarefa; √°rvore de decis√£o, regress√£o log√≠stica e redes neurais s√£o algumas formas poss√≠veis de implement√°-la.</p>
+        </div>
+
+        <div class="study-prose">
+          <h3>Da necessidade √† especifica√ß√£o</h3>
+          <p>Uma boa formula√ß√£o explicita objetivo, entrada, sa√≠da, restri√ß√µes, crit√©rio de sucesso, baseline e impacto do erro. A pergunta profissional mais importante √©: <strong>qual vantagem mensur√°vel a IA oferece em rela√ß√£o a uma regra, uma consulta, um algoritmo determin√≠stico ou uma decis√£o humana assistida?</strong></p>
+
+          <h3>Nem todo problema precisa de IA</h3>
+          <div class="study-table-wrap">
+            <table class="study-table">
+              <thead><tr><th>Situa√ß√£o</th><th>Caminho prov√°vel</th><th>Justificativa</th></tr></thead>
+              <tbody>
+                <tr><td>Enviar lembrete antes do vencimento</td><td>Automa√ß√£o convencional</td><td>Data e a√ß√£o s√£o expl√≠citas; IA adicionaria complexidade sem benef√≠cio claro.</td></tr>
+                <tr><td>Bloquear formul√°rio com campo obrigat√≥rio vazio</td><td>Regra determin√≠stica</td><td>O requisito √© completo e verific√°vel.</td></tr>
+                <tr><td>Recomendar conte√∫do segundo hist√≥rico e contexto</td><td>Recomenda√ß√£o ou solu√ß√£o h√≠brida</td><td>Existe varia√ß√£o, contexto e necessidade de medir relev√¢ncia.</td></tr>
+                <tr><td>Prever falha de equipamento por sensores</td><td>Classifica√ß√£o / previs√£o</td><td>Depende de dados hist√≥ricos e do custo dos falsos alarmes.</td></tr>
+                <tr><td>Planejar rotas com restri√ß√µes</td><td>Busca / otimiza√ß√£o</td><td>H√° muitas alternativas e crit√©rios concorrentes.</td></tr>
+                <tr><td>Gerar explica√ß√£o personalizada</td><td>IA generativa com revis√£o</td><td>A gera√ß√£o pode ajudar, mas qualidade e adequa√ß√£o precisam ser verificadas.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Quando a complexidade adicional se justifica?</h3>
+          <p>Sinais favor√°veis incluem padr√µes dif√≠ceis de expressar manualmente, incerteza, grande n√∫mero de combina√ß√µes, regras dif√≠ceis de manter e exist√™ncia de dados ou conhecimento adequados. Sinais de alerta incluem problema mal definido, aus√™ncia de baseline, dados inadequados, custo do erro elevado sem mecanismos de conten√ß√£o e incapacidade de validar o comportamento no contexto de uso.</p>
+
+          <h3>Aplica√ß√µes contempor√¢neas: olhar para o problema, n√£o para o r√≥tulo</h3>
+          <p>Tecnologias e marcas mudam rapidamente. Uma an√°lise mais est√°vel pergunta: que problema est√° sendo resolvido, qual tarefa computacional √© executada, qual benef√≠cio √© esperado, como o sistema √© validado e o que acontece quando ele erra.</p>
+
+          <div class="study-table-wrap">
+            <table class="study-table">
+              <thead><tr><th>√Årea no ciclo de software</th><th>Aplica√ß√µes poss√≠veis</th><th>Pergunta cr√≠tica</th></tr></thead>
+              <tbody>
+                <tr><td>Requisitos e an√°lise</td><td>S√≠ntese de entrevistas, agrupamento de necessidades, identifica√ß√£o de inconsist√™ncias.</td><td>Omiss√£o de requisitos, falsa precis√£o e perda de contexto.</td></tr>
+                <tr><td>Desenvolvimento</td><td>Completar ou gerar c√≥digo, explicar trechos, refatorar.</td><td>C√≥digo plaus√≠vel por√©m incorreto, APIs inexistentes e vulnerabilidades.</td></tr>
+                <tr><td>Testes e qualidade</td><td>Gerar casos, priorizar testes, classificar defeitos.</td><td>Cobertura aparente sem casos-limite e reprodu√ß√£o do mesmo erro.</td></tr>
+                <tr><td>Opera√ß√£o</td><td>Detectar anomalias, agrupar incidentes, resumir logs.</td><td>Mudan√ßa de distribui√ß√£o, falso positivo e perda de causalidade.</td></tr>
+                <tr><td>Seguran√ßa</td><td>Triagem de alertas, fraude, malware, phishing e anomalias.</td><td>Advers√°rios adaptativos, dados sens√≠veis e ataques ao modelo.</td></tr>
+                <tr><td>Produto</td><td>Busca sem√¢ntica, recomenda√ß√£o, atendimento e personaliza√ß√£o.</td><td>Privacidade, manipula√ß√£o, vi√©s e conte√∫do inadequado.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Formas de inserir IA em um sistema</h3>
+          <p>IA pode atuar como assist√™ncia para uma pessoa, componente de um pipeline, apoio √† decis√£o, mecanismo de a√ß√£o autom√°tica ou agente com ferramentas. Quanto maior a autonomia, maiores as exig√™ncias de controle, observabilidade, permiss√µes, rastreabilidade e recupera√ß√£o.</p>
+
+          <h3>IA washing</h3>
+          <p>O r√≥tulo ‚Äúinteligente‚Äù n√£o demonstra vantagem t√©cnica. Um engenheiro deve perguntar qual tarefa √© executada, que baseline foi superado, como o sistema foi avaliado, quais limita√ß√µes s√£o conhecidas e que parte depende de interven√ß√£o humana.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section alt" id="riscos">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Limites, riscos e decis√£o de engenharia</p>
+          <h2>Desempenho n√£o √© o √∫nico crit√©rio</h2>
+          <p>Sistemas de IA s√£o sistemas de software, mas introduzem fontes adicionais de incerteza. O c√≥digo pode estar correto e o modelo ainda produzir uma resposta inadequada.</p>
+        </div>
+
+        <div class="study-grid">
+          <div class="study-prose">
+            <h3>Erro √© parte do modelo</h3>
+            <p>Em sistemas aprendidos, parte dos erros decorre de aproxima√ß√µes produzidas a partir de dados limitados. Por isso, n√£o basta perguntar se existe um bug: precisamos avaliar que distribui√ß√£o de erros √© aceit√°vel e quais erros custam mais.</p>
+            <p>Uma acur√°cia global alta pode esconder falhas graves em classes raras ou situa√ß√µes cr√≠ticas. Detector de fraude, detec√ß√£o de malware e manuten√ß√£o preditiva ilustram como falsos positivos e falsos negativos podem ter custos muito diferentes.</p>
+
+            <h3>Generaliza√ß√£o e mudan√ßa de distribui√ß√£o</h3>
+            <p>Modelos s√£o desenvolvidos com dados de determinados per√≠odos e contextos, mas ser√£o usados no futuro. Usu√°rios, dispositivos, linguagem, processos e advers√°rios mudam. Quando a distribui√ß√£o de dados muda, o desempenho pode degradar mesmo sem altera√ß√£o no c√≥digo.</p>
+
+            <h3>Sobreajuste</h3>
+            <p>Sobreajuste ocorre quando o modelo se adapta excessivamente aos dados conhecidos e perde capacidade de generalizar. Separa√ß√£o adequada entre treinamento, valida√ß√£o e teste, preven√ß√£o de vazamento de informa√ß√£o e avalia√ß√£o representativa s√£o partes essenciais da engenharia.</p>
+
+            <h3>Inconsist√™ncia e sensibilidade ao contexto</h3>
+            <p>Sistemas probabil√≠sticos e generativos podem responder de forma diferente a entradas semelhantes. Pequenas altera√ß√µes na formula√ß√£o, ordem das informa√ß√µes ou contexto podem modificar a sa√≠da. Isso exige testar estabilidade e definir quanto de varia√ß√£o √© aceit√°vel.</p>
+
+            <h3>Custo computacional e viabilidade</h3>
+            <p>O melhor resultado em benchmark n√£o √© necessariamente a melhor solu√ß√£o de produto. Mem√≥ria, lat√™ncia, CPU/GPU, energia, custo por requisi√ß√£o, depend√™ncia de rede, escalabilidade e manuten√ß√£o tamb√©m fazem parte da decis√£o.</p>
+
+            <h3>Dados, vi√©s e privacidade</h3>
+            <p>Dados refletem processos de coleta, decis√µes hist√≥ricas, erros e cobertura desigual. Qualidade, representatividade, privacidade, impacto sobre grupos, proveni√™ncia e custo de infraestrutura precisam ser considerados junto ao desempenho m√©dio.</p>
+
+            <h3>Explicabilidade, auditabilidade e rastreabilidade</h3>
+            <p>Nem toda aplica√ß√£o exige uma explica√ß√£o em linguagem natural, mas decis√µes relevantes precisam ser audit√°veis. Devemos conseguir identificar vers√µes de dados, modelo, prompt, ferramenta e configura√ß√£o associadas a um resultado.</p>
+
+            <h3>Seguran√ßa de sistemas com IA</h3>
+            <p>A superf√≠cie de ataque inclui vulnerabilidades tradicionais e riscos ligados a entradas adversariais, manipula√ß√£o de dados, depend√™ncias de terceiros e instru√ß√µes maliciosas em sistemas generativos. Quanto maior a autonomia, mais importantes se tornam menor privil√©gio, valida√ß√£o de entradas e sa√≠das, segrega√ß√£o de credenciais, logs, limites de execu√ß√£o, confirma√ß√£o humana e rollback.</p>
+          </div>
+
+          <aside class="study-stack">
+            <div class="study-callout">
+              <strong>M√©trica sem contexto √© insuficiente</strong>
+              <p>Antes de aceitar um n√∫mero global, pergunte qual √© o baseline, como as classes est√£o distribu√≠das e como o sistema se comporta nos casos mais cr√≠ticos.</p>
+            </div>
+            <div class="study-callout violet">
+              <strong>Risco t√©cnico √© risco de sistema</strong>
+              <p>Modelo, arquitetura, opera√ß√£o, organiza√ß√£o, pessoas, sociedade e legisla√ß√£o formam camadas de valida√ß√£o diferentes.</p>
+            </div>
+            <div class="study-callout teal">
+              <strong>Regra de projeto</strong>
+              <p>Quanto maior o alcance das a√ß√µes do sistema, maior deve ser o investimento em conten√ß√£o, monitoramento, confirma√ß√£o humana e recupera√ß√£o.</p>
+            </div>
+          </aside>
+        </div>
+
+        <div class="study-heading" style="margin-top:5rem">
+          <p class="study-kicker">S√≠ntese final</p>
+          <h2>Uma primeira decis√£o de engenharia</h2>
+          <p>Ao final da aula, o objetivo √© possuir uma estrutura de perguntas que possa ser reutilizada em problemas futuros.</p>
+        </div>
+
+        <ol class="study-prose">
+          <li>Qual √© o problema do dom√≠nio e qual decis√£o ou resultado precisa ser produzido?</li>
+          <li>Existe uma solu√ß√£o simples, determin√≠stica ou baseada em regras que atende aos requisitos?</li>
+          <li>Que tipo de problema est√° presente: busca, classifica√ß√£o, previs√£o, recomenda√ß√£o, otimiza√ß√£o, infer√™ncia, gera√ß√£o ou controle?</li>
+          <li>Se o sistema for visto como agente, quais s√£o ambiente, percep√ß√µes, a√ß√µes, objetivo e crit√©rio de desempenho?</li>
+          <li>Quais dados, conhecimentos e recursos estar√£o dispon√≠veis no momento da execu√ß√£o?</li>
+          <li>Como o resultado ser√° validado contra um baseline e quais erros t√™m maior custo?</li>
+          <li>Quais riscos t√©cnicos, de seguran√ßa, privacidade, vi√©s, explicabilidade e opera√ß√£o precisam ser tratados?</li>
+          <li>Qual deve ser o papel humano antes, durante e depois da decis√£o?</li>
+          <li>Como o sistema ser√° monitorado, atualizado, auditado e, se necess√°rio, revertido?</li>
+        </ol>
+
+        <div class="study-callout teal" style="margin-top:1.5rem">
+          <strong>Mensagem de fechamento</strong>
+          <p>IA aplicada √© uma decis√£o de engenharia. O valor n√£o est√° em usar a t√©cnica mais recente, mas em formular bem o problema, escolher uma abordagem compat√≠vel com os requisitos, medir o que importa e manter controle sobre os riscos.</p>
+        </div>
+
+        <div class="study-heading" style="margin-top:5rem">
+          <p class="study-kicker">Checklist de conhecimento</p>
+          <h2>O que voc√™ deve conseguir explicar ao final</h2>
+        </div>
+
+        <div class="check-grid">
+          <article class="check-card"><span>01</span><strong>Campo</strong><p>Explicar por que IA √© um campo amplo e por que modelos generativos representam apenas uma parte dele.</p></article>
+          <article class="check-card"><span>02</span><strong>Fronteiras</strong><p>Distinguir automa√ß√£o, regras, mecanismos de IA e solu√ß√µes h√≠bridas.</p></article>
+          <article class="check-card"><span>03</span><strong>Aprendizagem</strong><p>Explicar por que nem toda IA precisa aprender e citar busca, infer√™ncia, planejamento e otimiza√ß√£o.</p></article>
+          <article class="check-card"><span>04</span><strong>Evolu√ß√£o</strong><p>Descrever mudan√ßas de foco entre s√≠mbolos, conhecimento, dados, redes e gera√ß√£o sem trat√°-las como substitui√ß√£o linear.</p></article>
+          <article class="check-card"><span>05</span><strong>Agentes</strong><p>Identificar ambiente, percep√ß√µes, estado, objetivo, decis√£o, a√ß√µes e crit√©rio de desempenho.</p></article>
+          <article class="check-card"><span>06</span><strong>Problemas</strong><p>Reconhecer busca, classifica√ß√£o, previs√£o, recomenda√ß√£o, otimiza√ß√£o, infer√™ncia, gera√ß√£o e controle.</p></article>
+          <article class="check-card"><span>07</span><strong>Decis√£o tecnol√≥gica</strong><p>Comparar IA com automa√ß√£o, regras e algoritmos convencionais antes de justificar complexidade adicional.</p></article>
+          <article class="check-card"><span>08</span><strong>Avalia√ß√£o</strong><p>Considerar dados, custo dos erros, generaliza√ß√£o, sobreajuste, explicabilidade, custo, privacidade, seguran√ßa e supervis√£o.</p></article>
+          <article class="check-card"><span>09</span><strong>IA generativa</strong><p>Tratar sa√≠das generativas como hip√≥teses a serem verificadas, testadas e documentadas.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section" id="referencias">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Refer√™ncias utilizadas</p>
+          <h2>Leituras que sustentam este material</h2>
+        </div>
+        <ul class="references">
+          <li>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson/Addison-Wesley, 2009.</li>
+          <li>McCORDUCK, Pamela. <em>Machines Who Think: A Personal Inquiry into the History and Prospects of Artificial Intelligence</em>. 2. ed. A K Peters, 2004.</li>
+          <li>NILSSON, Nils J. <em>The Quest for Artificial Intelligence: A History of Ideas and Achievements</em>. Cambridge University Press, 2010.</li>
+          <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Intelig√™ncia Artificial</em>. Tradu√ß√£o da 3. ed. Elsevier, 2013.</li>
+          <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Pearson, 2021.</li>
+          <li>CASTRO, Andr√© Cerqueira et al. <em>Introdu√ß√£o √† Intelig√™ncia Artificial</em>. Goi√¢nia: Cegraf UFG, 2025.</li>
+        </ul>
+        <div class="study-actions" style="margin-top:2rem">
+          <a class="button button-primary" href="aula-02.html">Voltar √† Aula 02</a>
+          <a class="button button-secondary" href="#inicio">Voltar ao in√≠cio ‚Üë</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Intelig√™ncia Artificial Aplicada</strong><p>Engenharia de Software ¬∑ 2026/2</p></div>
+      <a href="index.html">Portal da disciplina</a>
+    </div>
+  </footer>
+</body>
+</html>
