@@ -28,23 +28,139 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Setup Python for dark figures
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install image dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy
+
       - name: Prepare static files
         run: |
           rm -rf dist
           mkdir -p dist
           rsync -av --exclude='.git' --exclude='.github' --exclude='dist' ./ dist/
 
+      - name: Generate dark-mode Aula 02 figures
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import numpy as np
+
+          asset_dir = Path('dist/assets/aula-02-aprofundamento')
+
+          def darkify(src, dst):
+              img = Image.open(src).convert('RGB')
+              arr = np.asarray(img).astype(np.float32) / 255.0
+
+              mx = arr.max(axis=2)
+              mn = arr.min(axis=2)
+              delta = mx - mn
+              value = mx
+              sat = np.where(mx > 1e-6, delta / mx, 0)
+
+              hue = np.zeros_like(value)
+              mask = delta > 1e-6
+              r, g, b = arr[..., 0], arr[..., 1], arr[..., 2]
+              mr = (mx == r) & mask
+              mg = (mx == g) & mask
+              mb = (mx == b) & mask
+              hue[mr] = ((g[mr] - b[mr]) / delta[mr]) % 6
+              hue[mg] = ((b[mg] - r[mg]) / delta[mg]) + 2
+              hue[mb] = ((r[mb] - g[mb]) / delta[mb]) + 4
+              hue /= 6.0
+
+              nv = value.copy()
+              ns = sat.copy()
+
+              neutral = sat < 0.16
+              light_neutral = neutral & (value > 0.72)
+              nv[light_neutral] = 0.065 + (1 - value[light_neutral]) * 0.26
+
+              dark_neutral = neutral & (value < 0.58)
+              nv[dark_neutral] = 0.94 - value[dark_neutral] * 0.16
+
+              mid_neutral = neutral & ~(light_neutral | dark_neutral)
+              nv[mid_neutral] = 0.50
+
+              pastel = (sat >= 0.16) & (sat < 0.42) & (value > 0.82)
+              nv[pastel] = 0.20 + 0.10 * sat[pastel]
+              ns[pastel] = np.minimum(0.62, sat[pastel] * 1.35)
+
+              color = (sat >= 0.16) & ~pastel
+              nv[color] = np.maximum(value[color], 0.76)
+              ns[color] = np.minimum(1.0, sat[color] * 0.98 + 0.04)
+
+              i = np.floor(hue * 6).astype(int) % 6
+              f = hue * 6 - i
+              p = nv * (1 - ns)
+              q = nv * (1 - f * ns)
+              t = nv * (1 - (1 - f) * ns)
+              out = np.zeros_like(arr)
+              options = [(nv, t, p), (q, nv, p), (p, nv, t), (p, q, nv), (t, p, nv), (nv, p, q)]
+
+              for k, vals in enumerate(options):
+                  m = i == k
+                  for c, val in enumerate(vals):
+                      out[..., c][m] = val[m]
+
+              Image.fromarray(np.clip(out * 255, 0, 255).astype(np.uint8), 'RGB').save(
+                  dst, 'PNG', compress_level=6
+              )
+
+          for number in range(1, 9):
+              src = asset_dir / f'aula-02-aprofundamento-{number:02d}.png'
+              dst = asset_dir / f'aula-02-aprofundamento-{number:02d}-dark.png'
+              if not src.exists():
+                  raise SystemExit(f'Imagem clara ausente: {src}')
+              darkify(src, dst)
+          PY
+
+      - name: Adapt Aula 02 figure chrome for dark mode
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          html_path = Path('dist/aula-02-aprofundamento.html')
+          html = html_path.read_text(encoding='utf-8')
+          html = html.replace(
+              'body.theme-dark .figure-light { background: #fff; border-color: #42506a; }',
+              'body.theme-dark .figure-light { background: #07111f; border-color: #27466f; }'
+          )
+          html = html.replace(
+              'body.theme-dark .figure-light img { background: #fff; }',
+              'body.theme-dark .figure-light img { background: transparent; }'
+          )
+          html_path.write_text(html, encoding='utf-8')
+
+          script_path = Path('dist/script.js')
+          script = script_path.read_text(encoding='utf-8')
+          script = script.replace(
+              'background: #fff;\n      border-radius: 10px;',
+              'background: transparent;\n      border-radius: 10px;'
+          )
+          script_path.write_text(script, encoding='utf-8')
+          PY
+
       - name: Validate generated site
         run: |
           test -f dist/index.html
           test -f dist/curso.html
           test -f dist/aula-02.html
+          test -f dist/aula-02-aprofundamento.html
           test -f dist/calendario-a.html
           test -f dist/calendario-b.html
           test -f dist/assets/infografico.png
           test -f dist/assets/infografico-dark.png
+          for i in $(seq -w 1 8); do
+            test -f "dist/assets/aula-02-aprofundamento/aula-02-aprofundamento-${i}.png"
+            test -f "dist/assets/aula-02-aprofundamento/aula-02-aprofundamento-${i}-dark.png"
+          done
           grep -q 'calendario-a.html' dist/curso.html
           grep -q 'calendario-b.html' dist/curso.html
+          grep -q -- '-dark.png' dist/script.js
 
       - name: Upload static files
         uses: actions/upload-pages-artifact@v3
