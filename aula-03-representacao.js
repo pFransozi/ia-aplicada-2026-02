@@ -145,12 +145,118 @@
     if (eyebrow) eyebrow.textContent = '06 · Validação do modelo';
   }
 
-  const activityHeading = document.querySelector('#atividade .section-heading');
-  if (activityHeading) {
-    const eyebrow = activityHeading.querySelector('.eyebrow');
-    const title = activityHeading.querySelector('h2');
-    if (eyebrow) eyebrow.textContent = 'Aplicação integrada';
-    if (title) title.textContent = 'Percorra o ciclo completo em um novo problema';
+  const activityContainer = document.querySelector('#atividade .container');
+  if (activityContainer) {
+    activityContainer.innerHTML = `
+      <div class="section-heading">
+        <p class="eyebrow">Aplicação integrada</p>
+        <h2>Percorra o ciclo completo em um novo problema</h2>
+        <p>Escolha um dos casos abaixo e produza uma formulação que outra pessoa consiga compreender e implementar sem depender da descrição original. O foco é justificar decisões de modelagem, não preencher um formulário.</p>
+      </div>
+
+      <div class="case-options">
+        <article class="case-card"><span aria-hidden="true">🧩</span><small>Opção A</small><h4>Labirinto</h4><p>Um personagem precisa sair da entrada e alcançar a saída utilizando apenas movimentos permitidos.</p></article>
+        <article class="case-card"><span aria-hidden="true">📦</span><small>Opção B</small><h4>Coleta e entrega</h4><p>Um robô precisa coletar um objeto em um local e entregá-lo em outro, respeitando as condições do domínio.</p></article>
+        <article class="case-card"><span aria-hidden="true">🚉</span><small>Opção C</small><h4>Transporte</h4><p>Um passageiro precisa deslocar-se de uma estação inicial até um destino usando conexões disponíveis.</p></article>
+        <article class="case-card"><span aria-hidden="true">📋</span><small>Opção D</small><h4>Tarefas com dependências</h4><p>Um conjunto de tarefas deve ser concluído respeitando relações de precedência entre elas.</p></article>
+      </div>
+
+      <div class="integrated-activity-brief">
+        <strong>Produto da atividade</strong>
+        <span>Em uma folha, quadro ou arquivo do grupo, construa um único modelo organizado nas seis etapas abaixo. Cada decisão deve ser acompanhada de pelo menos um exemplo concreto.</span>
+      </div>
+
+      <article class="inquiry integrated-cycle">
+        <div class="inquiry-head">
+          <div><span class="inquiry-kicker">Etapa 1 · Modelagem técnica</span><h3>Construa uma formulação completa e verificável</h3></div>
+          <span class="inquiry-tag">Sem consultar IA nesta etapa</span>
+        </div>
+
+        <div class="integrated-cycle-grid">
+          <article class="integrated-step">
+            <span class="integrated-step-number">01</span>
+            <div><small>Definição do problema</small><h3>Delimite exatamente o que deve ser resolvido</h3>
+              <ul><li>Identifique o ponto de partida e a condição que caracteriza o término.</li><li>Retire da descrição elementos que não alteram a tarefa.</li></ul>
+              <p class="integrated-deliverable"><strong>Entregue:</strong> uma frase de especificação do problema, acompanhada do estado inicial e do objetivo.</p>
+            </div>
+          </article>
+
+          <article class="integrated-step">
+            <span class="integrated-step-number">02</span>
+            <div><small>Abstração do domínio</small><h3>Decida o que precisa entrar no modelo</h3>
+              <ul><li>Selecione as informações necessárias para distinguir situações relevantes.</li><li>Indique pelo menos dois elementos do mundo real que podem ser omitidos e justifique a exclusão.</li></ul>
+              <p class="integrated-deliverable"><strong>Entregue:</strong> elementos representados, elementos omitidos e a justificativa de relevância.</p>
+            </div>
+          </article>
+
+          <article class="integrated-step">
+            <span class="integrated-step-number">03</span>
+            <div><small>Formulação do problema</small><h3>Defina a dinâmica sobre a qual a busca poderia operar</h3>
+              <ul><li>Especifique a representação de estado, as ações aplicáveis e o modelo de transição.</li><li>Defina restrições, teste de objetivo e, quando fizer sentido, uma função de custo.</li></ul>
+              <p class="integrated-deliverable"><strong>Entregue:</strong> dois estados concretos e pelo menos uma transição escrita no formato <code>estado — ação → novo estado</code>.</p>
+            </div>
+          </article>
+
+          <article class="integrated-step">
+            <span class="integrated-step-number">04</span>
+            <div><small>Representação computacional</small><h3>Escolha estruturas capazes de codificar o modelo</h3>
+              <ul><li>Indique como estados, conexões, ações e objetivo seriam representados em Python.</li><li>Use estruturas adequadas ao domínio, como strings, tuplas, conjuntos, listas ou dicionários.</li></ul>
+              <p class="integrated-deliverable"><strong>Entregue:</strong> um pequeno exemplo de estado e da estrutura que representa uma transição ou relação de sucessores. Não implemente o algoritmo de busca.</p>
+            </div>
+          </article>
+
+          <article class="integrated-step">
+            <span class="integrated-step-number">05</span>
+            <div><small>Espaço de estados</small><h3>Mostre quais possibilidades a formulação produz</h3>
+              <ul><li>Represente os estados como nós e as transições válidas como arestas, ou use uma tabela de sucessores equivalente.</li><li>Destaque um caminho válido do estado inicial até um estado objetivo.</li></ul>
+              <p class="integrated-deliverable"><strong>Entregue:</strong> o grafo completo, se o problema for pequeno, ou um recorte representativo com estados e transições suficientes para demonstrar o modelo.</p>
+            </div>
+          </article>
+
+          <article class="integrated-step integrated-step-validation">
+            <span class="integrated-step-number">06</span>
+            <div><small>Validação do modelo</small><h3>Teste se a representação continua adequada quando o requisito muda</h3>
+              <ul><li>Introduza uma pequena mudança: bloqueio, custo, recurso, capacidade ou nova dependência.</li><li>Identifique o que precisa ser alterado no estado, nas ações, nas transições ou no teste de objetivo — e o que permanece válido.</li></ul>
+              <p class="integrated-deliverable"><strong>Entregue:</strong> uma alteração no requisito e uma justificativa técnica das mudanças necessárias no modelo.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="integrated-quality">
+          <div><span class="inquiry-kicker">Critérios de qualidade</span><h3>Antes de apresentar, audite a própria formulação</h3></div>
+          <div class="integrated-quality-grid">
+            <div><strong>Suficiência</strong><span>O estado distingue todas as situações que podem alterar decisões ou a validade da solução?</span></div>
+            <div><strong>Precisão</strong><span>Ações, condições de aplicabilidade e transições estão definidas sem ambiguidade?</span></div>
+            <div><strong>Verificabilidade</strong><span>O teste de objetivo pode ser avaliado diretamente a partir de um estado?</span></div>
+            <div><strong>Abstração</strong><span>O modelo evita informações que não influenciam a resolução do problema?</span></div>
+            <div><strong>Consistência</strong><span>O caminho apresentado respeita as restrições e realmente leva ao objetivo?</span></div>
+            <div><strong>Custo</strong><span>Se houver várias soluções, o critério de comparação está claramente definido?</span></div>
+          </div>
+        </div>
+
+        <div class="integrated-presentation">
+          <strong>Apresentação do grupo · 3 minutos</strong>
+          <span>Explique o problema, mostre um estado, uma transição, um caminho válido, uma decisão de abstração e o resultado do teste de mudança de requisito. O objetivo é demonstrar que a representação é operacional, e não apenas listar definições.</span>
+        </div>
+      </article>
+
+      <article class="inquiry" id="ia-critica">
+        <div class="inquiry-head">
+          <div><span class="inquiry-kicker">Etapa 2 · Auditoria com IA</span><h3>Compare formulações e procure falhas de modelagem</h3></div>
+          <span class="inquiry-tag">IA como hipótese para revisão</span>
+        </div>
+        <div class="ai-audit-intro">
+          <p>Somente depois de concluir o modelo do grupo, peça a uma ferramenta de IA generativa que formule o mesmo problema. Solicite explicitamente: representação de estado, estado inicial, ações aplicáveis, modelo de transição, restrições, teste de objetivo e função de custo, quando pertinente.</p>
+        </div>
+        <div class="ai-audit-grid">
+          <article><span>01</span><div><strong>Compare as representações de estado</strong><p>A IA distingue as mesmas situações que o grupo? Ela omitiu alguma variável necessária ou adicionou informação irrelevante?</p></div></article>
+          <article><span>02</span><div><strong>Audite ações e transições</strong><p>Procure ações impossíveis, condições de aplicabilidade ausentes e transições que não correspondam às regras do domínio.</p></div></article>
+          <article><span>03</span><div><strong>Verifique objetivo, restrições e custo</strong><p>O teste de objetivo é computável? As restrições são suficientes? A função de custo realmente expressa o que significa uma solução preferível?</p></div></article>
+          <article><span>04</span><div><strong>Decida o que revisar</strong><p>Escolha pelo menos uma diferença entre as duas propostas. Aceite ou rejeite a sugestão da IA com uma justificativa baseada no modelo, não na autoridade da ferramenta.</p></div></article>
+        </div>
+        <div class="ai-audit-output"><strong>Resultado esperado</strong><span>Uma versão final do modelo acompanhada de uma justificativa curta: o que foi mantido, o que foi corrigido e por quê.</span></div>
+      </article>
+    `;
   }
 
   const style = document.createElement('style');
@@ -162,7 +268,22 @@
     #formulacao .distinction code{padding:.12rem .32rem;border-radius:6px;background:var(--soft);color:var(--ink)}
     #formulacao .search-formulation-summary{display:block;line-height:1.6}#formulacao .search-formulation-main{margin:0;color:var(--muted)}#formulacao .search-formulation-main strong{color:var(--ink)}#formulacao .optimality-note{display:block;margin:.7rem 0 0;padding-top:.7rem;border-top:1px solid var(--line);color:var(--muted)}
     body.theme-dark .formulation-schema{background:#111a2b}body.theme-dark .formulation-closure{background:#0f2b2a}
-    @media(max-width:980px){.formulation-schema{grid-template-columns:1fr}.formulation-schema>div{text-align:left}.formulation-schema>b{transform:rotate(90deg);justify-self:start}}@media(max-width:640px){.formulation-closure{grid-template-columns:1fr}}
+
+    #atividade .integrated-activity-brief{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.55rem .9rem;align-items:start;margin:1rem 0 1.5rem;padding:1rem 1.1rem;border-left:4px solid var(--blue);border-radius:0 14px 14px 0;background:var(--blue-soft)}
+    #atividade .integrated-activity-brief strong{color:var(--blue);white-space:nowrap}#atividade .integrated-activity-brief span{color:var(--muted);line-height:1.5}
+    #atividade .integrated-cycle{margin-top:1.25rem}.integrated-cycle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:1.35rem}
+    .integrated-step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:.85rem;padding:1.05rem;border:1px solid var(--line);border-radius:17px;background:var(--paper)}
+    .integrated-step-number{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--blue-soft);color:var(--blue);font-size:.76rem;font-weight:900}
+    .integrated-step small{display:block;margin:0 0 .28rem;color:var(--blue);font-size:.68rem;font-weight:850;letter-spacing:.07em;text-transform:uppercase}.integrated-step h3{margin:0 0 .6rem;font-size:1rem}.integrated-step ul{margin:.1rem 0 .8rem;padding-left:1.15rem;color:var(--muted);font-size:.86rem;line-height:1.5}.integrated-step li+li{margin-top:.28rem}
+    .integrated-deliverable{margin:0;padding-top:.72rem;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;line-height:1.45}.integrated-deliverable strong{color:var(--ink)}.integrated-deliverable code{padding:.12rem .3rem;border-radius:6px;background:var(--soft);color:var(--ink)}
+    .integrated-step-validation{border-color:#a9ddd5;background:linear-gradient(145deg,var(--teal-soft),var(--paper))}.integrated-step-validation .integrated-step-number{background:#dff4f0;color:var(--teal)}.integrated-step-validation small{color:var(--teal)}
+    .integrated-quality{margin:0 1.35rem 1.2rem;padding:1.15rem;border:1px solid var(--line);border-radius:17px;background:var(--soft)}.integrated-quality h3{margin:.2rem 0 1rem}.integrated-quality-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.integrated-quality-grid>div{padding:.85rem;border:1px solid var(--line);border-radius:13px;background:var(--paper)}.integrated-quality-grid strong,.integrated-quality-grid span{display:block}.integrated-quality-grid strong{margin-bottom:.25rem;color:var(--ink);font-size:.84rem}.integrated-quality-grid span{color:var(--muted);font-size:.77rem;line-height:1.4}
+    .integrated-presentation{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.6rem .9rem;margin:0 1.35rem 1.35rem;padding:1rem 1.1rem;border:1px solid #a9ddd5;border-radius:15px;background:var(--teal-soft)}.integrated-presentation strong{color:var(--teal);white-space:nowrap}.integrated-presentation span{color:var(--ink);line-height:1.5}
+    #atividade #ia-critica{margin-top:1.5rem}.ai-audit-intro{padding:1.2rem 1.35rem 0}.ai-audit-intro p{margin:0;color:var(--muted);line-height:1.55}.ai-audit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:1.2rem 1.35rem}.ai-audit-grid article{display:grid;grid-template-columns:38px minmax(0,1fr);gap:.75rem;padding:1rem;border:1px solid var(--line);border-radius:15px;background:var(--paper)}.ai-audit-grid article>span{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:var(--violet-soft);color:var(--violet);font-size:.72rem;font-weight:900}.ai-audit-grid strong{display:block;margin-bottom:.3rem;color:var(--ink)}.ai-audit-grid p{margin:0;color:var(--muted);font-size:.84rem;line-height:1.45}.ai-audit-output{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.55rem .85rem;margin:0 1.35rem 1.35rem;padding:1rem;border-left:4px solid var(--violet);border-radius:0 13px 13px 0;background:var(--violet-soft)}.ai-audit-output strong{color:var(--violet)}.ai-audit-output span{color:var(--ink);line-height:1.45}
+    body.theme-dark #atividade .integrated-activity-brief{background:#111a2b}body.theme-dark .integrated-step,body.theme-dark .integrated-quality-grid>div,body.theme-dark .ai-audit-grid article{background:#172033;border-color:var(--line)}body.theme-dark .integrated-step-validation{background:#0f2b2a;border-color:#245d59}body.theme-dark .integrated-quality{background:#111a2b;border-color:var(--line)}body.theme-dark .integrated-presentation{background:#0f2b2a;border-color:#245d59}body.theme-dark .ai-audit-output{background:#201a3a}
+    @media(max-width:980px){.formulation-schema{grid-template-columns:1fr}.formulation-schema>div{text-align:left}.formulation-schema>b{transform:rotate(90deg);justify-self:start}.integrated-quality-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.integrated-cycle-grid,.ai-audit-grid,.integrated-quality-grid{grid-template-columns:1fr}.integrated-step{grid-template-columns:1fr}.integrated-presentation,#atividade .integrated-activity-brief,.ai-audit-output{grid-template-columns:1fr}.integrated-presentation strong,#atividade .integrated-activity-brief strong{white-space:normal}}
+    @media(max-width:640px){.formulation-closure{grid-template-columns:1fr}}
   `;
   document.head.appendChild(style);
 })();
