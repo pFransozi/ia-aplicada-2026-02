@@ -83,48 +83,72 @@
         </div>
 
         <div class="state-graph-canvas">
-          <svg class="state-graph-svg" viewBox="0 0 820 430" role="img" aria-labelledby="state-graph-title state-graph-desc">
+          <svg class="state-graph-svg" viewBox="0 0 1000 560" role="img" aria-labelledby="state-graph-title state-graph-desc">
             <title id="state-graph-title">Grafo do espaço de estados do robô</title>
-            <desc id="state-graph-desc">O estado Corredor está conectado a Recepção, Sala 101, Copa e Laboratório. Recepção é o estado inicial, Laboratório é o objetivo e o caminho Recepção, Corredor, Laboratório está destacado.</desc>
+            <desc id="state-graph-desc">Recepção é o estado inicial e está conectada ao Corredor. O Corredor se conecta ao Laboratório, objetivo do problema, à Sala 101, ao Banheiro e à Copa. A Sala 101 se conecta à Sala 102. A Copa se conecta ao Almoxarifado e à Sala de Reunião.</desc>
 
             <defs>
-              <filter id="state-node-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#07101f" flood-opacity="0.18" />
+              <filter id="state-node-shadow" x="-24%" y="-24%" width="148%" height="160%">
+                <feDropShadow dx="0" dy="9" stdDeviation="9" flood-color="#07101f" flood-opacity="0.18" />
               </filter>
             </defs>
 
             <g class="state-graph-edges" aria-hidden="true">
-              <line class="state-path-edge" x1="195" y1="215" x2="345" y2="215"></line>
-              <line class="state-path-edge" x1="475" y1="215" x2="625" y2="215"></line>
-              <line x1="392" y1="175" x2="365" y2="111"></line>
-              <line x1="392" y1="255" x2="365" y2="319"></line>
+              <line class="state-path-edge" x1="242" y1="265" x2="430" y2="265"></line>
+              <line class="state-path-edge" x1="570" y1="265" x2="758" y2="265"></line>
+              <line x1="500" y1="225" x2="500" y2="150"></line>
+              <line x1="570" y1="285" x2="650" y2="350"></line>
+              <line x1="500" y1="305" x2="500" y2="365"></line>
+              <line x1="590" y1="105" x2="720" y2="105"></line>
+              <line x1="500" y1="445" x2="405" y2="505"></line>
+              <line x1="500" y1="445" x2="595" y2="505"></line>
             </g>
 
-            <g class="state-node state-node-start" transform="translate(55 175)" filter="url(#state-node-shadow)">
-              <rect width="140" height="80" rx="20"></rect>
-              <text x="70" y="39">Recepção</text>
-              <text class="node-role" x="70" y="61">estado inicial</text>
+            <g class="state-node state-node-start" transform="translate(70 220)" filter="url(#state-node-shadow)">
+              <rect width="172" height="90" rx="22"></rect>
+              <text x="86" y="43">Recepção</text>
+              <text class="node-role" x="86" y="67">estado inicial</text>
             </g>
 
-            <g class="state-node state-node-core state-node-on-path" transform="translate(345 175)" filter="url(#state-node-shadow)">
-              <rect width="130" height="80" rx="20"></rect>
-              <text x="65" y="47">Corredor</text>
+            <g class="state-node state-node-core state-node-on-path" transform="translate(430 220)" filter="url(#state-node-shadow)">
+              <rect width="140" height="90" rx="22"></rect>
+              <text x="70" y="53">Corredor</text>
             </g>
 
-            <g class="state-node state-node-regular" transform="translate(285 35)" filter="url(#state-node-shadow)">
-              <rect width="150" height="76" rx="19"></rect>
-              <text x="75" y="44">Sala 101</text>
+            <g class="state-node state-node-goal" transform="translate(758 220)" filter="url(#state-node-shadow)">
+              <rect width="172" height="90" rx="22"></rect>
+              <text x="86" y="43">Laboratório</text>
+              <text class="node-role" x="86" y="67">objetivo</text>
             </g>
 
-            <g class="state-node state-node-regular" transform="translate(285 319)" filter="url(#state-node-shadow)">
-              <rect width="150" height="76" rx="19"></rect>
-              <text x="75" y="44">Copa</text>
+            <g class="state-node state-node-regular" transform="translate(410 60)" filter="url(#state-node-shadow)">
+              <rect width="180" height="90" rx="22"></rect>
+              <text x="90" y="53">Sala 101</text>
             </g>
 
-            <g class="state-node state-node-goal" transform="translate(625 175)" filter="url(#state-node-shadow)">
-              <rect width="140" height="80" rx="20"></rect>
-              <text x="70" y="39">Laboratório</text>
-              <text class="node-role" x="70" y="61">objetivo</text>
+            <g class="state-node state-node-regular" transform="translate(720 60)" filter="url(#state-node-shadow)">
+              <rect width="180" height="90" rx="22"></rect>
+              <text x="90" y="53">Sala 102</text>
+            </g>
+
+            <g class="state-node state-node-regular" transform="translate(640 330)" filter="url(#state-node-shadow)">
+              <rect width="170" height="80" rx="20"></rect>
+              <text x="85" y="47">Banheiro</text>
+            </g>
+
+            <g class="state-node state-node-regular" transform="translate(410 365)" filter="url(#state-node-shadow)">
+              <rect width="180" height="80" rx="20"></rect>
+              <text x="90" y="47">Copa</text>
+            </g>
+
+            <g class="state-node state-node-regular state-node-small" transform="translate(250 485)" filter="url(#state-node-shadow)">
+              <rect width="200" height="70" rx="19"></rect>
+              <text x="100" y="42">Almoxarifado</text>
+            </g>
+
+            <g class="state-node state-node-regular state-node-small" transform="translate(550 485)" filter="url(#state-node-shadow)">
+              <rect width="220" height="70" rx="19"></rect>
+              <text x="110" y="42">Sala de Reunião</text>
             </g>
           </svg>
         </div>
@@ -226,7 +250,7 @@
       display: block;
       width: 100%;
       height: auto;
-      min-height: 330px;
+      min-height: 380px;
     }
 
     .state-graph-edges line {
@@ -237,8 +261,8 @@
 
     .state-graph-edges line.state-path-edge {
       stroke: #3aa797;
-      stroke-width: 7;
-      filter: drop-shadow(0 0 5px rgba(58, 167, 151, .26));
+      stroke-width: 8;
+      filter: drop-shadow(0 0 5px rgba(58, 167, 151, .28));
     }
 
     .state-node rect {
@@ -248,22 +272,27 @@
     .state-node text {
       fill: var(--ink);
       font-family: Inter, system-ui, sans-serif;
-      font-size: 17px;
+      font-size: 19px;
       font-weight: 800;
       text-anchor: middle;
+    }
+
+    .state-node-small text {
+      font-size: 17px;
     }
 
     .state-node .node-role {
       fill: var(--muted);
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .04em;
+      font-weight: 750;
+      letter-spacing: .055em;
       text-transform: uppercase;
     }
 
     .state-node-start rect {
       fill: var(--blue-soft);
       stroke: #6f8fe8;
+      stroke-width: 2.5;
     }
 
     .state-node-core rect {
@@ -284,6 +313,7 @@
     .state-node-goal rect {
       fill: var(--teal-soft);
       stroke: #3aa797;
+      stroke-width: 2.5;
     }
 
     .state-node-goal text:first-of-type {
@@ -436,6 +466,7 @@
 
     body.theme-dark .state-graph-edges line.state-path-edge {
       stroke: #45b3a2;
+      filter: drop-shadow(0 0 7px rgba(69,179,162,.34));
     }
 
     body.theme-dark .state-node text {
@@ -458,6 +489,7 @@
     }
 
     body.theme-dark .state-node-on-path rect {
+      fill: #102f31;
       stroke: #45b3a2;
     }
 
@@ -500,7 +532,7 @@
       }
 
       .state-graph-svg {
-        min-width: 690px;
+        min-width: 760px;
       }
 
       .state-graph-canvas {
