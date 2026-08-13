@@ -1,5 +1,41 @@
 /* Refino da atividade de modelagem da Aula 03. */
 (() => {
+  const abstractionInquiry = document.querySelector('#abstracao .abstraction-challenge');
+  if (abstractionInquiry) {
+    abstractionInquiry.innerHTML = `
+      <div class="inquiry-head">
+        <div>
+          <span class="inquiry-kicker">Análise de impacto na representação</span>
+          <h3>Uma nova restrição altera quais componentes do modelo?</h3>
+        </div>
+        <span class="inquiry-tag">Reformule e justifique</span>
+      </div>
+      <div class="inquiry-body inquiry-body-single">
+        <div>
+          <div class="challenge-change">
+            <small>Mudança no requisito</small>
+            <p>O robô precisa chegar ao <strong>Laboratório</strong>, mas não pode entrar em ambientes cuja <strong>temperatura seja superior a 30 °C</strong>.</p>
+          </div>
+          <p class="challenge-context"><strong>Objetivo da atividade:</strong> analise o impacto da nova condição sobre a abstração anterior. Não reconstrua todo o modelo; identifique precisamente o que precisa ser modificado e o que pode ser preservado.</p>
+          <ol class="prompt-list">
+            <li><strong>Relevância da informação.</strong> Explique por que a temperatura, antes descartada, passa a influenciar a validade de uma solução.</li>
+            <li><strong>Decisão de modelagem.</strong> Determine se a temperatura deve ser tratada como atributo do ambiente, informação do estado, restrição sobre uma transição ou combinação desses elementos. Justifique considerando se ela é fixa ou pode variar durante a execução.</li>
+            <li><strong>Regra de transição.</strong> Formule, em linguagem natural ou notação lógica, as condições que tornam válido o deslocamento para um ambiente vizinho. Considere, no mínimo, conectividade e temperatura.</li>
+            <li><strong>Consistência do modelo.</strong> Indique quais componentes anteriores permanecem válidos — como estado inicial, objetivo e estrutura de conexões — e quais precisam ser ampliados ou reinterpretados.</li>
+          </ol>
+          <div class="abstraction-takeaway" style="margin:1.25rem 0 0">
+            <strong>Resultado esperado</strong>
+            <span>O grupo deve apresentar uma versão revisada do modelo e justificar cada alteração com base no novo requisito, evitando incluir informações que não afetam a resolução do problema.</span>
+          </div>
+        </div>
+      </div>
+      <div class="abstraction-takeaway">
+        <strong>Princípio de modelagem</strong>
+        <span>Uma mudança de requisito pode alterar a abstração, as restrições e a função de transição sem exigir que todo o modelo seja reconstruído. A representação deve conter apenas as informações necessárias para distinguir situações relevantes e validar ações possíveis.</span>
+      </div>
+    `;
+  }
+
   const section = document.querySelector('#atividade');
   if (!section) return;
 
