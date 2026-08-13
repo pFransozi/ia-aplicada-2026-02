@@ -3,7 +3,7 @@
   if (description) description.remove();
 
   const journeyLabels = [
-    'Especificação do problema',
+    'Definição do problema',
     'Abstração do domínio',
     'Formulação do problema',
     'Representação computacional',
