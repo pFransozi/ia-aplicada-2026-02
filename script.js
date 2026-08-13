@@ -339,6 +339,12 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
       const representationRefinement = document.createElement('script');
       representationRefinement.src = 'aula-03-representacao.js';
       representationRefinement.async = false;
+      representationRefinement.addEventListener('load', () => {
+        const validationRefinement = document.createElement('script');
+        validationRefinement.src = 'aula-03-validacao.js';
+        validationRefinement.async = false;
+        document.head.appendChild(validationRefinement);
+      });
       document.head.appendChild(representationRefinement);
     });
 
