@@ -297,6 +297,35 @@ setupDeepDiveFigures();
 if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathname.endsWith('aula-03.html')) {
   document.querySelector('#fechamento .knowledge-exit')?.remove();
 
+  const aula03ThemeStyle = document.createElement('style');
+  aula03ThemeStyle.id = 'aula03-theme-alignment';
+  aula03ThemeStyle.textContent = `
+    body.lesson-page:not(.theme-dark) #aquecimento .warmup {
+      background: linear-gradient(145deg, #ffffff, #f4f7ff);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      box-shadow: 0 18px 48px rgba(35, 50, 78, .08);
+    }
+    body.lesson-page:not(.theme-dark) #aquecimento .warmup p { color: var(--muted); }
+    body.lesson-page:not(.theme-dark) #aquecimento .question-cloud > div { background:#f7f9fd; border-color:var(--line); color:var(--ink); }
+    body.lesson-page:not(.theme-dark) #aquecimento .warmup-map-figure { background:#fff; border-color:var(--line); }
+    body.lesson-page:not(.theme-dark) #codigo.section-dark,
+    body.lesson-page:not(.theme-dark) #ponte.section-dark { background:var(--paper); color:var(--ink); }
+    body.lesson-page:not(.theme-dark) #codigo.section-dark p,
+    body.lesson-page:not(.theme-dark) #ponte.section-dark p { color:var(--muted); }
+    body.lesson-page:not(.theme-dark) #codigo.section-dark .eyebrow,
+    body.lesson-page:not(.theme-dark) #ponte.section-dark .eyebrow { color:var(--blue); }
+    body.lesson-page:not(.theme-dark) #codigo .code-note { background:#fff; border-color:var(--line); color:var(--ink); box-shadow:0 12px 30px rgba(35,50,78,.045); }
+    body.lesson-page:not(.theme-dark) #espaco .state-note { background:linear-gradient(145deg,#f8faff,#eef2ff); border:1px solid var(--line); color:var(--ink); box-shadow:0 12px 30px rgba(35,50,78,.05); }
+    body.lesson-page:not(.theme-dark) #espaco .state-note p,
+    body.lesson-page:not(.theme-dark) #espaco .state-note span { color:var(--muted); }
+    body.lesson-page:not(.theme-dark) #espaco .state-note-list > div { border-bottom-color:var(--line); }
+    body.lesson-page:not(.theme-dark) #ponte .bridge { background:linear-gradient(135deg,#f5f7ff,#edf2ff); border:1px solid #d7e0fb; color:var(--ink); box-shadow:0 12px 30px rgba(35,50,78,.05); }
+    body.lesson-page:not(.theme-dark) #ponte .bridge p { color:var(--muted); }
+    body.lesson-page:not(.theme-dark) #ponte .bridge-arrow { color:var(--blue); }
+  `;
+  document.head.appendChild(aula03ThemeStyle);
+
   const lessonAdjustments = document.createElement('script');
   lessonAdjustments.src = 'aula-03-ajustes.js';
   lessonAdjustments.async = false;
