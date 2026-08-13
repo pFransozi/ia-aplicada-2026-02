@@ -28,6 +28,60 @@
     if (eyebrow) eyebrow.textContent = text;
   });
 
+  const formalizeInitialAnalysis = () => {
+    const scenario = document.querySelector('.scenario-reworked');
+    if (!scenario) return false;
+
+    const eyebrow = scenario.querySelector('.scenario-intro .eyebrow');
+    const title = scenario.querySelector('.scenario-intro h2');
+    const lead = scenario.querySelector('.scenario-lead');
+    const questionTitle = scenario.querySelector('.scenario-question strong');
+    const questionText = scenario.querySelector('.scenario-question span');
+    const cards = scenario.querySelectorAll('.scenario-summary-card');
+
+    if (eyebrow) eyebrow.textContent = 'Delimitação inicial';
+    if (title) title.textContent = 'A descrição da tarefa ainda não constitui uma representação computacional';
+    if (lead) {
+      lead.textContent = 'A instrução “levar o robô ao laboratório” expressa o problema em linguagem natural. Para que um algoritmo possa operar sobre essa situação, é necessário explicitar quais elementos do domínio serão representados, quais transformações são permitidas e como reconhecer que o objetivo foi alcançado.';
+    }
+    if (questionTitle) questionTitle.textContent = 'Antes de buscar uma solução, é necessário formular o problema de modo operacional.';
+    if (questionText) {
+      questionText.textContent = 'Isso implica definir estados, ações, transições, restrições e uma condição de objetivo verificável. Somente depois é possível escolher uma estratégia para explorar o espaço de possibilidades.';
+    }
+
+    if (cards.length >= 3) {
+      cards[0].innerHTML = `
+        <small>01 · Delimitação da tarefa</small>
+        <h3>Qual é o problema a resolver?</h3>
+        <p>O robô inicia na <strong>Recepção</strong> e deve alcançar o <strong>Laboratório</strong>, utilizando apenas conexões permitidas entre os ambientes.</p>
+      `;
+
+      cards[1].innerHTML = `
+        <small>02 · Elementos do domínio</small>
+        <h3>Quais elementos são relevantes?</h3>
+        <p>O cenário é composto por ambientes e conexões que determinam as possibilidades de deslocamento do robô.</p>
+      `;
+
+      cards[2].innerHTML = `
+        <small>03 · Estrutura necessária</small>
+        <h3>A descrição ainda não é um modelo</h3>
+        <p>Ainda precisamos explicitar <strong>estado</strong>, <strong>estado inicial</strong>, <strong>ações</strong>, <strong>transições</strong>, <strong>restrições</strong>, <strong>objetivo</strong>, <strong>teste de objetivo</strong> e <strong>critério de sucesso</strong>.</p>
+      `;
+    }
+
+    return true;
+  };
+
+  if (!formalizeInitialAnalysis()) {
+    let attempts = 0;
+    const waitForScenario = () => {
+      attempts += 1;
+      if (formalizeInitialAnalysis() || attempts >= 20) return;
+      requestAnimationFrame(waitForScenario);
+    };
+    requestAnimationFrame(waitForScenario);
+  }
+
   const syncWarmupMapTheme = () => {
     const image = document.querySelector('.warmup-map-figure img');
     if (!image) return false;
@@ -91,11 +145,15 @@
   original.src = 'aula-03-representacao-base.js';
   original.async = false;
   original.addEventListener('load', () => {
+    formalizeInitialAnalysis();
     harmonizeFinalStages();
     syncWarmupMapTheme();
     const activityScript = [...document.scripts].find((script) => script.src.includes('aula-03-atividade.js'));
     if (activityScript) activityScript.addEventListener('load', harmonizeFinalStages, { once: true });
-    requestAnimationFrame(harmonizeFinalStages);
+    requestAnimationFrame(() => {
+      formalizeInitialAnalysis();
+      harmonizeFinalStages();
+    });
   });
   document.head.appendChild(original);
 })();
