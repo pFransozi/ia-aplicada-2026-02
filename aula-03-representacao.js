@@ -135,7 +135,7 @@
 
     if (note) {
       note.classList.add('search-formulation-summary');
-      note.innerHTML = '<strong>Formulação clássica de um problema de busca:</strong> especificamos o <strong>estado inicial</strong>, as <strong>ações aplicáveis</strong>, o <strong>modelo de transição</strong>, o <strong>teste de objetivo</strong> e, quando pertinente, uma <strong>função de custo</strong>. Esses elementos definem o problema; a estratégia de busca determina como o espaço será explorado.<span class="optimality-note">Uma solução de menor custo é <strong>ótima em relação ao critério adotado</strong>; portanto, “melhor solução” depende da função de custo definida.</span>';
+      note.innerHTML = '<p class="search-formulation-main"><strong>Formulação clássica de um problema de busca:</strong> especificamos o <strong>estado inicial</strong>, as <strong>ações aplicáveis</strong>, o <strong>modelo de transição</strong>, o <strong>teste de objetivo</strong> e, quando pertinente, uma <strong>função de custo</strong>. Esses elementos definem o problema; a estratégia de busca determina como o espaço será explorado.</p><p class="optimality-note">Uma solução de menor custo é <strong>ótima em relação ao critério adotado</strong>; portanto, “melhor solução” depende da função de custo definida.</p>';
     }
   }
 
@@ -160,7 +160,7 @@
     .formulation-schema>div{text-align:center}.formulation-schema small,.formulation-schema strong{display:block}.formulation-schema small{color:var(--muted);font-size:.66rem;text-transform:uppercase}.formulation-schema>b{color:var(--blue)}
     .formulation-closure{display:grid;grid-template-columns:auto 1fr;gap:.7rem;margin-top:1.25rem;padding:1rem 1.1rem;border-left:4px solid var(--teal);background:var(--teal-soft)}.formulation-closure strong{color:var(--teal)}
     #formulacao .distinction code{padding:.12rem .32rem;border-radius:6px;background:var(--soft);color:var(--ink)}
-    #formulacao .search-formulation-summary{display:grid;gap:.45rem}#formulacao .optimality-note{display:block;margin-top:.25rem;padding-top:.65rem;border-top:1px solid var(--line);color:var(--muted)}
+    #formulacao .search-formulation-summary{display:block;line-height:1.6}#formulacao .search-formulation-main{margin:0;color:var(--muted)}#formulacao .search-formulation-main strong{color:var(--ink)}#formulacao .optimality-note{display:block;margin:.7rem 0 0;padding-top:.7rem;border-top:1px solid var(--line);color:var(--muted)}
     body.theme-dark .formulation-schema{background:#111a2b}body.theme-dark .formulation-closure{background:#0f2b2a}
     @media(max-width:980px){.formulation-schema{grid-template-columns:1fr}.formulation-schema>div{text-align:left}.formulation-schema>b{transform:rotate(90deg);justify-self:start}}@media(max-width:640px){.formulation-closure{grid-template-columns:1fr}}
   `;
