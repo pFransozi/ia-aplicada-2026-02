@@ -31,6 +31,8 @@
 #codigo .visual-state.is-available:not(.is-current){border-color:#829ce8;box-shadow:0 0 0 2px rgba(49,87,213,.07)}
 #codigo .visual-state.is-goal{border-color:#68baad;background:var(--teal-soft);color:var(--teal)}
 #codigo .visual-state.is-visited:not(.is-current):not(.is-goal){background:var(--teal-soft)}
+#codigo .visual-state[data-visual-state="sala_101"]{grid-column:2/4!important;grid-row:3!important;justify-self:stretch;width:100%}
+#codigo .visual-state[data-visual-state="copa"]{grid-column:4/6!important;grid-row:3!important;justify-self:stretch;width:100%}
 #codigo .visual-map-help{margin:.75rem 0 0;color:var(--muted);font-size:.76rem}
 #codigo .visual-status{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #codigo .visual-status>div{padding:.75rem;border-radius:10px;background:var(--paper)}
