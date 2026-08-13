@@ -28,6 +28,49 @@
     if (eyebrow) eyebrow.textContent = text;
   });
 
+  const syncWarmupMapTheme = () => {
+    const image = document.querySelector('.warmup-map-figure img');
+    if (!image) return false;
+
+    const lightSrc = 'assets/aula-03-mapa-light.svg';
+    const darkSrc = 'assets/aula-03-mapa.svg';
+    image.dataset.lightSrc = lightSrc;
+    image.dataset.darkSrc = darkSrc;
+    image.alt = 'Mapa simplificado com Recepção, Corredor, Laboratório, Sala 101, Sala 102, Banheiro, Copa, Almoxarifado e Sala de Reunião. A Recepção é o estado inicial e o Laboratório é o destino.';
+
+    const nextSrc = document.body.classList.contains('theme-dark') ? darkSrc : lightSrc;
+    if (image.getAttribute('src') !== nextSrc) image.setAttribute('src', nextSrc);
+    return true;
+  };
+
+  if (!document.getElementById('aula03-map-theme-styles')) {
+    const mapStyle = document.createElement('style');
+    mapStyle.id = 'aula03-map-theme-styles';
+    mapStyle.textContent = `
+      body:not(.theme-dark) .warmup-map-figure {
+        border-color: var(--line);
+        background: #ffffff;
+        box-shadow: 0 12px 30px rgba(35,50,78,.06);
+      }
+      body.theme-dark .warmup-map-figure {
+        border-color: rgba(255,255,255,.12);
+        background: rgba(255,255,255,.045);
+        box-shadow: none;
+      }
+    `;
+    document.head.appendChild(mapStyle);
+  }
+
+  if (!syncWarmupMapTheme()) {
+    let attempts = 0;
+    const waitForMap = () => {
+      attempts += 1;
+      if (syncWarmupMapTheme() || attempts >= 20) return;
+      requestAnimationFrame(waitForMap);
+    };
+    requestAnimationFrame(waitForMap);
+  }
+
   const harmonizeFinalStages = () => {
     const validationEyebrow = document.querySelector('#representacao .section-heading .eyebrow');
     if (validationEyebrow) validationEyebrow.textContent = '06 · Validação do modelo';
@@ -49,6 +92,7 @@
   original.async = false;
   original.addEventListener('load', () => {
     harmonizeFinalStages();
+    syncWarmupMapTheme();
     const activityScript = [...document.scripts].find((script) => script.src.includes('aula-03-atividade.js'));
     if (activityScript) activityScript.addEventListener('load', harmonizeFinalStages, { once: true });
     requestAnimationFrame(harmonizeFinalStages);
