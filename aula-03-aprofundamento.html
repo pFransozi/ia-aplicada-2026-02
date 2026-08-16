@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Material de aprofundamento da Aula 03 de Inteligência Artificial Aplicada: formulação de problemas, abstração, estados, ações, modelo de transição, objetivos, custos, espaço de estados e representação computacional.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Aula 03 — Material de aprofundamento | Inteligência Artificial Aplicada</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+  <style>
+    .study-page { background: var(--bg); color: var(--text); }
+    .study-page .site-header { background: color-mix(in srgb, var(--bg) 92%, transparent); }
+    .study-hero { padding: 6rem 0 5rem; background: radial-gradient(circle at 88% 18%, rgba(124,103,232,.15), transparent 27rem), radial-gradient(circle at 8% 78%, rgba(49,94,251,.11), transparent 24rem), var(--bg); }
+    .study-hero-grid { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(280px,.7fr); gap: 3.5rem; align-items: end; }
+    .study-hero h1 { margin: 0; max-width: 930px; font-size: clamp(3rem, 6.5vw, 6rem); line-height: .96; letter-spacing: -.055em; }
+    .study-lead { max-width: 820px; margin: 1.5rem 0 0; color: var(--muted); font-size: clamp(1.15rem, 2vw, 1.42rem); }
+    .study-card { padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .study-card strong { display: block; margin-bottom: .55rem; color: var(--primary); }
+    .study-card p:last-child { margin-bottom: 0; }
+    .study-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.7rem; }
+    .study-meta { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.3rem; }
+    .study-meta span { padding: .35rem .7rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--surface); font-size: .84rem; }
+    .study-toc-shell { position: sticky; top: 76px; z-index: 60; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(14px); }
+    .study-toc { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: .5rem; padding: .85rem 0; }
+    .study-toc a { padding: .72rem .7rem; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; text-align: center; color: var(--muted); background: var(--surface); font-size: .78rem; font-weight: 800; line-height: 1.2; }
+    .study-toc a:hover { color: var(--primary); border-color: var(--primary); }
+    .study-section { padding: 5.5rem 0; scroll-margin-top: 155px; }
+    .study-section.alt { background: var(--surface-soft); }
+    .study-heading { max-width: 900px; margin-bottom: 2.2rem; }
+    .study-heading h2 { margin: 0; font-size: clamp(2.15rem,4vw,3.6rem); line-height: 1.04; letter-spacing: -.045em; }
+    .study-heading > p:last-child { margin: 1rem 0 0; color: var(--muted); font-size: 1.05rem; }
+    .study-kicker { margin: 0 0 .65rem; color: var(--primary); font-size: .76rem; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+    .study-grid { display: grid; grid-template-columns: minmax(0,1.22fr) minmax(280px,.78fr); gap: 2rem; align-items: start; }
+    .study-prose { min-width: 0; }
+    .study-prose h3 { margin: 2.3rem 0 .8rem; font-size: 1.55rem; }
+    .study-prose h3:first-child { margin-top: 0; }
+    .study-prose h4 { margin: 1.65rem 0 .55rem; font-size: 1.08rem; }
+    .study-prose p, .study-prose li { color: var(--muted); }
+    .study-prose p { margin: 0 0 1.05rem; }
+    .study-prose ul, .study-prose ol { padding-left: 1.3rem; }
+    .study-prose li + li { margin-top: .42rem; }
+    .study-stack { display: grid; gap: 1rem; }
+    .study-callout { padding: 1.15rem 1.25rem; border-left: 4px solid var(--primary); border-radius: 0 16px 16px 0; background: color-mix(in srgb, var(--primary) 9%, var(--surface)); }
+    .study-callout strong { display: block; margin-bottom: .35rem; color: var(--primary); }
+    .study-callout p { margin: 0; color: var(--muted); }
+    .study-callout.violet { border-left-color: var(--secondary); background: color-mix(in srgb, var(--secondary) 10%, var(--surface)); }
+    .study-callout.violet strong { color: var(--secondary); }
+    .study-callout.teal { border-left-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+    .study-callout.teal strong { color: var(--accent); }
+    .study-table-wrap { margin: 1.5rem 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .study-table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    .study-table th, .study-table td { padding: .9rem; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+    .study-table th { background: color-mix(in srgb, var(--primary) 10%, var(--surface)); color: var(--text); font-size: .82rem; }
+    .study-table td { color: var(--muted); font-size: .9rem; }
+    .study-table tr:last-child td { border-bottom: 0; }
+    .mini-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .mini-card { padding: 1.2rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .mini-card h4 { margin: 0 0 .45rem; }
+    .mini-card p { margin: 0; color: var(--muted); }
+    .code-block { margin: 1.35rem 0; padding: 1.25rem; overflow-x: auto; border: 1px solid #293653; border-radius: 18px; background: #0b1220; color: #dbe6f7; line-height: 1.58; }
+    .code-block code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: .88rem; }
+    .formula { display: inline-block; margin: .35rem 0 1rem; padding: .5rem .7rem; border-radius: 10px; background: var(--surface-soft); color: var(--text); font-family: "SFMono-Regular", Consolas, monospace; font-size: .92rem; }
+    .flow-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: .8rem; margin: 1.5rem 0; }
+    .flow-card { position: relative; padding: 1.1rem; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); }
+    .flow-card strong { display: block; margin-bottom: .35rem; color: var(--primary); }
+    .flow-card p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .graph-line { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; margin: 1.2rem 0; }
+    .graph-node { padding: .65rem .85rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); font-weight: 850; }
+    .graph-arrow { color: var(--primary); font-weight: 900; }
+    .check-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .check-card { padding: 1.2rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .check-card span { display: inline-grid; place-items: center; width: 34px; height: 34px; margin-bottom: .8rem; border-radius: 10px; color: #fff; background: var(--primary); font-size: .78rem; font-weight: 900; }
+    .check-card strong { display: block; margin-bottom: .35rem; }
+    .check-card p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .references { padding-left: 1.2rem; }
+    .references li + li { margin-top: .65rem; }
+    .study-page .site-footer { border-top: 1px solid var(--line); }
+    @media (max-width: 980px) {
+      .study-hero-grid, .study-grid { grid-template-columns: 1fr; }
+      .study-toc { grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .flow-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .check-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 680px) {
+      .study-hero { padding: 4.2rem 0 3.5rem; }
+      .study-toc-shell { position: static; }
+      .study-toc { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .study-section { padding: 4rem 0; scroll-margin-top: 90px; }
+      .mini-grid, .flow-grid, .check-grid { grid-template-columns: 1fr; }
+      .study-nav .nav-label { display: none; }
+    }
+  </style>
+</head>
+<body class="study-page">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="site-header" id="inicio">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="IA Aplicada — página principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span><strong>IA Aplicada</strong><small>Engenharia de Software</small></span>
+      </a>
+      <nav class="main-nav study-nav" aria-label="Navegação principal">
+        <a href="aula-03.html">Aula 03</a>
+        <a class="nav-highlight" href="aula-03-aprofundamento.html">Aprofundamento</a>
+        <a href="index.html">Portal</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-text nav-label">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="study-hero">
+      <div class="container study-hero-grid">
+        <div>
+          <p class="eyebrow">Aula 03 · material de aprofundamento</p>
+          <h1>Formulação de problemas e espaço de estados</h1>
+          <p class="study-lead">Da situação real a um modelo computacional sobre o qual algoritmos de busca podem operar. O material aprofunda abstração, representação, estados, ações, transições, objetivos, custos e espaço de estados sem antecipar as estratégias de busca.</p>
+          <div class="study-meta">
+            <span>Engenharia de Software</span>
+            <span>2026/2</span>
+            <span>Leitura ampliada</span>
+            <span>Sem exercícios</span>
+          </div>
+          <div class="study-actions">
+            <a class="button button-primary" href="#formulacao">Começar a leitura</a>
+            <a class="button button-secondary" href="aula-03.html">Voltar à aula principal</a>
+          </div>
+        </div>
+        <aside class="study-card">
+          <strong>Como usar este material</strong>
+          <p>Este texto complementa a Aula 03. A aula em sala foi mantida deliberadamente mais simples e orientada a exemplos; aqui, os mesmos conceitos são desenvolvidos com maior rigor conceitual e conexão com a literatura de Inteligência Artificial.</p>
+          <p>O objetivo não é antecipar BFS, DFS ou A*. O foco é compreender a estrutura do problema que esses algoritmos receberão.</p>
+        </aside>
+      </div>
+    </section>
+
+    <div class="study-toc-shell" aria-label="Sumário do aprofundamento">
+      <div class="container study-toc">
+        <a href="#formulacao">Formulação e abstração</a>
+        <a href="#estado">Estado e modelo formal</a>
+        <a href="#objetivo">Objetivo e custo</a>
+        <a href="#espaco">Espaço de estados</a>
+        <a href="#implementacao">Representação em Python</a>
+        <a href="#sintese">Síntese e referências</a>
+      </div>
+    </div>
+
+    <section class="study-section" id="formulacao">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Parte I · Construindo o problema</p>
+          <h2>Antes de escolher o algoritmo, é preciso definir sobre o que ele vai operar</h2>
+          <p>A formulação transforma uma situação concreta em um objeto computacional. Essa etapa antecede a busca e condiciona o significado de qualquer solução encontrada depois.</p>
+        </div>
+
+        <div class="study-grid">
+          <article class="study-prose">
+            <h3>1. Formular o problema vem antes de escolher o algoritmo</h3>
+            <p>Em problemas de busca, o algoritmo não atua diretamente sobre o mundo. Ele atua sobre um modelo computacional do problema. Russell e Norvig tratam a formulação como uma etapa anterior à busca: o agente precisa definir estados, estado inicial, ações, modelo de transição, objetivos e custos antes de explorar alternativas. Luger organiza a mesma ideia em termos de espaço de estados: estados correspondem a situações do processo de solução e arcos correspondem a passos possíveis.</p>
+            <p>Essa separação tem uma consequência importante para a Engenharia de Software: um algoritmo correto pode produzir uma solução inadequada se o problema tiver sido representado de forma inadequada. O erro, nesse caso, não está necessariamente no mecanismo de busca; pode estar na escolha do que foi modelado.</p>
+
+            <div class="flow-grid">
+              <div class="flow-card"><strong>Situação real</strong><p>O que está acontecendo no domínio?</p></div>
+              <div class="flow-card"><strong>Abstração</strong><p>O que realmente precisa ser preservado?</p></div>
+              <div class="flow-card"><strong>Representação</strong><p>Como os elementos serão codificados?</p></div>
+              <div class="flow-card"><strong>Busca</strong><p>Como explorar as possibilidades?</p></div>
+            </div>
+
+            <h3>2. Abstração: reduzir o mundo sem perder o problema</h3>
+            <p>Uma representação é sempre uma abstração. Luger enfatiza que uma representação não é o objeto real, mas um padrão simbólico que o designa. Russell e Norvig descrevem a formulação de um problema como um modelo abstrato que elimina detalhes considerados irrelevantes para a tarefa.</p>
+            <p>No exemplo do robô, o prédio real inclui temperatura, cor das paredes, pessoas, iluminação, altura do teto, marcas dos equipamentos e muitas outras propriedades. Para encontrar um caminho em um primeiro modelo, boa parte dessas informações pode ser descartada. Em contraste, a conectividade entre locais precisa ser preservada porque determina quais movimentos são possíveis.</p>
+            <span class="formula">mundo real → abstração → representação computacional</span>
+
+            <h4>2.1 Uma boa abstração preserva o que muda a solução</h4>
+            <p>A decisão sobre o nível de detalhe não é puramente estética. Uma abstração é útil quando reduz a complexidade sem eliminar informações necessárias para determinar ações válidas, efeitos das ações ou condições de objetivo. Se retirarmos informação demais, estados diferentes no mundo podem parecer iguais no modelo. Se mantivermos informação demais, o espaço de estados pode crescer desnecessariamente.</p>
+
+            <div class="study-table-wrap">
+              <table class="study-table">
+                <thead><tr><th>Problema de modelagem</th><th>Efeito</th></tr></thead>
+                <tbody>
+                  <tr><td>Abstração insuficiente</td><td>Situações que exigem decisões diferentes ficam indistinguíveis.</td></tr>
+                  <tr><td>Abstração excessivamente detalhada</td><td>O número de estados aumenta e a busca pode se tornar mais cara sem ganho de validade.</td></tr>
+                  <tr><td>Abstração adequada</td><td>Preserva as diferenças relevantes e omite detalhes que não alteram a tarefa.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>3. Representação como escolha de engenharia</h3>
+            <p>Não existe uma única representação correta para todos os problemas. Luger observa que esquemas de representação envolvem compromissos entre expressividade, naturalidade e eficiência. Finlay e Dix discutem critérios semelhantes ao avaliar representações de conhecimento: uma representação deve ser capaz de expressar o necessário, permitir uso efetivo e eficiente da informação e tornar explícitas as relações relevantes.</p>
+            <p>Hurbans traz essa discussão para uma perspectiva mais operacional: estruturas de dados devem ser escolhidas de acordo com o contexto do problema e com o objetivo. Grafos, por exemplo, são particularmente adequados para representar estados conectados por transições.</p>
+          </article>
+
+          <aside class="study-stack">
+            <div class="study-callout">
+              <strong>Ideia central</strong>
+              <p>Antes de escolher um algoritmo de busca, é necessário definir sobre o que ele buscará.</p>
+            </div>
+            <div class="study-callout violet">
+              <strong>Da aula para a teoria</strong>
+              <p>“Levar o robô ao laboratório” ainda é uma descrição humana. A formulação começa quando locais viram estados, conexões viram movimentos válidos e o destino se torna uma condição verificável.</p>
+            </div>
+            <div class="study-callout teal">
+              <strong>Representar não é apenas armazenar dados</strong>
+              <p>A representação determina quais perguntas o programa consegue responder diretamente, quais operações são naturais e quanto trabalho será necessário para explorar as possibilidades.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section alt" id="estado">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Parte II · Estrutura formal</p>
+          <h2>O estado precisa ser suficiente para distinguir situações relevantes</h2>
+          <p>Estado, ações aplicáveis e modelo de transição formam o núcleo da dinâmica do problema. O modelo deve preservar exatamente as diferenças que influenciam o que pode acontecer.</p>
+        </div>
+
+        <div class="study-grid">
+          <article class="study-prose">
+            <h3>4. O que é um estado?</h3>
+            <p>Um estado é uma descrição de uma situação relevante do problema em um determinado momento. No modelo inicial do robô, a localização atual é suficiente: Recepção, Corredor, Sala 101, Copa ou Laboratório. Cada símbolo identifica uma situação distinta para os fins daquela tarefa.</p>
+            <p>A palavra <strong>suficiente</strong> é importante. O estado precisa conter informação suficiente para que o sistema determine quais ações estão disponíveis, qual resultado uma ação produz e se o objetivo foi atingido. Informações que não afetam nenhuma dessas decisões podem, em princípio, ficar fora do estado.</p>
+
+            <h4>4.1 Quando um estado simples deixa de ser suficiente</h4>
+            <p>Se o problema muda e o robô precisa buscar um pacote na Sala 101 antes de entregá-lo, a localização isolada deixa de distinguir situações que produzem comportamentos diferentes. Estar no corredor com o pacote não é equivalente a estar no corredor sem o pacote.</p>
+            <span class="formula">estado = (local, possui_pacote)</span>
+            <p>Assim, dois estados podem compartilhar o mesmo local e ainda serem distintos: <code>(corredor, falso)</code> e <code>(corredor, verdadeiro)</code>. A representação foi ampliada porque uma nova informação passou a influenciar a validade das ações e a condição final.</p>
+
+            <h3>5. Formulação formal de um problema de busca</h3>
+            <p>A Aula 03 usa nove campos pedagógicos porque eles ajudam a pensar como engenheiro de software: entrada, estado, estado inicial, ações, modelo de transição, restrições, objetivo, saída e avaliação. Na formulação clássica de Russell e Norvig, o núcleo de um problema de busca é apresentado de forma mais compacta: estado inicial, ações, modelo de transição, estados objetivo e função de custo das ações. O espaço de estados é induzido por esses componentes.</p>
+            <span class="formula">P = (S, s0, A, Result, G, c)</span>
+
+            <div class="study-table-wrap">
+              <table class="study-table">
+                <thead><tr><th>Componente</th><th>Significado</th><th>No robô</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>S</strong> — espaço de estados</td><td>Conjunto de estados considerados pelo modelo.</td><td>Locais do prédio; na versão ampliada, pares (local, possui_pacote).</td></tr>
+                  <tr><td><strong>s0</strong> — estado inicial</td><td>Estado em que o problema começa.</td><td>Recepção; sem o pacote, na versão ampliada.</td></tr>
+                  <tr><td><strong>A(s)</strong> — ações aplicáveis</td><td>Ações que podem ser executadas em um estado s.</td><td>Mover para locais conectados; coletar pacote quando aplicável.</td></tr>
+                  <tr><td><strong>Result(s,a)</strong></td><td>Estado produzido ao executar a ação a em s.</td><td>Mover muda o local; coletar muda possui_pacote para verdadeiro.</td></tr>
+                  <tr><td><strong>G</strong> — objetivo</td><td>Condição que identifica estados aceitáveis como meta.</td><td>Laboratório; na versão ampliada, Laboratório com o pacote.</td></tr>
+                  <tr><td><strong>c(s,a,s')</strong> — custo</td><td>Custo numérico de executar uma ação e chegar ao novo estado.</td><td>1 por movimento, distância, tempo ou energia.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>6. Estado inicial, ações e modelo de transição</h3>
+            <h4>6.1 Estado inicial</h4>
+            <p>O estado inicial determina o ponto de partida da instância do problema. Alterá-lo pode mudar quais estados são alcançáveis e qual caminho constitui uma solução, mesmo quando o restante do modelo permanece idêntico.</p>
+
+            <h4>6.2 Ações aplicáveis</h4>
+            <p>A função de ações não deve apenas listar tudo o que seria concebível no domínio; ela deve retornar o que é aplicável no estado atual. No exemplo, mover da Recepção diretamente para a Copa não é uma ação válida se não existe conexão entre esses locais.</p>
+
+            <h4>6.3 Modelo de transição</h4>
+            <p>A expressão <code>Result(s,a)</code> responde a uma pergunta precisa: dado o estado <code>s</code> e a ação <code>a</code>, qual estado resulta? Essa formulação é mais rigorosa que pensar apenas em uma seta entre dois nomes, porque deixa explícito que a transição depende tanto do estado atual quanto da ação escolhida.</p>
+            <pre class="code-block"><code>def resultado(estado, acao):
+    # modelo determinístico simplificado
+    return acao.destino</code></pre>
+            <p>Na Aula 03, o dicionário de adjacências já codifica uma parte importante desse modelo: para cada local, ele lista os destinos permitidos. Teoricamente, é mais preciso dizer que o dicionário representa as conexões relevantes do ambiente — ele não é o ambiente em si.</p>
+
+            <h3>7. Restrições: tornar a invalidade parte do modelo</h3>
+            <p>Restrições delimitam quais estados, ações ou caminhos são admissíveis. Na prática, uma restrição não deveria existir apenas como frase de documentação; sempre que possível, ela deve aparecer na definição das ações aplicáveis, nas pré-condições ou no teste de validade do estado.</p>
+            <pre class="code-block"><code>def acoes_possiveis(estado):
+    return mapa[estado]  # apenas destinos conectados aparecem aqui</code></pre>
+            <p>Nesse exemplo, a regra “não atravessar paredes” não precisa de uma verificação separada porque o próprio mapa omite movimentos que atravessariam paredes. A estrutura de representação incorpora a restrição.</p>
+          </article>
+
+          <aside class="study-stack">
+            <div class="study-callout teal">
+              <strong>Princípio de suficiência do estado</strong>
+              <p>Se duas situações do mundo forem representadas pelo mesmo estado, mas exigirem ações diferentes, produzirem resultados diferentes ou tiverem critérios de objetivo diferentes, a representação perdeu informação relevante.</p>
+            </div>
+            <div class="study-callout">
+              <strong>Restrições e espaço de estados</strong>
+              <p>Ao impedir certas ações ou excluir certos estados, as restrições alteram diretamente a estrutura do espaço de estados. Elas fazem parte da formulação.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section" id="objetivo">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Parte III · O que conta como solução</p>
+          <h2>Objetivo, sucesso e avaliação respondem a perguntas diferentes</h2>
+          <p>Uma solução válida precisa chegar a uma condição desejada por uma sequência admissível de ações; entre soluções válidas, ainda pode existir um critério para decidir qual é preferível.</p>
+        </div>
+
+        <div class="study-grid">
+          <article class="study-prose">
+            <h3>8. Objetivo, teste de objetivo, sucesso e avaliação</h3>
+            <p>A distinção feita na Aula 03 pode ser conectada a conceitos formais. O objetivo descreve a situação desejada; o teste de objetivo é a condição computável usada para reconhecê-la; o critério de sucesso considera se a solução completa é válida; e o critério de avaliação compara soluções válidas.</p>
+
+            <div class="study-table-wrap">
+              <table class="study-table">
+                <thead><tr><th>Conceito</th><th>Pergunta</th><th>Exemplo</th></tr></thead>
+                <tbody>
+                  <tr><td>Objetivo</td><td>Que situação queremos alcançar?</td><td>Chegar ao Laboratório com o pacote.</td></tr>
+                  <tr><td>Teste de objetivo</td><td>Como o programa reconhece essa situação?</td><td><code>local == laboratorio and possui_pacote == True</code></td></tr>
+                  <tr><td>Critério de sucesso</td><td>A solução satisfaz objetivo e restrições?</td><td>A entrega foi concluída por uma sequência de ações válidas.</td></tr>
+                  <tr><td>Critério de avaliação</td><td>Qual solução válida é preferível?</td><td>Menor número de movimentos, menor distância ou menor tempo.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h4>8.1 Objetivos podem depender do estado ou do caminho</h4>
+            <p>Luger chama a atenção para dois tipos de descrição de objetivo. Em muitos problemas, basta encontrar um estado que possua uma propriedade — por exemplo, uma configuração vencedora em um jogo. Em outros, a propriedade relevante pertence ao caminho inteiro. No problema do caixeiro viajante, por exemplo, não basta terminar em uma cidade específica; interessa encontrar um circuito que visite as cidades e tenha custo mínimo.</p>
+            <p>Essa observação explica por que “chegar ao destino” e “chegar ao destino pelo melhor caminho” são requisitos diferentes.</p>
+
+            <h3>9. Custos, caminhos, soluções e otimalidade</h3>
+            <p>Uma sequência de ações forma um caminho. Uma solução é um caminho que parte do estado inicial e termina em um estado objetivo. Quando cada ação possui um custo numérico, o custo total do caminho pode ser definido como a soma dos custos das ações.</p>
+            <span class="formula">C(caminho) = Σ c(si, ai, si+1)</span>
+            <p>Se cada movimento do robô custar 1, minimizar custo equivale a minimizar o número de movimentos. Se os corredores tiverem comprimentos diferentes, a distância pode ser uma medida mais apropriada. Se houver consumo de energia, atrasos ou prioridades, a função de custo pode representar outro critério.</p>
+          </article>
+
+          <aside class="study-stack">
+            <div class="study-callout violet">
+              <strong>O custo deve refletir o que realmente importa</strong>
+              <p>Dois modelos podem ter os mesmos estados e as mesmas ações, mas produzir escolhas diferentes se usam funções de custo diferentes. Modelar custo é parte da especificação do problema.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section alt" id="espaco">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Parte IV · Estrutura das possibilidades</p>
+          <h2>O espaço de estados pode ser lido como um grafo</h2>
+          <p>Estados se tornam vértices e transições se tornam arestas. Essa leitura torna explícita a conectividade do problema e prepara a passagem para os algoritmos de busca.</p>
+        </div>
+
+        <div class="study-grid">
+          <article class="study-prose">
+            <h3>10. Espaço de estados como grafo</h3>
+            <p>Quando estados são considerados como vértices e ações como arestas direcionadas, obtemos um grafo de espaço de estados. Essa estrutura torna explícita a conectividade do problema: de cada estado, quais outros estados podem ser produzidos por ações válidas?</p>
+
+            <div class="study-table-wrap">
+              <table class="study-table">
+                <thead><tr><th>Conceito de grafo</th><th>Interpretação no problema</th></tr></thead>
+                <tbody>
+                  <tr><td>Vértice / nó</td><td>Um estado.</td></tr>
+                  <tr><td>Aresta / arco</td><td>Uma transição causada por uma ação.</td></tr>
+                  <tr><td>Caminho</td><td>Uma sequência de estados e ações.</td></tr>
+                  <tr><td>Alcançabilidade</td><td>Existência de pelo menos um caminho entre estados.</td></tr>
+                  <tr><td>Ciclo</td><td>Possibilidade de retornar a um estado já alcançado.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="graph-line" aria-label="Exemplo de sequência no espaço de estados">
+              <span class="graph-node">Recepção</span><span class="graph-arrow">→</span>
+              <span class="graph-node">Corredor</span><span class="graph-arrow">→</span>
+              <span class="graph-node">Sala 101</span><span class="graph-arrow">→</span>
+              <span class="graph-node">Corredor</span><span class="graph-arrow">→</span>
+              <span class="graph-node">Laboratório</span>
+            </div>
+
+            <h4>10.1 Espaço de estados não é a mesma coisa que árvore de busca</h4>
+            <p>Russell e Norvig fazem uma distinção que será central na Aula 04. O espaço de estados descreve o problema: estados e transições possíveis. A árvore de busca descreve os caminhos que um algoritmo gerou ao explorar esse espaço. O mesmo estado pode aparecer em diferentes nós da árvore quando é alcançado por caminhos diferentes.</p>
+            <p>Em grafos com ciclos, isso também explica por que algoritmos de busca precisam controlar estados já alcançados. Sem esse controle, uma sequência como <code>A → B → C → A</code> pode ser repetida indefinidamente.</p>
+          </article>
+
+          <aside class="study-stack">
+            <div class="study-callout">
+              <strong>Ponte para BFS e DFS</strong>
+              <p>BFS e DFS não mudam o problema representado. Elas mudam a ordem em que a fronteira da busca é explorada. Por isso a formulação da Aula 03 deve existir antes da comparação entre os algoritmos da Aula 04.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section" id="implementacao">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Parte V · Do conceito para o código</p>
+          <h2>A estrutura de dados implementa a representação; ela ainda não é o solucionador</h2>
+          <p>No nível de implementação, estados, conexões e critérios precisam ser convertidos em estruturas concretas. Essa escolha deve preservar identidade, comparação e operações necessárias à busca.</p>
+        </div>
+
+        <div class="study-grid">
+          <article class="study-prose">
+            <h3>11. Representação computacional em Python</h3>
+            <p>Hurbans apresenta listas de adjacência, matrizes e outras estruturas como formas concretas de representar grafos. Para o exemplo didático da Aula 03, um dicionário de adjacências é apropriado por ser legível e próximo da ideia de “vizinhos de cada estado”.</p>
+            <pre class="code-block"><code>mapa = {
+    "recepcao": ["corredor"],
+    "corredor": ["recepcao", "sala_101", "copa", "laboratorio"],
+    "sala_101": ["corredor"],
+    "copa": ["corredor"],
+    "laboratorio": ["corredor"]
+}
+
+def acoes_possiveis(estado):
+    return mapa[estado]
+
+def objetivo_atingido(estado):
+    return estado == "laboratorio"</code></pre>
+            <p>Esse código ainda não é um solucionador. Ele define parte do problema: estados simbólicos, conectividade e teste de objetivo. Um algoritmo de busca poderá ser escrito depois e reutilizar essa definição.</p>
+
+            <h4>11.1 Estados imutáveis e identificáveis</h4>
+            <p>Na versão ampliada do problema, um dicionário é didático para mostrar que o estado possui mais de uma propriedade. Entretanto, quando algoritmos precisam armazenar estados visitados em conjuntos ou usá-los como chaves, representações imutáveis costumam ser mais convenientes em Python. Uma tupla é uma alternativa simples:</p>
+            <pre class="code-block"><code>estado = ("corredor", False)  # (local, possui_pacote)</code></pre>
+            <p>A escolha entre dicionário, tupla, <code>dataclass</code> ou outro tipo não altera a teoria do estado; altera a forma concreta de implementá-la.</p>
+
+            <h3>12. Estudo formal do robô com coleta e entrega</h3>
+            <p>A extensão introduzida na Aula 03 mostra, em pequena escala, como uma mudança de requisito altera a modelagem.</p>
+            <div class="study-table-wrap">
+              <table class="study-table">
+                <thead><tr><th>Elemento</th><th>Definição</th></tr></thead>
+                <tbody>
+                  <tr><td>Estado</td><td><code>(local, possui_pacote)</code>, onde local pertence aos locais do mapa e possui_pacote pertence a {False, True}.</td></tr>
+                  <tr><td>Estado inicial</td><td><code>(recepcao, False)</code>.</td></tr>
+                  <tr><td>Ação mover(destino)</td><td>Aplicável quando destino é adjacente ao local atual; preserva possui_pacote.</td></tr>
+                  <tr><td>Ação coletar</td><td>Aplicável na Sala 101 quando possui_pacote == False; muda a segunda componente para True.</td></tr>
+                  <tr><td>Objetivo</td><td><code>local == laboratorio and possui_pacote == True</code>.</td></tr>
+                  <tr><td>Restrições</td><td>Não mover entre locais desconectados; não concluir entrega sem o pacote.</td></tr>
+                  <tr><td>Custo simples</td><td>1 por movimento; coletar pode ter custo 0 ou 1, conforme o modelo adotado.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Com cinco locais e uma variável booleana, existem no máximo <strong>5 × 2 = 10</strong> combinações sintáticas de estado. Isso não significa que todas sejam necessariamente alcançáveis. A alcançabilidade depende do estado inicial e das ações definidas.</p>
+            <p>Uma solução possível, considerando o mapa da Aula 03, é:</p>
+            <span class="formula">(recepcao,F) → (corredor,F) → (sala_101,F) → (sala_101,T) → (corredor,T) → (laboratorio,T)</span>
+            <p>O exemplo evidencia um ponto geral: a solução é uma sequência no espaço representado, não uma lista de instruções independentes do estado. Cada passo precisa ser legal a partir do estado anterior.</p>
+
+            <h3>13. Granularidade e explosão do espaço de estados</h3>
+            <p>A qualidade da abstração também afeta o tamanho do espaço. Se um estado do robô incluir apenas o local, temos poucas possibilidades. Ao adicionar possui_pacote, o número potencial de combinações cresce. Se acrescentarmos nível de bateria, porta aberta/fechada, horário, ocupação de corredores e dezenas de outros atributos, o número de combinações pode crescer rapidamente.</p>
+            <p>Esse fenômeno é uma das razões pelas quais a literatura de IA trata representação e busca como temas inseparáveis. Luger observa que muitos problemas exibem crescimento combinatório; Russell e Norvig destacam que a escolha da abstração é decisiva para tornar a resolução tratável.</p>
+
+            <h3>14. Erros frequentes de formulação</h3>
+            <div class="study-table-wrap">
+              <table class="study-table">
+                <thead><tr><th>Erro</th><th>Sintoma</th><th>Correção conceitual</th></tr></thead>
+                <tbody>
+                  <tr><td>Estado insuficiente</td><td>O sistema toma a mesma decisão em situações que deveriam ser distintas.</td><td>Adicionar apenas as variáveis que alteram a dinâmica ou a validade.</td></tr>
+                  <tr><td>Estado excessivo</td><td>O espaço cresce sem que as novas variáveis mudem a solução.</td><td>Remover detalhes irrelevantes para a tarefa.</td></tr>
+                  <tr><td>Objetivo ambíguo</td><td>Não existe teste claro para encerrar a busca.</td><td>Converter a intenção em uma condição verificável.</td></tr>
+                  <tr><td>Restrição apenas textual</td><td>O algoritmo gera movimentos que a especificação dizia serem proibidos.</td><td>Codificar a restrição nas ações, pré-condições ou validação.</td></tr>
+                  <tr><td>Custo mal definido</td><td>A solução “ótima” não corresponde ao que o usuário considera melhor.</td><td>Alinhar a função de custo ao critério real de desempenho.</td></tr>
+                  <tr><td>Meta inalcançável</td><td>Nenhuma sequência de ações leva ao objetivo.</td><td>Verificar conectividade e coerência entre estado inicial, ações e objetivo.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>15. A mesma situação pode gerar formulações diferentes</h3>
+            <p>Formular é escolher uma perspectiva. Para um sistema de rotas, um estado pode ser apenas a cidade atual; em outro sistema, pode ser <code>(cidade, combustivel, horario)</code>. O primeiro modelo é menor e suficiente para determinadas perguntas. O segundo é necessário se abastecimento ou janelas de horário alterarem as ações válidas.</p>
+            <p>Da mesma forma, uma ação pode ser definida em granularidades diferentes. “Ir de Arad a Sibiu” pode ser uma única ação abstrata; em um simulador veicular, a mesma viagem pode ser decomposta em milhares de ações de aceleração, frenagem e direção. Russell e Norvig usam essa ideia para explicar que boas abstrações removem o máximo de detalhe possível sem perder validade e mantendo as ações abstratas executáveis.</p>
+          </article>
+
+          <aside class="study-stack">
+            <div class="study-callout teal">
+              <strong>Mais informação não significa automaticamente um modelo melhor</strong>
+              <p>Uma variável deve ser adicionada ao estado quando distingue situações que importam para a dinâmica, para a legalidade das ações, para o objetivo ou para o custo.</p>
+            </div>
+            <div class="study-callout violet">
+              <strong>Formulação é uma decisão de projeto</strong>
+              <p>O problema não chega pronto ao algoritmo. O projetista define quais estados existem, quais ações são relevantes, quais custos importam e qual nível de detalhe será usado.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-section alt" id="sintese">
+      <div class="container">
+        <div class="study-heading">
+          <p class="study-kicker">Parte VI · Fechamento teórico</p>
+          <h2>Representar bem é construir o terreno no qual a busca acontecerá</h2>
+          <p>A separação entre definição do problema e estratégia de busca permite compreender e comparar algoritmos sem confundir mudanças no solucionador com mudanças no próprio modelo.</p>
+        </div>
+
+        <div class="study-grid">
+          <article class="study-prose">
+            <h3>16. Separar definição do problema e estratégia de busca</h3>
+            <p>Uma arquitetura didática e de software útil consiste em manter duas camadas distintas:</p>
+            <div class="study-table-wrap">
+              <table class="study-table">
+                <thead><tr><th>Camada</th><th>Responsabilidade</th></tr></thead>
+                <tbody>
+                  <tr><td>Definição do problema</td><td>Representar estado inicial, ações, transições, objetivo, restrições e custos.</td></tr>
+                  <tr><td>Solucionador</td><td>Decidir em que ordem os estados serão explorados e como controlar a fronteira e os estados visitados.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Essa separação permite comparar BFS, DFS e outros algoritmos sobre o mesmo problema. Se mudarmos apenas a estratégia de exploração, conseguimos observar o efeito do algoritmo. Se mudarmos simultaneamente a representação, já não estamos comparando apenas os solucionadores.</p>
+            <p>Por isso, o encerramento da Aula 03 — “temos o problema; ainda falta o solucionador” — é conceitualmente apropriado. A próxima etapa é estudar como diferentes algoritmos percorrem a mesma estrutura de possibilidades.</p>
+
+            <h3>17. Síntese teórica</h3>
+            <p>A formulação de problemas em IA transforma uma situação concreta em um objeto computacional manipulável. Esse processo exige escolher uma abstração, definir estados capazes de distinguir situações relevantes, especificar ações e transições, tornar restrições operacionais, estabelecer uma condição de objetivo e definir como soluções serão avaliadas.</p>
+            <p>O espaço de estados emerge dessas escolhas. Ele pode ser representado como um grafo no qual estados são vértices e ações são arestas. Uma solução é um caminho do estado inicial a um estado objetivo; quando existem custos, pode-se ainda distinguir soluções válidas de soluções ótimas.</p>
+            <p>A representação não é neutra. Ela determina quais diferenças do mundo ficam visíveis para o algoritmo, quais movimentos podem ser gerados e quão grande será o espaço a explorar. Em termos de engenharia, a formulação é parte da solução: antes de perguntar “qual algoritmo usar?”, é preciso verificar se o problema foi definido de modo que uma resposta computacional tenha o significado desejado.</p>
+
+            <h3>Referências utilizadas</h3>
+            <ul class="references">
+              <li>FRANSOZI, Philipe Hugo. <em>Aula 03 — Formulação de problemas: Antes de buscar, precisamos representar.</em> Material didático da disciplina Inteligência Artificial Aplicada, Engenharia de Software, 2026.</li>
+              <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach.</em> 4. ed., Global Edition. Pearson, 2022. Em especial: Capítulo 3 — Solving Problems by Searching.</li>
+              <li>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving.</em> 6. ed. Boston: Pearson/Addison-Wesley, 2009. Em especial: Parte II e Capítulo 3 — Structures and Strategies for State Space Search.</li>
+              <li>FINLAY, Janet; DIX, Alan. <em>An Introduction to Artificial Intelligence.</em> Routledge, 2002 [obra originalmente publicada em 1996]. Em especial: capítulos sobre representação do conhecimento e busca.</li>
+              <li>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms.</em> Shelter Island: Manning, 2020. Em especial: Capítulo 2 — Search Fundamentals.</li>
+            </ul>
+
+            <h3>Leitura orientada nas referências</h3>
+            <p>Para continuar o aprofundamento sem antecipar em excesso as estratégias de busca, uma sequência recomendada é: Russell & Norvig, Seção 3.1 (formulação); Luger, Seção 3.1.3 (representação por espaço de estados); Hurbans, trecho “Representing state” do Capítulo 2; e Finlay & Dix, Capítulo 1, para critérios e problemas de representação.</p>
+          </article>
+
+          <aside class="study-stack">
+            <div class="study-callout">
+              <strong>Leitura da Aula 03 em uma frase</strong>
+              <p>Representar bem é construir o terreno no qual a busca acontecerá. O algoritmo de busca só pode explorar as possibilidades que o modelo tornou visíveis.</p>
+            </div>
+            <div class="study-callout teal">
+              <strong>Próxima etapa</strong>
+              <p>Com o problema definido, a Aula 04 passa a discutir como diferentes estratégias exploram o mesmo espaço de estados.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Inteligência Artificial Aplicada</strong><p>Engenharia de Software · Aula 03 · Material de aprofundamento</p></div>
+      <div class="study-actions">
+        <a href="aula-03.html">Aula 03</a>
+        <a href="#inicio">Voltar ao início ↑</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
