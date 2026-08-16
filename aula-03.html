@@ -595,7 +595,7 @@
             <h3>Modelo do problema</h3>
             <p>Para encontrar um caminho, podemos começar com uma representação bem menor.</p>
             <div class="tag-cloud">
-              <span class="keep">estado atual</span><span class="keep">estado inicial</span><span class="keep">ações possíveis</span><span class="keep">transições</span><span class="keep">objetivo</span><span class="keep">restrições</span>
+              <span class="keep">estado atual</span><span class="keep">estado inicial</span><span class="keep">ações possíveis</span><span class="keep">modelo de transição</span><span class="keep">objetivo</span><span class="keep">restrições</span>
             </div>
           </article>
         </div>
@@ -645,11 +645,11 @@
           <article class="anatomy-card"><span>02</span><h3>Estado</h3><p><strong>Pergunta:</strong> o que descreve uma situação relevante?</p><p>No modelo inicial: a posição atual do robô.</p></article>
           <article class="anatomy-card"><span>03</span><h3>Estado inicial</h3><p><strong>Pergunta:</strong> onde o problema começa?</p><p>No exemplo: Recepção.</p></article>
           <article class="anatomy-card"><span>04</span><h3>Ações</h3><p><strong>Pergunta:</strong> o que pode ser feito em cada estado?</p><p>No exemplo: mover para um local diretamente conectado.</p></article>
-          <article class="anatomy-card"><span>05</span><h3>Transição</h3><p><strong>Pergunta:</strong> o que muda depois de uma ação?</p><p>O robô passa do local atual para o destino escolhido.</p></article>
+          <article class="anatomy-card"><span>05</span><h3>Modelo de transição</h3><p><strong>Pergunta:</strong> dado um estado e uma ação, qual novo estado resulta?</p><p>O robô passa do local atual para o destino escolhido.</p></article>
           <article class="anatomy-card"><span>06</span><h3>Restrições</h3><p><strong>Pergunta:</strong> o que não é permitido?</p><p>Não atravessar paredes nem mover para locais desconectados.</p></article>
           <article class="anatomy-card"><span>07</span><h3>Objetivo</h3><p><strong>Pergunta:</strong> qual situação queremos alcançar?</p><p>No exemplo: estar no Laboratório.</p></article>
           <article class="anatomy-card"><span>08</span><h3>Saída</h3><p><strong>Pergunta:</strong> o que o sistema deve produzir?</p><p>Uma sequência válida de movimentos.</p></article>
-          <article class="anatomy-card"><span>09</span><h3>Avaliação</h3><p><strong>Pergunta:</strong> como comparamos soluções?</p><p>Quantidade de movimentos, distância, tempo ou outro custo.</p></article>
+          <article class="anatomy-card"><span>09</span><h3>Avaliação / custo</h3><p><strong>Pergunta:</strong> como comparamos soluções?</p><p>Quantidade de movimentos, distância, tempo ou outro custo associado ao caminho.</p></article>
         </div>
 
         <div class="section-heading" style="margin-top:3.5rem">
@@ -711,8 +711,8 @@ def acoes_possiveis(estado):
     return mapa[estado]</code></pre>
           </div>
           <article class="code-note">
-            <h3>O dicionário virou o ambiente abstrato</h3>
-            <p>Para cada estado, registramos quais estados podem ser alcançados por uma ação válida.</p>
+            <h3>O dicionário representa as conexões relevantes do ambiente</h3>
+            <p>Para cada estado, registramos quais outros estados podem ser alcançados por uma ação válida. O dicionário é uma representação do domínio, não o ambiente real.</p>
             <ul><li>As chaves são estados.</li><li>As listas representam possibilidades de transição.</li><li>A função responde “o que posso fazer daqui?”.</li></ul>
           </article>
         </div>
