@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aula 04 de Inteligência Artificial Aplicada: busca não informada, fronteira, expansão de estados, busca em largura (BFS), busca em profundidade (DFS), comparação e prática em Python.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Aula 04 — Inteligência Artificial Aplicada</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="aula-04.css">
+  <script defer src="script.js"></script>
+  <script defer src="aula-04.js"></script>
+</head>
+<body class="a4-page">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="site-header" id="inicio">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="IA Aplicada — página principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span><strong>IA Aplicada</strong><small>Aula 04</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="main-nav" aria-label="Navegação da aula">
+        <a href="index.html">Página principal</a>
+        <a href="#visao">Visão</a>
+        <a href="#busca">Busca</a>
+        <a href="#bfs">BFS</a>
+        <a href="#dfs">DFS</a>
+        <a href="#laboratorio">Laboratório</a>
+        <a href="#checklist">Checklist</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-text">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="a4-hero">
+      <div class="a4-container a4-hero-grid">
+        <div>
+          <p class="a4-eyebrow">Aula 04 · Busca não informada</p>
+          <h1>Agora o problema pode ser percorrido</h1>
+          <p class="a4-lead">Na aula anterior, construímos estados, ações, transições e objetivo. Nesta aula, vamos usar essa representação para fazer um algoritmo decidir <strong>qual estado explorar em seguida</strong> até encontrar uma solução.</p>
+          <div class="a4-actions">
+            <a class="button button-primary" href="#busca">Começar a aula</a>
+            <a class="button button-secondary" href="aula-03.html">Retomar a Aula 03</a>
+          </div>
+        </div>
+        <aside class="a4-guide">
+          <span>Pergunta orientadora</span>
+          <blockquote>Se vários estados podem ser explorados, em que ordem o algoritmo deve procurar?</blockquote>
+        </aside>
+      </div>
+    </section>
+
+    <section class="a4-section" id="visao">
+      <div class="a4-container">
+        <div class="a4-heading">
+          <p class="a4-eyebrow">Visão da aula</p>
+          <h2>Apresentar os algoritmos. Depois, testar o comportamento deles.</h2>
+          <p>A parte conceitual é deliberadamente curta. O objetivo é entender a mecânica de BFS e DFS e passar rapidamente para execução manual, implementação, modificação do código e comparação experimental.</p>
+        </div>
+
+        <div class="a4-grid-2">
+          <article class="a4-card accent-blue">
+            <h3>O que vamos desenvolver</h3>
+            <p>Ao final da aula, você deverá conseguir executar e implementar BFS e DFS, explicar a função da fronteira e do conjunto de visitados e comparar as duas estratégias em um mesmo problema.</p>
+            <div class="a4-topic-list">
+              <div>Problemas de busca</div>
+              <div>Fronteira</div>
+              <div>Expansão de estados</div>
+              <div>Estados visitados</div>
+              <div>BFS</div>
+              <div>DFS</div>
+              <div>Fila e pilha</div>
+              <div>Comparação experimental</div>
+            </div>
+          </article>
+
+          <div class="a4-practice-stack">
+            <article class="a4-card accent-violet">
+              <h3>C2 — Construir soluções eficientes</h3>
+              <div class="a4-skill"><strong>H6</strong><span>Aplicar procedimentos e estruturas adequadas para implementar algoritmos de busca e analisar seu comportamento.</span></div>
+            </article>
+            <article class="a4-card accent-teal">
+              <h3>C11 — Desenvolver algoritmos</h3>
+              <div class="a4-skill"><strong>H38</strong><span>Desenvolver e testar algoritmos capazes de percorrer espaços de estados e produzir caminhos de solução.</span></div>
+            </article>
+          </div>
+        </div>
+
+        <div class="a4-timeline" style="margin-top:22px">
+          <article><strong>01 · Retomada</strong><h3>Da representação à busca</h3><p>Estado inicial, ações, objetivo e espaço de estados.</p></article>
+          <article><strong>02 · Conceitos</strong><h3>Como uma busca funciona</h3><p>Fronteira, expansão, visitados, caminho e teste de objetivo.</p></article>
+          <article><strong>03 · Algoritmos</strong><h3>BFS × DFS</h3><p>Mesma estrutura geral; estratégias diferentes para escolher o próximo estado.</p></article>
+          <article><strong>04 · Laboratório</strong><h3>Executar, implementar e comparar</h3><p>A maior parte da aula é dedicada à prática.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section a4-soft">
+      <div class="a4-container">
+        <div class="a4-bridge">
+          <div>
+            <p class="a4-eyebrow">Ponte com a Aula 03</p>
+            <h2>O problema já existe. Falta procurar.</h2>
+            <p>Na Aula 03, o programa já conseguia representar locais, listar ações possíveis e reconhecer o objetivo. Ele ainda não sabia escolher sozinho uma sequência de ações.</p>
+          </div>
+          <div class="a4-arrow-flow" aria-label="Fluxo entre formulação e busca">
+            <span>situação real</span><b>→</b>
+            <span>abstração</span><b>→</b>
+            <span>estados e ações</span><b>→</b>
+            <span>espaço de estados</span><b>→</b>
+            <span>algoritmo de busca</span><b>→</b>
+            <span>caminho</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section" id="busca">
+      <div class="a4-container">
+        <div class="a4-heading">
+          <p class="a4-eyebrow">Ideia central</p>
+          <h2>Buscar é decidir o que explorar agora e o que deixar para depois</h2>
+          <p>Em cada passo, o algoritmo retira um estado da <strong>fronteira</strong>, verifica se ele resolve o problema e, se necessário, gera novos estados possíveis. A estratégia de busca define principalmente <strong>qual elemento da fronteira sai primeiro</strong>.</p>
+        </div>
+
+        <div class="a4-anatomy">
+          <article><small>01</small><h3>Estado inicial</h3><p>O ponto de partida da busca.</p></article>
+          <article><small>02</small><h3>Fronteira</h3><p>Estados descobertos que ainda aguardam exploração.</p></article>
+          <article><small>03</small><h3>Expansão</h3><p>Retirar um estado e gerar seus sucessores válidos.</p></article>
+          <article><small>04</small><h3>Visitados</h3><p>Registro dos estados já considerados, evitando repetições desnecessárias.</p></article>
+          <article><small>05</small><h3>Objetivo</h3><p>Teste que encerra a busca quando encontramos uma solução.</p></article>
+        </div>
+
+        <div class="a4-callout">
+          <strong>Uma distinção útil:</strong> o <em>espaço de estados</em> descreve o problema; a <em>fronteira</em> é uma estrutura mantida pelo algoritmo durante a procura.
+        </div>
+
+        <div class="a4-grid-3" style="margin-top:28px">
+          <article class="a4-card accent-blue"><h3>Descobrir</h3><p>Um sucessor aparece pela primeira vez e entra na fronteira.</p></article>
+          <article class="a4-card accent-teal"><h3>Expandir</h3><p>O estado é retirado da fronteira e suas possibilidades são examinadas.</p></article>
+          <article class="a4-card accent-violet"><h3>Encontrar</h3><p>O teste de objetivo é satisfeito e o caminho acumulado pode ser devolvido.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section a4-soft" id="bfs">
+      <div class="a4-container">
+        <div class="a4-heading">
+          <p class="a4-eyebrow">Busca em largura · BFS</p>
+          <h2>Explore primeiro os estados mais próximos do início</h2>
+          <p>A busca em largura organiza a fronteira como uma <strong>fila</strong>. O primeiro estado que entra é o primeiro a sair. Por isso, a exploração tende a ocorrer por níveis de profundidade.</p>
+        </div>
+
+        <div class="a4-algorithm">
+          <article class="a4-algo-identity">
+            <span class="a4-algo-badge">Breadth-First Search</span>
+            <h3 style="font-size:2rem;margin-top:1.2rem">BFS</h3>
+            <p>Boa referência quando todas as ações têm o mesmo custo e queremos encontrar uma solução com o menor número de passos.</p>
+            <div class="a4-structure">
+              <span>fronteira</span><span>→</span><span class="a4-structure-box">FILA · FIFO</span>
+            </div>
+            <div class="a4-structure">
+              <span>retira</span><span>→</span><span class="a4-structure-box">o mais antigo</span>
+            </div>
+          </article>
+
+          <pre class="a4-code" aria-label="Pseudocódigo de BFS"><code><span class="fn">BFS</span>(inicial, objetivo):
+    fronteira ← fila com o estado inicial
+    visitados ← {estado inicial}
+
+    <span class="kw">enquanto</span> fronteira não estiver vazia:
+        estado, caminho ← retirar o primeiro
+
+        <span class="kw">se</span> estado é objetivo:
+            devolver caminho
+
+        <span class="kw">para cada</span> sucessor do estado:
+            <span class="kw">se</span> sucessor não foi visitado:
+                marcar como visitado
+                adicionar ao fim da fila
+
+    devolver falha</code></pre>
+        </div>
+
+        <div class="a4-callout warning">
+          <strong>Condição importante:</strong> dizer que BFS encontra o “melhor caminho” exige cuidado. Com custos iguais por ação, ela encontra uma solução de menor profundidade. Se as ações tiverem custos diferentes, menor número de passos não significa necessariamente menor custo.
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section" id="dfs">
+      <div class="a4-container">
+        <div class="a4-heading">
+          <p class="a4-eyebrow">Busca em profundidade · DFS</p>
+          <h2>Escolha um caminho e aprofunde antes de tentar alternativas</h2>
+          <p>A busca em profundidade organiza a fronteira como uma <strong>pilha</strong>. O último estado inserido é o primeiro a ser retirado. Isso faz o algoritmo avançar por um ramo antes de retornar para outras possibilidades.</p>
+        </div>
+
+        <div class="a4-algorithm reverse">
+          <pre class="a4-code" aria-label="Pseudocódigo de DFS"><code><span class="fn">DFS</span>(inicial, objetivo):
+    fronteira ← pilha com o estado inicial
+    visitados ← {estado inicial}
+
+    <span class="kw">enquanto</span> fronteira não estiver vazia:
+        estado, caminho ← retirar o último
+
+        <span class="kw">se</span> estado é objetivo:
+            devolver caminho
+
+        <span class="kw">para cada</span> sucessor do estado:
+            <span class="kw">se</span> sucessor não foi visitado:
+                marcar como visitado
+                empilhar sucessor
+
+    devolver falha</code></pre>
+
+          <article class="a4-algo-identity dfs">
+            <span class="a4-algo-badge">Depth-First Search</span>
+            <h3 style="font-size:2rem;margin-top:1.2rem">DFS</h3>
+            <p>Pode alcançar rapidamente estados profundos e tende a manter uma fronteira menor, mas a primeira solução encontrada não é necessariamente a mais curta.</p>
+            <div class="a4-structure">
+              <span>fronteira</span><span>→</span><span class="a4-structure-box">PILHA · LIFO</span>
+            </div>
+            <div class="a4-structure">
+              <span>retira</span><span>→</span><span class="a4-structure-box">o mais recente</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section a4-soft" id="comparacao">
+      <div class="a4-container">
+        <div class="a4-heading">
+          <p class="a4-eyebrow">Antes do laboratório</p>
+          <h2>O esqueleto é parecido. A estratégia muda o comportamento.</h2>
+          <p>BFS e DFS podem usar quase a mesma lógica geral. A diferença decisiva é a política de retirada da fronteira e, portanto, a ordem em que o espaço é explorado.</p>
+        </div>
+
+        <div class="a4-table-wrap">
+          <table class="a4-table">
+            <thead><tr><th>Aspecto</th><th>BFS</th><th>DFS</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Estrutura</strong></td><td>Fila</td><td>Pilha</td></tr>
+              <tr><td><strong>Política</strong></td><td>FIFO — primeiro a entrar, primeiro a sair</td><td>LIFO — último a entrar, primeiro a sair</td></tr>
+              <tr><td><strong>Exploração</strong></td><td>Por níveis de profundidade</td><td>Aprofunda um ramo antes de voltar</td></tr>
+              <tr><td><strong>Memória</strong></td><td>Pode crescer bastante quando há muitos estados em um mesmo nível</td><td>Em geral mantém menos alternativas simultaneamente</td></tr>
+              <tr><td><strong>Completude</strong></td><td>Completa sob ramificação finita</td><td>Não é garantida em espaços infinitos; em grafos finitos com controle de visitados, termina</td></tr>
+              <tr><td><strong>Menor número de passos</strong></td><td>Garantido quando cada ação tem o mesmo custo</td><td>Não garantido</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section" id="simulador">
+      <div class="a4-container">
+        <div class="a4-heading">
+          <p class="a4-eyebrow">Experimente antes de programar</p>
+          <h2>O mesmo grafo, duas ordens de exploração</h2>
+          <p>O objetivo é chegar da <strong>Recepção</strong> ao <strong>Laboratório</strong>. Troque entre BFS e DFS e avance passo a passo. Observe a fronteira, os estados expandidos e o caminho que está sendo carregado.</p>
+        </div>
+
+        <div class="a4-sim" data-search-simulator>
+          <div class="a4-graph-panel">
+            <h3>Espaço de estados</h3>
+            <p>As conexões são bidirecionais. A ordem dos vizinhos foi fixada para permitir comparar as execuções.</p>
+            <div class="a4-graph" aria-label="Grafo do problema do robô">
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <line x1="50" y1="10" x2="28" y2="27"></line>
+                <line x1="50" y1="10" x2="72" y2="27"></line>
+                <line x1="28" y1="27" x2="16" y2="47"></line>
+                <line x1="28" y1="27" x2="39" y2="47"></line>
+                <line x1="16" y1="47" x2="16" y2="68"></line>
+                <line x1="16" y1="68" x2="16" y2="88"></line>
+                <line x1="72" y1="27" x2="72" y2="52"></line>
+                <line x1="72" y1="52" x2="72" y2="78"></line>
+              </svg>
+              <div class="a4-node" data-graph-node="recepcao" style="left:50%;top:10%">Recepção</div>
+              <div class="a4-node" data-graph-node="corredor_a" style="left:28%;top:27%">Corredor A</div>
+              <div class="a4-node" data-graph-node="sala_101" style="left:72%;top:27%">Sala 101</div>
+              <div class="a4-node" data-graph-node="copa" style="left:16%;top:47%">Copa</div>
+              <div class="a4-node" data-graph-node="arquivo" style="left:39%;top:47%">Arquivo</div>
+              <div class="a4-node" data-graph-node="estoque" style="left:16%;top:68%">Estoque</div>
+              <div class="a4-node" data-graph-node="deposito" style="left:16%;top:88%">Depósito</div>
+              <div class="a4-node" data-graph-node="hall" style="left:72%;top:52%">Hall</div>
+              <div class="a4-node goal" data-graph-node="laboratorio" style="left:72%;top:78%">Laboratório</div>
+            </div>
+          </div>
+
+          <div class="a4-sim-panel">
+            <h3>Execução</h3>
+            <div class="a4-sim-controls">
+              <button class="active" type="button" data-mode="bfs">BFS</button>
+              <button type="button" data-mode="dfs">DFS</button>
+            </div>
+            <div class="a4-sim-controls">
+              <button type="button" data-step>Executar um passo</button>
+              <button type="button" data-auto>Executar automaticamente</button>
+              <button type="button" data-reset>Reiniciar</button>
+            </div>
+
+            <div class="a4-state-grid">
+              <div class="a4-state"><span>Estado atual</span><strong data-current>—</strong></div>
+              <div class="a4-state"><span>Fronteira</span><strong data-frontier>—</strong></div>
+              <div class="a4-state"><span>Expandidos</span><strong data-visited>—</strong></div>
+              <div class="a4-state"><span>Caminho atual / solução</span><strong data-path>—</strong></div>
+            </div>
+            <p style="margin-top:1rem"><strong data-status>Selecione um algoritmo.</strong></p>
+            <div class="a4-log" data-log aria-live="polite"></div>
+          </div>
+        </div>
+
+        <div class="a4-callout warning">
+          <strong>Faça um teste:</strong> execute BFS até o fim, reinicie, execute DFS e compare quantos estados foram expandidos antes de chegar ao Laboratório. O grafo é o mesmo; apenas a estratégia de escolha mudou.
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section a4-dark" id="laboratorio">
+      <div class="a4-container">
+        <div class="a4-heading">
+          <p class="a4-eyebrow">Laboratório</p>
+          <h2>Agora é com o código</h2>
+          <p>A sequência abaixo começa com execução manual, passa por implementação guiada e termina com um problema novo. Registre decisões e resultados: o objetivo não é apenas fazer o código “funcionar”, mas explicar o comportamento observado.</p>
+        </div>
+
+        <div class="a4-practice-stack">
+          <article class="a4-practice">
+            <div class="a4-practice-number">01</div>
+            <div>
+              <h3>Execute BFS e DFS manualmente</h3>
+              <p>Use o grafo do simulador. Para cada passo, anote o estado retirado da fronteira, a fronteira após a expansão e os estados já visitados.</p>
+              <div class="a4-task">
+                <strong>Entregável rápido:</strong> escreva a ordem de expansão dos dois algoritmos e indique em qual momento o Laboratório é encontrado.
+              </div>
+              <div class="a4-editor">
+                <textarea data-persist="manual" aria-label="Registro da execução manual" placeholder="BFS: Recepção → ...&#10;DFS: Recepção → ..."></textarea>
+                <small>O texto fica salvo somente neste navegador.</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="a4-practice">
+            <div class="a4-practice-number">02</div>
+            <div>
+              <h3>Implemente BFS em Python</h3>
+              <p>Comece pelo mesmo tipo de representação utilizado na Aula 03. A função deve devolver um caminho do estado inicial até o objetivo.</p>
+              <pre class="a4-code"><code><span class="kw">from</span> collections <span class="kw">import</span> deque
+
+grafo = {
+    <span class="st">"recepcao"</span>: [<span class="st">"corredor_a"</span>, <span class="st">"sala_101"</span>],
+    <span class="st">"corredor_a"</span>: [<span class="st">"recepcao"</span>, <span class="st">"copa"</span>, <span class="st">"arquivo"</span>],
+    <span class="st">"copa"</span>: [<span class="st">"corredor_a"</span>, <span class="st">"estoque"</span>],
+    <span class="st">"estoque"</span>: [<span class="st">"copa"</span>, <span class="st">"deposito"</span>],
+    <span class="st">"deposito"</span>: [<span class="st">"estoque"</span>],
+    <span class="st">"arquivo"</span>: [<span class="st">"corredor_a"</span>],
+    <span class="st">"sala_101"</span>: [<span class="st">"recepcao"</span>, <span class="st">"hall"</span>],
+    <span class="st">"hall"</span>: [<span class="st">"sala_101"</span>, <span class="st">"laboratorio"</span>],
+    <span class="st">"laboratorio"</span>: [<span class="st">"hall"</span>]
+}
+
+<span class="kw">def</span> <span class="fn">bfs</span>(grafo, inicio, objetivo):
+    fronteira = deque([(inicio, [inicio])])
+    visitados = {inicio}
+
+    <span class="kw">while</span> fronteira:
+        <span class="cm"># TODO 1: retirar o próximo estado segundo a regra da BFS</span>
+        estado, caminho = ...
+
+        <span class="kw">if</span> estado == objetivo:
+            <span class="kw">return</span> caminho
+
+        <span class="kw">for</span> proximo <span class="kw">in</span> grafo[estado]:
+            <span class="kw">if</span> proximo <span class="kw">not in</span> visitados:
+                visitados.add(proximo)
+                <span class="cm"># TODO 2: inserir o sucessor com o novo caminho</span>
+                ...
+
+    <span class="kw">return</span> None
+
+print(bfs(grafo, <span class="st">"recepcao"</span>, <span class="st">"laboratorio"</span>))</code></pre>
+              <div class="a4-task"><strong>Teste mínimo:</strong> o resultado deve ser um caminho válido e começar em <code>recepcao</code> e terminar em <code>laboratorio</code>.</div>
+            </div>
+          </article>
+
+          <article class="a4-practice">
+            <div class="a4-practice-number">03</div>
+            <div>
+              <h3>Transforme a BFS em DFS</h3>
+              <p>Não reescreva tudo do zero. Compare os dois pseudocódigos e descubra quais partes realmente precisam mudar.</p>
+              <ol>
+                <li>Substitua a estrutura da fronteira por uma pilha simples.</li>
+                <li>Altere a operação que retira o próximo elemento.</li>
+                <li>Mantenha o controle de visitados e o caminho.</li>
+                <li>Execute no mesmo grafo.</li>
+              </ol>
+              <div class="a4-task"><strong>Pergunta:</strong> quantas linhas conceitualmente importantes precisaram mudar para transformar a estratégia?</div>
+              <div class="a4-editor"><textarea data-persist="bfs-dfs-diferenca" aria-label="Diferenças entre BFS e DFS" placeholder="As mudanças principais foram..."></textarea></div>
+            </div>
+          </article>
+
+          <article class="a4-practice">
+            <div class="a4-practice-number">04</div>
+            <div>
+              <h3>Instrumente e compare</h3>
+              <p>Modifique as funções para registrar pelo menos: caminho encontrado, profundidade da solução, quantidade de estados expandidos e maior tamanho observado da fronteira.</p>
+              <div class="a4-table-wrap a4-metrics">
+                <table class="a4-table">
+                  <thead><tr><th>Algoritmo</th><th>Caminho</th><th>Profundidade</th><th>Expandidos</th><th>Pico da fronteira</th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>BFS</strong></td><td><input data-persist="m-bfs-path" aria-label="Caminho BFS"></td><td><input data-persist="m-bfs-depth" aria-label="Profundidade BFS"></td><td><input data-persist="m-bfs-expanded" aria-label="Expandidos BFS"></td><td><input data-persist="m-bfs-frontier" aria-label="Fronteira BFS"></td></tr>
+                    <tr><td><strong>DFS</strong></td><td><input data-persist="m-dfs-path" aria-label="Caminho DFS"></td><td><input data-persist="m-dfs-depth" aria-label="Profundidade DFS"></td><td><input data-persist="m-dfs-expanded" aria-label="Expandidos DFS"></td><td><input data-persist="m-dfs-frontier" aria-label="Fronteira DFS"></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="a4-editor"><textarea data-persist="metric-analysis" aria-label="Análise das métricas" placeholder="O que os números mostram? Qual algoritmo explorou mais estados? Qual manteve maior fronteira? Por quê?"></textarea></div>
+            </div>
+          </article>
+
+          <article class="a4-practice">
+            <div class="a4-practice-number">05</div>
+            <div>
+              <h3>Quebre uma proteção de propósito</h3>
+              <p>Em uma cópia do código, remova temporariamente o controle de estados visitados. Observe o efeito em um grafo com conexões bidirecionais.</p>
+              <div class="a4-callout warning" style="margin-top:.8rem">
+                <strong>Não deixe a execução sem limite.</strong> Acrescente um contador de passos e interrompa após algumas dezenas de expansões para evitar uma execução desnecessariamente longa.
+              </div>
+              <div class="a4-task"><strong>Explique:</strong> por que o conjunto de visitados não é um detalhe de implementação em grafos com ciclos?</div>
+              <div class="a4-editor"><textarea data-persist="visited" aria-label="Reflexão sobre estados visitados" placeholder="Sem visitados, o algoritmo..."></textarea></div>
+            </div>
+          </article>
+
+          <article class="a4-practice">
+            <div class="a4-practice-number">06</div>
+            <div>
+              <h3>Formule um problema novo e aplique uma busca</h3>
+              <p>Escolha um domínio, faça a formulação aprendida na Aula 03 e depois aplique BFS e DFS. Algumas opções:</p>
+              <ul>
+                <li>navegação entre estações de uma pequena rede de transporte;</li>
+                <li>rotas entre páginas de um site;</li>
+                <li>movimentação de um personagem entre salas conectadas;</li>
+                <li>sequência de operações para chegar de um número inicial a um número-alvo.</li>
+              </ul>
+              <div class="a4-task">
+                <strong>Seu modelo precisa declarar:</strong> estado inicial, objetivo, ações ou transições, representação do espaço, critério de sucesso e a ordem dos sucessores usada pelos algoritmos.
+              </div>
+              <div class="a4-editor"><textarea data-persist="novo-problema" aria-label="Formulação do problema novo" placeholder="Domínio:&#10;Estado inicial:&#10;Objetivo:&#10;Estados:&#10;Transições:&#10;Critério de sucesso:&#10;O que observei com BFS e DFS:"></textarea></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section" id="experimento">
+      <div class="a4-container">
+        <div class="a4-heading">
+          <p class="a4-eyebrow">Uma referência para conferir a instrumentação</p>
+          <h2>Compare o comportamento no grafo desta página</h2>
+          <p>Use o botão abaixo somente depois de fazer sua própria execução. Ele calcula as mesmas métricas básicas para o grafo do simulador e serve como referência para conferência.</p>
+        </div>
+        <button class="button button-primary" type="button" data-run-comparison>Executar comparação de referência</button>
+        <div class="a4-table-wrap" style="margin-top:1rem">
+          <table class="a4-table">
+            <thead><tr><th>Algoritmo</th><th>Caminho</th><th>Profundidade</th><th>Expandidos</th><th>Pico da fronteira</th></tr></thead>
+            <tbody>
+              <tr data-result-bfs><td><strong>BFS</strong></td><td data-result-path>—</td><td data-result-depth>—</td><td data-result-expanded>—</td><td data-result-frontier>—</td></tr>
+              <tr data-result-dfs><td><strong>DFS</strong></td><td data-result-path>—</td><td data-result-depth>—</td><td data-result-expanded>—</td><td data-result-frontier>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section a4-soft" id="checklist">
+      <div class="a4-container">
+        <div class="a4-heading">
+          <p class="a4-eyebrow">Checklist de saída</p>
+          <h2>O que precisa estar claro ao final da aula</h2>
+          <p>Marque apenas o que você consegue explicar sem depender do código pronto.</p>
+        </div>
+        <div class="a4-checklist">
+          <label class="a4-check"><input type="checkbox" data-persist="c1"><span>Consigo explicar a diferença entre espaço de estados e fronteira.</span></label>
+          <label class="a4-check"><input type="checkbox" data-persist="c2"><span>Consigo descrever o ciclo retirar → testar → expandir → inserir sucessores.</span></label>
+          <label class="a4-check"><input type="checkbox" data-persist="c3"><span>Consigo explicar por que BFS usa fila e DFS usa pilha.</span></label>
+          <label class="a4-check"><input type="checkbox" data-persist="c4"><span>Consigo executar BFS e DFS manualmente em um grafo pequeno.</span></label>
+          <label class="a4-check"><input type="checkbox" data-persist="c5"><span>Consigo implementar uma busca mantendo caminho e estados visitados.</span></label>
+          <label class="a4-check"><input type="checkbox" data-persist="c6"><span>Consigo explicar por que ciclos exigem cuidado com estados repetidos.</span></label>
+          <label class="a4-check"><input type="checkbox" data-persist="c7"><span>Consigo dizer em que condição BFS garante uma solução com menor número de passos.</span></label>
+          <label class="a4-check"><input type="checkbox" data-persist="c8"><span>Consigo comparar BFS e DFS usando evidências da execução, não apenas definições.</span></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="a4-section a4-dark">
+      <div class="a4-container a4-next">
+        <div>
+          <p class="a4-eyebrow">Próxima pergunta</p>
+          <h2>Precisamos explorar tantos estados?</h2>
+          <p>BFS e DFS não usam informação sobre qual estado parece estar mais próximo do objetivo. Na próxima etapa, vamos perguntar o que muda quando uma busca recebe uma estimativa capaz de orientar a exploração.</p>
+        </div>
+        <aside class="a4-question">
+          <strong>Deixe esta questão em aberto</strong>
+          <p>Se dois estados estão na fronteira, como poderíamos estimar qual deles é mais promissor antes de explorá-lo?</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Inteligência Artificial Aplicada</strong><p>Aula 04 · Busca não informada · BFS e DFS</p></div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap"><a href="aula-03.html">← Aula 03</a><a href="#inicio">Voltar ao início ↑</a></div>
+    </div>
+  </footer>
+</body>
+</html>
