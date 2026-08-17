@@ -71,6 +71,58 @@
     }
   }
 
+  const dfsSection = document.querySelector("#dfs");
+  if (dfsSection) {
+    const heading = dfsSection.querySelector(".section-heading");
+    const title = heading?.querySelector("h2");
+    const intro = heading?.querySelector("p:last-child");
+
+    if (title) title.textContent = "DFS explora por ramos: aprofunda um caminho antes de voltar às alternativas";
+    if (intro) {
+      intro.innerHTML = "A busca em profundidade segue uma lógica diferente da BFS: ela escolhe uma alternativa e <strong>continua avançando por esse ramo enquanto houver novos estados</strong>. Quando chega a um ponto sem novas opções, retorna às alternativas que ficaram esperando e continua a exploração.";
+    }
+
+    const algorithmLayout = dfsSection.querySelector(".algorithm-layout");
+    if (algorithmLayout && !dfsSection.querySelector(".dfs-learning-grid")) {
+      const pedagogy = document.createElement("div");
+      pedagogy.className = "overview-grid dfs-learning-grid";
+      pedagogy.style.marginBottom = "1.7rem";
+      pedagogy.innerHTML = `
+        <article class="card">
+          <p class="eyebrow">Intuição</p>
+          <h3>Primeiro um ramo inteiro</h3>
+          <p>DFS não percorre uma camada completa antes de avançar. Ela segue o <strong>estado descoberto mais recentemente</strong>, aprofundando o caminho até encontrar o objetivo ou chegar a um ponto em que não há mais para onde seguir.</p>
+        </article>
+
+        <article class="card">
+          <p class="eyebrow">No exemplo do prédio</p>
+          <h3>Entrar, aprofundar e depois voltar</h3>
+          <p>Com a ordem usada no simulador, a busca começa em <strong>Recepção → Corredor A → Copa → Estoque → Depósito</strong>. Como o Depósito não oferece um novo caminho, a DFS retorna às alternativas que ficaram pendentes, passa por <strong>Arquivo</strong> e depois segue por <strong>Sala 101 → Hall → Laboratório</strong>.</p>
+        </article>
+
+        <article class="card">
+          <p class="eyebrow">Quando faz sentido usar?</p>
+          <h3>Quando qualquer solução pode bastar</h3>
+          <p>DFS é útil quando a solução pode estar <strong>mais profunda</strong>, quando não precisamos garantir o caminho com menos passos ou quando queremos manter menos alternativas simultaneamente na memória. Exemplos: percorrer árvores de diretórios, explorar labirintos e resolver problemas por <em>backtracking</em>.</p>
+        </article>
+      `;
+      algorithmLayout.before(pedagogy);
+    }
+
+    const algorithmCardText = dfsSection.querySelector(".algorithm-card.dfs > p");
+    if (algorithmCardText) {
+      algorithmCardText.innerHTML = "A <strong>pilha</strong> é o que mantém o aprofundamento: novos estados ficam no topo e o mais recente é retirado primeiro. Isso favorece seguir um ramo por vez e, em geral, mantém menos alternativas simultaneamente, mas a primeira solução encontrada não é necessariamente a mais curta.";
+    }
+
+    const figure = dfsSection.querySelector(".lesson-figure");
+    if (figure && !dfsSection.querySelector(".dfs-warning")) {
+      const warning = document.createElement("div");
+      warning.className = "note-banner warning dfs-warning";
+      warning.innerHTML = "<strong>Cuidado:</strong> aprofundar primeiro não significa encontrar o melhor ou o menor caminho. O resultado da DFS pode depender da ordem em que os sucessores são considerados e, em espaços com ciclos ou profundidade ilimitada, o controle de estados visitados ou de limites de exploração é essencial.";
+      figure.before(warning);
+    }
+  }
+
   const graph = {
     recepcao: ["corredor_a", "sala_101"],
     corredor_a: ["recepcao", "copa", "arquivo"],
