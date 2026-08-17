@@ -4,6 +4,10 @@
     window.location.pathname.endsWith('/aula-02.html') ||
     window.location.pathname.endsWith('aula-02.html');
 
+  const isAula02Aprofundamento = () =>
+    window.location.pathname.endsWith('/aula-02-aprofundamento.html') ||
+    window.location.pathname.endsWith('aula-02-aprofundamento.html');
+
   const findInquiry = (title) =>
     [...document.querySelectorAll('.inquiry')].find(
       (item) => item.querySelector('h3')?.textContent.trim() === title
@@ -204,17 +208,55 @@
     document.head.appendChild(style);
   };
 
-  const applyAula02Adjustments = () => {
-    if (!isAula02()) return;
-    simplifyAiDecision();
-    simplifyContemporaryApplication();
-    removeKnowledgeExit();
-    improveDarkAgentDiagram();
-    improveLightMode();
+  const improveAula02AprofundamentoHistory = () => {
+    if (!isAula02Aprofundamento()) return;
+
+    const heading = [...document.querySelectorAll('#fundamentos .study-prose h3')]
+      .find((item) => item.textContent.trim().startsWith('Computação, cérebro e comportamento'));
+    if (!heading) return;
+
+    const nextHeading = [...heading.parentElement.querySelectorAll('h3')]
+      .find((item) => item !== heading && item.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_PRECEDING && item.textContent.trim().startsWith('1956: Dartmouth'));
+
+    if (!nextHeading) return;
+
+    let current = heading.nextElementSibling;
+    while (current && current !== nextHeading) {
+      const next = current.nextElementSibling;
+      current.remove();
+      current = next;
+    }
+
+    heading.textContent = 'Computação, cérebro e comportamento: 1936–1950';
+
+    const paragraphs = [
+      'Nas décadas de 1930 e 1940, questões antigas sobre raciocínio, inteligência e mente começaram a ser reformuladas em termos computacionais. Em 1936, <strong>Alan Turing</strong> apresentou um modelo abstrato de computação que ajudou a estabelecer o que significa executar um procedimento de forma mecânica e quais são os limites desse processo. Com isso, a ideia de representar e executar processos de raciocínio em máquinas ganhou uma base matemática mais precisa.',
+      'Em 1943, <strong>Warren McCulloch e Walter Pitts</strong> aproximaram outra tradição desse novo universo computacional. Inspirados pelo funcionamento dos neurônios, pela lógica proposicional e pela teoria da computação, propuseram um modelo matemático de neurônio artificial. Redes formadas por essas unidades podiam implementar operações lógicas, mostrando que estruturas inspiradas no sistema nervoso também poderiam ser analisadas como sistemas de computação.',
+      'Poucos anos depois, Turing voltou diretamente ao problema da inteligência. Em <strong>1950</strong>, em <em>Computing Machinery and Intelligence</em>, argumentou que perguntar simplesmente se uma máquina “pensa” levava a dificuldades conceituais e propôs substituir essa questão por algo observável: <strong>como a máquina se comporta em uma interação?</strong> O chamado <em>jogo da imitação</em> deslocava, assim, parte da discussão sobre inteligência para critérios que poderiam ser testados empiricamente.',
+      'Esses trabalhos revelam algo importante sobre as origens da IA: <strong>suas diferentes linhas de pesquisa não surgiram completamente separadas</strong>. Lógica, computação, modelos do cérebro e estudo do comportamento já apareciam combinados. Nas décadas seguintes, algumas abordagens enfatizariam símbolos, regras e procedimentos explícitos, enquanto outras explorariam redes de unidades conectadas e aprendizagem. A relação entre essas perspectivas — ora concorrentes, ora complementares — acompanharia grande parte da história da IA.'
+    ];
+
+    paragraphs.forEach((html) => {
+      const paragraph = document.createElement('p');
+      paragraph.innerHTML = html;
+      nextHeading.before(paragraph);
+    });
   };
 
-  applyAula02Adjustments();
-  document.addEventListener('DOMContentLoaded', applyAula02Adjustments);
+  const applyPageAdjustments = () => {
+    if (isAula02()) {
+      simplifyAiDecision();
+      simplifyContemporaryApplication();
+      removeKnowledgeExit();
+      improveDarkAgentDiagram();
+      improveLightMode();
+    }
+
+    improveAula02AprofundamentoHistory();
+  };
+
+  applyPageAdjustments();
+  document.addEventListener('DOMContentLoaded', applyPageAdjustments);
 
   const loaderScript = document.currentScript;
   const baseScript = document.createElement('script');
@@ -222,6 +264,6 @@
     ? new URL('script-base.js', loaderScript.src).href
     : 'script-base.js';
   baseScript.async = false;
-  baseScript.addEventListener('load', applyAula02Adjustments);
+  baseScript.addEventListener('load', applyPageAdjustments);
   document.head.appendChild(baseScript);
 })();
