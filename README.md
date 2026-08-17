@@ -8,3 +8,5 @@ Estrutura:
 - `styles.css`: estilos compartilhados.
 - `script.js`: navegação móvel, modo noturno e ampliação de materiais.
 - `assets/`: infográfico da jornada usado em `curso.html`.
+
+<!-- deploy retry 2026-08-17 -->
