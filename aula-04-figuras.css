@@ -53,6 +53,31 @@
 
 .concept-callout p { margin: 0; }
 
+.question-cloud div::after {
+  display: block;
+  margin-top: .35rem;
+  color: #b9c7e6;
+  font-size: .9rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.question-cloud div:nth-child(1)::after {
+  content: "Precisamos de uma regra para decidir por onde a procura continua.";
+}
+
+.question-cloud div:nth-child(2)::after {
+  content: "Não queremos perder essas opções: deixamos elas esperando para poder voltar depois.";
+}
+
+.question-cloud div:nth-child(3)::after {
+  content: "Registramos os lugares por onde já passamos para não repetir o mesmo caminho sem necessidade.";
+}
+
+.question-cloud div:nth-child(4)::after {
+  content: "Enquanto procuramos, guardamos de onde viemos para reconstruir o percurso até o objetivo.";
+}
+
 .criteria-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
