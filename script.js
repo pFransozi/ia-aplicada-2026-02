@@ -455,3 +455,54 @@ const simplifyAula02GroupMap = () => {
 
 simplifyAula02GroupMap();
 document.addEventListener('DOMContentLoaded', simplifyAula02GroupMap);
+
+const simplifyAula02AiDecision = () => {
+  const isAula02 = window.location.pathname.endsWith('/aula-02.html') || window.location.pathname.endsWith('aula-02.html');
+  if (!isAula02) return;
+
+  const inquiry = [...document.querySelectorAll('#problemas .inquiry')]
+    .find((item) => item.querySelector('h3')?.textContent.trim() === 'Este problema realmente precisa de IA?');
+
+  if (!inquiry || inquiry.dataset.simplified === 'true') return;
+
+  const body = inquiry.querySelector('.inquiry-body');
+  if (!body) return;
+
+  body.querySelector('.worksheet')?.remove();
+  body.classList.add('inquiry-body-single');
+
+  const content = body.firstElementChild;
+  if (content) {
+    const heading = document.createElement('p');
+    heading.innerHTML = '<strong>Para cada cenário escolhido, investigue:</strong>';
+
+    const questions = document.createElement('ol');
+    questions.className = 'prompt-list';
+
+    [
+      'O problema pode ser resolvido adequadamente sem IA? Como?',
+      'Que característica do problema poderia justificar o uso de IA?',
+      'Qual alternativa mais simples poderia ser utilizada?',
+      'Que benefício concreto a IA acrescentaria em comparação com essa alternativa?',
+      'Qual é o principal risco de erro ou impacto da solução?',
+      'Como validar se a solução com IA é realmente melhor do que a alternativa mais simples?'
+    ].forEach((question) => {
+      const item = document.createElement('li');
+      item.textContent = question;
+      questions.appendChild(item);
+    });
+
+    const teacherNote = content.querySelector('.teacher-note');
+    if (teacherNote) {
+      teacherNote.insertAdjacentElement('beforebegin', heading);
+      heading.insertAdjacentElement('afterend', questions);
+    } else {
+      content.append(heading, questions);
+    }
+  }
+
+  inquiry.dataset.simplified = 'true';
+};
+
+simplifyAula02AiDecision();
+document.addEventListener('DOMContentLoaded', simplifyAula02AiDecision);
