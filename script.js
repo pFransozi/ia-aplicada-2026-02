@@ -355,6 +355,53 @@
     heading.dataset.adjusted = 'true';
   };
 
+  const improveAula02AprofundamentoLearning = () => {
+    if (!isAula02Aprofundamento()) return;
+
+    const section = document.querySelector('#aprendizado');
+    if (!section || section.dataset.adjusted === 'true') return;
+
+    const kicker = section.querySelector('.study-heading .study-kicker');
+    if (kicker) kicker.textContent = 'Representação, dados e aprendizagem';
+
+    const prose = section.querySelector('.study-prose');
+    if (!prose) return;
+
+    prose.innerHTML = `
+      <h3>A tradição conexionista</h3>
+      <p>Uma alternativa importante às representações simbólicas explícitas surgiu com os modelos <strong>conexionistas</strong>, também associados historicamente às redes neurais e ao processamento distribuído. Em vez de representar o conhecimento principalmente por símbolos e regras manipulados explicitamente, esses modelos utilizam unidades simples conectadas entre si, cujo comportamento depende dos valores associados às conexões.</p>
+      <p>Essa tradição aparece muito cedo na história da IA. O modelo de <strong>McCulloch e Pitts</strong>, de 1943, mostrou que unidades artificiais inspiradas em neurônios poderiam realizar operações lógicas. Posteriormente, o <strong>perceptron</strong> introduziu mecanismos de aprendizagem capazes de ajustar conexões a partir de exemplos. As limitações dos perceptrons de uma única camada reduziram o entusiasmo pela abordagem durante um período, mas redes multicamadas e métodos como <strong>backpropagation</strong> contribuíram para uma retomada importante a partir dos anos 1980.</p>
+      <p>Um ponto importante é que representação não desaparece. Ainda é necessário decidir como os dados serão codificados, quais entradas serão utilizadas e como o modelo será estruturado. O que muda é que parte das relações relevantes deixa de ser especificada diretamente como regras e passa a ser <strong>ajustada a partir da experiência de treinamento</strong>.</p>
+
+      <h3>Aprendizado de máquina: aprender a partir da experiência</h3>
+      <p><strong>Aprendizado de máquina</strong> não é sinônimo de redes neurais. Trata-se de uma área mais ampla da IA dedicada a métodos capazes de melhorar seu desempenho a partir de dados, exemplos, experiência ou feedback. Árvores de decisão, modelos lineares, métodos probabilísticos, redes neurais e diversas outras técnicas podem fazer parte desse repertório.</p>
+      <p>Em vez de especificar manualmente todo o comportamento desejado, o projetista define um problema, disponibiliza dados ou formas de feedback e utiliza um algoritmo para ajustar um <strong>modelo</strong>. Dependendo do problema, esse aprendizado pode ocorrer a partir de exemplos rotulados, da identificação de estruturas em dados sem rótulos ou das consequências das ações realizadas por um agente.</p>
+      <p>Isso não elimina as decisões de engenharia. Ainda é necessário definir o problema, selecionar e preparar dados, escolher representações e modelos, estabelecer critérios de avaliação e verificar se o comportamento aprendido <strong>generaliza para novos casos</strong>.</p>
+
+      <h3>Deep learning e aprendizagem de representações</h3>
+      <p><strong>Deep learning</strong> corresponde a uma família de métodos baseados em redes neurais com múltiplas camadas de processamento. Uma de suas características mais importantes é a possibilidade de aprender não apenas uma relação entre entradas e saídas, mas também <strong>representações intermediárias dos dados</strong>.</p>
+      <p>Em visão computacional, por exemplo, diferentes camadas podem aprender estruturas progressivamente mais abstratas, partindo de padrões locais simples e chegando a representações relacionadas a objetos e configurações mais complexas. Essa capacidade reduziu, em muitos domínios, a necessidade de definir manualmente todas as características utilizadas pelo modelo.</p>
+      <p>O crescimento do deep learning também dependeu da combinação de grandes volumes de dados, aumento da capacidade computacional, hardware especializado e avanços em arquiteturas e métodos de treinamento. Seu desempenho é particularmente relevante em dados de alta dimensionalidade, como imagens, áudio e linguagem, mas isso <strong>não significa que redes profundas sejam a melhor escolha para qualquer problema</strong>.</p>
+
+      <h3>De modelos generativos à IA generativa</h3>
+      <p>A ideia de um <strong>modelo generativo</strong> é anterior aos sistemas generativos atuais. Em termos gerais, um modelo generativo procura representar aspectos do processo ou da distribuição que poderia produzir os dados observados. Modelos probabilísticos clássicos já possuíam essa característica, muito antes da atual popularização da expressão “IA generativa”.</p>
+      <p>Com o desenvolvimento das redes neurais profundas surgiram novas arquiteturas capazes de aprender distribuições complexas e produzir novos exemplos. As <strong>Generative Adversarial Networks (GANs)</strong>, por exemplo, combinam uma rede geradora com uma rede discriminadora em um processo competitivo de treinamento.</p>
+      <p>Em aplicações contemporâneas, modelos generativos podem produzir texto, imagens, áudio, código e outras estruturas a partir de padrões aprendidos em grandes conjuntos de dados. A saída não deve ser interpretada simplesmente como recuperação de uma resposta armazenada, mas como a produção de uma nova saída condicionada pelo modelo e pela entrada recebida.</p>
+      <p>Essa capacidade também muda a forma de avaliar o sistema. Uma tarefa de classificação costuma ter uma resposta esperada mais claramente delimitada; uma saída generativa admite muitas respostas possíveis. Por isso, sua avaliação precisa considerar adequação ao objetivo, correção, consistência, segurança, testes e revisão humana.</p>
+    `;
+
+    const callouts = section.querySelectorAll('.study-stack .study-callout');
+    const firstCallout = callouts[0];
+    if (firstCallout) {
+      const title = firstCallout.querySelector('strong');
+      const text = firstCallout.querySelector('p');
+      if (title) title.textContent = 'Outra forma de construir conhecimento';
+      if (text) text.textContent = 'Além de perguntar “que conhecimento devemos representar explicitamente?”, podemos perguntar “que regularidades podem ser aprendidas a partir de dados ou experiência e como saber se elas generalizam para novos casos?”.';
+    }
+
+    section.dataset.adjusted = 'true';
+  };
+
   const applyPageAdjustments = () => {
     if (isAula02()) {
       simplifyAiDecision();
@@ -368,6 +415,7 @@
     improveAula02AprofundamentoSearchRepresentation();
     improveAula02AprofundamentoGeneralMethods();
     improveAula02AprofundamentoExpertSystems();
+    improveAula02AprofundamentoLearning();
   };
 
   applyPageAdjustments();
