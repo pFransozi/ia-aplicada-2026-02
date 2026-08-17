@@ -376,8 +376,8 @@
   const loaderScript = document.currentScript;
   const baseScript = document.createElement('script');
   baseScript.src = loaderScript?.src
-    ? new URL('script-base.js', loaderScript.src).href
-    : 'script-base.js';
+    ? new URL('script-base.js?v=20260817-fig02b', loaderScript.src).href
+    : 'script-base.js?v=20260817-fig02b';
   baseScript.async = false;
   baseScript.addEventListener('load', applyPageAdjustments);
   document.head.appendChild(baseScript);

@@ -101,6 +101,19 @@ const setupDeepDiveFigures = () => {
   );
 
   deepDiveImages.forEach((image) => {
+    const explicitLight = image.dataset.lightSrc;
+    const explicitDark = image.dataset.darkSrc;
+
+    // Quando o HTML fornece as duas versões explicitamente, respeite esses
+    // caminhos (inclusive query strings de cache-busting) e não os recalcule.
+    if (explicitLight && explicitDark) {
+      image.setAttribute(
+        'src',
+        document.body.classList.contains('theme-dark') ? explicitDark : explicitLight
+      );
+      return;
+    }
+
     const currentSrc = image.getAttribute('src');
     if (!currentSrc) return;
 
