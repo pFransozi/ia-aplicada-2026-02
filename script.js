@@ -272,6 +272,40 @@
     heading.dataset.adjusted = 'true';
   };
 
+  const improveAula02AprofundamentoGeneralMethods = () => {
+    if (!isAula02Aprofundamento()) return;
+
+    const heading = [...document.querySelectorAll('#simbolica .study-prose h3')]
+      .find((item) => item.textContent.trim() === 'Por que métodos gerais não eram suficientes?');
+    if (!heading || heading.dataset.adjusted === 'true') return;
+
+    const nextHeading = [...heading.parentElement.querySelectorAll('h3')]
+      .find((item) => item !== heading && item.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_PRECEDING && item.textContent.trim() === 'Sistemas especialistas');
+    if (!nextHeading) return;
+
+    let current = heading.nextElementSibling;
+    while (current && current !== nextHeading) {
+      const next = current.nextElementSibling;
+      current.remove();
+      current = next;
+    }
+
+    const paragraphs = [
+      'Os primeiros programas de IA alimentaram a expectativa de que <strong>estratégias gerais de busca e raciocínio</strong> poderiam resolver muitos tipos diferentes de problemas. Essas estratégias funcionavam bem em situações pequenas e bem delimitadas, nas quais o número de estados e ações permanecia controlável.',
+      'A dificuldade aparecia quando essas técnicas eram aplicadas a tarefas maiores. À medida que cada estado pode gerar várias alternativas, o número de caminhos possíveis cresce rapidamente. Essa <strong>explosão combinatória</strong> faz com que uma estratégia capaz de encontrar uma solução em princípio possa exigir tempo ou memória impraticáveis para encontrá-la de fato.',
+      'A experiência mostrou então que <strong>a forma de orientar a busca importa tanto quanto o mecanismo geral utilizado</strong>. Heurísticas ajudam a priorizar alternativas promissoras, mas são aproximações e podem falhar. Em muitos problemas, obter bom desempenho também exige incorporar <strong>conhecimento específico do domínio</strong> — regras, restrições e relações capazes de eliminar alternativas inadequadas e direcionar o raciocínio.',
+      'Essa mudança de perspectiva abriu caminho para sistemas mais intensivos em conhecimento, como o <strong>DENDRAL</strong> e os sistemas especialistas, nos quais parte importante da capacidade de resolução vem não apenas do mecanismo de inferência, mas do conhecimento representado sobre o problema.'
+    ];
+
+    paragraphs.forEach((html) => {
+      const paragraph = document.createElement('p');
+      paragraph.innerHTML = html;
+      nextHeading.before(paragraph);
+    });
+
+    heading.dataset.adjusted = 'true';
+  };
+
   const applyPageAdjustments = () => {
     if (isAula02()) {
       simplifyAiDecision();
@@ -283,6 +317,7 @@
 
     improveAula02AprofundamentoHistory();
     improveAula02AprofundamentoSearchRepresentation();
+    improveAula02AprofundamentoGeneralMethods();
   };
 
   applyPageAdjustments();
