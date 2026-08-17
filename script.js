@@ -47,10 +47,15 @@
     content.querySelectorAll('.teacher-note').forEach((note) => note.remove());
   };
 
+  const removeKnowledgeExit = () => {
+    document.querySelector('#fechamento .knowledge-exit')?.remove();
+  };
+
   const applyAula02Adjustments = () => {
     if (!isAula02()) return;
     simplifyAiDecision();
     simplifyContemporaryApplication();
+    removeKnowledgeExit();
   };
 
   applyAula02Adjustments();
