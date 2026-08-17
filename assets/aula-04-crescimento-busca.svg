@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Por que a busca pode ficar cara?</title>
+  <desc id="desc">Árvore com fator de ramificação três mostrando crescimento de estados por profundidade e relação com memória e estados expandidos.</desc>
+  <defs><style>.t{font-family:Inter,Segoe UI,Arial,sans-serif;fill:#172033}.m{fill:#647087}.h{font-weight:800}.r{fill:#a52a2a}.small{font-size:12.5px}</style></defs>
+  <rect x="1" y="1" width="958" height="538" rx="28" fill="#fbfcff" stroke="#dfe5ef"/>
+  <text x="480" y="48" text-anchor="middle" class="t h" font-size="34">Por que a busca pode ficar cara?</text>
+  <text x="480" y="75" text-anchor="middle" class="t m" font-size="16">Crescimento do espaço de estados</text>
+
+  <rect x="28" y="104" width="500" height="320" rx="22" fill="#fff" stroke="#dfe5ef"/>
+  <text x="278" y="135" text-anchor="middle" class="r h" font-size="18">fator de ramificação = 3</text>
+  <text x="55" y="173" class="t small h">Nível 0</text><text x="55" y="238" class="t small h">Nível 1</text><text x="55" y="303" class="t small h">Nível 2</text><text x="55" y="370" class="t small h">Nível 3</text>
+  <line x1="115" y1="168" x2="490" y2="168" stroke="#cbd5e1" stroke-dasharray="6 5"/><line x1="115" y1="233" x2="490" y2="233" stroke="#cbd5e1" stroke-dasharray="6 5"/><line x1="115" y1="298" x2="490" y2="298" stroke="#cbd5e1" stroke-dasharray="6 5"/><line x1="115" y1="365" x2="490" y2="365" stroke="#cbd5e1" stroke-dasharray="6 5"/>
+  <!-- nível 0 e 1 -->
+  <circle cx="310" cy="160" r="16" fill="#a52a2a"/><g stroke="#172033" stroke-width="1.8"><line x1="310" y1="176" x2="220" y2="220"/><line x1="310" y1="176" x2="310" y2="220"/><line x1="310" y1="176" x2="400" y2="220"/></g>
+  <g fill="#ffe7a3" stroke="#c28c22" stroke-width="1.6"><circle cx="220" cy="233" r="14"/><circle cx="310" cy="233" r="14"/><circle cx="400" cy="233" r="14"/></g>
+  <!-- nível 2 -->
+  <g stroke="#172033" stroke-width="1.3"><line x1="220" y1="247" x2="175" y2="286"/><line x1="220" y1="247" x2="220" y2="286"/><line x1="220" y1="247" x2="265" y2="286"/><line x1="310" y1="247" x2="285" y2="286"/><line x1="310" y1="247" x2="310" y2="286"/><line x1="310" y1="247" x2="335" y2="286"/><line x1="400" y1="247" x2="355" y2="286"/><line x1="400" y1="247" x2="400" y2="286"/><line x1="400" y1="247" x2="445" y2="286"/></g>
+  <g fill="#dcecff" stroke="#6f91c8" stroke-width="1.4"><circle cx="175" cy="298" r="11"/><circle cx="220" cy="298" r="11"/><circle cx="265" cy="298" r="11"/><circle cx="285" cy="298" r="11"/><circle cx="310" cy="298" r="11"/><circle cx="335" cy="298" r="11"/><circle cx="355" cy="298" r="11"/><circle cx="400" cy="298" r="11"/><circle cx="445" cy="298" r="11"/></g>
+  <!-- nível 3 representado como 27 pontos -->
+  <g fill="#dff0c8" stroke="#7da24f" stroke-width="1">
+    <circle cx="145" cy="365" r="6"/><circle cx="158" cy="365" r="6"/><circle cx="171" cy="365" r="6"/><circle cx="184" cy="365" r="6"/><circle cx="197" cy="365" r="6"/><circle cx="210" cy="365" r="6"/><circle cx="223" cy="365" r="6"/><circle cx="236" cy="365" r="6"/><circle cx="249" cy="365" r="6"/><circle cx="262" cy="365" r="6"/><circle cx="275" cy="365" r="6"/><circle cx="288" cy="365" r="6"/><circle cx="301" cy="365" r="6"/><circle cx="314" cy="365" r="6"/><circle cx="327" cy="365" r="6"/><circle cx="340" cy="365" r="6"/><circle cx="353" cy="365" r="6"/><circle cx="366" cy="365" r="6"/><circle cx="379" cy="365" r="6"/><circle cx="392" cy="365" r="6"/><circle cx="405" cy="365" r="6"/><circle cx="418" cy="365" r="6"/><circle cx="431" cy="365" r="6"/><circle cx="444" cy="365" r="6"/><circle cx="457" cy="365" r="6"/><circle cx="470" cy="365" r="6"/><circle cx="483" cy="365" r="6"/>
+  </g>
+  <text x="314" y="405" text-anchor="middle" class="t h" font-size="14">27 estados apenas no nível 3</text>
+
+  <rect x="552" y="104" width="380" height="320" rx="22" fill="#fff" stroke="#dfe5ef"/>
+  <rect x="575" y="132" width="210" height="224" rx="14" fill="#fff" stroke="#dfe5ef"/>
+  <rect x="575" y="132" width="210" height="42" rx="14" fill="#a52a2a"/><text x="625" y="158" text-anchor="middle" fill="#fff" font-family="Arial" font-weight="800" font-size="13">Profundidade</text><text x="730" y="158" text-anchor="middle" fill="#fff" font-family="Arial" font-weight="800" font-size="13">Estados</text>
+  <g class="t" font-size="15" text-anchor="middle"><text x="625" y="198">0</text><text x="730" y="198">1</text><text x="625" y="236">1</text><text x="730" y="236">3</text><text x="625" y="274">2</text><text x="730" y="274">9</text><text x="625" y="312">3</text><text x="730" y="312">27</text><text x="625" y="350">4</text><text x="730" y="350">81</text></g>
+  <g stroke="#dfe5ef"><line x1="575" y1="212" x2="785" y2="212"/><line x1="575" y1="250" x2="785" y2="250"/><line x1="575" y1="288" x2="785" y2="288"/><line x1="575" y1="326" x2="785" y2="326"/><line x1="680" y1="174" x2="680" y2="356"/></g>
+  <rect x="804" y="132" width="105" height="104" rx="14" fill="#fff9e9" stroke="#ead8ad"/><text x="856" y="157" text-anchor="middle" class="t h" font-size="12">Mais sucessores</text><text x="856" y="178" text-anchor="middle" class="t m" font-size="11">→ fronteira</text><text x="856" y="196" text-anchor="middle" class="t m" font-size="11">maior</text>
+  <rect x="804" y="252" width="105" height="104" rx="14" fill="#f1f5ff" stroke="#b6c6ef"/><text x="856" y="277" text-anchor="middle" class="t h" font-size="12">Solução mais</text><text x="856" y="298" text-anchor="middle" class="t m" font-size="11">profunda → mais</text><text x="856" y="316" text-anchor="middle" class="t m" font-size="11">exploração possível</text>
+  <text x="742" y="392" text-anchor="middle" class="t m" font-size="13">O crescimento pode ser exponencial.</text>
+
+  <rect x="70" y="455" width="820" height="60" rx="18" fill="#fff" stroke="#a52a2a" stroke-width="2"/>
+  <text x="205" y="482" text-anchor="middle" class="r h" font-size="17">BFS</text><text x="315" y="482" text-anchor="middle" class="t m" font-size="13">costuma sofrer mais com memória</text>
+  <text x="590" y="482" text-anchor="middle" fill="#3157d5" font-family="Inter,Arial" font-weight="800" font-size="17">DFS</text><text x="740" y="482" text-anchor="middle" class="t m" font-size="13">pode ir fundo, mas não garante o caminho mais curto</text>
+  <text x="480" y="505" text-anchor="middle" class="t h" font-size="14">Compare solução, estados expandidos e memória.</text>
+</svg>
