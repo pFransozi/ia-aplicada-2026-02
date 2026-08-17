@@ -402,6 +402,113 @@
     section.dataset.adjusted = 'true';
   };
 
+  const improveAula02AprofundamentoAgents = () => {
+    if (!isAula02Aprofundamento()) return;
+
+    const section = document.querySelector('#agentes');
+    if (!section || section.dataset.adjusted === 'true') return;
+
+    const heading = section.querySelector('.study-heading');
+    const title = heading?.querySelector('h2');
+    const intro = heading?.querySelector(':scope > p:last-child');
+    if (title) title.textContent = 'Agentes: perceber, decidir e agir';
+    if (intro) intro.textContent = 'A perspectiva de agentes permite analisar um sistema observando o ambiente em que ele opera, o que consegue perceber, que ações pode executar e segundo qual critério seu comportamento será avaliado.';
+
+    const firstFigure = section.querySelector(':scope > .container > .figure-light');
+    if (firstFigure && !firstFigure.previousElementSibling?.classList.contains('agents-framing')) {
+      const framing = document.createElement('div');
+      framing.className = 'study-prose agents-framing';
+      framing.innerHTML = `
+        <h3>Diferentes formas de produzir comportamento</h3>
+        <p>Um sistema pode produzir comportamento por procedimentos determinísticos, regras explícitas, mecanismos de busca, modelos aprendidos ou combinações dessas estratégias. A perspectiva de <strong>agentes</strong> oferece outra forma de analisar a solução: em vez de perguntar apenas qual técnica foi utilizada, observamos como o sistema percebe o ambiente, mantém informações relevantes, escolhe ações e é avaliado.</p>
+      `;
+      firstFigure.before(framing);
+    }
+
+    const prose = section.querySelector(':scope > .container > .study-prose:not(.agents-framing)');
+    if (!prose) return;
+
+    prose.innerHTML = `
+      <h3>Agentes e ambientes</h3>
+      <p>Um <strong>agente</strong> é uma entidade que pode ser analisada como percebendo um ambiente e atuando sobre ele. Em um robô, sensores podem incluir câmeras e sensores de distância, enquanto atuadores podem ser motores. Em software, percepções podem chegar por arquivos, mensagens, APIs, eventos ou entradas do usuário, e as ações podem envolver escrever dados, enviar mensagens, chamar serviços ou produzir recomendações.</p>
+      <p>A ideia de agente é uma <strong>abstração para estudar comportamento</strong>, não uma tecnologia específica. Um agente pode ser muito simples ou combinar representação, busca, planejamento, aprendizagem e outras técnicas de IA.</p>
+
+      <figure class="figure-light">
+        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-07.webp" alt="Ciclo básico de interação de um agente">
+        <figcaption>Ambiente, percepções, agente, ações e novo estado do ambiente formam um ciclo contínuo.</figcaption>
+      </figure>
+
+      <h3>Percepção, estado, decisão e desempenho</h3>
+      <p>Entre perceber e agir, diferentes arquiteturas podem utilizar informações diferentes. Um agente simples pode responder diretamente à percepção atual; outros mantêm um <strong>estado interno</strong> para representar aspectos do ambiente que não estão imediatamente observáveis. Arquiteturas mais elaboradas podem ainda representar <strong>objetivos</strong>, prever consequências ou comparar alternativas segundo uma função de <strong>utilidade</strong>.</p>
+      <p>Independentemente da arquitetura interna, é necessário definir externamente como o comportamento será avaliado. Essa <strong>medida de desempenho</strong> permite analisar se as ações produzidas pelo agente são adequadas ao ambiente e à tarefa.</p>
+
+      <figure class="figure-light">
+        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-08.webp" alt="Estudo de caso de um aspirador robô como agente">
+        <figcaption>O aspirador robô ajuda a visualizar ambiente, percepções, estado, ações e critérios de desempenho.</figcaption>
+      </figure>
+
+      <h3>Racionalidade não significa perfeição</h3>
+      <p>Um agente racional não precisa conhecer o futuro nem produzir sempre o melhor resultado possível. Ele deve escolher a ação que, considerando as informações disponíveis, seu conhecimento, as ações que pode executar e a medida de desempenho definida, apresenta a melhor expectativa de resultado.</p>
+      <p>Uma decisão pode ser racional e ainda produzir um resultado ruim quando existe incerteza ou informação incompleta. Além disso, racionalidade perfeita frequentemente é inviável por limitações de tempo, memória e capacidade computacional.</p>
+
+      <h3>PEAS: especificando o ambiente de tarefa</h3>
+      <p>Uma forma clássica de descrever o problema de um agente é o modelo <strong>PEAS</strong>, formado por medida de desempenho, ambiente, atuadores e sensores. Em sistemas de software, sensores e atuadores não precisam ser dispositivos físicos: APIs, filas, arquivos e entradas de usuário podem funcionar como sensores, enquanto chamadas de API, gravações, notificações e comandos podem funcionar como atuadores.</p>
+      <div class="study-table-wrap">
+        <table class="study-table">
+          <thead><tr><th>Elemento</th><th>Pergunta de projeto</th><th>Exemplo: triagem de incidentes</th></tr></thead>
+          <tbody>
+            <tr><td>Medida de desempenho</td><td>Como saberemos se o agente funciona bem?</td><td>Tempo de resposta, encaminhamento correto e redução de retrabalho.</td></tr>
+            <tr><td>Ambiente</td><td>Em que contexto o sistema opera?</td><td>Fila de incidentes, serviços, usuários, políticas e estado da infraestrutura.</td></tr>
+            <tr><td>Atuadores</td><td>Por quais mecanismos o agente pode agir?</td><td>Classificar, priorizar, abrir tarefa, chamar serviço ou solicitar confirmação.</td></tr>
+            <tr><td>Sensores</td><td>Por quais mecanismos recebe informações?</td><td>Título, descrição, logs, métricas, mensagens e contexto do serviço.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Arquiteturas clássicas de agentes</h3>
+      <div class="study-table-wrap">
+        <table class="study-table">
+          <thead><tr><th>Arquitetura</th><th>Ideia central</th><th>Quando é útil</th></tr></thead>
+          <tbody>
+            <tr><td>Reativo simples</td><td>Decide diretamente com base na percepção atual por regras condição e ação.</td><td>Ambientes simples, bem observáveis e com respostas locais.</td></tr>
+            <tr><td>Reativo baseado em modelo</td><td>Mantém estado interno e um modelo para lidar com aspectos não observáveis diretamente.</td><td>Monitoramento, navegação e diagnóstico com informação incompleta.</td></tr>
+            <tr><td>Orientado a objetivos</td><td>Considera estados futuros e escolhe ações que possam conduzir a um objetivo.</td><td>Busca, planejamento de tarefas e rotas.</td></tr>
+            <tr><td>Orientado a utilidade</td><td>Compara alternativas segundo preferências, custos e benefícios.</td><td>Decisões com trade-offs, incerteza ou objetivos concorrentes.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Aprendizagem pode atravessar todas essas arquiteturas</h3>
+      <p><strong>Aprender não define uma arquitetura isolada de agente.</strong> Um agente baseado em modelo pode aprender seu modelo; um agente orientado a objetivos pode aprender informações relevantes para alcançar objetivos; e um agente orientado a utilidade pode aprender sobre resultados ou preferências. A aprendizagem é uma capacidade que pode modificar diferentes componentes do sistema para melhorar seu desempenho.</p>
+
+      <h3>Autonomia é uma propriedade gradual</h3>
+      <p>Autonomia não significa ausência de regras, limites ou intervenção humana. Ela indica em que medida o comportamento do agente pode depender de suas próprias percepções, estado e experiência, em vez de resultar exclusivamente de decisões previamente especificadas pelo projetista. Em sistemas reais, autonomia precisa ser compatível com permissões, supervisão e mecanismos de contenção.</p>
+
+      <h3>O ambiente condiciona a arquitetura</h3>
+      <p>Não existe uma arquitetura de agente ideal independentemente do ambiente. Características do ambiente determinam que informações precisam ser mantidas e que mecanismos de decisão são adequados.</p>
+      <div class="study-table-wrap">
+        <table class="study-table">
+          <thead><tr><th>Propriedade</th><th>Contraste</th><th>Impacto no projeto</th></tr></thead>
+          <tbody>
+            <tr><td>Observabilidade</td><td>Total ou parcial</td><td>Ambientes parcialmente observáveis podem exigir estado interno e inferência.</td></tr>
+            <tr><td>Agentes envolvidos</td><td>Agente único ou multiagente</td><td>Outros agentes podem cooperar, competir ou alterar o ambiente.</td></tr>
+            <tr><td>Previsibilidade</td><td>Determinístico ou não determinístico</td><td>Incerteza pode exigir comparação de riscos e resultados esperados.</td></tr>
+            <tr><td>Dependência temporal</td><td>Episódico ou sequencial</td><td>Decisões sequenciais precisam considerar consequências futuras.</td></tr>
+            <tr><td>Mudança durante a decisão</td><td>Estático ou dinâmico</td><td>Ambientes dinâmicos podem exigir atualização contínua e replanejamento.</td></tr>
+            <tr><td>Representação de estados e ações</td><td>Discreto ou contínuo</td><td>Afeta modelos, algoritmos e formas de controle.</td></tr>
+            <tr><td>Conhecimento do ambiente</td><td>Conhecido ou desconhecido</td><td>Ambientes desconhecidos podem exigir exploração e aprendizagem.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>LLM não é sinônimo de agente</h3>
+      <p>Um modelo de linguagem pode participar do mecanismo de decisão de um agente, mas <strong>o agente é o sistema completo</strong>. Para analisá-lo precisamos identificar ambiente, entradas, estado, objetivos ou critérios de desempenho, ações disponíveis e mecanismos de controle.</p>
+      <p>Em sistemas atuais, isso pode incluir um LLM, memória, bancos de dados, mecanismos de busca, APIs, ferramentas, regras de autorização e componentes tradicionais de software. O modelo é um componente possível da arquitetura, não a definição de agente.</p>
+    `;
+
+    section.dataset.adjusted = 'true';
+  };
+
   const applyPageAdjustments = () => {
     if (isAula02()) {
       simplifyAiDecision();
@@ -416,6 +523,7 @@
     improveAula02AprofundamentoGeneralMethods();
     improveAula02AprofundamentoExpertSystems();
     improveAula02AprofundamentoLearning();
+    improveAula02AprofundamentoAgents();
   };
 
   applyPageAdjustments();
