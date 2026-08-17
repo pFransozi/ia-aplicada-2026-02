@@ -1,0 +1,110 @@
+.lesson-figure {
+  margin: 2rem 0 0;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.lesson-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+}
+
+.lesson-figure figcaption {
+  padding: .8rem 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: .82rem;
+  background: var(--paper);
+}
+
+.concept-callout {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 1rem;
+  align-items: start;
+  margin: 0 0 1.7rem;
+  padding: 1.15rem 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--blue-soft), var(--paper));
+}
+
+.concept-callout .concept-icon {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.concept-callout h3 {
+  margin: .05rem 0 .45rem;
+  font-size: 1.25rem;
+}
+
+.concept-callout p { margin: 0; }
+
+.criteria-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 0 0 1.7rem;
+}
+
+.criteria-card {
+  min-height: 155px;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--paper);
+}
+
+.criteria-card small {
+  display: block;
+  margin-bottom: .7rem;
+  color: var(--blue);
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.criteria-card h3 { margin-bottom: .45rem; }
+.criteria-card p { margin: 0; font-size: .9rem; }
+
+.cost-split {
+  margin: 1.5rem 0 0;
+  padding: 1rem 1.1rem;
+  border: 1px solid #efd5a7;
+  border-radius: 15px;
+  background: var(--amber-soft);
+  color: var(--muted);
+}
+
+.cost-split strong { color: var(--amber); }
+
+body.theme-dark .lesson-figure {
+  border-color: var(--line);
+  box-shadow: 0 18px 48px rgba(0,0,0,.26);
+}
+
+body.theme-dark .lesson-figure figcaption { background: #172033; }
+body.theme-dark .concept-callout { background: linear-gradient(135deg,#111a2b,#172033); }
+body.theme-dark .criteria-card { background: #172033; }
+
+@media (max-width: 1000px) {
+  .criteria-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .criteria-grid { grid-template-columns: 1fr; }
+  .concept-callout { grid-template-columns: 1fr; }
+  .lesson-figure { border-radius: 16px; }
+}
