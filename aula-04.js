@@ -10,14 +10,12 @@
 
         <div class="search-mode-grid">
           <article class="search-mode-card search-mode-uninformed">
-            <span class="search-mode-label">Foco desta aula</span>
             <h4>Busca não informada</h4>
             <p>O algoritmo sabe <strong>onde começar</strong>, quais <strong>ações</strong> pode realizar e como reconhecer o <strong>objetivo</strong>, mas não possui pistas sobre qual caminho parece mais promissor. Por isso, explora as possibilidades seguindo apenas a regra usada para organizar os estados que ainda precisam ser examinados.</p>
             <small>BFS e DFS são exemplos desse tipo de busca.</small>
           </article>
 
           <article class="search-mode-card search-mode-informed">
-            <span class="search-mode-label">Contraponto</span>
             <h4>Busca informada</h4>
             <p>Além de conhecer o problema, o algoritmo dispõe de uma <strong>estimativa</strong> que ajuda a indicar quais estados parecem mais promissores em relação ao objetivo. Essa informação orienta a exploração e pode reduzir a quantidade de alternativas examinadas.</p>
             <small>Veremos depois como heurísticas fornecem essa orientação.</small>
