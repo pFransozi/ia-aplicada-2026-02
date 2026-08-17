@@ -241,6 +241,16 @@
       paragraph.innerHTML = html;
       nextHeading.before(paragraph);
     });
+
+    nextHeading.textContent = '1956: Dartmouth e a consolidação da Inteligência Artificial';
+    const dartmouthParagraph = nextHeading.nextElementSibling;
+    if (dartmouthParagraph?.tagName === 'P') {
+      dartmouthParagraph.innerHTML = 'Em 1956, o <em>Dartmouth Summer Research Project on Artificial Intelligence</em> reuniu pesquisadores como <strong>John McCarthy, Marvin Minsky, Nathaniel Rochester e Claude Shannon</strong> em torno de um programa explícito para investigar máquinas inteligentes. O encontro ajudou a consolidar a expressão <em>artificial intelligence</em> e a dar identidade a uma comunidade de pesquisa.';
+
+      const synthesis = document.createElement('p');
+      synthesis.innerHTML = 'A proposta abrangia temas como linguagem, abstração, aprendizagem, redes neurais e raciocínio. Dartmouth não criou do zero a ideia de máquinas inteligentes; seu papel histórico foi organizar questões já em desenvolvimento em uma agenda comum. Nas décadas seguintes, representação simbólica, raciocínio e busca se tornariam linhas centrais da área.';
+      dartmouthParagraph.after(synthesis);
+    }
   };
 
   const applyPageAdjustments = () => {
