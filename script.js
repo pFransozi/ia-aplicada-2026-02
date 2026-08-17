@@ -253,6 +253,25 @@
     }
   };
 
+  const improveAula02AprofundamentoSearchRepresentation = () => {
+    if (!isAula02Aprofundamento()) return;
+
+    const heading = [...document.querySelectorAll('#simbolica .study-prose h3')]
+      .find((item) => item.textContent.trim() === 'Representação, espaço de busca e heurística');
+    if (!heading || heading.dataset.adjusted === 'true') return;
+
+    const firstParagraph = heading.nextElementSibling;
+    if (!firstParagraph || firstParagraph.tagName !== 'P') return;
+
+    firstParagraph.innerHTML = 'Antes que um sistema possa procurar uma solução, o problema precisa ser <strong>representado computacionalmente</strong>. Isso exige decidir quais características da situação são relevantes e como serão descritas. Em problemas de busca, essa representação costuma identificar <strong>estados</strong>, um estado inicial, condições de objetivo e <strong>ações ou operadores</strong> capazes de transformar um estado em outro. Representar um problema é, portanto, escolher o que será considerado pelo processo de solução — e também o que ficará de fora.';
+
+    const secondParagraph = document.createElement('p');
+    secondParagraph.innerHTML = 'A aplicação sucessiva desses operadores produz diferentes configurações possíveis, formando um <strong>espaço de busca</strong>. Em problemas pequenos, pode ser possível explorar grande parte desse espaço; em problemas maiores, o número de alternativas pode crescer rapidamente. Nesse contexto, uma <strong>heurística</strong> fornece informação adicional para estimar quais estados ou caminhos parecem mais promissores, direcionando a busca sem exigir que todas as possibilidades sejam examinadas.';
+    firstParagraph.after(secondParagraph);
+
+    heading.dataset.adjusted = 'true';
+  };
+
   const applyPageAdjustments = () => {
     if (isAula02()) {
       simplifyAiDecision();
@@ -263,6 +282,7 @@
     }
 
     improveAula02AprofundamentoHistory();
+    improveAula02AprofundamentoSearchRepresentation();
   };
 
   applyPageAdjustments();
