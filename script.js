@@ -2,6 +2,13 @@ const navToggle = document.querySelector('.nav-toggle');
 const mainNav = document.querySelector('.main-nav');
 const themeToggle = document.querySelector('.theme-toggle');
 
+document.querySelectorAll('a[href="#inicio"]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
 const removeDuplicateRussellNorvigReference = () => {
   if (!window.location.pathname.endsWith('aula-02-aprofundamento.html')) return;
 
