@@ -34,6 +34,7 @@
         <a href="#busca">Busca</a>
         <a href="#bfs">BFS</a>
         <a href="#dfs">DFS</a>
+        <a href="#fechamento">Checklist</a>
         <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
           <span class="theme-icon" aria-hidden="true">☾</span>
           <span class="theme-text">Modo noturno</span>
@@ -115,6 +116,7 @@
           <a href="#bfs"><strong>Executar BFS</strong></a>
           <a href="#dfs"><strong>Executar DFS</strong></a>
           <a href="#simulador"><strong>Comparar estratégias</strong></a>
+          <a href="#fechamento"><strong>Revisar pontos-chave</strong></a>
         </div>
       </div>
     </section>
@@ -369,6 +371,26 @@
 
         <div class="note-banner warning">
           <strong>Compare:</strong> execute BFS até o fim, reinicie e execute DFS. O grafo não mudou; apenas a estratégia de escolha do próximo estado.
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="fechamento">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Checklist de saída</p>
+          <h2>O que precisa estar claro ao final da aula</h2>
+          <p>Use esta lista como uma revisão rápida dos conceitos que você precisa levar desta aula.</p>
+        </div>
+        <div class="knowledge-grid">
+          <label class="knowledge-item"><input type="checkbox" data-persist="c1"><span class="knowledge-content"><strong>Espaço de estados × fronteira</strong><span>Consigo explicar a diferença entre a representação do problema e a estrutura mantida pelo algoritmo.</span></span></label>
+          <label class="knowledge-item"><input type="checkbox" data-persist="c2"><span class="knowledge-content"><strong>Ciclo da busca</strong><span>Consigo descrever retirar → testar → expandir → inserir sucessores.</span></span></label>
+          <label class="knowledge-item"><input type="checkbox" data-persist="c3"><span class="knowledge-content"><strong>Fila × pilha</strong><span>Consigo explicar por que BFS usa fila e DFS usa pilha.</span></span></label>
+          <label class="knowledge-item"><input type="checkbox" data-persist="c4"><span class="knowledge-content"><strong>Execução manual</strong><span>Consigo executar BFS e DFS em um grafo pequeno.</span></span></label>
+          <label class="knowledge-item"><input type="checkbox" data-persist="c5"><span class="knowledge-content"><strong>Estados visitados</strong><span>Consigo explicar por que ciclos exigem controle de estados repetidos.</span></span></label>
+          <label class="knowledge-item"><input type="checkbox" data-persist="c6"><span class="knowledge-content"><strong>Comparação</strong><span>Consigo comparar BFS e DFS usando evidências da execução.</span></span></label>
+          <label class="knowledge-item"><input type="checkbox" data-persist="c7"><span class="knowledge-content"><strong>Busca não informada</strong><span>Consigo explicar por que BFS e DFS não usam estimativas sobre qual estado está mais próximo do objetivo.</span></span></label>
+          <label class="knowledge-item"><input type="checkbox" data-persist="c8"><span class="knowledge-content"><strong>Solução × esforço de busca</strong><span>Consigo distinguir profundidade/custo da solução de estados expandidos e memória usada pela busca.</span></span></label>
         </div>
       </div>
     </section>
