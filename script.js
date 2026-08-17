@@ -110,12 +110,107 @@
     document.head.appendChild(style);
   };
 
+  const improveLightMode = () => {
+    if (document.getElementById('aula02-light-mode-adjustments')) return;
+
+    const style = document.createElement('style');
+    style.id = 'aula02-light-mode-adjustments';
+    style.textContent = `
+      /* O modo claro deve permanecer claro também nos blocos de destaque. */
+      body:not(.theme-dark) #aquecimento .warmup {
+        background: linear-gradient(135deg, #f6f8ff 0%, #eef6fb 100%);
+        border: 1px solid #dce4f1;
+        box-shadow: 0 14px 32px rgba(35, 50, 78, .06);
+        color: var(--ink);
+      }
+
+      body:not(.theme-dark) #aquecimento .warmup p {
+        color: var(--muted);
+      }
+
+      body:not(.theme-dark) #aquecimento .warmup .eyebrow {
+        color: var(--blue) !important;
+      }
+
+      body:not(.theme-dark) #aquecimento .question-cloud div {
+        background: rgba(255, 255, 255, .86);
+        border-color: #dce4f1;
+        color: var(--ink);
+      }
+
+      body:not(.theme-dark) #aplicacoes.section-dark {
+        background: var(--soft);
+        color: var(--ink);
+      }
+
+      body:not(.theme-dark) #aplicacoes.section-dark p {
+        color: var(--muted);
+      }
+
+      body:not(.theme-dark) #aplicacoes.section-dark .eyebrow {
+        color: var(--blue);
+      }
+
+      body:not(.theme-dark) #aplicacoes .application-card {
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: 0 12px 28px rgba(35, 50, 78, .055);
+        color: var(--ink);
+      }
+
+      body:not(.theme-dark) #aplicacoes .application-card p {
+        color: var(--muted);
+      }
+
+      body:not(.theme-dark) #aplicacoes .application-card span {
+        color: var(--blue);
+      }
+
+      body:not(.theme-dark) #riscos .big-question {
+        background: linear-gradient(135deg, var(--blue-soft), var(--violet-soft));
+        border: 1px solid #cbd6ff;
+        box-shadow: 0 12px 28px rgba(49, 87, 213, .06);
+        color: var(--ink);
+      }
+
+      body:not(.theme-dark) .protocol article {
+        background: #ffffff;
+        border-color: var(--line);
+        color: var(--ink);
+      }
+
+      body:not(.theme-dark) .protocol h3 {
+        color: var(--ink);
+      }
+
+      body:not(.theme-dark) .protocol article::before {
+        color: var(--blue);
+      }
+
+      body:not(.theme-dark) .site-footer {
+        background: #ffffff;
+        border-top: 1px solid var(--line);
+        color: var(--ink);
+      }
+
+      body:not(.theme-dark) .site-footer p {
+        color: var(--muted);
+      }
+
+      body:not(.theme-dark) .site-footer a {
+        color: var(--blue);
+      }
+    `;
+    document.head.appendChild(style);
+  };
+
   const applyAula02Adjustments = () => {
     if (!isAula02()) return;
     simplifyAiDecision();
     simplifyContemporaryApplication();
     removeKnowledgeExit();
     improveDarkAgentDiagram();
+    improveLightMode();
   };
 
   applyAula02Adjustments();
