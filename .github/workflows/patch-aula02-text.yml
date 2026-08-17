@@ -1,0 +1,50 @@
+name: Patch Aula 02 text
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-aula02-text.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Update Aula 02 aprofundamento text
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('aula-02-aprofundamento.html')
+          text = path.read_text(encoding='utf-8')
+
+          old = '''            <p>Uma forma clássica de organizar o campo distingue sistemas interessados em <strong>pensar como humanos</strong>, <strong>agir como humanos</strong>, <strong>pensar racionalmente</strong> ou <strong>agir racionalmente</strong>. Essas perspectivas levam a critérios de avaliação diferentes e ajudam a evitar a ideia de que inteligência artificial significa apenas imitar uma pessoa.</p>
+            <p>Ao longo da história, sistemas de IA foram construídos com lógica, busca, heurísticas, representação do conhecimento, probabilidades, redes neurais, métodos evolucionários e combinações dessas abordagens. Um sistema também não precisa aprender continuamente, conversar como uma pessoa ou possuir consciência para pertencer ao campo.</p>'''
+
+          new = '''            <p>Não existe uma única maneira de definir o que torna um sistema “inteligente”. Uma organização clássica do campo parte de duas perguntas: <strong>queremos reproduzir capacidades humanas ou alcançar um critério de racionalidade?</strong> E estamos interessados nos <strong>processos de pensamento</strong> ou no <strong>comportamento produzido</strong>? Da combinação dessas duas dimensões surgem quatro perspectivas: <strong>pensar como humanos, agir como humanos, pensar racionalmente e agir racionalmente</strong>. Cada uma delas enfatiza problemas diferentes e, por isso, também utiliza critérios diferentes para avaliar um sistema.</p>
+            <p>Essa diversidade ajuda a entender por que <strong>Inteligência Artificial não corresponde a uma técnica específica</strong>. Ao longo da história, diferentes problemas foram abordados com representação do conhecimento, lógica, busca, heurísticas, probabilidade, redes neurais, métodos evolucionários e combinações dessas estratégias. Algumas abordagens procuram reproduzir aspectos do comportamento ou do raciocínio humano; outras buscam simplesmente produzir decisões eficazes diante de um objetivo. <strong>Aprender com dados é uma possibilidade importante, mas não é uma condição necessária para que um sistema pertença ao campo da IA.</strong></p>'''
+
+          count = text.count(old)
+          if count != 1:
+              raise SystemExit(f'Expected exactly one matching block, found {count}.')
+
+          path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+      - name: Commit change
+        shell: bash
+        run: |
+          if git diff --quiet -- aula-02-aprofundamento.html; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add aula-02-aprofundamento.html
+          git commit -m 'Revisa texto introdutório da Aula 02'
+          git push origin HEAD:main
