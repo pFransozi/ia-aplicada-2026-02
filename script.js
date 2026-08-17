@@ -51,11 +51,71 @@
     document.querySelector('#fechamento .knowledge-exit')?.remove();
   };
 
+  const improveDarkAgentDiagram = () => {
+    if (document.getElementById('aula02-dark-agent-adjustments')) return;
+
+    const style = document.createElement('style');
+    style.id = 'aula02-dark-agent-adjustments';
+    style.textContent = `
+      body.theme-dark #agentes .agent-flow {
+        background: #111827;
+        border-color: #2d3a54;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, .20);
+      }
+
+      body.theme-dark #agentes .agent-node {
+        background: #111a2b;
+        border-color: #33415e;
+        color: #f4f7ff;
+        box-shadow: none;
+      }
+
+      body.theme-dark #agentes .agent-node.interface {
+        background: #141f33;
+        border-color: #354665;
+      }
+
+      body.theme-dark #agentes .agent-core {
+        background: linear-gradient(145deg, #34466f, #4b4278);
+        border: 1px solid rgba(151, 165, 232, .20);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, .28);
+        color: #f8faff;
+      }
+
+      body.theme-dark #agentes .agent-core-steps span {
+        background: #293755;
+        border-color: #46577d;
+        color: #f4f7ff;
+      }
+
+      body.theme-dark #agentes .agent-arrow {
+        color: #7f99e8;
+      }
+
+      body.theme-dark #agentes .feedback-line {
+        background: linear-gradient(90deg, #4f7fc4, #7087dc);
+        opacity: .82;
+      }
+
+      body.theme-dark #agentes .feedback-arrow {
+        color: #5f8fd2;
+      }
+
+      body.theme-dark #agentes .agent-loop {
+        background: #111a2b;
+        border: 1px solid #28364f;
+        color: #9eacc2;
+      }
+    `;
+    document.head.appendChild(style);
+  };
+
   const applyAula02Adjustments = () => {
     if (!isAula02()) return;
     simplifyAiDecision();
     simplifyContemporaryApplication();
     removeKnowledgeExit();
+    improveDarkAgentDiagram();
   };
 
   applyAula02Adjustments();
