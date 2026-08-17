@@ -1,0 +1,508 @@
+const navToggle = document.querySelector('.nav-toggle');
+const mainNav = document.querySelector('.main-nav');
+const themeToggle = document.querySelector('.theme-toggle');
+
+document.querySelectorAll('a[href="#inicio"]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+const removeDuplicateRussellNorvigReference = () => {
+  if (!window.location.pathname.endsWith('aula-02-aprofundamento.html')) return;
+
+  document.querySelectorAll('#referencias .references li').forEach((item) => {
+    const text = item.textContent.replace(/\s+/g, ' ').trim();
+    if (
+      text.includes('RUSSELL, Stuart J.; NORVIG, Peter.') &&
+      text.includes('Inteligência Artificial') &&
+      text.includes('Elsevier, 2013')
+    ) {
+      item.remove();
+    }
+  });
+};
+
+removeDuplicateRussellNorvigReference();
+document.addEventListener('DOMContentLoaded', removeDuplicateRussellNorvigReference);
+window.addEventListener('load', removeDuplicateRussellNorvigReference);
+
+const applyTheme = (theme) => {
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('theme-dark', isDark);
+
+  document.querySelectorAll('[data-light-src][data-dark-src]').forEach((image) => {
+    const nextSrc = isDark ? image.dataset.darkSrc : image.dataset.lightSrc;
+    if (image.getAttribute('src') !== nextSrc) image.setAttribute('src', nextSrc);
+  });
+
+  if (themeToggle) {
+    themeToggle.setAttribute('aria-pressed', String(isDark));
+    themeToggle.setAttribute('aria-label', isDark ? 'Ativar modo claro' : 'Ativar modo noturno');
+    themeToggle.querySelector('.theme-icon').textContent = isDark ? '☀' : '☾';
+    themeToggle.querySelector('.theme-text').textContent = isDark ? 'Modo claro' : 'Modo noturno';
+  }
+};
+
+const savedTheme = localStorage.getItem('ia-aplicada-theme');
+applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+
+themeToggle?.addEventListener('click', () => {
+  const nextTheme = document.body.classList.contains('theme-dark') ? 'light' : 'dark';
+  localStorage.setItem('ia-aplicada-theme', nextTheme);
+  applyTheme(nextTheme);
+});
+
+if (navToggle && mainNav) {
+  navToggle.addEventListener('click', () => {
+    const open = mainNav.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  mainNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      mainNav.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+document.querySelectorAll('[data-dialog-target]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const dialog = document.getElementById(button.dataset.dialogTarget);
+    if (dialog?.showModal) dialog.showModal();
+  });
+
+  button.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    const dialog = document.getElementById(button.dataset.dialogTarget);
+    if (dialog?.showModal) dialog.showModal();
+  });
+});
+
+document.querySelectorAll('.image-dialog').forEach((dialog) => {
+  dialog.querySelector('.dialog-close')?.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+});
+
+const setupDeepDiveFigures = () => {
+  if (!window.location.pathname.endsWith('aula-02-aprofundamento.html')) return;
+
+  removeDuplicateRussellNorvigReference();
+
+  // Usa os PNGs originais em alta definição. Mantém compatibilidade com
+  // referências antigas em WebP que ainda estejam presentes no HTML.
+  const deepDiveImages = Array.from(
+    document.querySelectorAll('.study-page .figure-light img[src*="assets/aula-02-aprofundamento/"]')
+  );
+
+  deepDiveImages.forEach((image) => {
+    const currentSrc = image.getAttribute('src');
+    if (!currentSrc) return;
+
+    const lightSrc = currentSrc.replace(/\.webp$/i, '.png');
+    image.setAttribute('src', lightSrc);
+    image.dataset.lightSrc = lightSrc;
+
+    // Convenção já preparada para futuras versões noturnas:
+    // aula-02-aprofundamento-01-dark.png, ...-08-dark.png.
+    // O data-dark-src só é habilitado se o arquivo realmente existir,
+    // evitando imagens quebradas enquanto os arquivos dark não forem publicados.
+    const darkSrc = lightSrc.replace(/\.png$/i, '-dark.png');
+    const probe = new Image();
+
+    probe.onload = () => {
+      image.dataset.darkSrc = darkSrc;
+      if (document.body.classList.contains('theme-dark')) {
+        image.setAttribute('src', darkSrc);
+      }
+    };
+
+    probe.src = darkSrc;
+  });
+
+  const fundamentalsSection = document.querySelector('#fundamentos');
+  const fundamentalsGrid = fundamentalsSection?.querySelector('.study-grid');
+  const firstProse = fundamentalsGrid?.querySelector('.study-prose');
+  const firstFigure = firstProse?.querySelector('.figure-light');
+
+  if (fundamentalsGrid && firstProse && firstFigure) {
+    const continuation = document.createElement('div');
+    continuation.className = 'study-prose study-prose-continuation';
+
+    let nextNode = firstFigure.nextElementSibling;
+    while (nextNode) {
+      const nodeToMove = nextNode;
+      nextNode = nextNode.nextElementSibling;
+      continuation.appendChild(nodeToMove);
+    }
+
+    fundamentalsGrid.insertAdjacentElement('afterend', firstFigure);
+    firstFigure.classList.add('figure-featured');
+    firstFigure.insertAdjacentElement('afterend', continuation);
+  }
+
+  const style = document.createElement('style');
+  style.id = 'deep-dive-figure-enhancements';
+  style.textContent = `
+    .study-page .figure-featured {
+      width: 100%;
+      max-width: 1180px;
+      margin: 2.35rem auto 3rem;
+      padding: .75rem;
+    }
+
+    .study-page .study-prose-continuation {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .study-page .figure-light {
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .study-page .figure-light[data-zoomable="true"] {
+      cursor: zoom-in;
+    }
+
+    .study-page .figure-light[data-zoomable="true"]:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--primary) 48%, #d9e1ec);
+      box-shadow: 0 18px 42px rgba(30,50,80,.14);
+    }
+
+    .study-page .figure-light[data-zoomable="true"]:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--primary) 65%, white);
+      outline-offset: 5px;
+    }
+
+    .deep-dive-image-dialog {
+      width: min(96vw, 1600px);
+      max-width: none;
+      height: min(94vh, 1050px);
+      max-height: none;
+      padding: 0;
+      border: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0b1020;
+      box-shadow: 0 28px 80px rgba(0,0,0,.45);
+    }
+
+    .deep-dive-image-dialog::backdrop {
+      background: rgba(3,7,18,.82);
+      backdrop-filter: blur(5px);
+    }
+
+    .deep-dive-dialog-shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 3.25rem 1.25rem 1.25rem;
+      box-sizing: border-box;
+      overflow: auto;
+    }
+
+    .deep-dive-dialog-shell img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(94vh - 5rem);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 10px;
+    }
+
+    .deep-dive-dialog-close {
+      position: absolute;
+      top: .8rem;
+      right: .9rem;
+      width: 2.35rem;
+      height: 2.35rem;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 999px;
+      background: rgba(15,23,42,.82);
+      color: #fff;
+      font: inherit;
+      font-size: 1.35rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .deep-dive-dialog-close:hover {
+      background: rgba(30,41,59,.98);
+    }
+
+    @media (max-width: 680px) {
+      .study-page .figure-featured {
+        margin: 1.6rem auto 2.2rem;
+        padding: .45rem;
+      }
+
+      .deep-dive-image-dialog {
+        width: 98vw;
+        height: 92vh;
+        border-radius: 12px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  const dialog = document.createElement('dialog');
+  dialog.className = 'deep-dive-image-dialog';
+  dialog.setAttribute('aria-label', 'Visualização ampliada da figura');
+  dialog.innerHTML = `
+    <div class="deep-dive-dialog-shell">
+      <button class="deep-dive-dialog-close" type="button" aria-label="Fechar imagem ampliada">×</button>
+      <img alt="">
+    </div>
+  `;
+  document.body.appendChild(dialog);
+
+  const dialogImage = dialog.querySelector('img');
+  const closeButton = dialog.querySelector('.deep-dive-dialog-close');
+
+  const openFigure = (figure) => {
+    const image = figure.querySelector('img');
+    if (!image || !dialogImage) return;
+    dialogImage.src = image.currentSrc || image.src;
+    dialogImage.alt = image.alt || 'Figura ampliada';
+    dialog.showModal();
+  };
+
+  document.querySelectorAll('.study-page .figure-light').forEach((figure) => {
+    figure.dataset.zoomable = 'true';
+    figure.tabIndex = 0;
+    figure.setAttribute('role', 'button');
+    figure.setAttribute('aria-label', 'Ampliar figura');
+
+    figure.addEventListener('click', () => openFigure(figure));
+    figure.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      openFigure(figure);
+    });
+  });
+
+  closeButton?.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+};
+
+setupDeepDiveFigures();
+
+if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathname.endsWith('aula-03.html')) {
+  document.querySelector('#fechamento .knowledge-exit')?.remove();
+
+  const aula03ThemeStyle = document.createElement('style');
+  aula03ThemeStyle.id = 'aula03-theme-alignment';
+  aula03ThemeStyle.textContent = `
+    body.lesson-page:not(.theme-dark) #aquecimento .warmup {
+      background: linear-gradient(145deg, #ffffff, #f4f7ff);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      box-shadow: 0 18px 48px rgba(35, 50, 78, .08);
+    }
+    body.lesson-page:not(.theme-dark) #aquecimento .warmup p { color: var(--muted); }
+    body.lesson-page:not(.theme-dark) #aquecimento .question-cloud > div { background:#f7f9fd; border-color:var(--line); color:var(--ink); }
+    body.lesson-page:not(.theme-dark) #aquecimento .warmup-map-figure { background:#fff; border-color:var(--line); }
+    body.lesson-page:not(.theme-dark) #codigo.section-dark,
+    body.lesson-page:not(.theme-dark) #ponte.section-dark { background:var(--paper); color:var(--ink); }
+    body.lesson-page:not(.theme-dark) #codigo.section-dark p,
+    body.lesson-page:not(.theme-dark) #ponte.section-dark p { color:var(--muted); }
+    body.lesson-page:not(.theme-dark) #codigo.section-dark .eyebrow,
+    body.lesson-page:not(.theme-dark) #ponte.section-dark .eyebrow { color:var(--blue); }
+    body.lesson-page:not(.theme-dark) #codigo .code-note { background:#fff; border-color:var(--line); color:var(--ink); box-shadow:0 12px 30px rgba(35,50,78,.045); }
+    body.lesson-page:not(.theme-dark) #espaco .state-note { background:linear-gradient(145deg,#f8faff,#eef2ff); border:1px solid var(--line); color:var(--ink); box-shadow:0 12px 30px rgba(35,50,78,.05); }
+    body.lesson-page:not(.theme-dark) #espaco .state-note p,
+    body.lesson-page:not(.theme-dark) #espaco .state-note span { color:var(--muted); }
+    body.lesson-page:not(.theme-dark) #espaco .state-note-list > div { border-bottom-color:var(--line); }
+    body.lesson-page:not(.theme-dark) #ponte .bridge { background:linear-gradient(135deg,#f5f7ff,#edf2ff); border:1px solid #d7e0fb; color:var(--ink); box-shadow:0 12px 30px rgba(35,50,78,.05); }
+    body.lesson-page:not(.theme-dark) #ponte .bridge p { color:var(--muted); }
+    body.lesson-page:not(.theme-dark) #ponte .bridge-arrow { color:var(--blue); }
+  `;
+  document.head.appendChild(aula03ThemeStyle);
+
+  const lessonAdjustments = document.createElement('script');
+  lessonAdjustments.src = 'aula-03-ajustes.js';
+  lessonAdjustments.async = false;
+
+  lessonAdjustments.addEventListener('load', () => {
+    const lessonRefinement = document.createElement('script');
+    lessonRefinement.src = 'aula-03-refino.js';
+    lessonRefinement.async = false;
+
+    lessonRefinement.addEventListener('load', () => {
+      const representationRefinement = document.createElement('script');
+      representationRefinement.src = 'aula-03-representacao.js';
+      representationRefinement.async = false;
+      representationRefinement.addEventListener('load', () => {
+        const validationRefinement = document.createElement('script');
+        validationRefinement.src = 'aula-03-validacao.js';
+        validationRefinement.async = false;
+        document.head.appendChild(validationRefinement);
+      });
+      document.head.appendChild(representationRefinement);
+    });
+
+    document.head.appendChild(lessonRefinement);
+  });
+
+  document.head.appendChild(lessonAdjustments);
+}
+
+const simplifyAula02GroupMap = () => {
+  const isAula02 = window.location.pathname.endsWith('/aula-02.html') || window.location.pathname.endsWith('aula-02.html');
+  if (!isAula02) return;
+
+  const section = document.querySelector('.group-map[aria-labelledby="group-map-title"]');
+  if (!section || section.dataset.simplified === 'true') return;
+
+  const head = section.querySelector('.group-map-head');
+  const eyebrow = head?.querySelector('.eyebrow');
+  const description = head?.querySelector('p:not(.eyebrow)');
+
+  if (eyebrow) eyebrow.textContent = 'Questões para investigação';
+  if (description) {
+    description.textContent = 'Investigue o funcionamento do sistema escolhido e prepare respostas curtas, específicas e sustentadas por evidências do caso.';
+  }
+
+  section.querySelector('.group-map-grid')?.remove();
+  section.querySelector('.group-conclusion')?.remove();
+
+  const questions = [
+    ['1. Objetivo', 'Que resultado o sistema procura alcançar?'],
+    ['2. Ambiente', 'Em que contexto o sistema opera e com quais elementos interage?'],
+    ['3. Percepções', 'Que informações o sistema recebe sobre o ambiente?'],
+    ['4. Estado ou conhecimento', 'O que o sistema precisa representar, manter ou considerar para tomar decisões?'],
+    ['5. Decisão', 'Como o sistema seleciona uma resposta ou ação?'],
+    ['6. Ações', 'O que o sistema produz ou executa e como isso afeta o ambiente?'],
+    ['7. Critério de desempenho', 'Como podemos saber se o agente está funcionando adequadamente?'],
+    ['8. Mecanismos utilizados', 'O sistema utiliza regras, busca, aprendizagem, otimização ou uma combinação desses mecanismos? Justifique.'],
+    ['9. Síntese do ciclo', 'Como você resumiria o ciclo completo do sistema, conectando percepções, ambiente, estado ou conhecimento, decisão, objetivo e critério de desempenho?'],
+    ['10. Situação de falha', 'Qual percepção incorreta, incompleta ou desatualizada poderia produzir uma decisão inadequada? Qual seria a consequência e como o risco poderia ser reduzido?']
+  ];
+
+  const list = document.createElement('div');
+  list.className = 'investigation-question-grid';
+
+  questions.forEach(([title, question]) => {
+    const article = document.createElement('article');
+    article.className = 'investigation-question';
+
+    const heading = document.createElement('h4');
+    heading.textContent = title;
+
+    const text = document.createElement('p');
+    text.textContent = question;
+
+    article.append(heading, text);
+    list.appendChild(article);
+  });
+
+  section.appendChild(list);
+  section.dataset.simplified = 'true';
+
+  if (!document.getElementById('aula02-investigation-questions-style')) {
+    const style = document.createElement('style');
+    style.id = 'aula02-investigation-questions-style';
+    style.textContent = `
+      .investigation-question-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 1.5rem;
+      }
+
+      .investigation-question {
+        padding: 1.2rem 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        background: var(--paper);
+        box-shadow: 0 10px 26px rgba(35, 50, 78, .045);
+      }
+
+      .investigation-question h4 {
+        margin: 0 0 .5rem;
+        font-size: 1rem;
+        color: var(--ink);
+      }
+
+      .investigation-question p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      @media (max-width: 760px) {
+        .investigation-question-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+};
+
+simplifyAula02GroupMap();
+document.addEventListener('DOMContentLoaded', simplifyAula02GroupMap);
+
+const simplifyAula02AiDecision = () => {
+  const isAula02 = window.location.pathname.endsWith('/aula-02.html') || window.location.pathname.endsWith('aula-02.html');
+  if (!isAula02) return;
+
+  const inquiry = [...document.querySelectorAll('#problemas .inquiry')]
+    .find((item) => item.querySelector('h3')?.textContent.trim() === 'Este problema realmente precisa de IA?');
+
+  if (!inquiry || inquiry.dataset.simplified === 'true') return;
+
+  const body = inquiry.querySelector('.inquiry-body');
+  if (!body) return;
+
+  body.querySelector('.worksheet')?.remove();
+  body.classList.add('inquiry-body-single');
+
+  const content = body.firstElementChild;
+  if (content) {
+    const heading = document.createElement('p');
+    heading.innerHTML = '<strong>Para cada cenário escolhido, investigue:</strong>';
+
+    const questions = document.createElement('ol');
+    questions.className = 'prompt-list';
+
+    [
+      'O problema pode ser resolvido adequadamente sem IA? Como?',
+      'Que característica do problema poderia justificar o uso de IA?',
+      'Qual alternativa mais simples poderia ser utilizada?',
+      'Que benefício concreto a IA acrescentaria em comparação com essa alternativa?',
+      'Qual é o principal risco de erro ou impacto da solução?',
+      'Como validar se a solução com IA é realmente melhor do que a alternativa mais simples?'
+    ].forEach((question) => {
+      const item = document.createElement('li');
+      item.textContent = question;
+      questions.appendChild(item);
+    });
+
+    const teacherNote = content.querySelector('.teacher-note');
+    if (teacherNote) {
+      teacherNote.insertAdjacentElement('beforebegin', heading);
+      heading.insertAdjacentElement('afterend', questions);
+    } else {
+      content.append(heading, questions);
+    }
+  }
+
+  inquiry.dataset.simplified = 'true';
+};
+
+simplifyAula02AiDecision();
+document.addEventListener('DOMContentLoaded', simplifyAula02AiDecision);
