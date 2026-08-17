@@ -8,6 +8,7 @@
   <title>Aula 04 — Inteligência Artificial Aplicada</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="aula-04.css">
+  <link rel="stylesheet" href="aula-04-figuras.css">
   <script defer src="script.js"></script>
   <script defer src="aula-04.js"></script>
 </head>
@@ -74,6 +75,7 @@
           <article class="card topics-card">
             <h3>Conteúdo programático</h3>
             <div class="topic-list">
+              <div>Busca não informada</div>
               <div>Problemas de busca</div>
               <div>Fronteira</div>
               <div>Expansão de estados</div>
@@ -82,6 +84,7 @@
               <div>Busca em profundidade — DFS</div>
               <div>Fila e pilha</div>
               <div>Comparação experimental</div>
+              <div>Critérios de comparação</div>
             </div>
             <div class="note-banner">
               <strong>Objetivo da aula:</strong> aplicar busca em largura e busca em profundidade em espaços de estados, explicando como a estratégia de fronteira altera a ordem de exploração e o comportamento da solução.
@@ -138,6 +141,11 @@
         <div class="note-banner">
           <strong>Da formulação para a busca:</strong> situação real → abstração → estados e ações → espaço de estados → algoritmo de busca → caminho encontrado.
         </div>
+
+        <figure class="lesson-figure">
+          <img src="assets/aula-04-representacao-busca.svg" alt="Da representação do prédio para o grafo de estados e, depois, para a estrutura dinâmica da busca." loading="lazy">
+          <figcaption>A representação define o espaço possível; o algoritmo de busca decide a ordem em que esse espaço será explorado.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -149,6 +157,14 @@
           <p>Em cada passo, o algoritmo retira um estado da <strong>fronteira</strong>, verifica se ele resolve o problema e, se necessário, gera novos estados possíveis.</p>
         </div>
 
+        <div class="concept-callout">
+          <div class="concept-icon" aria-hidden="true">?</div>
+          <div>
+            <h3>O que significa busca não informada?</h3>
+            <p>O algoritmo conhece o <strong>estado inicial</strong>, as <strong>ações e transições possíveis</strong> e o <strong>objetivo</strong>, mas não possui uma estimativa de qual alternativa parece mais próxima ou mais promissora. Ele precisa decidir a exploração usando apenas a organização da fronteira.</p>
+          </div>
+        </div>
+
         <div class="search-anatomy">
           <article><small>01</small><h3>Estado inicial</h3><p>O ponto de partida da busca.</p></article>
           <article><small>02</small><h3>Fronteira</h3><p>Estados descobertos que ainda aguardam exploração.</p></article>
@@ -156,6 +172,11 @@
           <article><small>04</small><h3>Visitados</h3><p>Registro dos estados já considerados, evitando repetições.</p></article>
           <article><small>05</small><h3>Objetivo</h3><p>Teste que encerra a busca quando encontramos uma solução.</p></article>
         </div>
+
+        <figure class="lesson-figure">
+          <img src="assets/aula-04-anatomia-busca.svg" alt="Fluxo da busca com fronteira, retirada de estado, teste de objetivo, expansão, filtro de repetidos e inserção de sucessores." loading="lazy">
+          <figcaption>BFS e DFS compartilham o mesmo ciclo geral; a diferença principal está na política usada para retirar o próximo estado da fronteira.</figcaption>
+        </figure>
 
         <div class="note-banner">
           <strong>Uma distinção importante:</strong> o espaço de estados descreve o problema; a fronteira é uma estrutura mantida pelo algoritmo enquanto ele procura uma solução.
@@ -238,6 +259,11 @@
             <div class="algorithm-structure"><span>retira</span><span>→</span><strong>o mais recente</strong></div>
           </article>
         </div>
+
+        <figure class="lesson-figure">
+          <img src="assets/aula-04-fila-pilha.svg" alt="Comparação entre fila FIFO da BFS e pilha LIFO da DFS." loading="lazy">
+          <figcaption>Fila e pilha não são apenas estruturas de dados: elas materializam duas políticas diferentes de exploração do espaço de estados.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -249,7 +275,19 @@
           <p>BFS e DFS usam quase a mesma lógica geral. A diferença decisiva está na política de retirada da fronteira.</p>
         </div>
 
-        <div class="comparison-table-wrap">
+        <div class="criteria-grid">
+          <article class="criteria-card"><small>01</small><h3>Completude</h3><p>Se uma solução existir, o algoritmo tem garantia de encontrá-la nas condições consideradas?</p></article>
+          <article class="criteria-card"><small>02</small><h3>Qualidade da solução</h3><p>A primeira solução encontrada tem o menor número de passos ou apenas satisfaz o objetivo?</p></article>
+          <article class="criteria-card"><small>03</small><h3>Custo da busca</h3><p>Quantos estados foram expandidos para chegar à solução?</p></article>
+          <article class="criteria-card"><small>04</small><h3>Memória</h3><p>Quantos estados precisam permanecer armazenados, especialmente na fronteira?</p></article>
+        </div>
+
+        <figure class="lesson-figure">
+          <img src="assets/aula-04-bfs-dfs.svg" alt="A mesma árvore explorada por BFS em largura e DFS em profundidade, com ordens diferentes." loading="lazy">
+          <figcaption>BFS percorre níveis; DFS aprofunda ramos. A ordem de exploração altera solução, número de expansões e uso de memória.</figcaption>
+        </figure>
+
+        <div class="comparison-table-wrap" style="margin-top:2rem">
           <table class="comparison-table">
             <thead><tr><th>Aspecto</th><th>BFS</th><th>DFS</th></tr></thead>
             <tbody>
@@ -262,6 +300,15 @@
             </tbody>
           </table>
         </div>
+
+        <div class="cost-split">
+          <strong>Custo da solução ≠ custo da busca.</strong> Nesta aula, quando todas as ações têm o mesmo custo, o número de passos representa o custo da solução. Já <strong>estados expandidos</strong> e <strong>pico da fronteira</strong> medem o esforço computacional realizado para encontrá-la.
+        </div>
+
+        <figure class="lesson-figure">
+          <img src="assets/aula-04-crescimento-busca.svg" alt="Crescimento de uma árvore de busca com fator de ramificação três: 1, 3, 9, 27 e 81 estados por nível." loading="lazy">
+          <figcaption>O fator de ramificação indica quantos sucessores, em média, cada estado pode gerar. Quanto maior a ramificação e a profundidade, maior pode ser o espaço explorado.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -490,6 +537,8 @@ print(bfs(grafo, <span class="st">"recepcao"</span>, <span class="st">"laborator
           <label class="knowledge-item"><input type="checkbox" data-persist="c4"><span class="knowledge-content"><strong>Execução manual</strong><span>Consigo executar BFS e DFS em um grafo pequeno.</span></span></label>
           <label class="knowledge-item"><input type="checkbox" data-persist="c5"><span class="knowledge-content"><strong>Estados visitados</strong><span>Consigo explicar por que ciclos exigem controle de estados repetidos.</span></span></label>
           <label class="knowledge-item"><input type="checkbox" data-persist="c6"><span class="knowledge-content"><strong>Comparação</strong><span>Consigo comparar BFS e DFS usando evidências da execução.</span></span></label>
+          <label class="knowledge-item"><input type="checkbox" data-persist="c7"><span class="knowledge-content"><strong>Busca não informada</strong><span>Consigo explicar por que BFS e DFS não usam estimativas sobre qual estado está mais próximo do objetivo.</span></span></label>
+          <label class="knowledge-item"><input type="checkbox" data-persist="c8"><span class="knowledge-content"><strong>Solução × esforço de busca</strong><span>Consigo distinguir profundidade/custo da solução de estados expandidos e memória usada pela busca.</span></span></label>
         </div>
       </div>
     </section>
