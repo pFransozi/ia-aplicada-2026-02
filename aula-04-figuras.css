@@ -67,6 +67,91 @@ body.theme-dark .lesson-figure img[src$="aula-04-representacao-busca.svg"] {
 
 .concept-callout p { margin: 0; }
 
+.search-concept-content {
+  min-width: 0;
+}
+
+.search-concept-intro {
+  max-width: 940px;
+  margin-top: .25rem !important;
+}
+
+.search-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.search-mode-card {
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255,255,255,.86);
+}
+
+.search-mode-card h4 {
+  margin: .35rem 0 .55rem;
+  font-size: 1.06rem;
+  color: var(--ink);
+}
+
+.search-mode-card p {
+  color: var(--muted);
+  font-size: .93rem;
+  line-height: 1.6;
+}
+
+.search-mode-card small {
+  display: block;
+  margin-top: .7rem;
+  color: var(--blue);
+  font-weight: 750;
+}
+
+.search-mode-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: .72rem;
+  font-weight: 850;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+
+.search-mode-informed {
+  background: linear-gradient(145deg, #fbfcff, #f5f2ff);
+  border-color: #ddd7fb;
+}
+
+.search-mode-informed .search-mode-label {
+  background: var(--violet-soft);
+  color: var(--violet);
+}
+
+.search-mode-informed small {
+  color: var(--violet);
+}
+
+.search-mode-takeaway {
+  margin-top: 1rem;
+  padding: .8rem .9rem;
+  border-left: 3px solid var(--blue);
+  border-radius: 0 12px 12px 0;
+  background: rgba(255,255,255,.55);
+  color: var(--muted);
+  font-size: .91rem;
+  line-height: 1.55;
+}
+
+.search-mode-takeaway strong {
+  color: var(--ink);
+}
+
 .question-cloud div::after {
   display: block;
   margin-top: .35rem;
@@ -138,8 +223,36 @@ body.theme-dark .lesson-figure figcaption { background: #172033; }
 body.theme-dark .concept-callout { background: linear-gradient(135deg,#111a2b,#172033); }
 body.theme-dark .criteria-card { background: #172033; }
 
+body.theme-dark .search-mode-card {
+  background: #111a2b;
+  border-color: #2d3b55;
+}
+
+body.theme-dark .search-mode-card h4,
+body.theme-dark .search-mode-takeaway strong {
+  color: #f5f7fb;
+}
+
+body.theme-dark .search-mode-card p,
+body.theme-dark .search-mode-takeaway {
+  color: #b8c3d7;
+}
+
+body.theme-dark .search-mode-informed {
+  background: linear-gradient(145deg, #161b30, #1d1833);
+  border-color: #40385f;
+}
+
+body.theme-dark .search-mode-takeaway {
+  background: rgba(9,16,30,.45);
+}
+
 @media (max-width: 1000px) {
   .criteria-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 760px) {
+  .search-mode-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
