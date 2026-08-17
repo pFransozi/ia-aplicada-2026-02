@@ -27,6 +27,50 @@
     `;
   }
 
+  const bfsSection = document.querySelector("#bfs");
+  if (bfsSection) {
+    const heading = bfsSection.querySelector(".section-heading");
+    const title = heading?.querySelector("h2");
+    const intro = heading?.querySelector("p:last-child");
+
+    if (title) title.textContent = "BFS explora por camadas: primeiro o que está perto, depois o que está mais longe";
+    if (intro) {
+      intro.innerHTML = "A ideia da busca em largura é simples: antes de avançar para estados mais distantes, ela examina <strong>todas as alternativas que estão à mesma distância do início</strong>. Por isso, sua exploração se parece com ondas que se espalham pelo espaço de estados.";
+    }
+
+    const algorithmLayout = bfsSection.querySelector(".algorithm-layout");
+    if (algorithmLayout && !bfsSection.querySelector(".bfs-learning-grid")) {
+      const pedagogy = document.createElement("div");
+      pedagogy.className = "overview-grid bfs-learning-grid";
+      pedagogy.style.marginBottom = "1.7rem";
+      pedagogy.innerHTML = `
+        <article class="card">
+          <p class="eyebrow">Intuição</p>
+          <h3>Primeiro uma camada inteira</h3>
+          <p>BFS não escolhe um ramo e segue até o fim. Ela considera primeiro os estados a <strong>1 passo</strong> do início, depois os que estão a <strong>2 passos</strong>, depois a 3, e assim por diante.</p>
+        </article>
+
+        <article class="card">
+          <p class="eyebrow">No exemplo do prédio</p>
+          <h3>Da Recepção para fora</h3>
+          <p><strong>Profundidade 0:</strong> Recepção. <strong>Profundidade 1:</strong> Corredor A e Sala 101. <strong>Profundidade 2:</strong> Copa, Arquivo e Hall. Só depois a busca avança para estados ainda mais distantes.</p>
+        </article>
+
+        <article class="card">
+          <p class="eyebrow">Quando faz sentido usar?</p>
+          <h3>Quando poucos passos importam</h3>
+          <p>BFS é especialmente útil quando queremos encontrar uma solução com o <strong>menor número de transições</strong> e todas as ações têm o mesmo custo. Exemplos: menor número de conexões em uma rede, de cliques entre páginas ou de movimentos em um problema não ponderado.</p>
+        </article>
+      `;
+      algorithmLayout.before(pedagogy);
+    }
+
+    const algorithmCardText = bfsSection.querySelector(".algorithm-card > p");
+    if (algorithmCardText) {
+      algorithmCardText.innerHTML = "A <strong>fila</strong> é o que mantém essa exploração por camadas: novos estados entram no fim e os mais antigos saem primeiro. Quando todas as ações têm o mesmo custo, a primeira solução encontrada tem o menor número de passos.";
+    }
+  }
+
   const graph = {
     recepcao: ["corredor_a", "sala_101"],
     corredor_a: ["recepcao", "copa", "arquivo"],
