@@ -331,7 +331,7 @@
       <p>Nos sistemas clássicos baseados em regras, o conhecimento costuma ser expresso por regras do tipo <strong>IF–THEN</strong>. A arquitetura separa o conhecimento do mecanismo que o utiliza: a <strong>base de conhecimento</strong> armazena regras e relações do domínio, a <strong>memória de trabalho</strong> contém os fatos do caso em análise e o <strong>motor de inferência</strong> identifica quais regras podem ser aplicadas para produzir novas conclusões.</p>
 
       <figure class="figure-light">
-        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-03.webp" alt="Arquitetura conceitual de um sistema especialista">
+        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-03.png?v=20260817-remaster2" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-03.png?v=20260817-remaster2" data-dark-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-03-dark.png?v=20260817-remaster2" alt="Arquitetura conceitual de um sistema especialista">
         <figcaption>Arquitetura conceitual simplificada de um sistema especialista.</figcaption>
       </figure>
 
@@ -344,7 +344,7 @@
       <p>Considere um sistema de diagnóstico de falhas de software. A base pode conter uma regra como: se o servidor está acessível e o serviço não responde, há indício de falha no serviço. Os fatos do caso entram na memória de trabalho, o motor verifica quais regras são aplicáveis e novas conclusões podem alimentar inferências seguintes.</p>
 
       <figure class="figure-light">
-        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.webp" alt="Fluxo do especialista à inferência em um sistema baseado em regras">
+        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.png?v=20260817-remaster2" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.png?v=20260817-remaster2" data-dark-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04-dark.png?v=20260817-remaster2" alt="Fluxo do especialista à inferência em um sistema baseado em regras">
         <figcaption>Nos sistemas especialistas clássicos, novos casos não atualizam automaticamente as regras.</figcaption>
       </figure>
 
@@ -376,8 +376,8 @@
   const loaderScript = document.currentScript;
   const baseScript = document.createElement('script');
   baseScript.src = loaderScript?.src
-    ? new URL('script-base.js?v=20260817-fig02b', loaderScript.src).href
-    : 'script-base.js?v=20260817-fig02b';
+    ? new URL('script-base.js?v=20260817-remaster2', loaderScript.src).href
+    : 'script-base.js?v=20260817-remaster2';
   baseScript.async = false;
   baseScript.addEventListener('load', applyPageAdjustments);
   document.head.appendChild(baseScript);
