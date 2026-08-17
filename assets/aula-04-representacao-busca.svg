@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Da representação para a busca</title>
+  <desc id="desc">Infográfico em três etapas: ambiente representado, grafo de estados e estrutura dinâmica da busca com estado atual, fronteira, visitados e estados ainda não descobertos.</desc>
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#23324e" flood-opacity=".08"/></filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#a52a2a"/></marker>
+    <style>
+      .t{font-family:Inter,Segoe UI,Arial,sans-serif;fill:#172033}.m{fill:#647087}.r{fill:#a52a2a}.h{font-weight:800}.panel{fill:#fff;stroke:#dfe5ef;stroke-width:2}.node{fill:#fff;stroke:#8796b1;stroke-width:2}.edge{stroke:#8796b1;stroke-width:2.5}.small{font-size:13px}.label{font-size:14px;font-weight:750}.caption{font-size:13px;fill:#647087}
+    </style>
+  </defs>
+  <rect x="1" y="1" width="958" height="538" rx="28" fill="#fbfcff" stroke="#dfe5ef" filter="url(#shadow)"/>
+  <text x="480" y="48" text-anchor="middle" class="t h" font-size="34">Da representação para a busca</text>
+  <text x="480" y="75" text-anchor="middle" class="t m" font-size="16">Do problema modelado ao algoritmo de busca</text>
+
+  <rect x="24" y="102" width="280" height="342" rx="22" class="panel"/>
+  <rect x="340" y="102" width="280" height="342" rx="22" class="panel"/>
+  <rect x="656" y="102" width="280" height="342" rx="22" class="panel"/>
+  <text x="164" y="132" text-anchor="middle" class="r h" font-size="19">1. Espaço do problema</text>
+  <text x="480" y="132" text-anchor="middle" class="r h" font-size="19">2. Grafo de estados</text>
+  <text x="796" y="132" text-anchor="middle" class="r h" font-size="19">3. Estrutura da busca</text>
+
+  <!-- planta -->
+  <rect x="50" y="158" width="228" height="205" rx="8" fill="#f8fafc" stroke="#172033" stroke-width="2.5"/>
+  <line x1="118" y1="158" x2="118" y2="363" stroke="#172033" stroke-width="2"/>
+  <line x1="205" y1="158" x2="205" y2="363" stroke="#172033" stroke-width="2"/>
+  <line x1="50" y1="225" x2="278" y2="225" stroke="#172033" stroke-width="2"/>
+  <line x1="50" y1="294" x2="278" y2="294" stroke="#172033" stroke-width="2"/>
+  <text x="84" y="194" text-anchor="middle" class="t small h">Sala 101</text>
+  <text x="161" y="194" text-anchor="middle" class="t small h">Corredor A</text>
+  <text x="241" y="194" text-anchor="middle" class="t small h">Copa</text>
+  <text x="84" y="263" text-anchor="middle" class="t small h">Recepção</text>
+  <text x="161" y="263" text-anchor="middle" class="t small h">Hall</text>
+  <text x="241" y="263" text-anchor="middle" class="t small h">Arquivo</text>
+  <text x="84" y="331" text-anchor="middle" class="t small h">Laboratório</text>
+  <text x="161" y="331" text-anchor="middle" class="t small h">Estoque</text>
+  <text x="241" y="331" text-anchor="middle" class="t small h">Depósito</text>
+  <text x="164" y="394" text-anchor="middle" class="caption">Representação do domínio:</text>
+  <text x="164" y="412" text-anchor="middle" class="caption">estados e conexões possíveis.</text>
+
+  <!-- grafo -->
+  <line x1="392" y1="174" x2="480" y2="174" class="edge"/><line x1="480" y1="174" x2="568" y2="174" class="edge"/>
+  <line x1="480" y1="174" x2="420" y2="246" class="edge"/><line x1="480" y1="174" x2="540" y2="246" class="edge"/>
+  <line x1="420" y1="246" x2="420" y2="316" class="edge"/><line x1="420" y1="316" x2="420" y2="378" class="edge"/>
+  <line x1="568" y1="174" x2="568" y2="286" class="edge"/><line x1="568" y1="286" x2="568" y2="366" class="edge"/>
+  <g class="t label">
+    <g><circle cx="392" cy="174" r="31" class="node"/><text x="392" y="179" text-anchor="middle">Recepção</text></g>
+    <g><circle cx="480" cy="174" r="34" class="node"/><text x="480" y="179" text-anchor="middle">Corredor A</text></g>
+    <g><circle cx="568" cy="174" r="28" class="node"/><text x="568" y="179" text-anchor="middle">Copa</text></g>
+    <g><circle cx="420" cy="246" r="29" class="node"/><text x="420" y="251" text-anchor="middle">Sala 101</text></g>
+    <g><circle cx="540" cy="246" r="27" class="node"/><text x="540" y="251" text-anchor="middle">Arquivo</text></g>
+    <g><circle cx="420" cy="316" r="25" class="node"/><text x="420" y="321" text-anchor="middle">Hall</text></g>
+    <g><circle cx="420" cy="378" r="30" class="node"/><text x="420" y="383" text-anchor="middle">Laboratório</text></g>
+    <g><circle cx="568" cy="286" r="28" class="node"/><text x="568" y="291" text-anchor="middle">Estoque</text></g>
+    <g><circle cx="568" cy="366" r="29" class="node"/><text x="568" y="371" text-anchor="middle">Depósito</text></g>
+  </g>
+  <text x="480" y="414" text-anchor="middle" class="caption">Mesma estrutura, agora pronta para ser percorrida.</text>
+
+  <!-- busca -->
+  <line x1="704" y1="174" x2="792" y2="174" class="edge"/><line x1="792" y1="174" x2="880" y2="174" class="edge"/>
+  <line x1="792" y1="174" x2="730" y2="246" class="edge"/><line x1="792" y1="174" x2="848" y2="246" class="edge"/>
+  <line x1="730" y1="246" x2="730" y2="318" class="edge" stroke-dasharray="5 5"/><line x1="730" y1="318" x2="730" y2="376" class="edge" stroke-dasharray="5 5"/>
+  <line x1="880" y1="174" x2="880" y2="286" class="edge"/><line x1="880" y1="286" x2="880" y2="366" class="edge" stroke-dasharray="5 5"/>
+  <g class="t label">
+    <circle cx="704" cy="174" r="29" fill="#dcecff" stroke="#6f91c8" stroke-width="2"/><text x="704" y="179" text-anchor="middle">Recepção</text>
+    <circle cx="792" cy="174" r="33" fill="#a52a2a" stroke="#791d1d" stroke-width="2"/><text x="792" y="179" text-anchor="middle" fill="#fff">Corredor A</text>
+    <circle cx="880" cy="174" r="28" fill="#ffe7a3" stroke="#d2a54b" stroke-width="2"/><text x="880" y="179" text-anchor="middle">Copa</text>
+    <circle cx="730" cy="246" r="28" fill="#dcecff" stroke="#6f91c8" stroke-width="2"/><text x="730" y="251" text-anchor="middle">Sala 101</text>
+    <circle cx="848" cy="246" r="27" fill="#ffe7a3" stroke="#d2a54b" stroke-width="2"/><text x="848" y="251" text-anchor="middle">Arquivo</text>
+    <circle cx="880" cy="286" r="27" fill="#ffe7a3" stroke="#d2a54b" stroke-width="2"/><text x="880" y="291" text-anchor="middle">Estoque</text>
+    <circle cx="730" cy="318" r="25" fill="#fff" stroke="#8796b1" stroke-width="2" stroke-dasharray="5 5"/><text x="730" y="323" text-anchor="middle">Hall</text>
+    <circle cx="730" cy="376" r="29" fill="#fff" stroke="#8796b1" stroke-width="2" stroke-dasharray="5 5"/><text x="730" y="381" text-anchor="middle">Laboratório</text>
+    <circle cx="880" cy="366" r="29" fill="#fff" stroke="#8796b1" stroke-width="2" stroke-dasharray="5 5"/><text x="880" y="371" text-anchor="middle">Depósito</text>
+  </g>
+  <text x="796" y="414" text-anchor="middle" class="caption">A busca mantém informação dinâmica sobre a exploração.</text>
+
+  <line x1="310" y1="270" x2="330" y2="270" stroke="#a52a2a" stroke-width="4" marker-end="url(#arrow)"/>
+  <line x1="626" y1="270" x2="646" y2="270" stroke="#a52a2a" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <rect x="70" y="468" width="820" height="48" rx="16" fill="#fff" stroke="#a52a2a" stroke-width="2"/>
+  <text x="480" y="499" text-anchor="middle" class="t h" font-size="18">A representação descreve o problema. A busca define a ordem de exploração.</text>
+</svg>
