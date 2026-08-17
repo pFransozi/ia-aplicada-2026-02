@@ -360,3 +360,98 @@ if (window.location.pathname.endsWith('/aula-03.html') || window.location.pathna
 
   document.head.appendChild(lessonAdjustments);
 }
+
+const simplifyAula02GroupMap = () => {
+  const isAula02 = window.location.pathname.endsWith('/aula-02.html') || window.location.pathname.endsWith('aula-02.html');
+  if (!isAula02) return;
+
+  const section = document.querySelector('.group-map[aria-labelledby="group-map-title"]');
+  if (!section || section.dataset.simplified === 'true') return;
+
+  const head = section.querySelector('.group-map-head');
+  const eyebrow = head?.querySelector('.eyebrow');
+  const description = head?.querySelector('p:not(.eyebrow)');
+
+  if (eyebrow) eyebrow.textContent = 'Questões para investigação';
+  if (description) {
+    description.textContent = 'Investigue o funcionamento do sistema escolhido e prepare respostas curtas, específicas e sustentadas por evidências do caso.';
+  }
+
+  section.querySelector('.group-map-grid')?.remove();
+  section.querySelector('.group-conclusion')?.remove();
+
+  const questions = [
+    ['1. Objetivo', 'Que resultado o sistema procura alcançar?'],
+    ['2. Ambiente', 'Em que contexto o sistema opera e com quais elementos interage?'],
+    ['3. Percepções', 'Que informações o sistema recebe sobre o ambiente?'],
+    ['4. Estado ou conhecimento', 'O que o sistema precisa representar, manter ou considerar para tomar decisões?'],
+    ['5. Decisão', 'Como o sistema seleciona uma resposta ou ação?'],
+    ['6. Ações', 'O que o sistema produz ou executa e como isso afeta o ambiente?'],
+    ['7. Critério de desempenho', 'Como podemos saber se o agente está funcionando adequadamente?'],
+    ['8. Mecanismos utilizados', 'O sistema utiliza regras, busca, aprendizagem, otimização ou uma combinação desses mecanismos? Justifique.'],
+    ['9. Síntese do ciclo', 'Como você resumiria o ciclo completo do sistema, conectando percepções, ambiente, estado ou conhecimento, decisão, objetivo e critério de desempenho?'],
+    ['10. Situação de falha', 'Qual percepção incorreta, incompleta ou desatualizada poderia produzir uma decisão inadequada? Qual seria a consequência e como o risco poderia ser reduzido?']
+  ];
+
+  const list = document.createElement('div');
+  list.className = 'investigation-question-grid';
+
+  questions.forEach(([title, question]) => {
+    const article = document.createElement('article');
+    article.className = 'investigation-question';
+
+    const heading = document.createElement('h4');
+    heading.textContent = title;
+
+    const text = document.createElement('p');
+    text.textContent = question;
+
+    article.append(heading, text);
+    list.appendChild(article);
+  });
+
+  section.appendChild(list);
+  section.dataset.simplified = 'true';
+
+  if (!document.getElementById('aula02-investigation-questions-style')) {
+    const style = document.createElement('style');
+    style.id = 'aula02-investigation-questions-style';
+    style.textContent = `
+      .investigation-question-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 1.5rem;
+      }
+
+      .investigation-question {
+        padding: 1.2rem 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        background: var(--paper);
+        box-shadow: 0 10px 26px rgba(35, 50, 78, .045);
+      }
+
+      .investigation-question h4 {
+        margin: 0 0 .5rem;
+        font-size: 1rem;
+        color: var(--ink);
+      }
+
+      .investigation-question p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      @media (max-width: 760px) {
+        .investigation-question-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+};
+
+simplifyAula02GroupMap();
+document.addEventListener('DOMContentLoaded', simplifyAula02GroupMap);
