@@ -14,6 +14,20 @@
   background: #fff;
 }
 
+/*
+ * A figura de transição representação → busca possui versões clara e escura.
+ * O HTML mantém o SVG como fallback, enquanto o conteúdo exibido acompanha
+ * o tema manual do site por meio da classe body.theme-dark.
+ */
+.lesson-figure img[src$="aula-04-representacao-busca.svg"] {
+  content: url("assets/aula-04-representacao-busca.png");
+}
+
+body.theme-dark .lesson-figure img[src$="aula-04-representacao-busca.svg"] {
+  content: url("assets/aula-04-representacao-busca-dark.png");
+  background: #06101f;
+}
+
 .lesson-figure figcaption {
   padding: .8rem 1rem;
   border-top: 1px solid var(--line);
