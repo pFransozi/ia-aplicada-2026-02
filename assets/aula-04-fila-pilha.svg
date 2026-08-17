@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Fila versus pilha</title>
+  <desc id="desc">Comparação entre fila FIFO usada pela BFS e pilha LIFO usada pela DFS.</desc>
+  <defs>
+    <marker id="redArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#a52a2a"/></marker>
+    <marker id="blueArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#3157d5"/></marker>
+    <style>.t{font-family:Inter,Segoe UI,Arial,sans-serif;fill:#172033}.m{fill:#647087}.h{font-weight:800}.red{fill:#a52a2a}.blue{fill:#3157d5}.small{font-size:13px}</style>
+  </defs>
+  <rect x="1" y="1" width="958" height="538" rx="28" fill="#fbfcff" stroke="#dfe5ef"/>
+  <text x="480" y="48" text-anchor="middle" class="t h" font-size="36">Fila × pilha</text>
+  <text x="480" y="75" text-anchor="middle" class="t m" font-size="16">Por que BFS e DFS retiram estados em ordens diferentes</text>
+
+  <rect x="35" y="105" width="420" height="340" rx="22" fill="#fff" stroke="#a52a2a" stroke-width="2"/>
+  <rect x="505" y="105" width="420" height="340" rx="22" fill="#fff" stroke="#3157d5" stroke-width="2"/>
+  <text x="245" y="140" text-anchor="middle" class="red h" font-size="26">Fila</text>
+  <text x="715" y="140" text-anchor="middle" class="blue h" font-size="26">Pilha</text>
+
+  <!-- fila -->
+  <g font-family="Inter,Arial" font-weight="800" font-size="20" text-anchor="middle" fill="#172033">
+    <rect x="130" y="190" width="62" height="62" rx="12" fill="#fff5f5" stroke="#a52a2a" stroke-width="2"/><text x="161" y="228">A</text>
+    <rect x="194" y="190" width="62" height="62" rx="12" fill="#fff5f5" stroke="#a52a2a" stroke-width="2"/><text x="225" y="228">B</text>
+    <rect x="258" y="190" width="62" height="62" rx="12" fill="#fff5f5" stroke="#a52a2a" stroke-width="2"/><text x="289" y="228">C</text>
+    <rect x="322" y="190" width="62" height="62" rx="12" fill="#fff5f5" stroke="#a52a2a" stroke-width="2"/><text x="353" y="228">D</text>
+  </g>
+  <line x1="105" y1="221" x2="62" y2="221" stroke="#a52a2a" stroke-width="4" marker-end="url(#redArrow)"/><text x="83" y="270" text-anchor="middle" class="t small h">sai primeiro</text>
+  <line x1="420" y1="221" x2="387" y2="221" stroke="#a52a2a" stroke-width="4" marker-end="url(#redArrow)"/><text x="410" y="270" text-anchor="middle" class="t small h">entra</text>
+  <text x="161" y="278" text-anchor="middle" class="t m" font-size="12">frente</text><text x="353" y="278" text-anchor="middle" class="t m" font-size="12">fim</text>
+  <rect x="102" y="305" width="286" height="42" rx="12" fill="#fff4f4" stroke="#e1a4a4"/><text x="245" y="331" text-anchor="middle" class="t" font-size="15"><tspan font-weight="800" fill="#a52a2a">FIFO</tspan> — primeiro a entrar, primeiro a sair</text>
+  <text x="245" y="379" text-anchor="middle" class="t m" font-size="14">Na BFS, estados mais antigos</text><text x="245" y="399" text-anchor="middle" class="t m" font-size="14">são explorados primeiro.</text>
+
+  <!-- pilha -->
+  <g font-family="Inter,Arial" font-weight="800" font-size="20" text-anchor="middle" fill="#172033">
+    <rect x="685" y="170" width="76" height="48" rx="10" fill="#eef4ff" stroke="#3157d5" stroke-width="2"/><text x="723" y="202">D</text>
+    <rect x="685" y="220" width="76" height="48" rx="10" fill="#eef4ff" stroke="#3157d5" stroke-width="2"/><text x="723" y="252">C</text>
+    <rect x="685" y="270" width="76" height="48" rx="10" fill="#eef4ff" stroke="#3157d5" stroke-width="2"/><text x="723" y="302">B</text>
+    <rect x="685" y="320" width="76" height="48" rx="10" fill="#eef4ff" stroke="#3157d5" stroke-width="2"/><text x="723" y="352">A</text>
+  </g>
+  <line x1="842" y1="194" x2="770" y2="194" stroke="#3157d5" stroke-width="4" marker-end="url(#blueArrow)"/><text x="835" y="175" text-anchor="middle" class="t small h">entra e sai (topo)</text>
+  <line x1="676" y1="194" x2="615" y2="194" stroke="#3157d5" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#blueArrow)"/><text x="610" y="165" text-anchor="middle" class="t small h">D sai primeiro</text>
+  <text x="723" y="386" text-anchor="middle" class="t m" font-size="12">base</text>
+  <rect x="572" y="405" width="286" height="42" rx="12" fill="#f1f5ff" stroke="#9cb0ed"/><text x="715" y="431" text-anchor="middle" class="t" font-size="15"><tspan font-weight="800" fill="#3157d5">LIFO</tspan> — último a entrar, primeiro a sair</text>
+
+  <rect x="90" y="474" width="780" height="42" rx="14" fill="#fff" stroke="#dfe5ef"/><text x="480" y="500" text-anchor="middle" class="t h" font-size="17">Fila favorece exploração por níveis. Pilha favorece aprofundamento.</text>
+</svg>
