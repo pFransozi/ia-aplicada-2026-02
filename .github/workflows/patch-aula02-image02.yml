@@ -1,0 +1,47 @@
+name: Patch Aula 02 image 02
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-aula02-image02.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Update image 02 sources
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('aula-02-aprofundamento.html')
+          text = path.read_text(encoding='utf-8')
+
+          old = '<img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-02.webp" alt="Infográfico das etapas de resolução simbólica de problemas em IA">'
+          new = '<img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-02.png" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-02.png" data-dark-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-02-dark.png" alt="Infográfico das etapas de resolução simbólica de problemas em IA">'
+
+          count = text.count(old)
+          if count != 1:
+              raise SystemExit(f'Expected exactly one matching image tag, found {count}.')
+
+          path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+      - name: Commit change
+        shell: bash
+        run: |
+          if git diff --quiet -- aula-02-aprofundamento.html; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add aula-02-aprofundamento.html
+          git commit -m 'Ajusta versões clara e dark da figura 02'
+          git push origin HEAD:main
