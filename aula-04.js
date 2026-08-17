@@ -140,6 +140,55 @@
     }
   }
 
+  const comparisonSection = document.querySelector("#comparacao");
+  if (comparisonSection) {
+    const growthFigure = [...comparisonSection.querySelectorAll(".lesson-figure")]
+      .find((figure) => figure.querySelector('img[src$="aula-04-crescimento-busca.svg"]'));
+
+    if (growthFigure && !comparisonSection.querySelector(".search-cost-learning")) {
+      const block = document.createElement("div");
+      block.className = "search-cost-learning";
+      block.innerHTML = `
+        <div class="section-heading" style="margin-top:2.5rem">
+          <p class="eyebrow">Custo da busca</p>
+          <h2>Por que a busca pode ficar cara?</h2>
+          <p>Mesmo quando existe uma solução, o algoritmo pode precisar examinar muitas possibilidades antes de encontrá-la. Isso acontece porque <strong>cada estado pode gerar novos sucessores</strong> e esse crescimento se repete a cada novo nível da busca.</p>
+        </div>
+
+        <div class="overview-grid" style="margin-bottom:1.7rem">
+          <article class="card">
+            <p class="eyebrow">Intuição</p>
+            <h3>Cada escolha abre novas escolhas</h3>
+            <p>Se um estado gera vários sucessores, cada um deles também pode gerar novas alternativas. A busca deixa de crescer de forma linear e passa a formar uma árvore cada vez maior.</p>
+          </article>
+
+          <article class="card">
+            <p class="eyebrow">Exemplo</p>
+            <h3>Ramificação 3 cresce rápido</h3>
+            <p>Se cada estado gera, em média, <strong>3 sucessores</strong>, temos 1 estado no nível 0, 3 no nível 1, 9 no nível 2, 27 no nível 3 e <strong>81 apenas no nível 4</strong>.</p>
+          </article>
+
+          <article class="card">
+            <p class="eyebrow">Por que isso importa?</p>
+            <h3>Mais profundidade, mais trabalho</h3>
+            <p>Quanto maior o número de sucessores e quanto mais profunda estiver a solução, maior pode ser o esforço necessário: <strong>mais estados expandidos</strong>, uma <strong>fronteira maior</strong> e mais uso de memória.</p>
+          </article>
+        </div>
+      `;
+      growthFigure.before(block);
+
+      const caption = growthFigure.querySelector("figcaption");
+      if (caption) {
+        caption.textContent = "O fator de ramificação indica quantos sucessores, em média, cada estado pode gerar. Quando a profundidade aumenta, o número de possibilidades pode crescer muito rapidamente.";
+      }
+
+      const warning = document.createElement("div");
+      warning.className = "note-banner warning search-cost-warning";
+      warning.innerHTML = "<strong>Ideia-chave:</strong> o custo da busca é fortemente influenciado por <strong>quantos sucessores cada estado gera</strong> e <strong>quão profunda está a solução</strong>. Quando os dois fatores crescem, explorar o espaço de estados pode se tornar computacionalmente caro.";
+      growthFigure.after(warning);
+    }
+  }
+
   const graph = {
     recepcao: ["corredor_a", "sala_101"],
     corredor_a: ["recepcao", "copa", "arquivo"],
