@@ -115,6 +115,9 @@ jobs:
               dst = asset_dir / f'aula-02-aprofundamento-{number:02d}-dark.png'
               if not src.exists():
                   raise SystemExit(f'Imagem clara ausente: {src}')
+              if dst.exists():
+                  print(f'Preservando imagem escura existente: {dst}')
+                  continue
               darkify(src, dst)
           PY
 
