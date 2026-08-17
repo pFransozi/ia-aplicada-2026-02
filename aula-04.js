@@ -121,6 +121,23 @@
       warning.innerHTML = "<strong>Cuidado:</strong> aprofundar primeiro não significa encontrar o melhor ou o menor caminho. O resultado da DFS pode depender da ordem em que os sucessores são considerados e, em espaços com ciclos ou profundidade ilimitada, o controle de estados visitados ou de limites de exploração é essencial.";
       figure.before(warning);
     }
+
+    if (figure && !dfsSection.querySelector(".frontier-structure-heading")) {
+      const frontierHeading = document.createElement("div");
+      frontierHeading.className = "section-heading frontier-structure-heading";
+      frontierHeading.style.marginTop = "2.4rem";
+      frontierHeading.innerHTML = `
+        <p class="eyebrow">Estruturas da fronteira</p>
+        <h2>Fila e pilha: a estrutura escolhida muda a ordem da exploração</h2>
+        <p>BFS e DFS seguem o mesmo ciclo geral de busca, mas retiram estados da fronteira de formas diferentes. A <strong>fila</strong> faz a BFS priorizar os estados descobertos há mais tempo; a <strong>pilha</strong> faz a DFS priorizar os estados descobertos mais recentemente. Essa escolha simples de estrutura de dados produz dois comportamentos de exploração bastante diferentes.</p>
+      `;
+      figure.before(frontierHeading);
+
+      const caption = figure.querySelector("figcaption");
+      if (caption) {
+        caption.textContent = "Fila e pilha materializam duas políticas diferentes de exploração: a BFS retira primeiro os estados mais antigos; a DFS, os mais recentes.";
+      }
+    }
   }
 
   const graph = {
