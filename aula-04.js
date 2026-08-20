@@ -189,6 +189,311 @@
     }
   }
 
+  const searchSection = document.querySelector("#busca");
+  if (searchSection) {
+    const cycleHeading = [...searchSection.querySelectorAll(".section-heading")]
+      .find((heading) => heading.querySelector("h2")?.textContent.trim() === "O mesmo conjunto de passos se repete");
+    const anatomy = searchSection.querySelector(".search-anatomy");
+
+    if (cycleHeading) {
+      const cycleIntro = cycleHeading.querySelector("p:last-child");
+      if (cycleIntro) {
+        cycleIntro.innerHTML = "Antes de conhecer estratégias específicas, observe a estrutura que qualquer busca precisa repetir: <strong>selecionar uma possibilidade, testá-la, expandi-la e atualizar o que ainda precisa ser explorado</strong>. A regra usada para escolher o próximo estado será discutida depois.";
+      }
+    }
+
+    if (anatomy && !searchSection.querySelector("[data-generic-search-cycle]")) {
+      const interactive = document.createElement("div");
+      interactive.className = "generic-search-cycle";
+      interactive.dataset.genericSearchCycle = "";
+      interactive.innerHTML = `
+        <div class="generic-cycle-heading">
+          <div>
+            <p class="eyebrow">Processo interativo</p>
+            <h3>Acompanhe um ciclo de busca passo a passo</h3>
+            <p>O grafo abaixo é propositalmente mais complexo que o exemplo do robô. Aqui não importa ainda qual estratégia escolhe o próximo estado: a ordem foi fixada apenas para observar <strong>o ciclo comum da busca</strong>.</p>
+          </div>
+          <div class="generic-cycle-legend" aria-label="Legenda do grafo">
+            <span><i class="legend-dot frontier"></i>Fronteira</span>
+            <span><i class="legend-dot current"></i>Atual</span>
+            <span><i class="legend-dot successor"></i>Sucessor</span>
+            <span><i class="legend-dot visited"></i>Visitado</span>
+            <span><i class="legend-dot goal"></i>Objetivo</span>
+          </div>
+        </div>
+
+        <div class="generic-cycle-stages" aria-label="Etapas do ciclo de busca">
+          <div data-cycle-stage="0"><small>01</small><strong>Preparar</strong></div>
+          <div data-cycle-stage="1"><small>02</small><strong>Escolher</strong></div>
+          <div data-cycle-stage="2"><small>03</small><strong>Testar</strong></div>
+          <div data-cycle-stage="3"><small>04</small><strong>Expandir</strong></div>
+          <div data-cycle-stage="4"><small>05</small><strong>Registrar</strong></div>
+        </div>
+
+        <div class="generic-cycle-layout">
+          <div class="generic-cycle-graph-card">
+            <div class="generic-cycle-graph" aria-label="Grafo genérico com doze estados, ciclos e múltiplos caminhos até o objetivo K">
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <line data-cycle-edge="A-B" x1="50" y1="9" x2="22" y2="25"></line>
+                <line data-cycle-edge="A-C" x1="50" y1="9" x2="50" y2="28"></line>
+                <line data-cycle-edge="A-D" x1="50" y1="9" x2="78" y2="25"></line>
+                <line data-cycle-edge="B-E" x1="22" y1="25" x2="12" y2="48"></line>
+                <line data-cycle-edge="B-F" x1="22" y1="25" x2="34" y2="49"></line>
+                <line data-cycle-edge="C-F" x1="50" y1="28" x2="34" y2="49"></line>
+                <line data-cycle-edge="C-G" x1="50" y1="28" x2="58" y2="50"></line>
+                <line data-cycle-edge="D-G" x1="78" y1="25" x2="58" y2="50"></line>
+                <line data-cycle-edge="D-H" x1="78" y1="25" x2="86" y2="49"></line>
+                <line data-cycle-edge="E-I" x1="12" y1="48" x2="20" y2="74"></line>
+                <line data-cycle-edge="F-I" x1="34" y1="49" x2="20" y2="74"></line>
+                <line data-cycle-edge="F-J" x1="34" y1="49" x2="47" y2="75"></line>
+                <line data-cycle-edge="G-J" x1="58" y1="50" x2="47" y2="75"></line>
+                <line data-cycle-edge="G-H" x1="58" y1="50" x2="86" y2="49"></line>
+                <line data-cycle-edge="H-K" x1="86" y1="49" x2="78" y2="76"></line>
+                <line data-cycle-edge="I-L" x1="20" y1="74" x2="36" y2="92"></line>
+                <line data-cycle-edge="J-L" x1="47" y1="75" x2="36" y2="92"></line>
+                <line data-cycle-edge="K-L" x1="78" y1="76" x2="61" y2="92"></line>
+                <line data-cycle-edge="J-K" x1="47" y1="75" x2="78" y2="76"></line>
+              </svg>
+              <div class="generic-cycle-node start" data-cycle-node="A" style="left:50%;top:9%">A<span>início</span></div>
+              <div class="generic-cycle-node" data-cycle-node="B" style="left:22%;top:25%">B</div>
+              <div class="generic-cycle-node" data-cycle-node="C" style="left:50%;top:28%">C</div>
+              <div class="generic-cycle-node" data-cycle-node="D" style="left:78%;top:25%">D</div>
+              <div class="generic-cycle-node" data-cycle-node="E" style="left:12%;top:48%">E</div>
+              <div class="generic-cycle-node" data-cycle-node="F" style="left:34%;top:49%">F</div>
+              <div class="generic-cycle-node" data-cycle-node="G" style="left:58%;top:50%">G</div>
+              <div class="generic-cycle-node" data-cycle-node="H" style="left:86%;top:49%">H</div>
+              <div class="generic-cycle-node" data-cycle-node="I" style="left:20%;top:74%">I</div>
+              <div class="generic-cycle-node" data-cycle-node="J" style="left:47%;top:75%">J</div>
+              <div class="generic-cycle-node goal" data-cycle-node="K" style="left:78%;top:76%">K<span>objetivo</span></div>
+              <div class="generic-cycle-node" data-cycle-node="L" style="left:42%;top:92%">L</div>
+            </div>
+          </div>
+
+          <div class="generic-cycle-panel">
+            <div class="generic-cycle-current-step">
+              <small>Etapa atual</small>
+              <strong data-cycle-title>Preparar a busca</strong>
+              <p data-cycle-explanation>Começamos colocando o estado inicial na fronteira. A busca ainda não examinou nenhum estado.</p>
+            </div>
+
+            <div class="generic-cycle-data">
+              <div><small>Estado atual</small><strong data-cycle-current>—</strong></div>
+              <div><small>Fronteira</small><strong data-cycle-frontier>—</strong></div>
+              <div><small>Visitados</small><strong data-cycle-visited>—</strong></div>
+              <div><small>Sucessores gerados</small><strong data-cycle-successors>—</strong></div>
+            </div>
+
+            <div class="generic-cycle-actions">
+              <button type="button" data-cycle-next>Próxima etapa</button>
+              <button type="button" data-cycle-complete>Executar um ciclo</button>
+              <button type="button" data-cycle-reset>Reiniciar</button>
+            </div>
+
+            <div class="generic-cycle-note" data-cycle-note>
+              <strong>Observe:</strong> a fronteira guarda possibilidades descobertas que ainda não foram examinadas.
+            </div>
+          </div>
+        </div>
+      `;
+      anatomy.after(interactive);
+
+      const genericGraph = {
+        A: ["B", "C", "D"],
+        B: ["A", "E", "F"],
+        C: ["A", "F", "G"],
+        D: ["A", "G", "H"],
+        E: ["B", "I"],
+        F: ["B", "C", "I", "J"],
+        G: ["C", "D", "J", "H"],
+        H: ["D", "G", "K"],
+        I: ["E", "F", "L"],
+        J: ["F", "G", "K", "L"],
+        K: ["H", "J", "L"],
+        L: ["I", "J", "K"]
+      };
+      const preferredOrder = ["A", "C", "D", "G", "H", "K", "B", "F", "J", "E", "I", "L"];
+      const goal = "K";
+      const nodeEls = [...interactive.querySelectorAll("[data-cycle-node]")];
+      const edgeEls = [...interactive.querySelectorAll("[data-cycle-edge]")];
+      const stageEls = [...interactive.querySelectorAll("[data-cycle-stage]")];
+      const titleEl = interactive.querySelector("[data-cycle-title]");
+      const explanationEl = interactive.querySelector("[data-cycle-explanation]");
+      const currentEl = interactive.querySelector("[data-cycle-current]");
+      const frontierEl = interactive.querySelector("[data-cycle-frontier]");
+      const visitedEl = interactive.querySelector("[data-cycle-visited]");
+      const successorsEl = interactive.querySelector("[data-cycle-successors]");
+      const noteEl = interactive.querySelector("[data-cycle-note]");
+      const nextButton = interactive.querySelector("[data-cycle-next]");
+      const completeButton = interactive.querySelector("[data-cycle-complete]");
+      const resetButton = interactive.querySelector("[data-cycle-reset]");
+
+      let phase = 0;
+      let frontier = [];
+      let visited = [];
+      let current = null;
+      let generated = [];
+      let parents = {};
+      let found = false;
+      let discovered = new Set();
+
+      const displayList = (items) => items.length ? `[ ${items.join(", ")} ]` : "—";
+      const edgeKey = (a, b) => [a, b].sort().join("-");
+
+      function chooseNext() {
+        return preferredOrder.find(item => frontier.includes(item)) || frontier[0] || null;
+      }
+
+      function pathTo(node) {
+        if (!node) return [];
+        const path = [node];
+        let cursor = node;
+        while (parents[cursor]) {
+          cursor = parents[cursor];
+          path.unshift(cursor);
+        }
+        return path;
+      }
+
+      function renderCycle() {
+        stageEls.forEach(item => item.classList.toggle("active", Number(item.dataset.cycleStage) === phase));
+        currentEl.textContent = current || "—";
+        frontierEl.textContent = displayList(frontier);
+        visitedEl.textContent = displayList(visited);
+        successorsEl.textContent = displayList(generated);
+
+        const path = found ? pathTo(goal) : [];
+        nodeEls.forEach(node => {
+          const id = node.dataset.cycleNode;
+          node.classList.toggle("frontier", frontier.includes(id));
+          node.classList.toggle("visited", visited.includes(id));
+          node.classList.toggle("current", current === id && !found);
+          node.classList.toggle("successor", generated.includes(id));
+          node.classList.toggle("found", found && path.includes(id));
+        });
+
+        edgeEls.forEach(edge => {
+          const key = edge.dataset.cycleEdge.split("-").sort().join("-");
+          const activeExpansion = current && generated.some(item => edgeKey(current, item) === key);
+          const activePath = found && path.slice(1).some((item, index) => edgeKey(path[index], item) === key);
+          edge.classList.toggle("active", Boolean(activeExpansion && !found));
+          edge.classList.toggle("found", Boolean(activePath));
+        });
+
+        nextButton.disabled = found;
+        completeButton.disabled = found;
+      }
+
+      function resetCycle() {
+        phase = 0;
+        frontier = [];
+        visited = [];
+        current = null;
+        generated = [];
+        parents = {};
+        found = false;
+        discovered = new Set();
+        titleEl.textContent = "Preparar a busca";
+        explanationEl.textContent = "Começamos colocando o estado inicial na fronteira. A busca ainda não examinou nenhum estado.";
+        noteEl.innerHTML = "<strong>Observe:</strong> a fronteira guarda possibilidades descobertas que ainda não foram examinadas.";
+        renderCycle();
+      }
+
+      function advanceCycle() {
+        if (found) return;
+
+        if (phase === 0) {
+          frontier = ["A"];
+          discovered.add("A");
+          generated = [];
+          current = null;
+          titleEl.textContent = "Preparar a busca";
+          explanationEl.textContent = "O estado inicial A entra na fronteira. Agora existe uma possibilidade pronta para ser examinada.";
+          noteEl.innerHTML = "<strong>Fronteira:</strong> contém estados descobertos, mas ainda pendentes de exploração.";
+          phase = 1;
+          renderCycle();
+          return;
+        }
+
+        if (phase === 1) {
+          current = chooseNext();
+          frontier = frontier.filter(item => item !== current);
+          generated = [];
+          titleEl.textContent = `Escolher um estado: ${current}`;
+          explanationEl.textContent = `Uma regra de escolha, ainda não discutida nesta parte da aula, seleciona ${current} entre as alternativas da fronteira.`;
+          noteEl.innerHTML = `<strong>Importante:</strong> por enquanto, interessa observar o ciclo. Mais adiante veremos diferentes regras para escolher o próximo estado.`;
+          phase = 2;
+          renderCycle();
+          return;
+        }
+
+        if (phase === 2) {
+          titleEl.textContent = `Testar o objetivo: ${current}`;
+          if (current === goal) {
+            found = true;
+            const path = pathTo(goal);
+            explanationEl.textContent = `${current} satisfaz a condição de objetivo. A busca pode parar e reconstruir o caminho encontrado.`;
+            noteEl.innerHTML = `<strong>Objetivo encontrado:</strong> ${path.join(" → ")}. Observe que o teste acontece antes de expandir novamente o estado.`;
+            renderCycle();
+            return;
+          }
+          explanationEl.textContent = `${current} ainda não é o objetivo. Como a busca precisa continuar, o próximo passo será descobrir quais estados podem ser alcançados a partir dele.`;
+          noteEl.innerHTML = "<strong>Teste de objetivo:</strong> evita expandir estados desnecessariamente quando a solução já foi alcançada.";
+          phase = 3;
+          renderCycle();
+          return;
+        }
+
+        if (phase === 3) {
+          generated = genericGraph[current].filter(item => !visited.includes(item) && item !== current);
+          titleEl.textContent = `Expandir o estado ${current}`;
+          explanationEl.textContent = generated.length
+            ? `Aplicamos as ações possíveis em ${current} e obtemos os sucessores ${generated.join(", ")}. Alguns podem já ter sido descobertos anteriormente.`
+            : `${current} não produz nenhum sucessor útil neste momento.`;
+          noteEl.innerHTML = "<strong>Expandir:</strong> significa aplicar as ações permitidas ao estado atual para gerar novas possibilidades.";
+          phase = 4;
+          renderCycle();
+          return;
+        }
+
+        if (phase === 4) {
+          if (!visited.includes(current)) visited.push(current);
+          const additions = [];
+          generated.forEach(item => {
+            if (!discovered.has(item) && !visited.includes(item)) {
+              discovered.add(item);
+              frontier.push(item);
+              parents[item] = current;
+              additions.push(item);
+            }
+          });
+          const repeated = generated.filter(item => !additions.includes(item));
+          titleEl.textContent = "Registrar e continuar";
+          explanationEl.textContent = additions.length
+            ? `${current} é registrado como visitado. ${additions.join(", ")} ${additions.length === 1 ? "entra" : "entram"} na fronteira para ciclos futuros.`
+            : `${current} é registrado como visitado, mas nenhum novo estado precisa ser acrescentado à fronteira.`;
+          noteEl.innerHTML = repeated.length
+            ? `<strong>Controle de repetição:</strong> ${repeated.join(", ")} ${repeated.length === 1 ? "já estava" : "já estavam"} conhecido(s), por isso não entra(m) novamente na fronteira.`
+            : "<strong>O ciclo recomeça:</strong> agora a busca volta a escolher uma das alternativas que ficaram pendentes na fronteira.";
+          phase = 1;
+          renderCycle();
+        }
+      }
+
+      nextButton.addEventListener("click", advanceCycle);
+      completeButton.addEventListener("click", () => {
+        if (found) return;
+        let guard = 0;
+        if (phase === 0) advanceCycle();
+        do {
+          advanceCycle();
+          guard += 1;
+        } while (!found && phase !== 1 && guard < 8);
+      });
+      resetButton.addEventListener("click", resetCycle);
+      resetCycle();
+    }
+  }
+
   const graph = {
     recepcao: ["corredor_a", "sala_101"],
     corredor_a: ["recepcao", "copa", "arquivo"],
