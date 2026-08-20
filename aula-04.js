@@ -295,7 +295,9 @@
           </div>
         </div>
       `;
-      anatomy.after(interactive);
+      const anatomyFigure = anatomy.nextElementSibling;
+      if (anatomyFigure?.classList.contains("lesson-figure")) anatomyFigure.after(interactive);
+      else anatomy.after(interactive);
 
       const genericGraph = {
         A: ["B", "C", "D"],
