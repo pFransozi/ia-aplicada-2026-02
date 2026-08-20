@@ -135,5 +135,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- styles.css
           git rm -- .github/workflows/apply-responsive-fixes-once.yml
+          if [ -f .github/responsive-fixes-trigger.txt ]; then
+            git rm -- .github/responsive-fixes-trigger.txt
+          fi
           git commit -m "fix: melhora responsividade dos calendários"
           git push origin HEAD:main
