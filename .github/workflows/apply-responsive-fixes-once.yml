@@ -19,8 +19,8 @@ jobs:
           fetch-depth: 0
 
       - name: Aplicar responsividade dos calendários
-        shell: python
         run: |
+          python - <<'PY'
           from pathlib import Path
 
           path = Path("styles.css")
@@ -125,6 +125,7 @@ jobs:
           text = path.read_text(encoding="utf-8")
           if marker not in text:
               path.write_text(text.rstrip() + block + "\n", encoding="utf-8")
+          PY
 
       - name: Validar e publicar
         run: |
