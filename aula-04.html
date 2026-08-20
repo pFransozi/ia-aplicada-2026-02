@@ -74,16 +74,16 @@
           <article class="card topics-card">
             <h3>Conteúdo programático</h3>
             <div class="topic-list">
+              <div>Problemas de busca e espaço de estados</div>
               <div>Busca não informada</div>
-              <div>Problemas de busca</div>
-              <div>Fronteira</div>
+              <div>Fronteira da busca</div>
               <div>Expansão de estados</div>
-              <div>Estados visitados</div>
+              <div>Controle de estados visitados</div>
+              <div>Fila e pilha</div>
               <div>Busca em largura — BFS</div>
               <div>Busca em profundidade — DFS</div>
-              <div>Fila e pilha</div>
-              <div>Comparação experimental</div>
               <div>Critérios de comparação</div>
+              <div>Comparação experimental</div>
             </div>
             <div class="note-banner">
               <strong>Objetivo da aula:</strong> aplicar busca em largura e busca em profundidade em espaços de estados, explicando como a estratégia de fronteira altera a ordem de exploração e o comportamento da solução.
@@ -137,8 +137,47 @@
           </div>
         </div>
 
-        <div class="note-banner">
-          <strong>Da formulação para a busca:</strong> situação real → abstração → estados e ações → espaço de estados → algoritmo de busca → caminho encontrado.
+        <div class="section-heading" style="margin-top:2.8rem">
+          <p class="eyebrow">Conexão entre as aulas</p>
+          <h2>Da formulação para a busca</h2>
+          <p>Na Aula 03, transformamos uma situação do mundo real em uma representação que o computador consegue manipular. Nesta aula, essa representação deixa de ser apenas uma descrição: ela passa a ser percorrida por um algoritmo.</p>
+        </div>
+
+        <div class="search-mode-grid">
+          <article class="search-mode-card">
+            <span class="search-mode-label">Etapa 01</span>
+            <h4>Situação real</h4>
+            <p>Começamos com um problema concreto, ainda cercado por detalhes do mundo real.</p>
+          </article>
+          <article class="search-mode-card">
+            <span class="search-mode-label">Etapa 02</span>
+            <h4>Abstração</h4>
+            <p>Selecionamos apenas as informações necessárias para resolver o problema.</p>
+          </article>
+          <article class="search-mode-card">
+            <span class="search-mode-label">Etapa 03</span>
+            <h4>Estados e ações</h4>
+            <p>Descrevemos as configurações possíveis e as mudanças permitidas entre elas.</p>
+          </article>
+          <article class="search-mode-card">
+            <span class="search-mode-label">Etapa 04</span>
+            <h4>Espaço de estados</h4>
+            <p>Organizamos todas as configurações alcançáveis e suas conexões.</p>
+          </article>
+          <article class="search-mode-card">
+            <span class="search-mode-label">Etapa 05</span>
+            <h4>Algoritmo de busca</h4>
+            <p>Definimos em que ordem as possibilidades serão examinadas.</p>
+          </article>
+          <article class="search-mode-card">
+            <span class="search-mode-label">Etapa 06</span>
+            <h4>Caminho encontrado</h4>
+            <p>Reconstruímos a sequência de ações que conduz do início ao objetivo.</p>
+          </article>
+        </div>
+
+        <div class="search-mode-takeaway">
+          <strong>O percurso completo:</strong> situação real → abstração → estados e ações → espaço de estados → algoritmo de busca → caminho encontrado.
         </div>
 
         <figure class="lesson-figure">
@@ -152,33 +191,77 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Ideia central</p>
-          <h2>Buscar é escolher o que explorar agora e o que deixar para depois</h2>
-          <p>Em cada passo, o algoritmo retira um estado da <strong>fronteira</strong>, verifica se ele resolve o problema e, se necessário, gera novos estados possíveis.</p>
+          <h2>Buscar é organizar as alternativas até encontrar o objetivo</h2>
+          <p>A partir do estado inicial, o algoritmo descobre diferentes possibilidades. Ele não precisa explorar todas ao mesmo tempo: uma alternativa é examinada agora, enquanto as demais permanecem guardadas para serem consideradas depois.</p>
         </div>
 
         <div class="concept-callout">
-          <div class="concept-icon" aria-hidden="true">?</div>
-          <div>
-            <h3>O que significa busca não informada?</h3>
-            <p>O algoritmo conhece o <strong>estado inicial</strong>, as <strong>ações e transições possíveis</strong> e o <strong>objetivo</strong>, mas não possui uma estimativa de qual alternativa parece mais próxima ou mais promissora. Ele precisa decidir a exploração usando apenas a organização da fronteira.</p>
+          <div class="concept-icon" aria-hidden="true">↳</div>
+          <div class="search-concept-content">
+            <h3>Um exemplo antes do algoritmo</h3>
+            <p class="search-concept-intro">Ao examinar a <strong>Recepção</strong>, o robô pode descobrir duas alternativas: seguir para o <strong>Corredor A</strong> ou para a <strong>Sala 101</strong>. As duas são válidas, mas o algoritmo precisa escolher qual delas será examinada primeiro.</p>
+            <div class="search-mode-grid">
+              <article class="search-mode-card">
+                <span class="search-mode-label">Explorar agora</span>
+                <h4>Um estado é retirado para análise</h4>
+                <p>O algoritmo verifica se esse estado é o objetivo e, caso não seja, descobre quais estados podem ser alcançados a partir dele.</p>
+              </article>
+              <article class="search-mode-card search-mode-informed">
+                <span class="search-mode-label">Guardar para depois</span>
+                <h4>As outras alternativas ficam na fronteira</h4>
+                <p>A fronteira funciona como a lista de possibilidades pendentes. Sua organização determina qual alternativa será a próxima.</p>
+              </article>
+            </div>
+            <div class="search-mode-takeaway">
+              <strong>Nenhuma alternativa precisa ser esquecida:</strong> a busca separa o estado examinado agora dos estados que continuam aguardando exploração.
+            </div>
           </div>
         </div>
 
+        <div class="section-heading" style="margin-top:2.8rem">
+          <p class="eyebrow">Ciclo geral da busca</p>
+          <h2>O mesmo conjunto de passos se repete</h2>
+          <p>BFS e DFS seguem a mesma mecânica básica. O que muda entre elas é a regra usada para selecionar o próximo estado da fronteira.</p>
+        </div>
+
         <div class="search-anatomy">
-          <article><small>01</small><h3>Estado inicial</h3><p>O ponto de partida da busca.</p></article>
-          <article><small>02</small><h3>Fronteira</h3><p>Estados descobertos que ainda aguardam exploração.</p></article>
-          <article><small>03</small><h3>Expansão</h3><p>Retirar um estado e gerar seus sucessores válidos.</p></article>
-          <article><small>04</small><h3>Visitados</h3><p>Registro dos estados já considerados, evitando repetições.</p></article>
-          <article><small>05</small><h3>Objetivo</h3><p>Teste que encerra a busca quando encontramos uma solução.</p></article>
+          <article><small>01</small><h3>Preparar a busca</h3><p>Colocar o estado inicial na fronteira e iniciar o registro de estados conhecidos.</p></article>
+          <article><small>02</small><h3>Escolher um estado</h3><p>Retirar da fronteira a próxima alternativa, conforme a estratégia adotada.</p></article>
+          <article><small>03</small><h3>Testar o objetivo</h3><p>Verificar se o estado retirado satisfaz a condição de chegada.</p></article>
+          <article><small>04</small><h3>Expandir o estado</h3><p>Gerar os sucessores válidos produzidos pelas ações disponíveis.</p></article>
+          <article><small>05</small><h3>Registrar e continuar</h3><p>Ignorar repetições, guardar os novos estados na fronteira e repetir o ciclo.</p></article>
         </div>
 
         <figure class="lesson-figure">
           <img src="assets/aula-04-anatomia-busca.svg" alt="Fluxo da busca com fronteira, retirada de estado, teste de objetivo, expansão, filtro de repetidos e inserção de sucessores." loading="lazy">
-          <figcaption>BFS e DFS compartilham o mesmo ciclo geral; a diferença principal está na política usada para retirar o próximo estado da fronteira.</figcaption>
+          <figcaption>O ciclo continua enquanto houver estados na fronteira. Quando o objetivo é encontrado, o algoritmo usa os registros do percurso para reconstruir o caminho.</figcaption>
         </figure>
 
+        <div class="concept-callout" style="margin-top:2rem">
+          <div class="concept-icon" aria-hidden="true">?</div>
+          <div class="search-concept-content">
+            <h3>Por que BFS e DFS são buscas não informadas?</h3>
+            <p class="search-concept-intro">Esses algoritmos conhecem o <strong>estado inicial</strong>, as <strong>ações e transições possíveis</strong> e o <strong>objetivo</strong>. No entanto, não usam uma estimativa para dizer qual alternativa parece mais próxima ou mais promissora.</p>
+            <div class="search-mode-grid">
+              <article class="search-mode-card">
+                <span class="search-mode-label">BFS</span>
+                <h4>Escolhe a alternativa mais antiga</h4>
+                <p>Com uma fila, explora primeiro os estados descobertos há mais tempo e avança por níveis.</p>
+              </article>
+              <article class="search-mode-card search-mode-informed">
+                <span class="search-mode-label">DFS</span>
+                <h4>Escolhe a alternativa mais recente</h4>
+                <p>Com uma pilha, continua pelo último estado descoberto e aprofunda um caminho.</p>
+              </article>
+            </div>
+            <div class="search-mode-takeaway">
+              <strong>A mecânica permanece a mesma:</strong> retirar → testar → expandir → registrar → continuar. A política da fronteira é que produz ordens de exploração diferentes.
+            </div>
+          </div>
+        </div>
+
         <div class="note-banner">
-          <strong>Uma distinção importante:</strong> o espaço de estados descreve o problema; a fronteira é uma estrutura mantida pelo algoritmo enquanto ele procura uma solução.
+          <strong>Não confunda as estruturas:</strong> o <strong>espaço de estados</strong> representa o problema; a <strong>fronteira</strong> guarda as alternativas ainda pendentes; e o conjunto de <strong>visitados</strong> registra o que já foi considerado para evitar repetições desnecessárias.
         </div>
       </div>
     </section>
