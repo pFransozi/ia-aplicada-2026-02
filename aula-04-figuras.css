@@ -693,3 +693,38 @@ body.theme-dark .generic-cycle-actions button:first-child:hover:not(:disabled) {
   .generic-cycle-actions { display: grid; grid-template-columns: 1fr; }
   .generic-cycle-actions button { width: 100%; }
 }
+
+/*
+ * Prioridade semântica dos estados do grafo.
+ * Um nó pode carregar mais de uma classe durante a transição entre etapas.
+ * A aparência deve refletir sempre o estado mais atual do ciclo.
+ */
+.generic-cycle-node.frontier:not(.current):not(.found) {
+  border-color: #5d7ee8;
+  background: #eaf0ff;
+  color: #2848ae;
+  box-shadow: 0 0 0 4px rgba(93,126,232,.10), 0 8px 16px rgba(36,50,76,.08);
+}
+
+.generic-cycle-node.goal.frontier:not(.current):not(.found) {
+  box-shadow: 0 0 0 4px rgba(123,97,216,.15), 0 0 0 8px rgba(93,126,232,.07), 0 8px 16px rgba(36,50,76,.08);
+}
+
+.generic-cycle-node.goal.current:not(.found) {
+  box-shadow: 0 0 0 4px rgba(123,97,216,.16), 0 0 0 9px rgba(215,134,32,.10), 0 12px 24px rgba(36,50,76,.12);
+}
+
+body.theme-dark .generic-cycle-node.frontier:not(.current):not(.found) {
+  border-color: #84a2ff;
+  background: #16213a;
+  color: #dce6ff;
+  box-shadow: 0 0 0 4px rgba(132,162,255,.13), 0 8px 18px rgba(0,0,0,.3);
+}
+
+body.theme-dark .generic-cycle-node.goal.frontier:not(.current):not(.found) {
+  box-shadow: 0 0 0 4px rgba(169,148,255,.18), 0 0 0 8px rgba(132,162,255,.08), 0 8px 18px rgba(0,0,0,.3);
+}
+
+body.theme-dark .generic-cycle-node.goal.current:not(.found) {
+  box-shadow: 0 0 0 4px rgba(169,148,255,.18), 0 0 0 9px rgba(244,180,95,.11), 0 12px 24px rgba(0,0,0,.28);
+}
