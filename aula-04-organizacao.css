@@ -1,0 +1,107 @@
+/* Organização integrada: estrutura, código e experimento por algoritmo */
+.code-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.1rem 0 1.6rem;
+}
+
+.code-example-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
+}
+
+.code-example-label {
+  padding: .72rem 1rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.code-example-card .code-block {
+  margin: 0;
+  height: 100%;
+  min-height: 350px;
+  border: 0;
+  border-radius: 0;
+}
+
+.frontier-structure-card h3 {
+  margin: 1rem 0 .55rem;
+  font-size: 1.65rem;
+}
+
+.structure-demo {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .7rem;
+  align-items: center;
+  margin-top: 1.1rem;
+  padding: .9rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--soft);
+}
+
+.structure-demo span {
+  color: var(--muted);
+  font-size: .75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.structure-demo strong {
+  text-align: center;
+  color: var(--ink);
+  letter-spacing: .04em;
+}
+
+.algorithm-experiment {
+  margin-top: 2.5rem;
+  padding-top: .3rem;
+}
+
+.algorithm-experiment-heading {
+  margin-bottom: 1.1rem;
+}
+
+.fixed-search-simulator {
+  margin-top: 0;
+}
+
+.fixed-search-simulator .simulator-card > h3 {
+  margin-bottom: 1rem;
+}
+
+body.theme-dark .code-example-card {
+  background: #172033;
+  border-color: #2a3750;
+}
+
+body.theme-dark .code-example-label {
+  border-color: #2a3750;
+}
+
+body.theme-dark .structure-demo {
+  background: #111a2b;
+  border-color: #2a3750;
+}
+
+body.theme-dark .structure-demo strong {
+  color: #f5f7fb;
+}
+
+@media (max-width: 900px) {
+  .code-comparison-grid { grid-template-columns: 1fr; }
+  .code-example-card .code-block { min-height: 0; }
+}
+
+@media (max-width: 640px) {
+  .structure-demo { grid-template-columns: 1fr; text-align: center; }
+}
