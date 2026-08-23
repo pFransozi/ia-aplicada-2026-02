@@ -34,7 +34,6 @@
     .study-prose { max-width: 1060px; min-width: 0; }
     .study-prose h3 { margin: 2.4rem 0 .8rem; font-size: 1.55rem; }
     .study-prose h3:first-child { margin-top: 0; }
-    .study-prose h4 { margin: 1.65rem 0 .55rem; font-size: 1.08rem; }
     .study-prose p, .study-prose li { color: var(--muted); }
     .study-prose p { margin: 0 0 1.05rem; }
     .study-prose ul, .study-prose ol { padding-left: 1.3rem; }
@@ -245,18 +244,12 @@ entrada_na_fronteira = (estado, caminho)</code></pre>
           <pre class="code-block"><code>from collections import deque
 
 
-def bfs(estado_inicial, objetivo_atingido, sucessores, mostrar_passos=True):
+def bfs(estado_inicial, objetivo_atingido, sucessores):
     fronteira = deque([(estado_inicial, [estado_inicial])])
     visitados = {estado_inicial}
-    expandidos = []
 
     while fronteira:
         estado, caminho = fronteira.popleft()
-        expandidos.append(estado)
-
-        if mostrar_passos:
-            print("Expandindo:", estado)
-            print("Fronteira:", list(fronteira))
 
         if objetivo_atingido(estado):
             return caminho
@@ -279,17 +272,24 @@ def bfs(estado_inicial, objetivo_atingido, sucessores, mostrar_passos=True):
         <p>A BFS encontra primeiro uma solução com o <strong>menor número de ações</strong>. Quando todas as ações têm o mesmo custo, isso também significa menor custo total. Se cada movimento custa 1, então um caminho com 3 movimentos custa menos que um caminho com 5 movimentos.</p>
         <p>Quando os custos são diferentes, a conclusão muda. Um caminho com menos passos pode ser mais caro que outro com mais passos. Por exemplo, atravessar uma porta pode custar 1, enquanto atravessar outra pode custar 100. Nesse caso, contar passos não basta para escolher a solução mais barata.</p>
         <div class="study-callout violet"><strong>Quando os custos são diferentes</strong><p>Se o problema exige minimizar custo acumulado, a fronteira precisa priorizar o menor custo conhecido, não apenas a menor profundidade. Esse raciocínio leva à busca de custo uniforme, relacionada ao algoritmo de Dijkstra.</p></div>
-        <h3>O preço da busca por níveis</h3>
-        <p>Se cada estado gerar aproximadamente <strong>b</strong> sucessores e a solução mais rasa estiver na profundidade <strong>d</strong>, a análise clássica de busca em árvore apresenta tempo e espaço da ordem de <span class="formula">O(b^d)</span>. A memória costuma ser o principal gargalo porque uma camada larga pode permanecer inteira na fronteira (Russell; Norvig, 2022, §3.4).</p>
+        <h3>Por que a busca por níveis pode ficar cara?</h3>
+        <p>A BFS é fácil de entender porque avança por camadas. O problema é que cada camada pode ser muito maior que a anterior. Se cada estado gerar 3 sucessores, por exemplo, a quantidade de estados por nível pode crescer assim: 1, 3, 9, 27, 81.</p>
+        <p>A expressão <span class="formula">O(b^d)</span> resume esse crescimento. O <strong>b</strong> representa quantos sucessores cada estado pode gerar. O <strong>d</strong> representa a profundidade da solução mais rasa. Quanto maior a ramificação e quanto mais longe estiver a solução, mais estados podem ser gerados antes de encontrá-la.</p>
+        <p>Na prática, o ponto mais sensível costuma ser a memória. Como a BFS guarda na fronteira muitos estados do mesmo nível ou do próximo nível, a fila pode crescer rapidamente. Em um grafo pequeno isso quase não aparece; em um espaço de estados grande, essa fila pode virar o principal limite da estratégia (Russell; Norvig, 2022, §3.4).</p>
       </div>
     </div></section>
 
     <section class="study-section alt" id="dfs"><div class="container">
       <div class="study-heading"><p class="study-kicker">Parte IV · Depth-First Search</p><h2>DFS transforma recência em prioridade</h2><p>A busca em profundidade organiza a fronteira como uma pilha. O último estado inserido é o primeiro a ser retirado, e a estratégia aprofunda um ramo antes de voltar às alternativas.</p></div>
-      <div class="study-grid">
+      <div class="callout-grid">
+        <div class="study-callout"><strong>Estrutura</strong><p>Pilha LIFO, último a entrar, primeiro a sair.</p></div>
+        <div class="study-callout violet"><strong>Política</strong><p>Explorar primeiro o caminho descoberto mais recentemente.</p></div>
+        <div class="study-callout teal"><strong>Efeito</strong><p>Pode chegar rápido a estados profundos, mas a primeira solução encontrada depende muito da ordem dos sucessores.</p></div>
+      </div>
+      <div class="study-grid equal">
         <div class="study-prose">
           <h3>Estrutura do algoritmo</h3>
-          <p>A DFS começa pelo estado inicial. A cada iteração, retira o estado mais recente da fronteira, testa o objetivo e empilha sucessores ainda não visitados.</p>
+          <p>A DFS começa pelo estado inicial. A cada iteração, retira o estado mais recente da fronteira, testa o objetivo e empilha sucessores ainda não visitados. A estrutura geral é parecida com a BFS; a diferença central é retirar da pilha, não da fila.</p>
           <pre class="code-block"><code>DFS(inicial, objetivo):
     fronteira ← pilha com o estado inicial
     visitados ← {estado inicial}
@@ -306,17 +306,37 @@ def bfs(estado_inicial, objetivo_atingido, sucessores, mostrar_passos=True):
                 empilhar sucessor
 
     devolver falha</code></pre>
-          <h3>A ordem dos sucessores faz diferença</h3>
-          <p>DFS é particularmente sensível à ordem de geração dos sucessores. Alterar essa ordem pode mudar o ramo explorado primeiro, o caminho encontrado e a quantidade de estados expandidos antes do objetivo.</p>
-          <h3>Completude, ciclos e memória</h3>
-          <p>Em busca em árvore sobre espaços infinitos, DFS não é completa, pois pode continuar indefinidamente em um ramo. Em um grafo finito com controle adequado de visitados, o algoritmo termina porque um mesmo estado não é inserido repetidamente.</p>
-          <p>A vantagem clássica é o menor consumo de memória em busca em árvore. Com fator de ramificação <strong>b</strong> e profundidade máxima <strong>m</strong>, a análise tradicional apresenta espaço <span class="formula">O(bm)</span>, porque a estratégia mantém principalmente o caminho corrente e as alternativas associadas a ele (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
         </div>
-        <aside class="study-stack">
-          <div class="study-callout"><strong>Estrutura</strong><p>Pilha LIFO, último a entrar, primeiro a sair.</p></div>
-          <div class="study-callout violet"><strong>Força</strong><p>Tende a manter menos alternativas simultaneamente em buscas profundas.</p></div>
-          <div class="study-callout teal"><strong>Limitação</strong><p>Pode investir muito trabalho em um ramo pouco útil e não garante menor custo.</p></div>
-        </aside>
+        <div class="study-prose">
+          <h3>Exemplo em Python</h3>
+          <p>Em Python, uma lista pode funcionar como pilha. O método <code>append()</code> empilha um novo item no fim da lista, e <code>pop()</code> retira justamente esse item mais recente.</p>
+          <pre class="code-block"><code>def dfs(estado_inicial, objetivo_atingido, sucessores):
+    fronteira = [(estado_inicial, [estado_inicial])]
+    visitados = {estado_inicial}
+
+    while fronteira:
+        estado, caminho = fronteira.pop()
+
+        if objetivo_atingido(estado):
+            return caminho
+
+        for sucessor in sucessores(estado):
+            if sucessor not in visitados:
+                visitados.add(sucessor)
+                novo_caminho = caminho + [sucessor]
+                fronteira.append((sucessor, novo_caminho))
+
+    return None</code></pre>
+        </div>
+      </div>
+      <div class="study-prose">
+        <p>A linha mais importante para entender a DFS é <code>pop()</code>. Ela retira o item mais recente da pilha. Com isso, os sucessores recém-descobertos passam à frente das alternativas mais antigas.</p>
+        <h3>A ordem dos sucessores faz diferença</h3>
+        <p>DFS é particularmente sensível à ordem de geração dos sucessores. Se os sucessores forem gerados como <code>A</code>, <code>B</code> e <code>C</code>, eles serão empilhados nessa ordem, e <code>C</code> será retirado primeiro. Isso pode mudar o ramo explorado primeiro, o caminho encontrado e a quantidade de estados expandidos antes do objetivo.</p>
+        <h3>Completude, ciclos e memória</h3>
+        <p>Em um espaço infinito, a DFS pode continuar descendo por um ramo e nunca voltar para outra alternativa que contém uma solução. Por isso, ela não é completa nesse tipo de busca em árvore.</p>
+        <p>Em grafos finitos com controle de visitados, a situação melhora: como o mesmo estado não é inserido repetidamente, a busca termina. Ainda assim, a primeira solução encontrada não precisa ser a mais curta nem a de menor custo.</p>
+        <p>A vantagem clássica da DFS é a memória. Como ela aprofunda um caminho antes de guardar muitas camadas ao mesmo tempo, tende a manter menos alternativas simultaneamente que a BFS. Em busca em árvore, a análise tradicional apresenta espaço <span class="formula">O(bm)</span>, onde <strong>b</strong> é o fator de ramificação e <strong>m</strong> é a profundidade máxima considerada (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
       </div>
     </div></section>
 
