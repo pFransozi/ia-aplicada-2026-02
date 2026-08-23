@@ -6,6 +6,10 @@
 }
 
 /* Ajustes da visão geral */
+.overview-grid { align-items: start; }
+.overview-grid .competency { align-self: start; min-height: 0; }
+.overview-grid .competency h3 { margin-bottom: .8rem; }
+.overview-grid .competency .skill { margin-top: 0; }
 .overview-grid .competency-alt { border-left: 4px solid var(--violet); }
 .competency-alt .skill strong { background: var(--violet-soft); color: var(--violet); }
 .overview-grid .c11 { grid-column: 2; }
