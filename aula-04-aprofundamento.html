@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Material de aprofundamento da Aula 04 de Inteligência Artificial Aplicada: busca em espaço de estados, fronteira, busca em largura, busca em profundidade, completude, optimalidade de custo, complexidade e implementação.">
   <meta name="theme-color" content="#0f172a">
-  <title>Aula 04 - Material de aprofundamento | Inteligência Artificial Aplicada</title>
+  <title>Aula 04 | Material de aprofundamento | Inteligência Artificial Aplicada</title>
   <link rel="stylesheet" href="styles.css">
   <script defer src="script.js"></script>
   <style>
@@ -31,9 +31,7 @@
     .study-heading h2 { margin: 0; font-size: clamp(2.15rem,4vw,3.6rem); line-height: 1.04; letter-spacing: -.045em; }
     .study-heading > p:last-child { margin: 1rem 0 0; color: var(--muted); font-size: 1.05rem; }
     .study-kicker { margin: 0 0 .65rem; color: var(--primary); font-size: .76rem; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
-    .study-grid { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(280px,.75fr); gap: 2rem; align-items: start; }
     .study-prose { max-width: 1060px; min-width: 0; }
-    .study-grid .study-prose { max-width: none; }
     .study-prose h3 { margin: 2.4rem 0 .8rem; font-size: 1.55rem; }
     .study-prose h3:first-child { margin-top: 0; }
     .study-prose h4 { margin: 1.65rem 0 .55rem; font-size: 1.08rem; }
@@ -41,6 +39,8 @@
     .study-prose p { margin: 0 0 1.05rem; }
     .study-prose ul, .study-prose ol { padding-left: 1.3rem; }
     .study-prose li + li { margin-top: .42rem; }
+    .study-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(280px,.8fr); gap: 2rem; align-items: start; }
+    .study-grid.equal { grid-template-columns: repeat(2,minmax(0,1fr)); }
     .study-stack { display: grid; gap: 1rem; }
     .study-callout { padding: 1.15rem 1.25rem; border-left: 4px solid var(--primary); border-radius: 0 16px 16px 0; background: color-mix(in srgb,var(--primary) 9%,var(--surface)); }
     .study-callout strong { display: block; margin-bottom: .35rem; color: var(--primary); }
@@ -80,7 +80,7 @@
     .references li + li { margin-top: .65rem; }
     .study-page .site-footer { border-top: 1px solid var(--line); }
     @media (max-width: 980px) {
-      .study-hero-grid, .study-grid { grid-template-columns: 1fr; }
+      .study-hero-grid, .study-grid, .study-grid.equal { grid-template-columns: 1fr; }
       .study-toc { grid-template-columns: repeat(3,minmax(0,1fr)); }
       .criteria-grid, .callout-grid, .callout-grid.two { grid-template-columns: repeat(2,minmax(0,1fr)); }
       .check-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -100,7 +100,7 @@
 
   <header class="site-header" id="inicio">
     <div class="container nav-wrap">
-      <a class="brand" href="index.html" aria-label="IA Aplicada - página principal">
+      <a class="brand" href="index.html" aria-label="IA Aplicada, página principal">
         <span class="brand-mark" aria-hidden="true">IA</span>
         <span><strong>IA Aplicada</strong><small>Engenharia de Software</small></span>
       </a>
@@ -145,7 +145,7 @@
         <p>Em muitos problemas de IA, o espaço de estados não precisa estar completamente materializado em memória. O algoritmo pode descobrir apenas a parte necessária enquanto gera sucessores durante a execução (Russell; Norvig, 2022, §3.3).</p>
         <h3>Do espaço de estados ao ciclo da busca</h3>
         <p>Representar o problema é apenas o ponto de partida. Mesmo sabendo quais estados existem e quais movimentos são possíveis, ainda precisamos de um procedimento que escolha <strong>o que explorar agora</strong>, mantenha outras alternativas disponíveis e repita o processo até encontrar o objetivo.</p>
-        <p>Esse procedimento é o <strong>ciclo da busca</strong>. BFS e DFS repetem as mesmas etapas básicas. A diferença aparece na política usada para organizar a fronteira e escolher o próximo estado.</p>
+        <p>Esse procedimento é o <strong>ciclo da busca</strong>. BFS e DFS repetem as mesmas etapas básicas; a diferença aparece na política usada para organizar a fronteira e escolher o próximo estado.</p>
       </div>
       <div class="check-grid" style="margin:1.5rem 0 2rem">
         <article class="check-card"><span>01</span><strong>Preparar a busca</strong><p>Colocar o estado inicial na fronteira e registrar que ele já foi descoberto.</p></article>
@@ -213,7 +213,12 @@ entrada_na_fronteira = (estado, caminho)</code></pre>
 
     <section class="study-section" id="bfs"><div class="container">
       <div class="study-heading"><p class="study-kicker">Parte III · Breadth-First Search</p><h2>BFS transforma proximidade do início em prioridade</h2><p>A busca em largura organiza a fronteira como uma fila. O primeiro estado inserido é o primeiro a ser retirado, e a exploração avança por níveis de profundidade.</p></div>
-      <div class="study-grid">
+      <div class="callout-grid">
+        <div class="study-callout"><strong>Estrutura</strong><p>Fila FIFO, primeiro a entrar, primeiro a sair.</p></div>
+        <div class="study-callout violet"><strong>Política</strong><p>Explorar primeiro os estados mais próximos do início.</p></div>
+        <div class="study-callout teal"><strong>Efeito</strong><p>Antes de avançar para profundidade 3, a BFS explora os estados relevantes de profundidade 2.</p></div>
+      </div>
+      <div class="study-grid equal">
         <div class="study-prose">
           <h3>Estrutura do algoritmo</h3>
           <p>A BFS começa pelo estado inicial. A cada iteração, retira o estado mais antigo da fronteira, testa se ele é objetivo e, se ainda não for, coloca seus sucessores não visitados no fim da fila.</p>
@@ -234,24 +239,24 @@ entrada_na_fronteira = (estado, caminho)</code></pre>
 
     devolver falha</code></pre>
         </div>
-        <aside class="study-stack">
-          <div class="study-callout"><strong>Estrutura</strong><p>Fila FIFO, primeiro a entrar, primeiro a sair.</p></div>
-          <div class="study-callout violet"><strong>Política</strong><p>Explorar primeiro os estados mais próximos do início.</p></div>
-          <div class="study-callout teal"><strong>Efeito</strong><p>Antes de avançar para profundidade 3, a BFS explora os estados relevantes de profundidade 2.</p></div>
-        </aside>
-      </div>
-      <div class="study-prose">
-        <h3>Exemplo em Python</h3>
-        <p>Em Python, a fila pode ser implementada com <code>deque</code>. Cada item da fronteira carrega dois dados: o estado atual e o caminho usado para chegar até ele.</p>
-        <pre class="code-block"><code>from collections import deque
+        <div class="study-prose">
+          <h3>Exemplo em Python</h3>
+          <p>Em Python, a fila pode ser implementada com <code>deque</code>. Cada item da fronteira carrega dois dados: o estado atual e o caminho usado para chegar até ele.</p>
+          <pre class="code-block"><code>from collections import deque
 
 
-def bfs(estado_inicial, objetivo_atingido, sucessores):
+def bfs(estado_inicial, objetivo_atingido, sucessores, mostrar_passos=True):
     fronteira = deque([(estado_inicial, [estado_inicial])])
     visitados = {estado_inicial}
+    expandidos = []
 
     while fronteira:
         estado, caminho = fronteira.popleft()
+        expandidos.append(estado)
+
+        if mostrar_passos:
+            print("Expandindo:", estado)
+            print("Fronteira:", list(fronteira))
 
         if objetivo_atingido(estado):
             return caminho
@@ -263,6 +268,9 @@ def bfs(estado_inicial, objetivo_atingido, sucessores):
                 fronteira.append((sucessor, novo_caminho))
 
     return None</code></pre>
+        </div>
+      </div>
+      <div class="study-prose">
         <p>A linha mais importante para entender a BFS é <code>popleft()</code>. Ela retira o item mais antigo da fila. Já <code>append()</code> coloca novos sucessores no fim. Essa combinação mantém a exploração por ordem de descoberta.</p>
         <h3>Completude</h3>
         <p>Dizer que BFS é <strong>completa</strong> significa dizer que ela não ignora uma solução que esteja ao seu alcance. Imagine a busca como camadas ao redor do estado inicial: primeiro a profundidade 0, depois a profundidade 1, depois a profundidade 2, e assim por diante.</p>
@@ -372,28 +380,29 @@ metricas["ordem_expansao"].append(estado)
 metricas["pico_fronteira"] = max(
     metricas["pico_fronteira"], len(fronteira)
 )</code></pre>
-        <h3>Extensão opcional: aprofundamento iterativo</h3>
-        <p>Em <strong>iterative deepening</strong>, executamos uma DFS limitada primeiro à profundidade 0, depois 1, 2, 3 e assim por diante. Sob as condições da análise clássica, a técnica mantém requisitos de memória próximos aos de DFS e recupera a exploração progressiva por profundidade. Com custos unitários, encontra uma solução mais rasa (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
+        <h3>Extensão opcional: existe um meio-termo entre BFS e DFS?</h3>
+        <p>Em <strong>iterative deepening</strong>, executamos uma DFS limitada primeiro à profundidade 0, depois 1, 2, 3 e assim por diante. Sob as condições da análise clássica, a técnica mantém requisitos de memória próximos aos de DFS e recupera a exploração progressiva por profundidade; com custos unitários, encontra uma solução mais rasa (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
+        <p>Ela não precisa fazer parte da implementação obrigatória desta aula. Seu valor aqui é mostrar que estratégias de busca podem ser projetadas a partir de trade-offs, e não apenas memorizadas como uma lista de algoritmos.</p>
         <div class="study-callout teal"><strong>Ponte para a próxima etapa</strong><p>BFS, DFS e aprofundamento iterativo ainda não usam uma estimativa para decidir se um estado parece mais promissor que outro. Quando o espaço cresce demais, surge a pergunta: podemos usar conhecimento do domínio para escolher melhor o próximo estado? Essa é a entrada para busca heurística.</p></div>
       </div>
     </div></section>
 
     <section class="study-section" id="sintese"><div class="container">
-      <div class="study-heading"><p class="study-kicker">Síntese final</p><h2>O que deve permanecer depois dos detalhes</h2><p>BFS e DFS não são apenas “fila versus pilha”. A estrutura da fronteira implementa uma política de exploração, e essa política produz garantias e custos diferentes.</p></div>
+      <div class="study-heading"><p class="study-kicker">Síntese final</p><h2>O que deve permanecer depois dos detalhes</h2><p>BFS e DFS não são apenas fila versus pilha. A estrutura da fronteira implementa uma política de exploração, e essa política produz garantias e custos diferentes.</p></div>
       <div class="check-grid">
         <article class="check-card"><span>01</span><strong>Modelo</strong><p>Distinguir a representação do problema da estrutura construída durante a busca.</p></article>
         <article class="check-card"><span>02</span><strong>Fronteira</strong><p>Explicar por que a organização da fronteira determina a ordem da busca.</p></article>
-        <article class="check-card"><span>03</span><strong>Visitados</strong><p>Explicar como ciclos e caminhos redundantes afetam a busca.</p></article>
+        <article class="check-card"><span>03</span><strong>Visitados</strong><p>Explicar como ciclos e caminhos redundantes afetam a busca e por que controlamos estados repetidos.</p></article>
         <article class="check-card"><span>04</span><strong>BFS</strong><p>Relacionar FIFO, exploração por níveis, completude, custos iguais e crescimento de memória.</p></article>
         <article class="check-card"><span>05</span><strong>DFS</strong><p>Relacionar LIFO, aprofundamento, ordem de sucessores, memória e ausência de garantia de optimalidade de custo.</p></article>
-        <article class="check-card"><span>06</span><strong>Avaliação</strong><p>Comparar algoritmos usando completude, optimalidade de custo, tempo e espaço, além de métricas experimentais.</p></article>
+        <article class="check-card"><span>06</span><strong>Avaliação</strong><p>Comparar algoritmos usando completude, optimalidade de custo, tempo e espaço, complementando a teoria com métricas experimentais.</p></article>
       </div>
     </div></section>
 
     <section class="study-section alt" id="referencias"><div class="container">
       <div class="study-heading"><p class="study-kicker">Referências utilizadas</p><h2>Leituras que sustentam este aprofundamento</h2><p>As referências no corpo do texto foram padronizadas entre parênteses, deixando o foco da explicação no conceito e mantendo a fonte indicada ao final da ideia.</p></div>
       <ul class="references study-prose">
-        <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Global Edition. Pearson, 2022. Capítulo 3, especialmente §§ 3.3-3.4: algoritmos de busca, estratégias não informadas, BFS, DFS, aprofundamento iterativo e comparação por completude, optimalidade de custo, tempo e espaço.</li>
+        <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Global Edition. Pearson, 2022. Capítulo 3, especialmente §§ 3.3 a 3.4: algoritmos de busca, estratégias não informadas, BFS, DFS, aprofundamento iterativo e comparação por completude, optimalidade de custo, tempo e espaço.</li>
         <li>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson/Addison-Wesley, 2009. Capítulo 3: estruturas e estratégias para busca em espaço de estados; Capítulo 6, §6.1: busca baseada em recursão.</li>
         <li>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. Manning, 2020. Capítulo 2: fundamentos de busca, representação de estados, busca não informada, BFS, DFS, filas, pilhas, visitados e reconstrução de caminhos.</li>
         <li>FINLAY, Janet; DIX, Alan. <em>An Introduction to Artificial Intelligence</em>. Routledge, 2002. Capítulo 3: busca, busca exaustiva e poda simples como apoio conceitual complementar.</li>
