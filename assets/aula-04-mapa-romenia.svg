@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 700" role="img" aria-labelledby="title desc">
+<title id="title">Mapa simplificado da Romênia para problemas de busca</title>
+<desc id="desc">Cidades conectadas por estradas com custos, usado como referência para busca em espaço de estados.</desc>
+<rect width="1040" height="700" fill="#ffffff"/>
+<style>text{font-family: Georgia, "Times New Roman", serif; fill:#232323}.city{font-size:22px;font-weight:700}.cost{font-size:18px}.road{stroke:#222;stroke-width:2.4;stroke-linecap:round}.node{fill:#b10f22;stroke:#1f1f1f;stroke-width:3}</style>
+<line class="road" x1="85" y1="170" x2="120" y2="105"/>
+<line class="road" x1="120" y1="105" x2="160" y2="35"/>
+<line class="road" x1="160" y1="35" x2="315" y2="245"/>
+<line class="road" x1="85" y1="170" x2="315" y2="245"/>
+<line class="road" x1="85" y1="170" x2="90" y2="355"/>
+<line class="road" x1="90" y1="355" x2="210" y2="425"/>
+<line class="road" x1="210" y1="425" x2="220" y2="500"/>
+<line class="road" x1="220" y1="500" x2="210" y2="575"/>
+<line class="road" x1="210" y1="575" x2="375" y2="605"/>
+<line class="road" x1="375" y1="605" x2="360" y2="355"/>
+<line class="road" x1="375" y1="605" x2="505" y2="455"/>
+<line class="road" x1="360" y1="355" x2="315" y2="245"/>
+<line class="road" x1="360" y1="355" x2="505" y2="455"/>
+<line class="road" x1="315" y1="245" x2="475" y2="245"/>
+<line class="road" x1="475" y1="245" x2="665" y2="535"/>
+<line class="road" x1="505" y1="455" x2="665" y2="535"/>
+<line class="road" x1="665" y1="535" x2="615" y2="655"/>
+<line class="road" x1="665" y1="535" x2="780" y2="490"/>
+<line class="road" x1="780" y1="490" x2="920" y2="490"/>
+<line class="road" x1="920" y1="490" x2="970" y2="620"/>
+<line class="road" x1="780" y1="490" x2="870" y2="300"/>
+<line class="road" x1="870" y1="300" x2="805" y2="170"/>
+<line class="road" x1="805" y1="170" x2="675" y2="105"/>
+<text class="cost" x="98" y="133">75</text>
+<text class="cost" x="130" y="70">71</text>
+<text class="cost" x="240" y="140">151</text>
+<text class="cost" x="195" y="210">140</text>
+<text class="cost" x="70" y="260">118</text>
+<text class="cost" x="150" y="390">111</text>
+<text class="cost" x="205" y="465">70</text>
+<text class="cost" x="205" y="535">75</text>
+<text class="cost" x="290" y="590">120</text>
+<text class="cost" x="350" y="480">146</text>
+<text class="cost" x="455" y="535">138</text>
+<text class="cost" x="335" y="300">80</text>
+<text class="cost" x="435" y="390">97</text>
+<text class="cost" x="395" y="235">99</text>
+<text class="cost" x="575" y="370">211</text>
+<text class="cost" x="585" y="500">101</text>
+<text class="cost" x="630" y="600">90</text>
+<text class="cost" x="720" y="510">85</text>
+<text class="cost" x="850" y="478">98</text>
+<text class="cost" x="945" y="555">86</text>
+<text class="cost" x="825" y="395">142</text>
+<text class="cost" x="840" y="235">92</text>
+<text class="cost" x="735" y="140">87</text>
+<rect class="node" x="77" y="162" width="16" height="16"/>
+<text class="city" x="20" y="178">Arad</text>
+<rect class="node" x="112" y="97" width="16" height="16"/>
+<text class="city" x="138" y="105">Zerind</text>
+<rect class="node" x="152" y="27" width="16" height="16"/>
+<text class="city" x="178" y="35">Oradea</text>
+<rect class="node" x="307" y="237" width="16" height="16"/>
+<text class="city" x="333" y="230">Sibiu</text>
+<rect class="node" x="82" y="347" width="16" height="16"/>
+<text class="city" x="108" y="355">Timisoara</text>
+<rect class="node" x="202" y="417" width="16" height="16"/>
+<text class="city" x="232" y="430">Lugoj</text>
+<rect class="node" x="212" y="492" width="16" height="16"/>
+<text class="city" x="242" y="505">Mehadia</text>
+<rect class="node" x="202" y="567" width="16" height="16"/>
+<text class="city" x="125" y="580">Drobeta</text>
+<rect class="node" x="367" y="597" width="16" height="16"/>
+<text class="city" x="335" y="643">Craiova</text>
+<rect class="node" x="352" y="347" width="16" height="16"/>
+<text class="city" x="378" y="343">Rimnicu Vilcea</text>
+<rect class="node" x="497" y="447" width="16" height="16"/>
+<text class="city" x="480" y="430">Pitesti</text>
+<rect class="node" x="467" y="237" width="16" height="16"/>
+<text class="city" x="447" y="220">Fagaras</text>
+<rect class="node" x="657" y="527" width="16" height="16"/>
+<text class="city" x="669" y="577">Bucharest</text>
+<rect class="node" x="607" y="647" width="16" height="16"/>
+<text class="city" x="629" y="665">Giurgiu</text>
+<rect class="node" x="772" y="482" width="16" height="16"/>
+<text class="city" x="770" y="525">Urziceni</text>
+<rect class="node" x="912" y="482" width="16" height="16"/>
+<text class="city" x="942" y="500">Hirsova</text>
+<rect class="node" x="962" y="612" width="16" height="16"/>
+<text class="city" x="950" y="665">Eforie</text>
+<rect class="node" x="862" y="292" width="16" height="16"/>
+<text class="city" x="892" y="305">Vaslui</text>
+<rect class="node" x="797" y="162" width="16" height="16"/>
+<text class="city" x="827" y="175">Iasi</text>
+<rect class="node" x="667" y="97" width="16" height="16"/>
+<text class="city" x="640" y="85">Neamt</text>
+</svg>
