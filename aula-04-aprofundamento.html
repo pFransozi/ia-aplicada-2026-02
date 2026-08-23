@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Material de aprofundamento da Aula 04 de Inteligência Artificial Aplicada: busca em espaço de estados, fronteira, busca em largura, busca em profundidade, completude, optimalidade, complexidade e implementação.">
+  <meta name="description" content="Material de aprofundamento da Aula 04 de Inteligência Artificial Aplicada: busca em espaço de estados, fronteira, busca em largura, busca em profundidade, completude, optimalidade de custo, complexidade e implementação.">
   <meta name="theme-color" content="#0f172a">
   <title>Aula 04 — Material de aprofundamento | Inteligência Artificial Aplicada</title>
   <link rel="stylesheet" href="styles.css">
@@ -60,16 +60,6 @@
     .mini-card p { margin: 0; color: var(--muted); }
     .code-block { margin: 1.35rem 0; padding: 1.25rem; overflow-x: auto; border: 1px solid #293653; border-radius: 18px; background: #0b1220; color: #dbe6f7; line-height: 1.58; }
     .code-block code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: .88rem; }
-    .diagram-shell { margin: 1.6rem 0; padding: 1.25rem; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); }
-    .diagram-title { margin-bottom: 1rem; font-weight: 850; }
-    .state-flow { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: .65rem; align-items: center; }
-    .state-flow div { padding: .85rem .7rem; border: 1px solid var(--line); border-radius: 13px; background: var(--surface-soft); text-align: center; font-size: .84rem; font-weight: 800; }
-    .state-flow .arrow { border: 0; background: transparent; color: var(--primary); font-size: 1.35rem; padding: .3rem; }
-    .tree-diagram { display: grid; gap: .8rem; }
-    .tree-level { display: flex; justify-content: center; gap: .8rem; flex-wrap: wrap; }
-    .tree-node { min-width: 62px; padding: .62rem .72rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); text-align: center; font-weight: 850; }
-    .tree-node.start { border-color: color-mix(in srgb, var(--primary) 55%, var(--line)); background: color-mix(in srgb, var(--primary) 10%, var(--surface)); color: var(--primary); }
-    .tree-node.goal { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); color: var(--accent); }
     .formula { display: inline-block; margin: .35rem 0; padding: .45rem .65rem; border-radius: 10px; background: var(--surface-soft); color: var(--text); font-family: "SFMono-Regular", Consolas, monospace; font-size: .9rem; }
     .criteria-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: .85rem; margin: 1.4rem 0; }
     .criteria-card { padding: 1.05rem; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); }
@@ -80,6 +70,9 @@
     .check-card span { display: inline-grid; place-items: center; width: 34px; height: 34px; margin-bottom: .8rem; border-radius: 10px; color: #fff; background: var(--primary); font-size: .78rem; font-weight: 900; }
     .check-card strong { display: block; margin-bottom: .35rem; }
     .check-card p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .study-figure { margin: 1.6rem 0; padding: 1rem; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); }
+    .study-figure img { display: block; width: 100%; height: auto; border-radius: 14px; }
+    .study-figure figcaption { margin-top: .85rem; color: var(--muted); font-size: .88rem; line-height: 1.55; }
     .references { padding-left: 1.2rem; }
     .references li + li { margin-top: .65rem; }
     .study-page .site-footer { border-top: 1px solid var(--line); }
@@ -87,8 +80,6 @@
       .study-hero-grid, .study-grid { grid-template-columns: 1fr; }
       .study-toc { grid-template-columns: repeat(3,minmax(0,1fr)); }
       .criteria-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-      .state-flow { grid-template-columns: 1fr; }
-      .state-flow .arrow { transform: rotate(90deg); }
       .check-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
     }
     @media (max-width: 680px) {
@@ -131,7 +122,6 @@
           <p class="study-lead">A aula principal apresenta BFS e DFS e coloca os algoritmos em prática. Este material aprofunda o modelo de busca, as estruturas de controle, as garantias formais e os trade-offs de tempo, memória e qualidade da solução.</p>
           <div class="study-meta">
             <span>Engenharia de Software</span>
-            <span>2026/2</span>
             <span>Leitura ampliada</span>
           </div>
           <div class="study-actions">
@@ -141,7 +131,7 @@
         </div>
         <aside class="study-card">
           <strong>Como usar este material</strong>
-          <p>Leia depois de executar BFS e DFS ao menos uma vez. A intenção é explicar por que os algoritmos se comportam de maneiras diferentes e quais condições sustentam afirmações como “completo”, “ótimo” ou “mais econômico em memória”.</p>
+          <p>Este material aprofunda os conceitos trabalhados na Aula 04, mantendo a mesma nomenclatura e a mesma estrutura básica de BFS e DFS usadas em sala.</p>
         </aside>
       </div>
     </section>
@@ -162,52 +152,49 @@
         <div class="study-heading">
           <p class="study-kicker">Parte I · Da formulação ao algoritmo</p>
           <h2>O espaço de estados não é a busca</h2>
-          <p>A Aula 03 definiu o problema. A busca é o processo que explora essa definição para construir uma sequência de ações capaz de chegar a um objetivo.</p>
+          <p>A Aula 03 definiu o problema. Na Aula 04, a busca passou a percorrer essa representação para construir um caminho até o objetivo.</p>
         </div>
 
         <div class="study-grid">
           <div class="study-prose">
             <h3>Problema, espaço de estados e solução</h3>
-            <p>Em uma formulação clássica, temos um estado inicial, ações, um modelo de transição, um teste ou conjunto de estados objetivo e, quando necessário, um custo associado às ações. O <strong>espaço de estados</strong> é o conjunto de situações alcançáveis e das transições possíveis entre elas. Uma solução é um caminho que parte do estado inicial e alcança um objetivo.</p>
-            <p>Russell e Norvig enfatizam que, em muitos problemas de IA, esse grafo não está materializado previamente em memória. Ele é <strong>implícito</strong>: conhecemos o estado inicial e sabemos gerar sucessores aplicando ações e transições. O algoritmo descobre a porção necessária do espaço enquanto executa.</p>
+            <p>Em uma formulação clássica, temos um estado inicial, ações, um modelo de transição, um teste ou conjunto de estados objetivo e, quando necessário, um custo associado às ações. O <strong>espaço de estados</strong> reúne as situações alcançáveis e as transições possíveis. Uma solução é um caminho que parte do estado inicial e alcança o objetivo.</p>
+            <p>Em muitos problemas de IA, o espaço de estados não precisa estar completamente materializado em memória. O algoritmo pode descobrir apenas a parte necessária enquanto gera sucessores durante a execução (Russell; Norvig, 2022, §3.3).</p>
 
-            <div class="diagram-shell">
-              <div class="diagram-title">Da representação para a execução</div>
-              <div class="state-flow">
-                <div>estado inicial</div><div class="arrow">→</div><div>gerar sucessores</div><div class="arrow">→</div><div>escolher próximo estado</div>
-              </div>
-            </div>
+            <h3>O ciclo da busca é o mesmo usado em sala</h3>
+            <p>BFS e DFS seguem a mesma mecânica geral apresentada na Aula 04: preparar a busca, escolher um estado da fronteira, testar o objetivo, expandir o estado, registrar novas possibilidades e continuar. A estratégia muda justamente na regra usada para retirar o próximo estado da fronteira.</p>
 
-            <h3>Estado e nó de busca não são exatamente a mesma coisa</h3>
-            <p>Um <strong>estado</strong> descreve uma configuração do problema: por exemplo, “o robô está no Hall”. Um <strong>nó de busca</strong> é um registro criado pelo algoritmo para representar uma ocorrência desse estado dentro do processo de procura. Além do estado, o nó pode guardar o pai, a ação que o gerou, a profundidade e o custo do caminho.</p>
-            <p>Essa distinção importa porque o mesmo estado pode ser alcançado por caminhos diferentes. Se guardarmos apenas o nome do estado, sabemos onde estamos; se guardarmos também o pai e a ação, podemos reconstruir como chegamos até ali.</p>
+            <figure class="study-figure">
+              <img src="assets/aula-04-anatomia-busca.svg" alt="Ciclo geral da busca com fronteira, retirada de estado, teste de objetivo, expansão, controle de repetidos e inserção de sucessores." loading="lazy">
+              <figcaption>Reutilizamos a anatomia da busca da aula principal porque o ciclo é comum a BFS e DFS. O que muda é a política de organização da fronteira.</figcaption>
+            </figure>
+
+            <h3>Estado e registro da busca não são exatamente a mesma coisa</h3>
+            <p>Na aula usamos principalmente o termo <strong>estado</strong>, porque ele deixa o algoritmo mais legível. Na literatura, é comum distinguir o estado do <strong>nó de busca</strong>: o estado representa uma configuração do problema; o nó é um registro interno que pode acrescentar informações como pai, ação, profundidade ou custo.</p>
+            <p>Essa distinção ajuda a entender como o mesmo estado pode ser alcançado por caminhos diferentes. Para manter a continuidade com o código utilizado em sala, continuaremos usando <strong>estado</strong>, <strong>caminho</strong>, <strong>fronteira</strong> e <strong>visitados</strong> como nomenclatura principal (Russell; Norvig, 2022, §3.3).</p>
 
             <div class="mini-grid">
-              <article class="mini-card"><h4>Estado</h4><p>Parte da definição do problema. Ex.: <code>"hall"</code>.</p></article>
-              <article class="mini-card"><h4>Nó de busca</h4><p>Registro do algoritmo. Ex.: estado = <code>"hall"</code>, pai = <code>"sala_101"</code>, profundidade = 2.</p></article>
+              <article class="mini-card"><h4>Estado</h4><p>Configuração do problema. Ex.: <code>"Hall"</code>.</p></article>
+              <article class="mini-card"><h4>Registro interno</h4><p>Pode associar ao estado um caminho, pai, profundidade ou custo.</p></article>
             </div>
 
-            <h3>Grafo de estados × árvore de busca</h3>
-            <p>O grafo de estados representa relações do domínio. A árvore de busca representa os caminhos que o algoritmo está construindo a partir do estado inicial. Em um grafo, um mesmo estado pode ter múltiplos predecessores; em uma árvore de busca, essas ocorrências podem aparecer em ramos diferentes se o algoritmo não controlar repetições.</p>
+            <h3>Grafo de estados × estrutura construída pela busca</h3>
+            <p>O grafo de estados representa as relações do domínio. A execução da busca constrói caminhos a partir do estado inicial conforme os estados vão sendo retirados e expandidos. Um mesmo estado pode ser alcançado por mais de um caminho; por isso o conjunto de <strong>visitados</strong> é importante para evitar explorações repetidas e ciclos.</p>
 
-            <div class="diagram-shell">
-              <div class="diagram-title">Uma árvore de busca possível</div>
-              <div class="tree-diagram" aria-label="Árvore de busca simples">
-                <div class="tree-level"><span class="tree-node start">A</span></div>
-                <div class="tree-level"><span class="tree-node">B</span><span class="tree-node">C</span><span class="tree-node">D</span></div>
-                <div class="tree-level"><span class="tree-node">E</span><span class="tree-node">F</span><span class="tree-node">G</span><span class="tree-node goal">H</span></div>
-              </div>
-            </div>
+            <figure class="study-figure">
+              <img src="assets/aula-04-representacao-busca.svg" alt="Passagem da representação do problema para o grafo de estados e para a execução da busca." loading="lazy">
+              <figcaption>A figura já usada na Aula 04 mostra a transição da representação do problema para o grafo de estados e, depois, para a estrutura dinâmica mantida pelo algoritmo.</figcaption>
+            </figure>
           </div>
 
           <aside class="study-stack">
             <div class="study-callout">
-              <strong>Russell & Norvig</strong>
-              <p>O Capítulo 3 organiza a resolução de problemas por busca a partir da formulação, do espaço de estados e de algoritmos que constroem árvores de busca.</p>
+              <strong>Representação</strong>
+              <p>Define quais estados e transições existem no problema.</p>
             </div>
             <div class="study-callout violet">
-              <strong>Luger</strong>
-              <p>O Capítulo 3 trata explicitamente o problema como procura de um caminho em um grafo de estados, conectando representação, operadores e estratégias de exploração.</p>
+              <strong>Busca</strong>
+              <p>Define em que ordem as possibilidades serão exploradas.</p>
             </div>
             <div class="study-callout teal">
               <strong>Ponto de engenharia</strong>
@@ -222,51 +209,51 @@
       <div class="container">
         <div class="study-heading">
           <p class="study-kicker">Parte II · Controle da exploração</p>
-          <h2>Fronteira, estados alcançados e repetição</h2>
-          <p>A diferença entre estratégias de busca aparece na forma como o algoritmo organiza os estados que já descobriu, mas ainda não expandiu.</p>
+          <h2>Fronteira, visitados e repetição</h2>
+          <p>A nomenclatura aqui é a mesma da Aula 04: <strong>fronteira</strong> guarda o que ainda precisa ser explorado; <strong>visitados</strong> registra os estados já descobertos para evitar repetições desnecessárias.</p>
         </div>
 
         <div class="study-grid">
           <div class="study-prose">
             <h3>A fronteira é o trabalho pendente</h3>
-            <p>Luger usa a lista <em>open</em> para registrar estados descobertos cujos sucessores ainda não foram examinados e a lista <em>closed</em> para registrar estados já considerados. Russell e Norvig usam o termo <em>frontier</em> para os nós pendentes e, em algoritmos de busca em grafo, uma estrutura <em>reached</em> para estados já alcançados.</p>
-            <p>Na implementação da aula usamos os nomes <strong>fronteira</strong> e <strong>visitados</strong>. Os nomes mudam entre autores e implementações, mas a pergunta permanece: <em>o que ainda preciso explorar e o que já sei que foi alcançado?</em></p>
+            <p>Um estado pode ter sido descoberto e ainda não ter sido retirado para análise. Enquanto isso, ele permanece na fronteira. A estrutura usada para organizar essa fronteira determina qual estado será escolhido em seguida: fila na BFS e pilha na DFS.</p>
 
-            <h3>Expandir não é apenas visitar</h3>
-            <p>Expandir um nó significa aplicar as ações válidas ao seu estado e produzir sucessores. Um nó pode estar na fronteira por algum tempo antes de ser expandido. Essa diferença ajuda a compreender as métricas de laboratório: número de estados descobertos, número de estados efetivamente expandidos e tamanho máximo da fronteira são medidas diferentes.</p>
+            <h3>Expandir não é apenas encontrar um estado</h3>
+            <p><strong>Expandir</strong> significa retirar um estado da fronteira e gerar seus sucessores válidos. Por isso, estados descobertos, estados expandidos e tamanho da fronteira são métricas diferentes. Essa distinção é útil quando comparamos o esforço de BFS e DFS.</p>
 
             <h3>Por que estados repetidos importam?</h3>
-            <p>Grafos podem conter ciclos. Em um prédio, por exemplo, se “Recepção → Corredor” é possível e “Corredor → Recepção” também é, uma busca que não reconhece estados repetidos pode continuar gerando os mesmos caminhos. Luger destaca o uso de estruturas explícitas para evitar loops; Hurbans também apresenta uma estrutura de visitados como parte importante das implementações de BFS e DFS.</p>
+            <p>Grafos podem conter ciclos. Se “Recepção → Corredor” e “Corredor → Recepção” forem transições válidas, uma busca sem controle de repetição pode gerar os mesmos estados indefinidamente. O conjunto de <strong>visitados</strong> impede esse comportamento nas versões utilizadas na Aula 04 (Luger, 2009, §3.2; Hurbans, 2020, cap. 2).</p>
 
-            <h3>Quando marcar como alcançado?</h3>
-            <p>Em BFS com custos unitários, Russell e Norvig permitem registrar o estado como alcançado assim que ele é gerado. Como os níveis são produzidos em ordem crescente de profundidade, a primeira chegada ao estado já possui o menor número de ações. Isso permite descartar futuras ocorrências daquele mesmo estado nessa versão do algoritmo.</p>
+            <h3>Quando marcar como visitado?</h3>
+            <p>No pseudocódigo utilizado em sala, tanto em BFS quanto em DFS, o estado inicial já começa em <strong>visitados</strong> e cada sucessor é marcado como visitado <strong>quando entra na fronteira</strong>. Assim, o mesmo estado não é colocado várias vezes na estrutura pendente. Essa escolha é adequada às versões didáticas de busca em grafo que estamos utilizando.</p>
 
             <h3>Como recuperar a solução?</h3>
-            <p>Encontrar o objetivo não basta quando queremos devolver o caminho. Luger sugere guardar, junto de cada estado, informação sobre o ancestral. Hurbans usa a mesma ideia ao atribuir um pai a cada nó. Ao encontrar o objetivo, seguimos os ponteiros de pai até a raiz e invertemos a sequência.</p>
+            <p>Na Aula 04, cada entrada da fronteira carrega <strong>estado, caminho</strong>. Isso torna a reconstrução da solução direta: quando o objetivo é retirado da fronteira, o algoritmo simplesmente devolve o caminho associado a ele.</p>
 
-            <pre class="code-block"><code>nó = {
-    "estado": "laboratorio",
-    "pai": nó_do_hall,
-    "acao": "hall -> laboratorio",
-    "profundidade": 3
-}
+            <pre class="code-block"><code>fronteira contém:
+    (estado, caminho)
 
-# Reconstrução:
-objetivo -> pai -> pai -> ... -> inicial</code></pre>
+exemplo:
+    ("Hall", ["Recepção", "Sala 101", "Hall"])
+
+quando estado é objetivo:
+    devolver caminho</code></pre>
+
+            <p>Uma implementação mais econômica pode guardar apenas um ponteiro para o pai de cada estado e reconstruir o caminho ao final. Essa alternativa reduz cópias de listas, mas é uma decisão de implementação; não muda a política de exploração de BFS ou DFS (Russell; Norvig, 2022, §3.3).</p>
           </div>
 
           <aside class="study-stack">
             <div class="study-callout">
               <strong>Fronteira</strong>
-              <p>Estados ou nós descobertos que ainda aguardam expansão.</p>
+              <p>Estados descobertos que ainda aguardam exploração.</p>
             </div>
             <div class="study-callout violet">
-              <strong>Alcançados / visitados</strong>
-              <p>Estrutura usada para reconhecer estados que já apareceram e controlar repetições.</p>
+              <strong>Visitados</strong>
+              <p>Estados já descobertos e registrados para evitar repetições.</p>
             </div>
             <div class="study-callout teal">
-              <strong>Pais</strong>
-              <p>Metadados usados para reconstruir o caminho de solução sem carregar uma cópia completa do caminho em cada entrada da fronteira.</p>
+              <strong>Caminho</strong>
+              <p>Sequência carregada junto com o estado na implementação didática usada em sala.</p>
             </div>
           </aside>
         </div>
@@ -277,51 +264,62 @@ objetivo -> pai -> pai -> ... -> inicial</code></pre>
       <div class="container">
         <div class="study-heading">
           <p class="study-kicker">Parte III · Breadth-First Search</p>
-          <h2>BFS transforma profundidade em prioridade</h2>
-          <p>A busca em largura expande primeiro os nós mais rasos. A fila FIFO não é um detalhe: ela implementa exatamente essa política.</p>
+          <h2>BFS transforma proximidade do início em prioridade</h2>
+          <p>A busca em largura organiza a fronteira como uma <strong>fila</strong>. O primeiro estado inserido é o primeiro a ser retirado; por isso a exploração avança por níveis.</p>
         </div>
 
         <div class="study-grid">
           <div class="study-prose">
+            <h3>O mesmo pseudocódigo usado na Aula 04</h3>
+            <p>O aprofundamento mantém a mesma versão trabalhada em sala. Isso permite separar duas coisas: primeiro compreender e implementar o algoritmo; depois analisar formalmente suas propriedades.</p>
+
+            <pre class="code-block"><code>BFS(inicial, objetivo):
+    fronteira ← fila com o estado inicial
+    visitados ← {estado inicial}
+
+    enquanto fronteira não estiver vazia:
+        estado, caminho ← retirar o primeiro
+
+        se estado é objetivo:
+            devolver caminho
+
+        para cada sucessor do estado:
+            se sucessor não foi visitado:
+                marcar como visitado
+                adicionar ao fim da fila
+
+    devolver falha</code></pre>
+
             <h3>Por que a fila produz busca por níveis?</h3>
-            <p>Quando um nó é expandido, seus sucessores são inseridos no fim da fila. Os nós que já estavam aguardando — e que pertencem ao mesmo nível ou a níveis mais rasos — permanecem na frente. Por isso, nenhum nó de profundidade 3 é expandido antes de todos os nós relevantes de profundidade 2 que chegaram antes à fila.</p>
-
-            <pre class="code-block"><code>fronteira = FILA([inicial])
-alcancados = {inicial}
-
-while fronteira:
-    no = retirar_primeiro(fronteira)
-
-    for filho in expandir(no):
-        if filho.estado not in alcancados:
-            alcancados.add(filho.estado)
-            filho.pai = no
-            if objetivo(filho.estado):
-                return reconstruir(filho)
-            adicionar_ao_fim(fronteira, filho)</code></pre>
+            <p>Quando um estado é expandido, seus sucessores são inseridos no fim da fila. Os estados que já estavam aguardando permanecem na frente. Dessa forma, a BFS processa primeiro as alternativas descobertas mais cedo e desenvolve a busca por níveis de profundidade.</p>
 
             <h3>Completude</h3>
-            <p>Na formulação comparativa de Russell e Norvig, BFS é completa sob as condições indicadas para a análise — em particular, fator de ramificação finito e existência de solução a uma profundidade finita, ou espaço de estados finito. Intuitivamente, como ela percorre os níveis sistematicamente, não abandona para sempre um nível raso em favor de um ramo profundo.</p>
+            <p>Sob as condições usuais da análise — fator de ramificação finito e uma solução em profundidade finita, ou um espaço de estados finito — BFS é completa: se houver solução nessas condições, a estratégia é garantida a alcançá-la (Russell; Norvig, 2022, §3.4).</p>
 
-            <h3>Optimalidade: qual “ótimo”?</h3>
-            <p>BFS encontra uma solução com o <strong>menor número de ações</strong>. Isso implica custo ótimo apenas quando todas as ações têm o mesmo custo. Se atravessar uma aresta puder custar 1, 5 ou 100, uma solução com três passos pode ser mais cara do que outra com quatro. Nesse cenário, a política adequada deixa de ser “menor profundidade” e passa a considerar custo acumulado.</p>
+            <h3>Optimalidade de custo</h3>
+            <p>BFS encontra uma solução com o <strong>menor número de ações</strong>. Isso corresponde também ao menor custo quando todas as ações têm o mesmo custo, como ocorre nos exemplos da Aula 04. Se as ações tiverem custos diferentes, menor profundidade e menor custo deixam de ser equivalentes.</p>
+
+            <div class="study-callout violet">
+              <strong>Quando os custos são diferentes</strong>
+              <p>Se o problema exige minimizar custo acumulado, a prioridade da fronteira precisa considerar esse custo. Esse raciocínio leva à busca de custo uniforme, relacionada ao algoritmo de Dijkstra. Não é necessário implementá-la nesta aula; o ponto é perceber por que BFS deixa de ser ótima em custo.</p>
+            </div>
 
             <h3>O preço da busca por níveis</h3>
-            <p>Se cada nó gerar em média <strong>b</strong> sucessores e a solução mais rasa estiver na profundidade <strong>d</strong>, a análise clássica de BFS dá tempo e espaço da ordem de <span class="formula">O(b^d)</span>. O problema de memória é especialmente severo porque uma camada inteira de nós pendentes pode precisar permanecer armazenada.</p>
+            <p>Se cada estado gerar aproximadamente <strong>b</strong> sucessores e a solução mais rasa estiver na profundidade <strong>d</strong>, a análise clássica de busca em árvore apresenta tempo e espaço da ordem de <span class="formula">O(b^d)</span>. A memória costuma ser o principal gargalo porque uma camada larga pode permanecer inteira na fronteira (Russell; Norvig, 2022, §3.4).</p>
           </div>
 
           <aside class="study-stack">
             <div class="study-callout">
               <strong>Estrutura</strong>
-              <p>FIFO — primeiro a entrar, primeiro a sair.</p>
+              <p>FILA · FIFO — primeiro a entrar, primeiro a sair.</p>
             </div>
             <div class="study-callout violet">
               <strong>Força</strong>
-              <p>Exploração sistemática por profundidade e menor número de ações quando encontra a primeira solução.</p>
+              <p>Explora por níveis e encontra uma solução com menor número de passos quando encontra a primeira solução.</p>
             </div>
             <div class="study-callout teal">
               <strong>Limitação</strong>
-              <p>O crescimento da fronteira pode tornar a memória o gargalo antes mesmo de o tempo de CPU se tornar o principal problema.</p>
+              <p>A fronteira pode crescer rapidamente quando existem muitas alternativas em um mesmo nível.</p>
             </div>
           </aside>
         </div>
@@ -333,49 +331,55 @@ while fronteira:
         <div class="study-heading">
           <p class="study-kicker">Parte IV · Depth-First Search</p>
           <h2>DFS transforma recência em prioridade</h2>
-          <p>A busca em profundidade seleciona o nó mais profundo ainda não expandido. Uma pilha LIFO ou a própria pilha de chamadas da recursão implementa essa política.</p>
+          <p>A busca em profundidade organiza a fronteira como uma <strong>pilha</strong>. O último estado inserido é o primeiro a ser retirado; por isso a estratégia aprofunda um ramo antes de voltar às alternativas.</p>
         </div>
 
         <div class="study-grid">
           <div class="study-prose">
-            <h3>Pilha explícita ou recursão</h3>
-            <p>Luger mostra que DFS pode ser escrita com uma pilha explícita ou de forma recursiva. Na versão recursiva, a sequência de chamadas mantém implicitamente o caminho corrente. Quando um ramo falha, o retorno da função produz o backtracking para o ancestral mais recente com alternativas não examinadas.</p>
+            <h3>O mesmo pseudocódigo usado na Aula 04</h3>
+            <p>A estrutura é deliberadamente paralela à BFS. Estado inicial, visitados, teste de objetivo, expansão e devolução do caminho permanecem iguais; muda apenas a política da fronteira.</p>
 
-            <pre class="code-block"><code>def dfs(atual):
-    if objetivo(atual):
-        return True
+            <pre class="code-block"><code>DFS(inicial, objetivo):
+    fronteira ← pilha com o estado inicial
+    visitados ← {estado inicial}
 
-    visitados.add(atual)
+    enquanto fronteira não estiver vazia:
+        estado, caminho ← retirar o último
 
-    for proximo in sucessores(atual):
-        if proximo not in visitados:
-            pai[proximo] = atual
-            if dfs(proximo):
-                return True
+        se estado é objetivo:
+            devolver caminho
 
-    return False</code></pre>
+        para cada sucessor do estado:
+            se sucessor não foi visitado:
+                marcar como visitado
+                empilhar sucessor
+
+    devolver falha</code></pre>
+
+            <h3>Por que a pilha aprofunda um ramo?</h3>
+            <p>Os sucessores recém-descobertos entram no topo da pilha e passam à frente das alternativas antigas. O algoritmo, portanto, continua pelo caminho mais recentemente descoberto até que precise retornar e explorar outra possibilidade.</p>
 
             <h3>A ordem dos sucessores faz diferença</h3>
-            <p>Como DFS aprofunda imediatamente o ramo selecionado, alterar a ordem em que os sucessores são gerados pode alterar drasticamente o caminho encontrado e o número de expansões realizadas antes de chegar ao objetivo. Isso é uma propriedade importante para interpretar experimentos: duas implementações “de DFS” podem produzir ordens de visita diferentes sem que nenhuma esteja necessariamente errada.</p>
+            <p>DFS é particularmente sensível à ordem de geração dos sucessores. Alterar essa ordem pode mudar o ramo explorado primeiro, o caminho encontrado e a quantidade de estados expandidos antes do objetivo. Isso não significa que uma das execuções esteja errada; significa que a política LIFO reage diretamente à ordem de inserção.</p>
 
             <h3>Completude e ciclos</h3>
-            <p>Na comparação de busca em árvore de Russell e Norvig, DFS não é completa em espaços infinitos: pode seguir indefinidamente por um ramo e nunca voltar para uma solução existente em outro ramo. Em espaços cíclicos, uma implementação sem controle pode entrar em loop. Em busca em grafo sobre um espaço finito com verificação adequada de estados repetidos, a situação muda: o algoritmo termina porque o conjunto de estados possíveis é finito.</p>
+            <p>Em busca em árvore sobre espaços infinitos, DFS não é completa: ela pode continuar indefinidamente em um ramo. Em um grafo finito com controle adequado de <strong>visitados</strong>, como nas versões usadas na Aula 04, o algoritmo termina porque um mesmo estado não é inserido repetidamente (Russell; Norvig, 2022, §3.4).</p>
 
-            <h3>Optimalidade</h3>
-            <p>DFS devolve a primeira solução que encontra segundo a ordem de exploração. Não há garantia de que seja a solução mais rasa nem a de menor custo.</p>
+            <h3>Optimalidade de custo</h3>
+            <p>DFS devolve a primeira solução encontrada segundo a ordem de exploração. Ela não garante a solução mais rasa nem a de menor custo.</p>
 
             <h3>Por que usar DFS?</h3>
-            <p>A vantagem clássica é memória. Para uma busca em árvore com fator de ramificação <strong>b</strong> e profundidade máxima <strong>m</strong>, Russell e Norvig apresentam espaço <span class="formula">O(bm)</span>, linear em relação à profundidade. Luger expressa a mesma ideia ao observar que, em cada nível, a fronteira precisa manter essencialmente as alternativas associadas ao caminho que está sendo aprofundado.</p>
+            <p>A vantagem clássica é o menor consumo de memória em busca em árvore. Com fator de ramificação <strong>b</strong> e profundidade máxima <strong>m</strong>, a análise tradicional apresenta espaço <span class="formula">O(bm)</span>, porque a estratégia mantém principalmente o caminho corrente e as alternativas associadas a ele (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
           </div>
 
           <aside class="study-stack">
             <div class="study-callout">
               <strong>Estrutura</strong>
-              <p>LIFO — último a entrar, primeiro a sair.</p>
+              <p>PILHA · LIFO — último a entrar, primeiro a sair.</p>
             </div>
             <div class="study-callout violet">
               <strong>Força</strong>
-              <p>Uso de memória muito menor em buscas profundas quando comparado à expansão por níveis.</p>
+              <p>Tende a manter menos alternativas simultaneamente em buscas profundas.</p>
             </div>
             <div class="study-callout teal">
               <strong>Limitação</strong>
@@ -391,24 +395,29 @@ while fronteira:
         <div class="study-heading">
           <p class="study-kicker">Parte V · Avaliação de algoritmos</p>
           <h2>“Funcionou” é uma avaliação insuficiente</h2>
-          <p>Russell e Norvig organizam a comparação entre algoritmos de busca por quatro critérios: completude, optimalidade de custo, complexidade de tempo e complexidade de espaço.</p>
+          <p>Uma estratégia de busca também deve ser analisada por suas garantias e pelo esforço necessário para encontrar uma solução.</p>
         </div>
 
         <div class="criteria-grid">
-          <article class="criteria-card"><strong>Completude</strong><p>Se existe solução nas condições do problema, o algoritmo é garantido a encontrá-la?</p></article>
-          <article class="criteria-card"><strong>Optimalidade</strong><p>A solução devolvida possui o menor custo segundo a função de custo definida?</p></article>
-          <article class="criteria-card"><strong>Tempo</strong><p>Quantos nós ou estados precisam ser gerados/expandidos no pior caso?</p></article>
-          <article class="criteria-card"><strong>Espaço</strong><p>Quantos nós precisam permanecer armazenados simultaneamente?</p></article>
+          <article class="criteria-card"><strong>Completude</strong><p>Se existe solução nas condições consideradas, o algoritmo é garantido a encontrá-la?</p></article>
+          <article class="criteria-card"><strong>Optimalidade de custo</strong><p>A solução devolvida possui o menor custo segundo a função de custo definida?</p></article>
+          <article class="criteria-card"><strong>Tempo</strong><p>Quanto trabalho precisa ser realizado no pior caso?</p></article>
+          <article class="criteria-card"><strong>Espaço</strong><p>Quanto precisa permanecer armazenado simultaneamente?</p></article>
         </div>
+
+        <figure class="study-figure">
+          <img src="assets/aula-04-bfs-dfs.svg" alt="Comparação da mesma árvore explorada por BFS e DFS em ordens diferentes." loading="lazy">
+          <figcaption>A mesma estrutura pode produzir ordens de exploração muito diferentes. A política da fronteira afeta a solução encontrada, o número de expansões e o uso de memória.</figcaption>
+        </figure>
 
         <div class="study-table-wrap">
           <table class="study-table">
             <thead><tr><th>Critério</th><th>BFS</th><th>DFS</th><th>Interpretação</th></tr></thead>
             <tbody>
-              <tr><td><strong>Completude</strong></td><td>Sim, sob as condições usuais da análise com ramificação finita e solução finita/espaço finito.</td><td>Não em busca em árvore sobre espaços infinitos; em grafos finitos com controle de repetição, termina.</td><td>“Existe solução” não é suficiente; a estrutura do espaço importa.</td></tr>
-              <tr><td><strong>Ótima em custo</strong></td><td>Sim quando os custos das ações são idênticos.</td><td>Não.</td><td>Menor profundidade e menor custo só coincidem sob uma hipótese sobre custos.</td></tr>
+              <tr><td><strong>Completude</strong></td><td>Sim, sob ramificação finita e solução em profundidade finita, ou espaço finito.</td><td>Não em busca em árvore sobre espaços infinitos; em grafos finitos com visitados, termina.</td><td>A estrutura do espaço e a versão do algoritmo importam.</td></tr>
+              <tr><td><strong>Optimalidade de custo</strong></td><td>Sim quando todas as ações têm o mesmo custo.</td><td>Não.</td><td>Menor profundidade e menor custo só coincidem sob uma hipótese sobre os custos.</td></tr>
               <tr><td><strong>Tempo — busca em árvore</strong></td><td><code>O(b^d)</code></td><td><code>O(b^m)</code></td><td><em>b</em> = fator de ramificação; <em>d</em> = profundidade da solução mais rasa; <em>m</em> = profundidade máxima.</td></tr>
-              <tr><td><strong>Espaço — busca em árvore</strong></td><td><code>O(b^d)</code></td><td><code>O(bm)</code></td><td>Essa diferença explica por que DFS é atraente quando memória é a restrição dominante.</td></tr>
+              <tr><td><strong>Espaço — busca em árvore</strong></td><td><code>O(b^d)</code></td><td><code>O(bm)</code></td><td>A diferença ajuda a explicar por que DFS pode ser atraente quando memória é uma restrição dominante.</td></tr>
             </tbody>
           </table>
         </div>
@@ -416,26 +425,36 @@ while fronteira:
         <div class="study-grid" style="margin-top:2.2rem">
           <div class="study-prose">
             <h3>Fator de ramificação</h3>
-            <p>O fator de ramificação <strong>b</strong> representa quantos sucessores, em média ou no modelo de análise, um nó oferece. Pequenos aumentos em <strong>b</strong> podem produzir grandes aumentos no número total de nós gerados quando a profundidade cresce.</p>
+            <p>O fator de ramificação <strong>b</strong> representa quantos sucessores um estado pode gerar, em média ou no modelo de análise. Pequenos aumentos em <strong>b</strong> podem causar grande crescimento quando a profundidade aumenta.</p>
+
+            <figure class="study-figure">
+              <img src="assets/aula-04-crescimento-busca.svg" alt="Crescimento de uma árvore de busca conforme aumentam fator de ramificação e profundidade." loading="lazy">
+              <figcaption>A figura da aula principal ajuda a visualizar por que a combinação entre ramificação e profundidade pode tornar uma busca rapidamente cara.</figcaption>
+            </figure>
 
             <h3>Profundidade da solução e profundidade máxima</h3>
-            <p><strong>d</strong> representa a profundidade da solução mais rasa; <strong>m</strong>, a profundidade máxima que uma busca pode atingir. BFS depende fortemente de <strong>d</strong> porque precisa desenvolver todos os níveis anteriores. DFS pode depender de <strong>m</strong> porque pode seguir até o fundo antes de encontrar ou rejeitar um ramo.</p>
+            <p><strong>d</strong> representa a profundidade da solução mais rasa; <strong>m</strong>, a profundidade máxima que uma busca pode atingir. BFS depende fortemente de <strong>d</strong> porque desenvolve os níveis anteriores. DFS pode depender de <strong>m</strong> porque pode seguir até o fundo antes de encontrar ou rejeitar um ramo.</p>
 
-            <h3>Busca em árvore × busca em grafo altera a análise</h3>
-            <p>A tabela clássica acima é para versões semelhantes a busca em árvore. Russell e Norvig observam que, quando uma busca em grafo mantém controle completo de estados repetidos em um espaço finito, tempo e espaço passam a ser limitados pelo tamanho do próprio grafo, isto é, por seus vértices e arestas. Essa é uma razão para sempre dizer <em>qual versão do algoritmo</em> está sendo analisada.</p>
+            <h3>Nos grafos explícitos da aula: |V| e |E|</h3>
+            <p>Os exemplos práticos da Aula 04 usam grafos finitos representados por listas de adjacência. Nessas versões, com controle de <strong>visitados</strong>, cada vértice é processado no máximo uma vez e suas conexões são examinadas durante a expansão. Por isso, a análise usual para BFS e DFS em um grafo explícito é <span class="formula">O(|V| + |E|)</span> em tempo e <span class="formula">O(|V|)</span> em espaço auxiliar, onde <strong>|V|</strong> é o número de estados e <strong>|E|</strong> o número de conexões.</p>
+
+            <div class="study-callout teal">
+              <strong>Então por que também aparece O(b<sup>d</sup>)?</strong>
+              <p>As duas análises respondem a contextos diferentes. <code>O(|V| + |E|)</code> descreve a travessia de um grafo explícito e finito. As expressões com <em>b</em>, <em>d</em> e <em>m</em> descrevem o crescimento de uma árvore de busca, especialmente útil quando o espaço é gerado implicitamente e pode ser muito grande.</p>
+            </div>
 
             <h3>O que a análise assintótica não mostra</h3>
-            <p>Dois algoritmos com a mesma ordem assintótica podem ter comportamentos muito diferentes em uma instância específica. Ordem dos sucessores, localização do objetivo, estrutura do grafo, custo de gerar sucessores e representação em memória afetam a execução real. Por isso, a análise formal e a instrumentação experimental se complementam.</p>
+            <p>Mesmo quando BFS e DFS têm a mesma ordem <code>O(|V| + |E|)</code> em um grafo explícito, podem executar quantidades muito diferentes de trabalho antes de encontrar um objetivo. Ordem dos sucessores, posição do objetivo e tamanho máximo da fronteira continuam relevantes. Por isso, análise formal e instrumentação experimental se complementam.</p>
           </div>
 
           <aside class="study-stack">
             <div class="study-callout">
-              <strong>Não compare só “tempo em segundos”</strong>
-              <p>Registre também estados expandidos, estados descobertos, profundidade, pico da fronteira e caminho encontrado.</p>
+              <strong>Não compare só tempo em segundos</strong>
+              <p>Registre também estados expandidos, profundidade da solução, pico da fronteira e caminho encontrado.</p>
             </div>
             <div class="study-callout violet">
               <strong>Não use “ótimo” sem critério</strong>
-              <p>Ótimo em número de passos, custo, memória ou tempo são propriedades diferentes.</p>
+              <p>Optimalidade de custo é uma propriedade da solução; tempo e espaço medem o esforço da busca.</p>
             </div>
           </aside>
         </div>
@@ -455,20 +474,21 @@ while fronteira:
             <h3>1. Estrutura da fronteira</h3>
             <p>Em Python, <code>collections.deque</code> é apropriada para BFS porque permite retirar do início com <code>popleft()</code> e inserir no fim com <code>append()</code>. Para DFS, uma lista pode funcionar como pilha usando <code>append()</code> e <code>pop()</code>.</p>
 
-            <h3>2. Estado alcançado no momento correto</h3>
-            <p>Na BFS da aula, marcar um estado quando ele entra na fronteira evita inserir múltiplas cópias do mesmo estado. Em outros algoritmos, especialmente quando caminhos com custos distintos competem entre si, a política pode precisar ser mais sofisticada.</p>
+            <h3>2. Visitados no mesmo momento em BFS e DFS</h3>
+            <p>Nas versões usadas em sala, BFS e DFS marcam um sucessor como <strong>visitado quando ele é colocado na fronteira</strong>. Manter a mesma regra nos dois algoritmos facilita a comparação e impede múltiplas inserções do mesmo estado.</p>
 
             <h3>3. Caminho completo ou ponteiro para o pai?</h3>
-            <p>Carregar uma lista completa do caminho em cada entrada é simples para ensinar, mas replica dados. Guardar <code>pai[filho] = atual</code> reduz redundância e aproxima a implementação do modelo de nó de busca usado na literatura.</p>
+            <p>O código didático carrega <code>(estado, caminho)</code> na fronteira, o que deixa a solução visível e fácil de acompanhar. Em implementações maiores, guardar apenas <code>pai[sucessor] = estado</code> reduz redundância e permite reconstruir o caminho ao final.</p>
 
             <h3>4. Ordem dos vizinhos</h3>
-            <p>Listas de adjacência possuem ordem. Se o grafo define <code>["copa", "arquivo"]</code> e depois passa a definir <code>["arquivo", "copa"]</code>, BFS pode mudar a ordem entre nós do mesmo nível e DFS pode mudar todo o ramo explorado primeiro. Para experimentos reprodutíveis, a ordem precisa ser conhecida e mantida.</p>
+            <p>Listas de adjacência possuem ordem. Se o grafo define <code>["Copa", "Arquivo"]</code> e depois passa a definir <code>["Arquivo", "Copa"]</code>, BFS pode alterar a ordem entre estados do mesmo nível e DFS pode mudar completamente o primeiro ramo aprofundado.</p>
+            <p>Na DFS iterativa há uma sutileza adicional: se os sucessores <code>[A, B, C]</code> forem empilhados nessa ordem, <code>C</code> ficará no topo e será retirado primeiro. Se quisermos visitar <code>A</code> antes de <code>B</code> e <code>C</code>, normalmente empilhamos os sucessores em ordem inversa. Isso não muda a DFS; apenas controla a ordem observada da execução.</p>
 
             <h3>5. Instrumentação</h3>
             <p>Uma versão de laboratório pode registrar:</p>
             <ul>
-              <li>quantidade de nós expandidos;</li>
-              <li>quantidade de estados descobertos;</li>
+              <li>quantidade de estados expandidos;</li>
+              <li>quantidade de estados visitados;</li>
               <li>maior tamanho da fronteira;</li>
               <li>profundidade da solução;</li>
               <li>custo da solução, se existir função de custo;</li>
@@ -477,7 +497,7 @@ while fronteira:
 
             <pre class="code-block"><code>metricas = {
     "expandidos": 0,
-    "descobertos": 1,
+    "visitados": 1,
     "pico_fronteira": 1,
     "ordem_expansao": []
 }
@@ -492,17 +512,17 @@ metricas["pico_fronteira"] = max(
 )</code></pre>
 
             <h3>6. DFS iterativa e DFS recursiva</h3>
-            <p>As duas implementam a mesma ideia de aprofundamento, mas tornam mecanismos diferentes visíveis. A versão iterativa explicita a pilha; a recursiva usa a pilha de chamadas da linguagem e torna o backtracking mais natural. Compará-las é uma boa forma de revisar recursão e estruturas de dados.</p>
+            <p>As duas implementam a mesma estratégia de aprofundamento. A versão iterativa torna a pilha explícita; a recursiva usa a pilha de chamadas da linguagem e faz o retorno entre ramos aparecer como backtracking. A comparação é útil para aprofundar estruturas de dados e recursão (Luger, 2009, §6.1).</p>
           </div>
 
           <aside class="study-stack">
             <div class="study-callout">
-              <strong>Hurbans</strong>
-              <p>O Capítulo 2 enfatiza justamente fila, pilha, visitados, pais e execução visual passo a passo, sendo uma boa ponte entre intuição e código.</p>
+              <strong>Consistência com a aula</strong>
+              <p>Os nomes principais permanecem: estado, sucessor, caminho, fronteira, visitados e expandidos.</p>
             </div>
             <div class="study-callout violet">
-              <strong>Luger</strong>
-              <p>O Capítulo 6 mostra como a recursão pode substituir uma pilha explícita na DFS e como <em>open</em>/<em>closed</em> organizam o controle da busca.</p>
+              <strong>Da intuição para o código</strong>
+              <p>Fila, pilha, visitados e caminho tornam visível como a política de exploração se transforma em uma implementação concreta (Hurbans, 2020, cap. 2).</p>
             </div>
           </aside>
         </div>
@@ -514,13 +534,13 @@ metricas["pico_fronteira"] = max(
         </div>
 
         <div class="study-prose">
-          <p>Em <strong>iterative deepening</strong>, executamos uma DFS limitada primeiro à profundidade 0, depois 1, 2, 3 e assim por diante. Russell e Norvig mostram que, sob as condições da análise, a técnica preserva requisitos de memória lineares semelhantes aos de DFS, enquanto recupera propriedades de exploração por níveis e, com custos unitários, a optimalidade associada à solução mais rasa. Luger apresenta a mesma ideia como um compromisso entre as limitações de largura e profundidade.</p>
+          <p>Em <strong>iterative deepening</strong>, executamos uma DFS limitada primeiro à profundidade 0, depois 1, 2, 3 e assim por diante. Sob as condições da análise clássica, a técnica mantém requisitos de memória próximos aos de DFS e recupera a exploração progressiva por profundidade; com custos unitários, encontra uma solução mais rasa (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
           <p>Ela não precisa fazer parte da implementação obrigatória desta aula. Seu valor aqui é mostrar que estratégias de busca podem ser <strong>projetadas a partir de trade-offs</strong>, e não apenas memorizadas como uma lista de algoritmos.</p>
         </div>
 
         <div class="study-callout teal" style="margin-top:1.5rem">
-          <strong>Ponte para a próxima aula</strong>
-          <p>BFS, DFS e aprofundamento iterativo ainda não sabem se um estado “parece” mais promissor que outro. Quando o espaço cresce demais, surge a pergunta: podemos usar conhecimento do domínio para escolher melhor o próximo nó? Essa é a entrada para busca heurística.</p>
+          <strong>Ponte para a próxima etapa</strong>
+          <p>BFS, DFS e aprofundamento iterativo ainda não usam uma estimativa para decidir se um estado parece mais promissor que outro. Quando o espaço cresce demais, surge a pergunta: podemos usar conhecimento do domínio para escolher melhor o próximo estado? Essa é a entrada para busca heurística.</p>
         </div>
       </div>
     </section>
@@ -534,12 +554,12 @@ metricas["pico_fronteira"] = max(
         </div>
 
         <div class="check-grid">
-          <article class="check-card"><span>01</span><strong>Modelo</strong><p>Distinguir formulação do problema, espaço de estados, árvore de busca, estado e nó de busca.</p></article>
+          <article class="check-card"><span>01</span><strong>Modelo</strong><p>Distinguir a representação do problema da estrutura construída durante a busca.</p></article>
           <article class="check-card"><span>02</span><strong>Fronteira</strong><p>Explicar por que a organização da fronteira determina a ordem da busca.</p></article>
-          <article class="check-card"><span>03</span><strong>Repetição</strong><p>Explicar como ciclos e caminhos redundantes afetam a busca e por que precisamos controlar estados alcançados.</p></article>
-          <article class="check-card"><span>04</span><strong>BFS</strong><p>Relacionar FIFO, exploração por níveis, completude, custos unitários e crescimento de memória.</p></article>
-          <article class="check-card"><span>05</span><strong>DFS</strong><p>Relacionar LIFO/recursão, aprofundamento, ordem de sucessores, pouca memória e ausência de garantia de optimalidade.</p></article>
-          <article class="check-card"><span>06</span><strong>Avaliação</strong><p>Comparar algoritmos usando completude, optimalidade, tempo e espaço — e complementar a teoria com métricas experimentais.</p></article>
+          <article class="check-card"><span>03</span><strong>Visitados</strong><p>Explicar como ciclos e caminhos redundantes afetam a busca e por que controlamos estados repetidos.</p></article>
+          <article class="check-card"><span>04</span><strong>BFS</strong><p>Relacionar FIFO, exploração por níveis, completude, custos iguais e crescimento de memória.</p></article>
+          <article class="check-card"><span>05</span><strong>DFS</strong><p>Relacionar LIFO, aprofundamento, ordem de sucessores, memória e ausência de garantia de optimalidade de custo.</p></article>
+          <article class="check-card"><span>06</span><strong>Avaliação</strong><p>Comparar algoritmos usando completude, optimalidade de custo, tempo e espaço — e complementar a teoria com métricas experimentais.</p></article>
         </div>
       </div>
     </section>
@@ -549,14 +569,14 @@ metricas["pico_fronteira"] = max(
         <div class="study-heading">
           <p class="study-kicker">Referências utilizadas</p>
           <h2>Leituras que sustentam este aprofundamento</h2>
-          <p>O texto foi construído a partir das obras disponíveis no projeto, priorizando as seções diretamente relacionadas à Aula 04.</p>
+          <p>As referências no corpo do texto foram padronizadas entre parênteses, deixando o foco da explicação no conceito e mantendo a fonte indicada ao final da ideia.</p>
         </div>
 
         <ul class="references study-prose">
-          <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Pearson, 2021. Capítulo 3, especialmente §§ 3.3–3.4: algoritmos de busca, estratégias não informadas, BFS, DFS, aprofundamento iterativo e comparação por completude, optimalidade, tempo e espaço.</li>
-          <li>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson/Addison-Wesley, 2009. Capítulo 3, especialmente § 3.2.3: busca em profundidade e largura, listas <em>open</em>/<em>closed</em>, reconstrução de caminho e trade-offs; Capítulo 6, § 6.1: busca recursiva.</li>
-          <li>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. Manning, 2020. Capítulo 2: fundamentos de busca, representação de estados, busca não informada, BFS, DFS, filas, pilhas, visitados e pais.</li>
-          <li>FINLAY, Janet; DIX, Alan. <em>An Introduction to Artificial Intelligence</em>. Routledge, 2002. Capítulo 3: busca, busca exaustiva e estratégias de poda como apoio conceitual complementar.</li>
+          <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Global Edition. Pearson, 2022. Capítulo 3, especialmente §§ 3.3–3.4: algoritmos de busca, estratégias não informadas, BFS, DFS, aprofundamento iterativo e comparação por completude, optimalidade de custo, tempo e espaço.</li>
+          <li>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson/Addison-Wesley, 2009. Capítulo 3: estruturas e estratégias para busca em espaço de estados; Capítulo 6, §6.1: busca baseada em recursão.</li>
+          <li>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. Manning, 2020. Capítulo 2: fundamentos de busca, representação de estados, busca não informada, BFS, DFS, filas, pilhas, visitados e reconstrução de caminhos.</li>
+          <li>FINLAY, Janet; DIX, Alan. <em>An Introduction to Artificial Intelligence</em>. Routledge, 2002. Capítulo 3: busca, busca exaustiva e poda simples como apoio conceitual complementar.</li>
         </ul>
 
         <div class="study-actions" style="margin-top:2rem">
@@ -569,7 +589,7 @@ metricas["pico_fronteira"] = max(
 
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div><strong>Inteligência Artificial Aplicada</strong><p>Aula 04 · Material de aprofundamento · 2026/2</p></div>
+      <div><strong>Inteligência Artificial Aplicada</strong><p>Aula 04 · Material de aprofundamento</p></div>
       <a href="index.html">Portal da disciplina</a>
     </div>
   </footer>
