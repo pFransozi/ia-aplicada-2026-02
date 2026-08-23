@@ -3,76 +3,183 @@
   if (!root) return;
 
   const injectAula05Adjustments = () => {
-    if (document.getElementById('aula05-competencias-romenia-ajustes')) return;
+    if (document.getElementById('aula05-layout-romenia-ajustes')) return;
 
     const style = document.createElement('style');
-    style.id = 'aula05-competencias-romenia-ajustes';
+    style.id = 'aula05-layout-romenia-ajustes';
     style.textContent = `
       #visao .overview-grid {
-        row-gap: 10px;
+        grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
         align-items: start;
+        gap: 22px;
       }
 
-      #visao .overview-grid .competency {
+      #visao .overview-grid .topics-card {
+        grid-row: auto !important;
+      }
+
+      #visao .competency-stack {
+        display: grid;
+        gap: 14px;
+        align-content: start;
+      }
+
+      #visao .competency-stack .competency {
         align-self: start;
         min-height: 0;
         padding: 1.15rem 1.25rem;
       }
 
-      #visao .overview-grid .competency h3 {
+      #visao .competency-stack .competency h3 {
         margin-bottom: .55rem;
       }
 
-      #visao .overview-grid .competency .skill {
+      #visao .competency-stack .competency .skill {
         margin-top: 0;
         gap: .6rem;
       }
 
-      #visao .overview-grid .competency .skill strong {
+      #visao .competency-stack .competency .skill strong {
         min-height: 34px;
       }
 
+      #visao .competency-stack .c11 {
+        grid-column: auto !important;
+      }
+
       .romania-graph {
-        min-height: 455px;
+        min-height: 520px;
+        padding: 0;
+        overflow: hidden;
       }
 
-      .romania-graph .guided-node {
-        width: 94px;
-        min-height: 56px;
-        padding: .42rem .5rem;
+      .romania-map-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
       }
 
-      .romania-graph .guided-node strong {
-        font-size: .92rem;
-        line-height: 1.1;
+      .romania-road {
+        fill: none;
+        stroke: #6d7f9c;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: .84;
       }
 
-      .romania-graph .guided-node small {
-        font-size: .66rem;
+      .romania-cost rect {
+        fill: rgba(255, 255, 255, .94);
+        stroke: #cbd5e1;
+        stroke-width: 2;
+        rx: 16;
       }
 
-      .romania-graph .edge-cost {
-        min-width: 32px;
-        min-height: 28px;
-        font-size: .72rem;
+      .romania-cost text {
+        fill: #172033;
+        font-size: 19px;
+        font-weight: 900;
+        dominant-baseline: middle;
+        text-anchor: middle;
+      }
+
+      .romania-city rect {
+        fill: var(--paper);
+        stroke: #40506b;
+        stroke-width: 3;
+        rx: 18;
+        filter: drop-shadow(0 10px 18px rgba(0,0,0,.12));
+        transition: fill .2s ease, stroke .2s ease, stroke-width .2s ease;
+      }
+
+      .romania-city text {
+        fill: var(--ink);
+        font-weight: 900;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+
+      .romania-city .city-name {
+        font-size: 24px;
+      }
+
+      .romania-city .city-h {
+        fill: var(--muted);
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      .romania-city.discovered rect {
+        fill: var(--blue-soft);
+        stroke: var(--blue);
+      }
+
+      .romania-city.expanded rect {
+        fill: var(--teal-soft);
+        stroke: var(--teal);
+      }
+
+      .romania-city.current rect {
+        fill: var(--amber-soft);
+        stroke: var(--amber);
+        stroke-width: 4;
+      }
+
+      .romania-city.found rect {
+        fill: var(--violet-soft);
+        stroke: var(--violet);
+        stroke-width: 4;
+      }
+
+      body.theme-dark .romania-road {
+        stroke: #637592;
+        opacity: .82;
+      }
+
+      body.theme-dark .romania-cost rect {
+        fill: #0d1422;
+        stroke: #40506b;
+      }
+
+      body.theme-dark .romania-cost text {
+        fill: #eef4ff;
+      }
+
+      @media (max-width: 980px) {
+        #visao .overview-grid {
+          grid-template-columns: 1fr;
+        }
       }
 
       @media (max-width: 720px) {
-        #visao .overview-grid {
-          gap: 12px;
-        }
-
         .romania-graph {
-          min-height: 390px;
+          min-height: 430px;
         }
 
-        .romania-graph .guided-node {
-          width: 76px;
-          min-height: 52px;
+        .romania-city .city-name {
+          font-size: 20px;
+        }
+
+        .romania-city .city-h {
+          font-size: 14px;
         }
       }
     `;
     document.head.appendChild(style);
+  };
+
+  const compactCompetencyCards = () => {
+    const overview = document.querySelector('#visao .overview-grid');
+    if (!overview || overview.querySelector('.competency-stack')) return;
+
+    const competencyCards = [...overview.querySelectorAll(':scope > article.competency')];
+    if (!competencyCards.length) return;
+
+    const stack = document.createElement('div');
+    stack.className = 'competency-stack';
+    competencyCards[0].before(stack);
+    competencyCards.forEach((card) => stack.appendChild(card));
   };
 
   const configureRomaniaGraph = () => {
@@ -94,44 +201,86 @@
       graph.classList.add('romania-graph');
       graph.setAttribute('aria-label', 'Grafo simplificado do mapa da Romênia, de Arad a Bucareste');
       graph.innerHTML = `
-        <svg viewBox="0 0 100 74" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="9" y1="39" x2="23" y2="18"></line>
-          <line x1="23" y1="18" x2="39" y2="14"></line>
-          <line x1="39" y1="14" x2="43" y2="39"></line>
-          <line x1="9" y1="39" x2="24" y2="63"></line>
-          <line x1="9" y1="39" x2="43" y2="39"></line>
-          <line x1="43" y1="39" x2="63" y2="25"></line>
-          <line x1="43" y1="39" x2="60" y2="55"></line>
-          <line x1="60" y1="55" x2="78" y2="55"></line>
-          <line x1="60" y1="55" x2="72" y2="72"></line>
-          <line x1="72" y1="72" x2="78" y2="55"></line>
-          <line x1="63" y1="25" x2="91" y2="38"></line>
-          <line x1="78" y1="55" x2="91" y2="38"></line>
+        <svg class="romania-map-svg" viewBox="0 0 1000 540" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa simplificado da Romênia usado para comparar busca gulosa e A estrela">
+          <g class="roads" aria-hidden="true">
+            <path class="romania-road" d="M 110 250 L 230 125" />
+            <path class="romania-road" d="M 230 125 L 385 92" />
+            <path class="romania-road" d="M 385 92 L 435 255" />
+            <path class="romania-road" d="M 110 250 L 235 400" />
+            <path class="romania-road" d="M 110 250 L 435 255" />
+            <path class="romania-road" d="M 435 255 L 635 170" />
+            <path class="romania-road" d="M 435 255 L 605 350" />
+            <path class="romania-road" d="M 605 350 L 780 350" />
+            <path class="romania-road" d="M 605 350 L 700 465" />
+            <path class="romania-road" d="M 700 465 L 780 350" />
+            <path class="romania-road" d="M 635 170 L 900 250" />
+            <path class="romania-road" d="M 780 350 L 900 250" />
+          </g>
+
+          <g class="romania-cost"><rect x="148" y="174" width="52" height="32" /><text x="174" y="190">75</text></g>
+          <g class="romania-cost"><rect x="292" y="91" width="52" height="32" /><text x="318" y="107">71</text></g>
+          <g class="romania-cost"><rect x="385" y="165" width="58" height="32" /><text x="414" y="181">151</text></g>
+          <g class="romania-cost"><rect x="148" y="330" width="58" height="32" /><text x="177" y="346">118</text></g>
+          <g class="romania-cost"><rect x="255" y="228" width="58" height="32" /><text x="284" y="244">140</text></g>
+          <g class="romania-cost"><rect x="522" y="194" width="52" height="32" /><text x="548" y="210">99</text></g>
+          <g class="romania-cost"><rect x="500" y="292" width="52" height="32" /><text x="526" y="308">80</text></g>
+          <g class="romania-cost"><rect x="678" y="330" width="52" height="32" /><text x="704" y="346">97</text></g>
+          <g class="romania-cost"><rect x="620" y="408" width="58" height="32" /><text x="649" y="424">146</text></g>
+          <g class="romania-cost"><rect x="720" y="420" width="58" height="32" /><text x="749" y="436">138</text></g>
+          <g class="romania-cost"><rect x="780" y="182" width="58" height="32" /><text x="809" y="198">211</text></g>
+          <g class="romania-cost"><rect x="832" y="292" width="58" height="32" /><text x="861" y="308">101</text></g>
+
+          <g class="romania-city" data-node="Arad">
+            <rect x="42" y="220" width="136" height="66" />
+            <text class="city-name" x="110" y="244">Arad</text>
+            <text class="city-h" x="110" y="270">h=366</text>
+          </g>
+          <g class="romania-city" data-node="Zerind">
+            <rect x="162" y="92" width="136" height="66" />
+            <text class="city-name" x="230" y="116">Zerind</text>
+            <text class="city-h" x="230" y="142">h=374</text>
+          </g>
+          <g class="romania-city" data-node="Oradea">
+            <rect x="314" y="59" width="142" height="66" />
+            <text class="city-name" x="385" y="83">Oradea</text>
+            <text class="city-h" x="385" y="109">h=380</text>
+          </g>
+          <g class="romania-city" data-node="Timisoara">
+            <rect x="148" y="367" width="174" height="66" />
+            <text class="city-name" x="235" y="391">Timisoara</text>
+            <text class="city-h" x="235" y="417">h=329</text>
+          </g>
+          <g class="romania-city" data-node="Sibiu">
+            <rect x="367" y="222" width="136" height="66" />
+            <text class="city-name" x="435" y="246">Sibiu</text>
+            <text class="city-h" x="435" y="272">h=253</text>
+          </g>
+          <g class="romania-city" data-node="Fagaras">
+            <rect x="558" y="137" width="154" height="66" />
+            <text class="city-name" x="635" y="161">Fagaras</text>
+            <text class="city-h" x="635" y="187">h=176</text>
+          </g>
+          <g class="romania-city" data-node="Rimnicu">
+            <rect x="522" y="317" width="166" height="66" />
+            <text class="city-name" x="605" y="341">Rimnicu</text>
+            <text class="city-h" x="605" y="367">h=193</text>
+          </g>
+          <g class="romania-city" data-node="Craiova">
+            <rect x="623" y="432" width="154" height="66" />
+            <text class="city-name" x="700" y="456">Craiova</text>
+            <text class="city-h" x="700" y="482">h=160</text>
+          </g>
+          <g class="romania-city" data-node="Pitesti">
+            <rect x="712" y="317" width="136" height="66" />
+            <text class="city-name" x="780" y="341">Pitesti</text>
+            <text class="city-h" x="780" y="367">h=100</text>
+          </g>
+          <g class="romania-city goal" data-node="Bucharest">
+            <rect x="812" y="216" width="176" height="68" />
+            <text class="city-name" x="900" y="241">Bucareste</text>
+            <text class="city-h" x="900" y="268">h=0</text>
+          </g>
         </svg>
-
-        <span class="edge-cost" style="left:15%;top:27%">75</span>
-        <span class="edge-cost" style="left:31%;top:13%">71</span>
-        <span class="edge-cost" style="left:43%;top:25%">151</span>
-        <span class="edge-cost" style="left:17%;top:53%">118</span>
-        <span class="edge-cost" style="left:27%;top:34%">140</span>
-        <span class="edge-cost" style="left:54%;top:30%">99</span>
-        <span class="edge-cost" style="left:51%;top:49%">80</span>
-        <span class="edge-cost" style="left:69%;top:59%">97</span>
-        <span class="edge-cost" style="left:65%;top:68%">146</span>
-        <span class="edge-cost" style="left:78%;top:67%">138</span>
-        <span class="edge-cost" style="left:77%;top:27%">211</span>
-        <span class="edge-cost" style="left:86%;top:49%">101</span>
-
-        <div class="guided-node" data-node="Arad" style="left:9%;top:39%"><strong>Arad</strong><small>h=366</small></div>
-        <div class="guided-node" data-node="Zerind" style="left:23%;top:18%"><strong>Zerind</strong><small>h=374</small></div>
-        <div class="guided-node" data-node="Oradea" style="left:39%;top:14%"><strong>Oradea</strong><small>h=380</small></div>
-        <div class="guided-node" data-node="Timisoara" style="left:24%;top:63%"><strong>Timisoara</strong><small>h=329</small></div>
-        <div class="guided-node" data-node="Sibiu" style="left:43%;top:39%"><strong>Sibiu</strong><small>h=253</small></div>
-        <div class="guided-node" data-node="Fagaras" style="left:63%;top:25%"><strong>Fagaras</strong><small>h=176</small></div>
-        <div class="guided-node" data-node="Rimnicu" style="left:60%;top:55%"><strong>Rimnicu</strong><small>h=193</small></div>
-        <div class="guided-node" data-node="Craiova" style="left:72%;top:72%"><strong>Craiova</strong><small>h=160</small></div>
-        <div class="guided-node" data-node="Pitesti" style="left:78%;top:55%"><strong>Pitesti</strong><small>h=100</small></div>
-        <div class="guided-node goal" data-node="Bucharest" style="left:91%;top:38%"><strong>Bucareste</strong><small>h=0</small></div>
       `;
     }
 
@@ -162,6 +311,7 @@
   };
 
   injectAula05Adjustments();
+  compactCompetencyCards();
   configureRomaniaGraph();
 
   const nodes = [...root.querySelectorAll('[data-node]')];
