@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aula 05 de Inteligência Artificial Aplicada: busca informada, função heurística, busca gulosa, custo acumulado, algoritmo A*, admissibilidade e comparação de estratégias.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Aula 05 — Inteligência Artificial Aplicada</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="aula-04.css">
+  <link rel="stylesheet" href="aula-05.css">
+  <script defer src="script.js"></script>
+  <script defer src="aula-05.js"></script>
+</head>
+<body class="lesson-page">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="IA Aplicada — página principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span><strong>IA Aplicada</strong><small>Aula 05</small></span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">
+        <span class="sr-only">Abrir menu</span><span></span><span></span><span></span>
+      </button>
+
+      <nav id="menu-principal" class="main-nav" aria-label="Navegação da aula">
+        <a href="index.html">Página principal</a>
+        <a href="curso.html">Visão geral</a>
+        <a href="#visao">Visão</a>
+        <a href="#heuristica">Heurística</a>
+        <a href="#gulosa">Gulosa</a>
+        <a href="#astar">A*</a>
+        <a href="#comparacao">Comparação</a>
+        <a href="#fechamento">Checklist</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-text">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Aula 05 · Busca informada</p>
+          <h1>Quando o algoritmo recebe uma pista</h1>
+          <p class="hero-lead">Na Aula 04, BFS e DFS exploravam o espaço sem estimar qual alternativa parecia mais próxima do objetivo. Agora vamos introduzir <strong>heurísticas</strong> para orientar a busca — e entender por que uma boa pista pode reduzir muito o trabalho sem substituir o raciocínio sobre custo.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#visao">Começar a aula</a>
+            <a class="button button-secondary" href="#simulador">Ir ao experimento</a>
+          </div>
+        </div>
+        <aside class="guiding-card">
+          <span>Pergunta orientadora</span>
+          <blockquote>Se algumas alternativas parecem mais promissoras do que outras, como usar essa informação sem confiar cegamente nela?</blockquote>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="visao">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Visão da aula</p>
+          <h2>O que vamos desenvolver</h2>
+          <p>O objetivo é construir e avaliar heurísticas, aplicar busca gulosa e A* e justificar a escolha da estratégia em problemas de rotas ou planejamento.</p>
+        </div>
+
+        <div class="overview-grid">
+          <article class="card topics-card">
+            <h3>Conteúdo programático</h3>
+            <div class="topic-list">
+              <div>Busca informada</div>
+              <div>Função heurística h(n)</div>
+              <div>Custo acumulado g(n)</div>
+              <div>Busca gulosa</div>
+              <div>Algoritmo A*</div>
+              <div>Função f(n) = g(n) + h(n)</div>
+              <div>Admissibilidade</div>
+              <div>Comparação de estratégias</div>
+            </div>
+            <div class="note-banner">
+              <strong>Objetivo da aula:</strong> construir e avaliar heurísticas e aplicar busca gulosa e A*, justificando a adequação da estratégia a um problema de rotas ou planejamento.
+            </div>
+          </article>
+
+          <article class="card competency">
+            <h3>C2 — Construir soluções eficientes</h3>
+            <div class="skill"><strong>H6</strong><span>Aplicar métodos de busca informada na construção de soluções eficientes.</span></div>
+          </article>
+
+          <article class="card competency competency-alt">
+            <h3>C3 — Comparar tecnologias e estratégias</h3>
+            <div class="skill"><strong>H10</strong><span>Comparar heurísticas e estratégias de busca segundo benefícios, custos e limitações.</span></div>
+          </article>
+
+          <article class="card competency c11">
+            <h3>C11 — Desenvolver algoritmos</h3>
+            <div class="skill"><strong>H38</strong><span>Implementar e validar busca gulosa e A* em problemas de rotas ou planejamento.</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="percurso">
+      <div class="container">
+        <div class="section-heading center">
+          <p class="eyebrow">Percurso da aula</p>
+          <h2>Da ordem fixa para a escolha orientada</h2>
+          <p>A mecânica geral da busca continua a mesma. O que muda é o critério usado para ordenar a fronteira.</p>
+        </div>
+        <div class="journey journey-five">
+          <a href="#ponte"><strong>Retomar BFS e DFS</strong></a>
+          <a href="#heuristica"><strong>Construir uma heurística</strong></a>
+          <a href="#gulosa"><strong>Usar apenas a estimativa</strong></a>
+          <a href="#astar"><strong>Combinar custo e estimativa</strong></a>
+          <a href="#simulador"><strong>Comparar no mesmo problema</strong></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="ponte">
+      <div class="container">
+        <div class="warmup warmup-light-aware">
+          <div>
+            <p class="eyebrow">Retomada da Aula 04</p>
+            <h2>O problema não mudou. A informação disponível mudou.</h2>
+            <p>BFS usa a antiguidade na fila. DFS usa a recência na pilha. Nenhum deles pergunta se um estado parece estar mais perto do objetivo.</p>
+          </div>
+          <div class="question-cloud">
+            <div>Se o mapa mostra onde está o destino, essa informação pode ajudar?</div>
+            <div>Uma estimativa precisa ser perfeita para ser útil?</div>
+            <div>Ir sempre para o que parece mais perto pode produzir uma rota ruim?</div>
+            <div>Como equilibrar o que já custou com o que ainda parece faltar?</div>
+          </div>
+        </div>
+
+        <div class="search-mode-grid bridge-grid" style="margin-top:2rem">
+          <article class="search-mode-card">
+            <span class="search-mode-label">Busca não informada</span>
+            <h4>A fronteira é ordenada por uma regra estrutural</h4>
+            <p>BFS e DFS conhecem estados, ações e objetivo, mas não recebem uma estimativa de proximidade do objetivo.</p>
+          </article>
+          <article class="search-mode-card search-mode-informed">
+            <span class="search-mode-label">Busca informada</span>
+            <h4>A fronteira também considera informação do problema</h4>
+            <p>Uma função heurística atribui uma estimativa aos estados e ajuda a decidir quais alternativas parecem mais promissoras.</p>
+          </article>
+        </div>
+
+        <div class="search-mode-takeaway">
+          <strong>Ideia central:</strong> busca informada não significa conhecer a solução. Significa usar uma estimativa relevante para decidir onde vale a pena procurar primeiro.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="heuristica">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Função heurística</p>
+          <h2>Uma estimativa do que ainda falta</h2>
+          <p>Em busca informada, uma heurística representa conhecimento do domínio em uma forma que o algoritmo consegue comparar.</p>
+        </div>
+
+        <div class="formula-grid">
+          <article class="formula-card formula-primary">
+            <span>Heurística</span>
+            <strong>h(n)</strong>
+            <p>estimativa do custo de sair do estado <em>n</em> e alcançar um objetivo.</p>
+          </article>
+          <article class="formula-card">
+            <span>Em um problema de rotas</span>
+            <strong>h(n) ≈ distância restante</strong>
+            <p>Uma possibilidade é usar a distância em linha reta até o destino, quando ela fizer sentido para o domínio.</p>
+          </article>
+        </div>
+
+        <div class="concept-callout heuristic-callout">
+          <div class="concept-icon" aria-hidden="true">h</div>
+          <div class="search-concept-content">
+            <h3>Heurística é uma pista, não uma verdade</h3>
+            <p class="search-concept-intro">O valor de <strong>h(n)</strong> não precisa ser o custo real do caminho restante. Ele é uma estimativa usada para orientar a busca. Por isso, uma heurística pode ser útil e ainda assim cometer erros.</p>
+            <div class="heuristic-principles">
+              <article><strong>Relevante</strong><span>Precisa ter relação com o objetivo do problema.</span></article>
+              <article><strong>Comparável</strong><span>Deve permitir ordenar alternativas de forma consistente.</span></article>
+              <article><strong>Barata</strong><span>Calcular a heurística não pode custar tanto quanto resolver o problema inteiro.</span></article>
+              <article><strong>Justificável</strong><span>É preciso explicar por que essa estimativa faz sentido naquele domínio.</span></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-heading" style="margin-top:2.8rem">
+          <p class="eyebrow">Construção coletiva</p>
+          <h2>Que pista você daria ao algoritmo?</h2>
+          <p>Considere um robô de entrega que precisa chegar a uma sala em um prédio. Antes de programar, compare possíveis heurísticas.</p>
+        </div>
+
+        <div class="heuristic-choice-grid">
+          <article class="heuristic-choice good">
+            <span>Possível</span>
+            <h3>Distância geométrica até o destino</h3>
+            <p>Pode funcionar bem quando obstáculos e corredores não distorcem demais a relação entre distância em linha reta e percurso real.</p>
+          </article>
+          <article class="heuristic-choice good">
+            <span>Possível</span>
+            <h3>Número estimado de setores restantes</h3>
+            <p>Pode ser útil quando o prédio está dividido em regiões e as transições entre elas refletem progresso até o objetivo.</p>
+          </article>
+          <article class="heuristic-choice warning-choice">
+            <span>Questionável</span>
+            <h3>Ordem alfabética do nome da sala</h3>
+            <p>É fácil de calcular, mas não tem relação clara com proximidade física ou custo da rota.</p>
+          </article>
+        </div>
+
+        <div class="prompt-box">
+          <strong>Pergunta para a turma</strong>
+          <p>Uma heurística pode ser excelente para um problema e ruim para outro. Que evidência você usaria para defender que sua heurística realmente ajuda?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="gulosa">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Busca gulosa · Greedy Best-First Search</p>
+          <h2>Escolha o estado que parece mais perto do objetivo</h2>
+          <p>A busca gulosa ordena a fronteira usando apenas a heurística. Ela prioriza o menor valor de <strong>h(n)</strong>.</p>
+        </div>
+
+        <div class="algorithm-layout">
+          <article class="algorithm-card greedy-card">
+            <span class="algorithm-badge">Greedy Best-First Search</span>
+            <h3>Busca gulosa</h3>
+            <p>A estratégia é direta: entre as alternativas disponíveis, escolher aquela que parece mais próxima do objetivo.</p>
+            <div class="algorithm-structure"><span>prioridade</span><span>→</span><strong>menor h(n)</strong></div>
+            <div class="algorithm-structure"><span>considera</span><span>→</span><strong>estimativa restante</strong></div>
+          </article>
+
+          <pre class="code-block"><code><span class="fn">BUSCA_GULOSA</span>(inicial, objetivo):
+    fronteira ← fila de prioridade com o estado inicial
+
+    <span class="kw">enquanto</span> fronteira não estiver vazia:
+        estado ← retirar estado com menor h(estado)
+
+        <span class="kw">se</span> estado é objetivo:
+            devolver caminho
+
+        <span class="kw">para cada</span> sucessor válido:
+            calcular h(sucessor)
+            inserir sucessor na fronteira
+
+    devolver falha</code></pre>
+        </div>
+
+        <div class="note-banner warning">
+          <strong>Limitação importante:</strong> parecer perto do objetivo não significa ter chegado por um caminho barato. A busca gulosa pode encontrar uma solução rapidamente e ainda assim retornar uma rota de custo maior.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="custo">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Custo acumulado</p>
+          <h2>Antes de olhar para frente, registre o que já foi gasto</h2>
+          <p>Para avaliar uma rota, não basta estimar quanto falta. Também precisamos conhecer o custo real acumulado desde o estado inicial.</p>
+        </div>
+
+        <div class="formula-grid three">
+          <article class="formula-card cost-card">
+            <span>Custo acumulado</span>
+            <strong>g(n)</strong>
+            <p>custo real do caminho do estado inicial até <em>n</em>.</p>
+          </article>
+          <article class="formula-card formula-primary">
+            <span>Estimativa restante</span>
+            <strong>h(n)</strong>
+            <p>estimativa do custo de <em>n</em> até um objetivo.</p>
+          </article>
+          <article class="formula-card total-card">
+            <span>Estimativa total</span>
+            <strong>f(n)</strong>
+            <p>combinação usada pelo A* para ordenar a fronteira.</p>
+          </article>
+        </div>
+
+        <div class="cost-example">
+          <div><small>Distância já percorrida</small><strong>g(n) = 6</strong></div>
+          <span aria-hidden="true">+</span>
+          <div><small>Estimativa até o destino</small><strong>h(n) = 4</strong></div>
+          <span aria-hidden="true">=</span>
+          <div class="result"><small>Estimativa total</small><strong>f(n) = 10</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="astar">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Algoritmo A*</p>
+          <h2>Equilibre o custo do caminho com a estimativa do que falta</h2>
+          <p>O A* combina a experiência acumulada da busca com uma previsão do futuro.</p>
+        </div>
+
+        <div class="astar-equation" aria-label="f de n é igual a g de n mais h de n">
+          <span class="eq-f">f(n)</span><span>=</span><span class="eq-g">g(n)</span><span>+</span><span class="eq-h">h(n)</span>
+        </div>
+        <div class="equation-legend">
+          <div><strong>g(n)</strong><span>quanto já custou</span></div>
+          <div><strong>h(n)</strong><span>quanto parece faltar</span></div>
+          <div><strong>f(n)</strong><span>estimativa do custo total da rota passando por n</span></div>
+        </div>
+
+        <div class="algorithm-layout reverse" style="margin-top:2rem">
+          <pre class="code-block"><code><span class="fn">A_ESTRELA</span>(inicial, objetivo):
+    fronteira ← fila de prioridade
+    g(inicial) ← 0
+    inserir inicial com prioridade g + h
+
+    <span class="kw">enquanto</span> fronteira não estiver vazia:
+        estado ← retirar menor f(estado)
+
+        <span class="kw">se</span> estado é objetivo:
+            devolver caminho
+
+        <span class="kw">para cada</span> sucessor:
+            novo_g ← g(estado) + custo(estado, sucessor)
+
+            <span class="kw">se</span> novo_g melhora o custo conhecido:
+                atualizar caminho e g(sucessor)
+                prioridade ← novo_g + h(sucessor)
+                inserir ou atualizar sucessor
+
+    devolver falha</code></pre>
+
+          <article class="algorithm-card astar-card">
+            <span class="algorithm-badge">A* Search</span>
+            <h3>A*</h3>
+            <p>O algoritmo pode deixar momentaneamente de seguir o estado que parece mais perto se existir outra alternativa com menor custo total estimado.</p>
+            <div class="algorithm-structure"><span>prioridade</span><span>→</span><strong>menor g(n) + h(n)</strong></div>
+            <div class="algorithm-structure"><span>equilíbrio</span><span>→</span><strong>passado + futuro</strong></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="simulador">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Experimento comparativo</p>
+          <h2>Greedy e A* no mesmo grafo</h2>
+          <p>Os dois algoritmos recebem a mesma heurística. A diferença é que A* também considera o custo acumulado.</p>
+        </div>
+
+        <div class="guided-simulator" data-guided-search>
+          <div class="guided-graph-card">
+            <div class="graph-heading">
+              <div>
+                <h3>Problema de rotas</h3>
+                <p>Objetivo: sair de <strong>S</strong> e chegar a <strong>G</strong> com menor custo.</p>
+              </div>
+              <div class="graph-legend"><span>número na aresta = custo</span><span>h = estimativa até G</span></div>
+            </div>
+
+            <div class="guided-graph" aria-label="Grafo com estados S, A, B, C e G">
+              <svg viewBox="0 0 100 70" preserveAspectRatio="none" aria-hidden="true">
+                <line x1="12" y1="35" x2="40" y2="16"></line>
+                <line x1="12" y1="35" x2="38" y2="54"></line>
+                <line x1="40" y1="16" x2="87" y2="20"></line>
+                <line x1="38" y1="54" x2="64" y2="54"></line>
+                <line x1="64" y1="54" x2="87" y2="20"></line>
+              </svg>
+
+              <span class="edge-cost" style="left:27%;top:21%">2</span>
+              <span class="edge-cost" style="left:26%;top:49%">4</span>
+              <span class="edge-cost" style="left:64%;top:12%">8</span>
+              <span class="edge-cost" style="left:51%;top:58%">2</span>
+              <span class="edge-cost" style="left:78%;top:43%">2</span>
+
+              <div class="guided-node" data-node="S" style="left:12%;top:50%"><strong>S</strong><small>h=6</small></div>
+              <div class="guided-node" data-node="A" style="left:40%;top:23%"><strong>A</strong><small>h=1</small></div>
+              <div class="guided-node" data-node="B" style="left:38%;top:77%"><strong>B</strong><small>h=4</small></div>
+              <div class="guided-node" data-node="C" style="left:64%;top:77%"><strong>C</strong><small>h=2</small></div>
+              <div class="guided-node goal" data-node="G" style="left:87%;top:29%"><strong>G</strong><small>h=0</small></div>
+            </div>
+          </div>
+
+          <div class="guided-control-card">
+            <h3>Execução passo a passo</h3>
+            <div class="sim-actions">
+              <button class="active" type="button" data-mode="greedy">Busca gulosa</button>
+              <button type="button" data-mode="astar">A*</button>
+            </div>
+            <div class="sim-actions">
+              <button type="button" data-step>Executar um passo</button>
+              <button type="button" data-reset>Reiniciar</button>
+            </div>
+
+            <div class="guided-status-grid">
+              <div><small>Estado atual</small><strong data-current>—</strong></div>
+              <div><small>Fronteira ordenada</small><strong data-frontier>—</strong></div>
+              <div><small>Custo do caminho atual</small><strong data-cost>—</strong></div>
+              <div><small>Caminho</small><strong data-path>—</strong></div>
+            </div>
+
+            <div class="decision-box">
+              <small>Por que esse estado?</small>
+              <strong data-explanation>Selecione uma estratégia e avance.</strong>
+            </div>
+            <p class="sim-outcome" data-outcome aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="experiment-questions">
+          <article><small>01</small><h3>Qual solução foi encontrada?</h3><p>Registre o caminho e some os custos das arestas.</p></article>
+          <article><small>02</small><h3>Quando as estratégias divergiram?</h3><p>Observe a fronteira e identifique o momento em que h(n) e g(n)+h(n) produzem escolhas diferentes.</p></article>
+          <article><small>03</small><h3>O que enganou a busca gulosa?</h3><p>O estado A parece excelente pela heurística, mas o trecho restante custa caro.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="admissibilidade">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Admissibilidade</p>
+          <h2>Uma heurística otimista não exagera o custo restante</h2>
+          <p>Para discutir a garantia de custo ótimo do A*, precisamos observar uma propriedade da heurística.</p>
+        </div>
+
+        <div class="admissibility-layout">
+          <article class="admissibility-definition">
+            <span>Heurística admissível</span>
+            <div class="admissibility-equation">h(n) ≤ h*(n)</div>
+            <p>O valor estimado por h(n) nunca é maior que o custo real do melhor caminho restante, representado aqui por h*(n).</p>
+          </article>
+          <div class="admissibility-copy">
+            <h3>Pense em uma estimativa otimista</h3>
+            <p>Ela pode dizer que falta menos do que realmente falta, mas não deve afirmar que o caminho restante custa mais do que o melhor custo real.</p>
+            <p>Com custos de ação positivos e uma heurística admissível, o A* pode preservar a propriedade de encontrar uma solução de custo ótimo nas condições clássicas de busca.</p>
+          </div>
+        </div>
+
+        <div class="heuristic-check-table-wrap">
+          <table class="heuristic-check-table">
+            <thead><tr><th>Estado</th><th>h(n)</th><th>Melhor custo real restante</th><th>Admissível?</th></tr></thead>
+            <tbody>
+              <tr><td>A</td><td>1</td><td>8</td><td><strong>Sim</strong></td></tr>
+              <tr><td>B</td><td>4</td><td>4</td><td><strong>Sim</strong></td></tr>
+              <tr><td>C</td><td>2</td><td>2</td><td><strong>Sim</strong></td></tr>
+              <tr><td>G</td><td>0</td><td>0</td><td><strong>Sim</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note-banner warning">
+          <strong>Não confunda:</strong> admissibilidade não significa que a heurística seja perfeita. Ela pode subestimar bastante e continuar admissível; nesse caso, porém, pode orientar menos e fazer o A* explorar mais estados.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="comparacao">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Comparação de estratégias</p>
+          <h2>O critério de prioridade muda o comportamento da busca</h2>
+          <p>Agora podemos colocar lado a lado as quatro estratégias trabalhadas nas duas aulas.</p>
+        </div>
+
+        <div class="comparison-table-wrap">
+          <table class="comparison-table search-strategy-table">
+            <thead>
+              <tr><th>Estratégia</th><th>Prioriza</th><th>Usa heurística?</th><th>Observação principal</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>BFS</strong></td><td>menor profundidade</td><td>Não</td><td>Com custos iguais por ação, encontra solução com menor número de passos.</td></tr>
+              <tr><td><strong>DFS</strong></td><td>maior profundidade atual</td><td>Não</td><td>Aprofunda rapidamente, mas a primeira solução pode ser ruim ou nem aparecer em espaços infinitos.</td></tr>
+              <tr><td><strong>Gulosa</strong></td><td>menor h(n)</td><td>Sim</td><td>Pode ser rápida, mas confia apenas na estimativa e não garante menor custo.</td></tr>
+              <tr><td><strong>A*</strong></td><td>menor g(n)+h(n)</td><td>Sim</td><td>Equilibra custo acumulado e estimativa restante; com as condições adequadas, encontra solução ótima.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="comparison-prompts">
+          <article><span>Cenário A</span><h3>Mapa grande, destino conhecido e custos de estrada</h3><p>Qual estratégia tende a aproveitar melhor uma boa estimativa de distância restante?</p></article>
+          <article><span>Cenário B</span><h3>Heurística ruim ou pouco relacionada ao objetivo</h3><p>Que efeito você espera no número de estados explorados e na qualidade das decisões?</p></article>
+          <article><span>Cenário C</span><h3>O caminho mais curto em passos não é o mais barato</h3><p>Por que considerar g(n) passa a ser importante?</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="fechamento">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Fechamento</p>
+          <h2>O que precisa ficar desta aula</h2>
+          <p>Mais importante do que memorizar fórmulas é reconhecer que diferentes estratégias usam diferentes informações para ordenar a fronteira.</p>
+        </div>
+
+        <div class="closing-grid">
+          <article><strong>01</strong><h3>Heurística orienta</h3><p>h(n) estima o custo restante e ajuda a concentrar a busca em alternativas promissoras.</p></article>
+          <article><strong>02</strong><h3>Gulosa olha só para frente</h3><p>Ela escolhe o menor h(n), podendo ignorar um custo alto já acumulado.</p></article>
+          <article><strong>03</strong><h3>A* combina passado e futuro</h3><p>g(n) registra o custo real percorrido; h(n) estima o restante; f(n) combina os dois.</p></article>
+          <article><strong>04</strong><h3>Admissibilidade importa</h3><p>Uma heurística que não superestima o melhor custo restante sustenta a garantia clássica de otimalidade do A*.</p></article>
+        </div>
+
+        <div class="next-lesson">
+          <span>Próxima aula</span>
+          <strong>Representação do conhecimento</strong>
+          <p>Depois de usar informação para orientar a busca, vamos discutir como fatos, regras e relações podem ser representados para permitir inferência.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="referencias">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Referências</p>
+          <h2>Base conceitual da aula</h2>
+        </div>
+        <div class="references-grid">
+          <article class="reference-card"><strong>RUSSELL, Stuart J.; NORVIG, Peter.</strong><p><em>Artificial Intelligence: A Modern Approach.</em> 4. ed. Pearson, 2022. Capítulo 3 — estratégias de busca informada, busca gulosa, A* e heurísticas.</p></article>
+          <article class="reference-card"><strong>LUGER, George F.</strong><p><em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving.</em> 6. ed. Pearson/Addison-Wesley, 2009. Capítulo 4 — busca heurística e best-first search.</p></article>
+          <article class="reference-card"><strong>HURBANS, Rishal.</strong><p><em>Grokking Artificial Intelligence Algorithms.</em> Manning, 2020. Capítulo 3 — heurísticas e busca inteligente.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Inteligência Artificial Aplicada</strong><p>Engenharia de Software · Aula 05</p></div>
+      <div class="study-actions">
+        <a href="aula-04.html">← Aula 04</a>
+        <a href="#inicio">Voltar ao início ↑</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
