@@ -161,40 +161,74 @@
             <p>Em uma formulação clássica, temos um estado inicial, ações, um modelo de transição, um teste ou conjunto de estados objetivo e, quando necessário, um custo associado às ações. O <strong>espaço de estados</strong> reúne as situações alcançáveis e as transições possíveis. Uma solução é um caminho que parte do estado inicial e alcança o objetivo.</p>
             <p>Em muitos problemas de IA, o espaço de estados não precisa estar completamente materializado em memória. O algoritmo pode descobrir apenas a parte necessária enquanto gera sucessores durante a execução (Russell; Norvig, 2022, §3.3).</p>
 
-            <h3>O ciclo da busca é o mesmo usado em sala</h3>
-            <p>BFS e DFS seguem a mesma mecânica geral apresentada na Aula 04: preparar a busca, escolher um estado da fronteira, testar o objetivo, expandir o estado, registrar novas possibilidades e continuar. A estratégia muda justamente na regra usada para retirar o próximo estado da fronteira.</p>
+            <h3>Do espaço de estados ao ciclo da busca</h3>
+            <p>Representar o problema é apenas o ponto de partida. Mesmo sabendo quais estados existem e quais movimentos são possíveis, ainda precisamos de um procedimento que escolha <strong>o que explorar agora</strong>, mantenha as outras alternativas disponíveis e repita esse processo até encontrar o objetivo.</p>
+            <p>Esse procedimento é o <strong>ciclo da busca</strong>. BFS e DFS repetem as mesmas etapas básicas; a diferença entre elas aparece principalmente na forma de organizar a fronteira e, portanto, na escolha do próximo estado.</p>
+
+            <div class="check-grid" style="margin:1.5rem 0 2rem">
+              <article class="check-card"><span>01</span><strong>Preparar a busca</strong><p>Colocar o estado inicial na fronteira e registrá-lo em <em>visitados</em>. A partir desse momento existe uma primeira alternativa aguardando exploração.</p></article>
+              <article class="check-card"><span>02</span><strong>Escolher um estado</strong><p>Retirar um estado da fronteira. A regra de retirada é o que diferencia as estratégias: BFS retira o mais antigo; DFS, o mais recente.</p></article>
+              <article class="check-card"><span>03</span><strong>Testar o objetivo</strong><p>Verificar se o estado retirado satisfaz a condição de chegada. Se satisfizer, a busca termina e o caminho associado pode ser devolvido.</p></article>
+              <article class="check-card"><span>04</span><strong>Expandir o estado</strong><p>Se ainda não chegamos ao objetivo, aplicar as ações válidas e gerar os estados sucessores que podem ser alcançados a partir do estado atual.</p></article>
+              <article class="check-card"><span>05</span><strong>Registrar e continuar</strong><p>Ignorar sucessores já visitados, registrar os novos estados e colocá-los na fronteira com seus caminhos. Se ainda houver alternativas, o ciclo volta à etapa 02; se a fronteira esvaziar, não foi encontrada uma solução.</p></article>
+            </div>
 
             <figure class="study-figure">
               <img src="assets/aula-04-anatomia-busca.svg" alt="Ciclo geral da busca com fronteira, retirada de estado, teste de objetivo, expansão, controle de repetidos e inserção de sucessores." loading="lazy">
-              <figcaption>Reutilizamos a anatomia da busca da aula principal porque o ciclo é comum a BFS e DFS. O que muda é a política de organização da fronteira.</figcaption>
+              <figcaption>A figura resume o fluxo; as cinco etapas acima explicam o papel de cada parte. O ciclo é comum a BFS e DFS. O que muda é a política usada para escolher o próximo estado da fronteira.</figcaption>
             </figure>
 
-            <h3>Estado e registro da busca não são exatamente a mesma coisa</h3>
-            <p>Na aula usamos principalmente o termo <strong>estado</strong>, porque ele deixa o algoritmo mais legível. Na literatura, é comum distinguir o estado do <strong>nó de busca</strong>: o estado representa uma configuração do problema; o nó é um registro interno que pode acrescentar informações como pai, ação, profundidade ou custo.</p>
-            <p>Essa distinção ajuda a entender como o mesmo estado pode ser alcançado por caminhos diferentes. Para manter a continuidade com o código utilizado em sala, continuaremos usando <strong>estado</strong>, <strong>caminho</strong>, <strong>fronteira</strong> e <strong>visitados</strong> como nomenclatura principal (Russell; Norvig, 2022, §3.3).</p>
-
-            <div class="mini-grid">
-              <article class="mini-card"><h4>Estado</h4><p>Configuração do problema. Ex.: <code>"Hall"</code>.</p></article>
-              <article class="mini-card"><h4>Registro interno</h4><p>Pode associar ao estado um caminho, pai, profundidade ou custo.</p></article>
+            <div class="study-callout teal">
+              <strong>Uma forma útil de ler qualquer algoritmo de busca</strong>
+              <p>Ao encontrar uma implementação nova, procure primeiro estas perguntas: onde está a fronteira? Como o próximo estado é retirado? Quando o objetivo é testado? Como os sucessores são gerados? E como as repetições são controladas?</p>
             </div>
 
-            <h3>Grafo de estados × estrutura construída pela busca</h3>
-            <p>O grafo de estados representa as relações do domínio. A execução da busca constrói caminhos a partir do estado inicial conforme os estados vão sendo retirados e expandidos. Um mesmo estado pode ser alcançado por mais de um caminho; por isso o conjunto de <strong>visitados</strong> é importante para evitar explorações repetidas e ciclos.</p>
+            <h3>O estado descreve o problema; a busca precisa guardar o percurso</h3>
+            <p>Agora podemos separar duas ideias que costumam parecer iguais no início. Um <strong>estado</strong> descreve apenas uma configuração do problema. Se o robô está no Hall, por exemplo, o estado pode ser simplesmente <code>"Hall"</code>. Isso responde à pergunta: <em>onde o problema está neste momento?</em></p>
+            <p>Mas o algoritmo precisa de informações adicionais para trabalhar. Se encontrar o Laboratório, queremos saber não apenas que ele chegou lá, mas <strong>como chegou</strong>. Por isso, na implementação didática da Aula 04, cada entrada da fronteira carrega o estado junto com o caminho percorrido até ele.</p>
+
+            <pre class="code-block"><code>estado = "Hall"
+caminho = ["Recepção", "Sala 101", "Hall"]
+
+entrada_na_fronteira = (estado, caminho)</code></pre>
+
+            <div class="mini-grid">
+              <article class="mini-card"><h4>Estado</h4><p>É parte da representação do problema. Diz qual configuração foi alcançada. Ex.: <code>"Hall"</code>.</p></article>
+              <article class="mini-card"><h4>Informação da busca</h4><p>É criada durante a execução. Ajuda o algoritmo a continuar a exploração e a devolver a solução. Ex.: o caminho até <code>"Hall"</code>.</p></article>
+            </div>
+
+            <p>Na literatura, essas informações podem ser reunidas em um <strong>nó de busca</strong>, que pode armazenar estado, pai, ação, profundidade e custo. Não precisamos trocar a nomenclatura usada no código da aula: o ponto importante é perceber que <strong>o estado pertence ao problema</strong>, enquanto os dados adicionais pertencem ao processo de busca (Russell; Norvig, 2022, §3.3).</p>
+
+            <div class="study-callout violet">
+              <strong>Por que essa distinção é útil?</strong>
+              <p>O mesmo estado pode ser alcançado por caminhos diferentes. O estado continua sendo o mesmo; o percurso usado para chegar até ele pode mudar. Separar essas duas coisas ajuda a compreender tanto a reconstrução da solução quanto o controle de estados repetidos.</p>
+            </div>
+
+            <h3>O grafo de estados é o mapa; a busca é o percurso sendo construído</h3>
+            <p>Uma segunda distinção fica mais simples a partir daqui. O <strong>grafo de estados</strong> representa as possibilidades do problema: quais estados existem e quais transições ligam um estado a outro. Ele funciona como um mapa das movimentações possíveis.</p>
+            <p>A <strong>execução da busca</strong>, por outro lado, é dinâmica. Conforme o algoritmo roda, a fronteira muda, novos estados entram em visitados e novos caminhos são construídos. Em outras palavras, o grafo diz <em>o que pode acontecer</em>; as estruturas da busca registram <em>o que o algoritmo já explorou e o que ainda falta explorar</em>.</p>
+
+            <div class="mini-grid">
+              <article class="mini-card"><h4>Grafo de estados</h4><p>Representação do domínio. Contém estados e transições possíveis. Para uma mesma instância do problema, permanece essencialmente o mesmo durante a execução.</p></article>
+              <article class="mini-card"><h4>Estruturas da busca</h4><p>Memória de trabalho do algoritmo. Fronteira, visitados e caminhos mudam a cada iteração conforme a exploração avança.</p></article>
+            </div>
 
             <figure class="study-figure">
               <img src="assets/aula-04-representacao-busca.svg" alt="Passagem da representação do problema para o grafo de estados e para a execução da busca." loading="lazy">
-              <figcaption>A figura já usada na Aula 04 mostra a transição da representação do problema para o grafo de estados e, depois, para a estrutura dinâmica mantida pelo algoritmo.</figcaption>
+              <figcaption>A representação define as possibilidades do problema. Durante a busca, o algoritmo percorre parte dessas possibilidades e mantém estruturas que registram o trabalho realizado e o trabalho ainda pendente.</figcaption>
             </figure>
+
+            <p>Em livros de IA, os caminhos gerados durante essa exploração também podem ser representados como uma <strong>árvore de busca</strong>. Para acompanhar os algoritmos desta aula, porém, a ideia central é mais simples: <strong>o grafo representa o problema; fronteira, visitados e caminho representam o andamento da busca</strong>.</p>
           </div>
 
           <aside class="study-stack">
             <div class="study-callout">
               <strong>Representação</strong>
-              <p>Define quais estados e transições existem no problema.</p>
+              <p>Define quais estados existem e quais transições são possíveis entre eles.</p>
             </div>
             <div class="study-callout violet">
-              <strong>Busca</strong>
-              <p>Define em que ordem as possibilidades serão exploradas.</p>
+              <strong>Execução da busca</strong>
+              <p>Mantém a fronteira, os estados visitados e os caminhos enquanto o algoritmo percorre a representação.</p>
             </div>
             <div class="study-callout teal">
               <strong>Ponto de engenharia</strong>
