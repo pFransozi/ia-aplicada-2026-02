@@ -34,6 +34,7 @@
     .study-prose { max-width: 1060px; min-width: 0; }
     .study-prose h3 { margin: 2.4rem 0 .8rem; font-size: 1.55rem; }
     .study-prose h3:first-child { margin-top: 0; }
+    .study-prose h4 { margin: 1.65rem 0 .55rem; font-size: 1.08rem; }
     .study-prose p, .study-prose li { color: var(--muted); }
     .study-prose p { margin: 0 0 1.05rem; }
     .study-prose ul, .study-prose ol { padding-left: 1.3rem; }
@@ -275,6 +276,7 @@ def bfs(estado_inicial, objetivo_atingido, sucessores):
         <h3>Por que a busca por níveis pode ficar cara?</h3>
         <p>A BFS é fácil de entender porque avança por camadas. O problema é que cada camada pode ser muito maior que a anterior. Se cada estado gerar 3 sucessores, por exemplo, a quantidade de estados por nível pode crescer assim: 1, 3, 9, 27, 81.</p>
         <p>A expressão <span class="formula">O(b^d)</span> resume esse crescimento. O <strong>b</strong> representa quantos sucessores cada estado pode gerar. O <strong>d</strong> representa a profundidade da solução mais rasa. Quanto maior a ramificação e quanto mais longe estiver a solução, mais estados podem ser gerados antes de encontrá-la.</p>
+        <figure class="study-figure"><img src="assets/aula-04-crescimento-busca.svg" alt="Crescimento de uma árvore de busca conforme aumentam fator de ramificação e profundidade." loading="lazy"><figcaption>A figura ajuda a visualizar por que a combinação entre ramificação e profundidade pode fazer a busca crescer rapidamente. Na BFS, isso afeta especialmente a memória, porque muitos estados do mesmo nível podem ficar armazenados ao mesmo tempo na fronteira.</figcaption></figure>
         <p>Na prática, o ponto mais sensível costuma ser a memória. Como a BFS guarda na fronteira muitos estados do mesmo nível ou do próximo nível, a fila pode crescer rapidamente. Em um grafo pequeno isso quase não aparece; em um espaço de estados grande, essa fila pode virar o principal limite da estratégia (Russell; Norvig, 2022, §3.4).</p>
       </div>
     </div></section>
@@ -358,7 +360,6 @@ def bfs(estado_inicial, objetivo_atingido, sucessores):
       <div class="study-prose">
         <h3>Fator de ramificação</h3>
         <p>O fator de ramificação <strong>b</strong> representa quantos sucessores um estado pode gerar, em média ou no modelo de análise. Pequenos aumentos em <strong>b</strong> podem causar grande crescimento quando a profundidade aumenta.</p>
-        <figure class="study-figure"><img src="assets/aula-04-crescimento-busca.svg" alt="Crescimento de uma árvore de busca conforme aumentam fator de ramificação e profundidade." loading="lazy"><figcaption>A figura ajuda a visualizar por que a combinação entre ramificação e profundidade pode tornar uma busca rapidamente cara.</figcaption></figure>
         <h3>Nos grafos explícitos da aula: |V| e |E|</h3>
         <p>Os exemplos práticos usam grafos finitos representados por listas de adjacência. Nessas versões, com controle de visitados, cada vértice é processado no máximo uma vez e suas conexões são examinadas durante a expansão. Por isso, a análise usual para BFS e DFS em um grafo explícito é <span class="formula">O(|V| + |E|)</span> em tempo e <span class="formula">O(|V|)</span> em espaço auxiliar, onde <strong>|V|</strong> é o número de estados e <strong>|E|</strong> o número de conexões.</p>
         <div class="study-callout teal"><strong>Então por que também aparece O(b<sup>d</sup>)?</strong><p>As duas análises respondem a contextos diferentes. <code>O(|V| + |E|)</code> descreve a travessia de um grafo explícito e finito. As expressões com <em>b</em>, <em>d</em> e <em>m</em> descrevem o crescimento de uma árvore de busca, especialmente útil quando o espaço é gerado implicitamente.</p></div>
