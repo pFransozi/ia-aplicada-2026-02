@@ -32,6 +32,7 @@
         <a href="curso.html">Visão geral</a>
         <a href="#visao">Visão</a>
         <a href="#heuristica">Heurística</a>
+        <a href="#estrutura-fronteira">Estrutura</a>
         <a href="#gulosa">Gulosa</a>
         <a href="#astar">A*</a>
         <a href="#comparacao">Comparação</a>
@@ -221,6 +222,86 @@
         <div class="prompt-box">
           <strong>Pergunta para a turma</strong>
           <p>Uma heurística pode ser excelente para um problema e ruim para outro. Que evidência você usaria para defender que sua heurística realmente ajuda?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="estrutura-fronteira">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Estrutura da fronteira</p>
+          <h2>Greedy e A* precisam de fila de prioridade</h2>
+          <p>Na Aula 04, a fronteira era organizada por fila ou pilha. Na Aula 05, a fronteira precisa comparar prioridades: menor <strong>h(n)</strong> na busca gulosa e menor <strong>g(n)+h(n)</strong> no A*.</p>
+        </div>
+
+        <div class="search-mode-grid">
+          <article class="search-mode-card">
+            <span class="search-mode-label">BFS</span>
+            <h4>Fila comum</h4>
+            <p>Retira primeiro quem entrou primeiro. A regra é estrutural: antiguidade na fronteira.</p>
+          </article>
+          <article class="search-mode-card">
+            <span class="search-mode-label">DFS</span>
+            <h4>Pilha</h4>
+            <p>Retira primeiro quem entrou por último. A regra é estrutural: recência na fronteira.</p>
+          </article>
+          <article class="search-mode-card search-mode-informed">
+            <span class="search-mode-label">Greedy e A*</span>
+            <h4>Fila de prioridade</h4>
+            <p>Retira primeiro o estado com melhor prioridade. Em Python, essa fila costuma ser implementada com um <strong>heap</strong>, usando <code>heapq</code>.</p>
+          </article>
+        </div>
+
+        <div class="search-mode-takeaway" style="margin-top:1.4rem">
+          <strong>Ideia central:</strong> o heap não muda o problema de busca. Ele apenas organiza a fronteira para retirar rapidamente o estado com menor prioridade.
+        </div>
+
+        <div class="comparison-table-wrap" style="margin-top:1.4rem">
+          <table class="comparison-table search-strategy-table">
+            <thead>
+              <tr><th>Estratégia</th><th>Estrutura da fronteira</th><th>Quem sai primeiro?</th><th>Prioridade</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>BFS</strong></td><td>fila</td><td>o estado mais antigo</td><td>ordem de chegada</td></tr>
+              <tr><td><strong>DFS</strong></td><td>pilha</td><td>o estado mais recente</td><td>ordem inversa de chegada</td></tr>
+              <tr><td><strong>Greedy</strong></td><td>fila de prioridade, geralmente heap</td><td>o estado com menor heurística</td><td><strong>h(n)</strong></td></tr>
+              <tr><td><strong>A*</strong></td><td>fila de prioridade, geralmente heap</td><td>o estado com menor custo total estimado</td><td><strong>g(n)+h(n)</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="algorithm-layout" style="margin-top:1.4rem">
+          <article class="search-mode-card">
+            <span class="search-mode-label">Como ler o heap</span>
+            <h4>O primeiro item da tupla é a prioridade</h4>
+            <p>No <code>heapq</code>, colocamos tuplas na fronteira. O Python usa o primeiro valor da tupla para decidir o que sai primeiro.</p>
+            <pre class="code-block" style="margin-top:1rem"><code>from heapq import heappush, heappop
+
+fronteira = []
+
+heappush(fronteira, (176, "Fagaras"))
+heappush(fronteira, (193, "Rimnicu Vilcea"))
+
+print(heappop(fronteira))
+# (176, "Fagaras")</code></pre>
+          </article>
+
+          <article class="search-mode-card search-mode-informed">
+            <span class="search-mode-label">Greedy x A*</span>
+            <h4>A estrutura é parecida; a prioridade muda</h4>
+            <p>A busca gulosa e o A* podem usar heap. A diferença está no número colocado como prioridade.</p>
+            <pre class="code-block" style="margin-top:1rem"><code># Greedy
+prioridade = h[cidade]
+heappush(fronteira, (prioridade, cidade))
+
+# A*
+prioridade = g[cidade] + h[cidade]
+heappush(fronteira, (prioridade, cidade))</code></pre>
+          </article>
+        </div>
+
+        <div class="note-banner warning">
+          <strong>No A*, o heap não basta sozinho:</strong> além da fila de prioridade, precisamos guardar o melhor custo conhecido até cada estado, normalmente em um dicionário como <code>melhor_g</code>. Isso evita aceitar um caminho pior quando o mesmo estado aparece por rotas diferentes.
         </div>
       </div>
     </section>
