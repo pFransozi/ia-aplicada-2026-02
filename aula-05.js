@@ -22,6 +22,14 @@
       .formalization-map-figure figcaption { max-width:1120px; margin:.75rem auto 0; color:var(--muted); font-size:.92rem; line-height:1.55; }
       .formalization-map-figure figcaption strong { color:var(--ink); }
 
+      .formula-grid { align-items:stretch; }
+      .formula-card { display:flex; flex-direction:column; justify-content:flex-start; min-height:260px; }
+      .formula-card span { letter-spacing:.08em; }
+      .formula-card strong { line-height:1.05; }
+      .formula-card p { max-width:780px; }
+      .heuristic-card-note { margin-top:auto; padding:.85rem; border:1px solid var(--line); border-radius:14px; background:var(--soft); color:var(--muted); font-size:.95rem; line-height:1.5; }
+      .heuristic-card-note strong { display:inline; font-size:inherit; color:var(--ink); }
+
       .formalization-compare, .python-formalization-grid, .heuristic-example-grid, .heuristic-areas-grid, .romania-summary-grid, .romania-reading-grid, .guided-status-grid { display:grid; gap:14px; }
       .formalization-compare, .python-formalization-grid, .heuristic-example-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
       .heuristic-areas-grid, .romania-summary-grid, .romania-reading-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
@@ -68,11 +76,11 @@
       .romania-reading-grid p { margin:0; }
 
       body.theme-dark .formalization-map-figure img { background:#fff; border-color:#40506b; }
-      body.theme-dark .formalization-card, body.theme-dark .formalization-mini-example, body.theme-dark .python-formalization-card, body.theme-dark .heuristic-explainer-card, body.theme-dark .heuristic-python-card, body.theme-dark .heuristic-area-card, body.theme-dark .concept-anchor-card, body.theme-dark .concept-anchor-grid article, body.theme-dark .romania-summary-card, body.theme-dark .romania-summary-grid article, body.theme-dark .romania-reading-grid article { background:var(--paper); border-color:var(--line); }
+      body.theme-dark .formula-card .heuristic-card-note, body.theme-dark .formalization-card, body.theme-dark .formalization-mini-example, body.theme-dark .python-formalization-card, body.theme-dark .heuristic-explainer-card, body.theme-dark .heuristic-python-card, body.theme-dark .heuristic-area-card, body.theme-dark .concept-anchor-card, body.theme-dark .concept-anchor-grid article, body.theme-dark .romania-summary-card, body.theme-dark .romania-summary-grid article, body.theme-dark .romania-reading-grid article { background:var(--paper); border-color:var(--line); }
       body.theme-dark .formalization-list li, body.theme-dark .formalization-table th, body.theme-dark .heuristic-explainer-card .formula-line { background:var(--soft); }
 
       @media (max-width:980px) {
-        #visao .overview-grid, .formalization-compare, .python-formalization-grid, .heuristic-example-grid, .heuristic-areas-grid, .concept-anchor-grid, .romania-summary-grid, .romania-reading-grid, .guided-status-grid { grid-template-columns:1fr; }
+        #visao .overview-grid, .formula-grid, .formalization-compare, .python-formalization-grid, .heuristic-example-grid, .heuristic-areas-grid, .concept-anchor-grid, .romania-summary-grid, .romania-reading-grid, .guided-status-grid { grid-template-columns:1fr; }
       }
     `;
     document.head.appendChild(style);
@@ -103,29 +111,15 @@
     percurso.insertAdjacentHTML('afterend', `
       <section class="section section-soft formalization-section" id="formalizacao-informada">
         <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">Formulação do problema</p>
-            <h2>O que muda quando a busca passa a usar heurística?</h2>
-            <p>Antes de falar de algoritmo, precisamos ajustar a descrição do problema. Na busca não informada, o algoritmo enxerga apenas a estrutura do espaço de estados. Na busca informada, a mesma formulação precisa carregar custos e uma estimativa de proximidade do objetivo.</p>
-          </div>
-          <figure class="formalization-map-figure">
-            <img src="assets/mapa-romenia-russell-norvig-fig-3-1.png" alt="Mapa simplificado de parte da Romênia, com cidades conectadas por estradas e distâncias entre elas." loading="lazy">
-            <figcaption><strong>Problema de referência da aula.</strong> Vamos usar o mapa da Romênia para contextualizar a mudança de formulação: de um grafo usado por BFS/DFS para um problema de busca informada, com custos e heurística.</figcaption>
-          </figure>
+          <div class="section-heading"><p class="eyebrow">Formulação do problema</p><h2>O que muda quando a busca passa a usar heurística?</h2><p>Antes de falar de algoritmo, precisamos ajustar a descrição do problema. Na busca não informada, o algoritmo enxerga apenas a estrutura do espaço de estados. Na busca informada, a mesma formulação precisa carregar custos e uma estimativa de proximidade do objetivo.</p></div>
+          <figure class="formalization-map-figure"><img src="assets/mapa-romenia-russell-norvig-fig-3-1.png" alt="Mapa simplificado de parte da Romênia, com cidades conectadas por estradas e distâncias entre elas." loading="lazy"><figcaption><strong>Problema de referência da aula.</strong> Vamos usar o mapa da Romênia para contextualizar a mudança de formulação: de um grafo usado por BFS/DFS para um problema de busca informada, com custos e heurística.</figcaption></figure>
           <div class="formalization-compare">
             <article class="formalization-card"><h3>Como ficava na Aula 04</h3><ul class="formalization-list"><li><strong>Estado inicial</strong><span>Arad.</span></li><li><strong>Objetivo</strong><span>Chegar a Bucharest.</span></li><li><strong>Sucessores</strong><span>Cidades diretamente conectadas por estradas.</span></li><li><strong>Critério de expansão</strong><span>Fila no BFS ou pilha no DFS.</span></li></ul></article>
             <article class="formalization-card"><h3>Como precisa ficar na Aula 05</h3><ul class="formalization-list"><li><strong>Custo da ação</strong><span>Distância de cada estrada, como Arad → Sibiu = 140.</span></li><li><strong>Custo acumulado g(n)</strong><span>Quanto já foi gasto do início até o estado atual.</span></li><li><strong>Heurística h(n)</strong><span>Estimativa de quanto falta de cada cidade até Bucharest.</span></li><li><strong>Prioridade</strong><span>Menor h(n) na gulosa; menor g(n)+h(n) no A*.</span></li></ul></article>
           </div>
-          <div class="formalization-mini-example">
-            <h3>Exemplo rápido no mapa da Romênia</h3>
-            <p>Ao chegar em Sibiu, duas alternativas importantes aparecem. Fagaras parece um pouco mais próxima do destino pela heurística, mas Rimnicu Vilcea tem menor custo total estimado quando somamos o que já foi gasto com o que ainda parece faltar.</p>
-            <div class="formalization-table-wrap"><table class="formalization-table"><thead><tr><th>Alternativa</th><th>g(n)</th><th>h(n)</th><th>g(n)+h(n)</th><th>Leitura</th></tr></thead><tbody><tr><td>Fagaras</td><td>239</td><td>176</td><td>415</td><td>Boa pela heurística, mas com custo acumulado maior.</td></tr><tr><td>Rimnicu Vilcea</td><td>220</td><td>193</td><td>413</td><td>Menos atraente pela heurística isolada, mas melhor para A*.</td></tr></tbody></table></div>
-          </div>
+          <div class="formalization-mini-example"><h3>Exemplo rápido no mapa da Romênia</h3><p>Ao chegar em Sibiu, duas alternativas importantes aparecem. Fagaras parece um pouco mais próxima do destino pela heurística, mas Rimnicu Vilcea tem menor custo total estimado quando somamos o que já foi gasto com o que ainda parece faltar.</p><div class="formalization-table-wrap"><table class="formalization-table"><thead><tr><th>Alternativa</th><th>g(n)</th><th>h(n)</th><th>g(n)+h(n)</th><th>Leitura</th></tr></thead><tbody><tr><td>Fagaras</td><td>239</td><td>176</td><td>415</td><td>Boa pela heurística, mas com custo acumulado maior.</td></tr><tr><td>Rimnicu Vilcea</td><td>220</td><td>193</td><td>413</td><td>Menos atraente pela heurística isolada, mas melhor para A*.</td></tr></tbody></table></div></div>
           <div class="python-formalization-grid">
-            <article class="python-formalization-card">
-              <h3>Antes: Python para BFS/DFS</h3>
-              <p>O problema podia ser descrito apenas como conexões entre estados. O algoritmo decidia a ordem pela estrutura da fronteira.</p>
-              <pre><code>estado_inicial = "Arad"
+            <article class="python-formalization-card"><h3>Antes: Python para BFS/DFS</h3><p>O problema podia ser descrito apenas como conexões entre estados. O algoritmo decidia a ordem pela estrutura da fronteira.</p><pre><code>estado_inicial = "Arad"
 objetivo = "Bucharest"
 
 mapa = {
@@ -136,12 +130,8 @@ mapa = {
 }
 
 # BFS: fronteira como fila
-# DFS: fronteira como pilha</code></pre>
-            </article>
-            <article class="python-formalization-card">
-              <h3>Agora: Python com heurística</h3>
-              <p>O problema passa a carregar custo real das ações e uma estimativa h(n), permitindo busca gulosa e A*.</p>
-              <pre><code>estado_inicial = "Arad"
+# DFS: fronteira como pilha</code></pre></article>
+            <article class="python-formalization-card"><h3>Agora: Python com heurística</h3><p>O problema passa a carregar custo real das ações e uma estimativa h(n), permitindo busca gulosa e A*.</p><pre><code>estado_inicial = "Arad"
 objetivo = "Bucharest"
 
 mapa = {
@@ -176,17 +166,23 @@ heuristica = {
 }
 
 # Gulosa: prioridade = h(n)
-# A*: prioridade = g(n) + h(n)</code></pre>
-            </article>
+# A*: prioridade = g(n) + h(n)</code></pre></article>
           </div>
         </div>
-      </section>
-    `);
+      </section>`);
   };
 
   const updateBridgeText = () => {
-    const paragraph = document.querySelector('#ponte .warmup h2 + p');
-    if (paragraph) paragraph.textContent = 'BFS e DFS não usam pistas sobre o destino. Eles apenas seguem a regra da estrutura: fila no BFS, pilha no DFS. A busca informada muda isso ao acrescentar uma estimativa de proximidade do objetivo.';
+    const p = document.querySelector('#ponte .warmup h2 + p');
+    if (p) p.textContent = 'BFS e DFS não usam pistas sobre o destino. Eles apenas seguem a regra da estrutura: fila no BFS, pilha no DFS. A busca informada muda isso ao acrescentar uma estimativa de proximidade do objetivo.';
+  };
+
+  const updateHeuristicIntroCards = () => {
+    const cards = document.querySelectorAll('#heuristica .formula-card');
+    if (cards.length < 2 || cards[0].dataset.didactic === 'true') return;
+    cards[0].dataset.didactic = 'true';
+    cards[0].innerHTML = `<span>Função heurística</span><strong>h(n)</strong><p>Recebe um estado <em>n</em> e devolve uma estimativa de quanto ainda falta para chegar ao objetivo.</p><div class="heuristic-card-note"><strong>Leitura:</strong> quanto menor o valor de h(n), mais promissor aquele estado parece para a busca.</div>`;
+    cards[1].innerHTML = `<span>Exemplo em rotas</span><strong>h(cidade) = distância até o destino</strong><p>No mapa da Romênia, podemos usar a distância em linha reta até Bucharest como pista inicial. Ela aproxima a direção do destino, mas não substitui o custo real das estradas.</p><div class="heuristic-card-note"><strong>Exemplo:</strong> h(Sibiu)=253, h(Fagaras)=176 e h(Bucharest)=0.</div>`;
   };
 
   const enhanceHeuristicSection = () => {
@@ -194,16 +190,9 @@ heuristica = {
     const callout = container?.querySelector('.heuristic-callout');
     if (!container || !callout || container.querySelector('.heuristic-explainer-card')) return;
     callout.insertAdjacentHTML('afterend', `
-      <div class="heuristic-explainer-card">
-        <h3>Heurística é uma pista para ordenar a fronteira</h3>
-        <p>Uma função heurística recebe um estado e devolve um número. Esse número não é o custo real do caminho; ele é uma estimativa. Em geral, quanto menor o valor de h(n), mais promissor aquele estado parece estar em relação ao objetivo.</p>
-        <div class="formula-line"><strong>No código da Romênia:</strong> h("Sibiu") = 253, h("Fagaras") = 176 e h("Bucharest") = 0. O valor zero indica que o objetivo já foi alcançado.</div>
-      </div>
+      <div class="heuristic-explainer-card"><h3>Heurística é uma pista para ordenar a fronteira</h3><p>Uma função heurística transforma conhecimento do domínio em um número comparável. Esse número não é o custo real do caminho; é uma estimativa usada para decidir qual estado parece valer a pena explorar primeiro.</p><div class="formula-line"><strong>No código da Romênia:</strong> h("Sibiu") = 253, h("Fagaras") = 176 e h("Bucharest") = 0. O valor zero indica que o objetivo já foi alcançado.</div></div>
       <div class="heuristic-example-grid">
-        <article class="heuristic-python-card">
-          <h3>Como isso aparece no algoritmo</h3>
-          <p>A busca gulosa usa só a pista. O A* combina a pista com o custo já acumulado.</p>
-          <pre><code>def h(cidade):
+        <article class="heuristic-python-card"><h3>Como isso aparece no algoritmo</h3><p>A busca gulosa usa apenas a pista h(n). O A* combina a pista com o custo já acumulado.</p><pre><code>def h(cidade):
     return heuristica[cidade]
 
 # Busca gulosa:
@@ -218,53 +207,21 @@ def prioridade_astar(cidade, custo_acumulado):
 
 prioridade_gulosa("Fagaras")      # 176
 prioridade_astar("Fagaras", 239)  # 415
-prioridade_astar("Rimnicu Vilcea", 220)  # 413</code></pre>
-        </article>
-        <article class="heuristic-explainer-card">
-          <h3>O que o algoritmo está comparando?</h3>
-          <p>Quando a fronteira contém Fagaras e Rimnicu Vilcea, a busca gulosa tende a escolher Fagaras porque 176 é menor que 193. O A* escolhe Rimnicu Vilcea porque 220 + 193 = 413, enquanto Fagaras fica com 239 + 176 = 415.</p>
-          <div class="formula-line"><strong>Ideia central:</strong> uma heurística boa ajuda a explorar menos estados, mas ela continua sendo uma estimativa. Por isso o custo real do caminho não pode desaparecer da análise.</div>
-        </article>
+prioridade_astar("Rimnicu Vilcea", 220)  # 413</code></pre></article>
+        <article class="heuristic-explainer-card"><h3>O que o algoritmo está comparando?</h3><p>Quando a fronteira contém Fagaras e Rimnicu Vilcea, a busca gulosa tende a escolher Fagaras porque 176 é menor que 193. O A* escolhe Rimnicu Vilcea porque 220 + 193 = 413, enquanto Fagaras fica com 239 + 176 = 415.</p><div class="formula-line"><strong>Ideia central:</strong> uma heurística boa ajuda a explorar menos estados, mas ela continua sendo uma estimativa. Por isso o custo real do caminho não pode desaparecer da análise.</div></article>
       </div>
       <div class="heuristic-areas-grid">
-        <article class="heuristic-area-card">
-          <small>Exemplo 01</small>
-          <h3>Rotas e logística</h3>
-          <p>Em um problema de rotas, h(n) pode ser a distância em linha reta até o destino. Ela não considera curvas, pedágios ou trânsito, mas ajuda a escolher cidades que parecem aproximar a rota do objetivo.</p>
-          <span>Estado: cidade atual. Heurística: distância estimada até a cidade destino.</span>
-        </article>
-        <article class="heuristic-area-card">
-          <small>Exemplo 02</small>
-          <h3>Jogos e labirintos</h3>
-          <p>Em um grid ou labirinto, h(n) pode ser a distância Manhattan: quantas linhas e colunas faltam até a saída, ignorando paredes temporariamente.</p>
-          <span>Estado: posição atual. Heurística: |linha atual - linha final| + |coluna atual - coluna final|.</span>
-        </article>
-        <article class="heuristic-area-card">
-          <small>Exemplo 03</small>
-          <h3>Planejamento de tarefas</h3>
-          <p>Em um planejamento simples, h(n) pode estimar quantas tarefas críticas ainda faltam para concluir um objetivo. Ela orienta a busca para planos que parecem reduzir pendências mais rapidamente.</p>
-          <span>Estado: conjunto de tarefas concluídas. Heurística: estimativa do esforço restante.</span>
-        </article>
-      </div>
-    `);
+        <article class="heuristic-area-card"><small>Exemplo 01</small><h3>Rotas e logística</h3><p>Em um problema de rotas, h(n) pode ser a distância em linha reta até o destino. Ela não considera curvas, pedágios ou trânsito, mas ajuda a escolher cidades que parecem aproximar a rota do objetivo.</p><span>Estado: cidade atual. Heurística: distância estimada até a cidade destino.</span></article>
+        <article class="heuristic-area-card"><small>Exemplo 02</small><h3>Jogos e labirintos</h3><p>Em um grid ou labirinto, h(n) pode ser a distância Manhattan: quantas linhas e colunas faltam até a saída, ignorando paredes temporariamente.</p><span>Estado: posição atual. Heurística: |linha atual - linha final| + |coluna atual - coluna final|.</span></article>
+        <article class="heuristic-area-card"><small>Exemplo 03</small><h3>Planejamento de tarefas</h3><p>Em um planejamento simples, h(n) pode estimar quantas tarefas críticas ainda faltam para concluir um objetivo. Ela orienta a busca para planos que parecem reduzir pendências mais rapidamente.</p><span>Estado: conjunto de tarefas concluídas. Heurística: estimativa do esforço restante.</span></article>
+      </div>`);
   };
 
   const insertConceptAnchorCard = () => {
     const container = document.querySelector('#heuristica .container');
     const target = container?.querySelector('.heuristic-areas-grid') || container?.querySelector('.heuristic-callout');
     if (!container || !target || container.querySelector('.concept-anchor-card')) return;
-    target.insertAdjacentHTML('afterend', `
-      <div class="concept-anchor-card">
-        <h3>Como avaliar se uma heurística ajuda?</h3>
-        <p>Uma heurística não é julgada apenas por parecer intuitiva. Ela precisa ser conectada ao domínio do problema, barata de calcular e útil para ordenar a fronteira sem esconder o custo real do caminho.</p>
-        <div class="concept-anchor-grid">
-          <article><strong>Domínio</strong><span>A estimativa precisa ter relação com o objetivo.</span></article>
-          <article><strong>Custo de cálculo</strong><span>Calcular h(n) não pode ser tão caro quanto resolver o problema.</span></article>
-          <article><strong>Qualidade da pista</strong><span>Quanto melhor a estimativa, menor tende a ser a exploração desnecessária.</span></article>
-          <article><strong>Garantia</strong><span>Para discutir otimalidade no A*, a admissibilidade passa a importar.</span></article>
-        </div>
-      </div>
-    `);
+    target.insertAdjacentHTML('afterend', `<div class="concept-anchor-card"><h3>Como avaliar se uma heurística ajuda?</h3><p>Uma heurística não é julgada apenas por parecer intuitiva. Ela precisa ser conectada ao domínio do problema, barata de calcular e útil para ordenar a fronteira sem esconder o custo real do caminho.</p><div class="concept-anchor-grid"><article><strong>Domínio</strong><span>A estimativa precisa ter relação com o objetivo.</span></article><article><strong>Custo de cálculo</strong><span>Calcular h(n) não pode ser tão caro quanto resolver o problema.</span></article><article><strong>Qualidade da pista</strong><span>Quanto melhor a estimativa, menor tende a ser a exploração desnecessária.</span></article><article><strong>Garantia</strong><span>Para discutir otimalidade no A*, a admissibilidade passa a importar.</span></article></div></div>`);
   };
 
   const configureRomaniaReference = () => {
@@ -283,26 +240,11 @@ prioridade_astar("Rimnicu Vilcea", 220)  # 413</code></pre>
     if (graph) {
       graph.classList.add('romania-summary');
       graph.setAttribute('aria-label', 'Resumo do problema da Romênia para comparação entre busca gulosa e A estrela');
-      graph.innerHTML = `
-        <div class="romania-summary-card">
-          <p>O grafo continua sendo o mesmo. O que muda é a informação usada para organizar a fronteira e decidir qual alternativa explorar primeiro.</p>
-          <div class="romania-summary-grid">
-            <article><strong>Estado inicial e objetivo</strong><span>Partimos de Arad e queremos chegar a Bucharest.</span></article>
-            <article><strong>Ponto crítico da comparação</strong><span>Em Sibiu, a escolha entre Fagaras e Rimnicu Vilcea mostra bem a diferença entre usar só h(n) ou combinar g(n)+h(n).</span></article>
-            <article><strong>Resultado esperado</strong><span>Greedy tende a seguir Arad → Sibiu → Fagaras. A* acaba preferindo a rota por Rimnicu Vilcea e Pitesti.</span></article>
-          </div>
-        </div>
-      `;
+      graph.innerHTML = `<div class="romania-summary-card"><p>O grafo continua sendo o mesmo. O que muda é a informação usada para organizar a fronteira e decidir qual alternativa explorar primeiro.</p><div class="romania-summary-grid"><article><strong>Estado inicial e objetivo</strong><span>Partimos de Arad e queremos chegar a Bucharest.</span></article><article><strong>Ponto crítico da comparação</strong><span>Em Sibiu, a escolha entre Fagaras e Rimnicu Vilcea mostra bem a diferença entre usar só h(n) ou combinar g(n)+h(n).</span></article><article><strong>Resultado esperado</strong><span>Greedy tende a seguir Arad → Sibiu → Fagaras. A* acaba preferindo a rota por Rimnicu Vilcea e Pitesti.</span></article></div></div>`;
     }
     if (!section?.querySelector('.romania-reading-grid')) {
       const graphCard = root.querySelector('.guided-graph-card');
-      graphCard?.insertAdjacentHTML('beforeend', `
-        <div class="romania-reading-grid">
-          <article><small>01</small><h3>O que o problema já tinha?</h3><p>Estados, conexões entre cidades e custo real das estradas.</p></article>
-          <article><small>02</small><h3>O que foi acrescentado?</h3><p>Uma heurística h(n), que funciona como uma pista sobre o quanto falta até Bucharest.</p></article>
-          <article><small>03</small><h3>O que isso permite comparar?</h3><p>Agora podemos observar a diferença entre ordenar a fronteira por h(n) ou por g(n)+h(n).</p></article>
-        </div>
-      `);
+      graphCard?.insertAdjacentHTML('beforeend', `<div class="romania-reading-grid"><article><small>01</small><h3>O que o problema já tinha?</h3><p>Estados, conexões entre cidades e custo real das estradas.</p></article><article><small>02</small><h3>O que foi acrescentado?</h3><p>Uma heurística h(n), que funciona como uma pista sobre o quanto falta até Bucharest.</p></article><article><small>03</small><h3>O que isso permite comparar?</h3><p>Agora podemos observar a diferença entre ordenar a fronteira por h(n) ou por g(n)+h(n).</p></article></div>`);
     }
     const costExample = document.querySelector('.cost-example');
     if (costExample) {
@@ -316,9 +258,7 @@ prioridade_astar("Rimnicu Vilcea", 220)  # 413</code></pre>
     if (questions?.[1]) questions[1].querySelector('p').textContent = 'Observe o momento em que a rota aparentemente direta por Fagaras perde para a alternativa por Rimnicu Vilcea e Pitesti.';
     if (questions?.[2]) questions[2].querySelector('p').textContent = 'Fagaras parece mais perto de Bucharest pela heurística, mas o custo real Fagaras → Bucharest é alto.';
     const tableBody = document.querySelector('.heuristic-check-table tbody');
-    if (tableBody) {
-      tableBody.innerHTML = `<tr><td>Arad</td><td>366</td><td>418</td><td><strong>Sim</strong></td></tr><tr><td>Sibiu</td><td>253</td><td>278</td><td><strong>Sim</strong></td></tr><tr><td>Fagaras</td><td>176</td><td>211</td><td><strong>Sim</strong></td></tr><tr><td>Rimnicu Vilcea</td><td>193</td><td>198</td><td><strong>Sim</strong></td></tr><tr><td>Pitesti</td><td>100</td><td>101</td><td><strong>Sim</strong></td></tr><tr><td>Bucharest</td><td>0</td><td>0</td><td><strong>Sim</strong></td></tr>`;
-    }
+    if (tableBody) tableBody.innerHTML = `<tr><td>Arad</td><td>366</td><td>418</td><td><strong>Sim</strong></td></tr><tr><td>Sibiu</td><td>253</td><td>278</td><td><strong>Sim</strong></td></tr><tr><td>Fagaras</td><td>176</td><td>211</td><td><strong>Sim</strong></td></tr><tr><td>Rimnicu Vilcea</td><td>193</td><td>198</td><td><strong>Sim</strong></td></tr><tr><td>Pitesti</td><td>100</td><td>101</td><td><strong>Sim</strong></td></tr><tr><td>Bucharest</td><td>0</td><td>0</td><td><strong>Sim</strong></td></tr>`;
   };
 
   injectStyles();
@@ -326,6 +266,7 @@ prioridade_astar("Rimnicu Vilcea", 220)  # 413</code></pre>
   compactCompetencyCards();
   insertFormalizationSection();
   updateBridgeText();
+  updateHeuristicIntroCards();
   enhanceHeuristicSection();
   insertConceptAnchorCard();
   configureRomaniaReference();
