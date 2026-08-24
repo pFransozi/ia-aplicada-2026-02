@@ -32,21 +32,21 @@
       .formalization-map-figure figcaption, .comparison-map-figure figcaption { max-width:1120px; margin:.75rem auto 0; color:var(--muted); font-size:.92rem; line-height:1.55; }
       .formalization-map-figure figcaption strong, .comparison-map-figure figcaption strong { color:var(--ink); }
 
-      .formalization-compare, .python-formalization-grid, .heuristic-example-grid, .heuristic-decision-grid, .heuristic-areas-grid, .romania-summary-grid, .romania-reading-grid, .guided-status-grid, .algorithm-code-pair, .comparison-panels, .map-status-strip, .runner-stats-grid { display:grid; gap:14px; }
-      .formalization-compare, .python-formalization-grid, .heuristic-example-grid, .heuristic-decision-grid, .algorithm-code-pair, .comparison-panels, .map-status-strip, .runner-stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .heuristic-areas-grid, .romania-summary-grid, .romania-reading-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      .formalization-compare, .python-formalization-grid, .heuristic-example-grid, .heuristic-decision-grid, .heuristic-areas-grid, .romania-summary-grid, .romania-reading-grid, .guided-status-grid, .algorithm-didactic-grid, .comparison-panels, .map-status-strip, .runner-stats-grid, .admissibility-example-grid, .admissibility-impact-grid { display:grid; gap:14px; }
+      .formalization-compare, .python-formalization-grid, .heuristic-example-grid, .heuristic-decision-grid, .algorithm-didactic-grid, .comparison-panels, .map-status-strip, .runner-stats-grid, .admissibility-impact-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .heuristic-areas-grid, .romania-summary-grid, .romania-reading-grid, .admissibility-example-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
       .guided-status-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
 
-      .formalization-card, .formalization-mini-example, .python-formalization-card, .heuristic-explainer-card, .heuristic-frontier-card, .heuristic-python-card, .heuristic-area-card, .algorithm-choice-card, .algorithm-code-card, .comparison-lab-card, .runner-panel, .map-status-card, .concept-anchor-card, .romania-summary-card, .romania-reading-grid article { border:1px solid var(--line); border-radius:20px; background:var(--paper); box-shadow:var(--shadow); }
-      .formalization-card, .formalization-mini-example, .python-formalization-card, .heuristic-explainer-card, .heuristic-frontier-card, .heuristic-python-card, .heuristic-area-card, .algorithm-choice-card, .algorithm-code-card, .comparison-lab-card, .runner-panel, .map-status-card, .concept-anchor-card, .romania-summary-card { padding:1.2rem; }
-      .formalization-card h3, .formalization-mini-example h3, .python-formalization-card h3, .heuristic-explainer-card h3, .heuristic-frontier-card h3, .heuristic-python-card h3, .heuristic-area-card h3, .algorithm-choice-card h3, .algorithm-code-card h3, .runner-panel h3, .concept-anchor-card h3 { margin:0 0 .7rem; }
+      .formalization-card, .formalization-mini-example, .python-formalization-card, .heuristic-explainer-card, .heuristic-frontier-card, .heuristic-python-card, .heuristic-area-card, .algorithm-choice-card, .algorithm-pseudo-card, .algorithm-code-card, .comparison-lab-card, .runner-panel, .map-status-card, .concept-anchor-card, .romania-summary-card, .romania-reading-grid article, .admissibility-mini-card, .admissibility-impact-card { border:1px solid var(--line); border-radius:20px; background:var(--paper); box-shadow:var(--shadow); }
+      .formalization-card, .formalization-mini-example, .python-formalization-card, .heuristic-explainer-card, .heuristic-frontier-card, .heuristic-python-card, .heuristic-area-card, .algorithm-choice-card, .algorithm-pseudo-card, .algorithm-code-card, .comparison-lab-card, .runner-panel, .map-status-card, .concept-anchor-card, .romania-summary-card, .admissibility-mini-card, .admissibility-impact-card { padding:1.2rem; }
+      .formalization-card h3, .formalization-mini-example h3, .python-formalization-card h3, .heuristic-explainer-card h3, .heuristic-frontier-card h3, .heuristic-python-card h3, .heuristic-area-card h3, .algorithm-choice-card h3, .algorithm-pseudo-card h3, .algorithm-code-card h3, .runner-panel h3, .concept-anchor-card h3, .admissibility-mini-card h3, .admissibility-impact-card h3 { margin:0 0 .7rem; }
 
       .formalization-list { display:grid; gap:.65rem; margin:0; padding:0; list-style:none; }
       .formalization-list li, .concept-anchor-grid article, .romania-summary-grid article, .algorithm-choice-card li { padding:.9rem; border:1px solid var(--line); border-radius:15px; background:var(--soft); }
-      .formalization-list strong, .formalization-list span, .romania-summary-grid strong, .romania-summary-grid span, .heuristic-area-card span { display:block; }
-      .formalization-list span, .romania-summary-grid span, .heuristic-area-card span { margin-top:.28rem; color:var(--muted); }
-      .formalization-mini-example, .python-formalization-grid, .heuristic-explainer-card, .heuristic-frontier-card, .heuristic-decision-grid, .heuristic-python-card, .heuristic-areas-grid, .algorithm-code-pair { margin-top:1.1rem; }
-      .formalization-mini-example p, .concept-anchor-card p, .romania-summary-card > p, .heuristic-explainer-card p, .heuristic-frontier-card p, .heuristic-python-card p, .heuristic-area-card p, .algorithm-choice-card p, .algorithm-code-card p, .runner-explanation-card p { margin:0; }
+      .formalization-list strong, .formalization-list span, .romania-summary-grid strong, .romania-summary-grid span, .heuristic-area-card span, .admissibility-mini-card strong, .admissibility-mini-card span { display:block; }
+      .formalization-list span, .romania-summary-grid span, .heuristic-area-card span, .admissibility-mini-card span { margin-top:.28rem; color:var(--muted); }
+      .formalization-mini-example, .python-formalization-grid, .heuristic-explainer-card, .heuristic-frontier-card, .heuristic-decision-grid, .heuristic-python-card, .heuristic-areas-grid, .algorithm-didactic-grid, .admissibility-explainer, .admissibility-impact-grid { margin-top:1.1rem; }
+      .formalization-mini-example p, .concept-anchor-card p, .romania-summary-card > p, .heuristic-explainer-card p, .heuristic-frontier-card p, .heuristic-python-card p, .heuristic-area-card p, .algorithm-choice-card p, .algorithm-pseudo-card p, .algorithm-code-card p, .runner-explanation-card p, .admissibility-mini-card p, .admissibility-impact-card p { margin:0; }
 
       .formalization-table-wrap, .heuristic-table-wrap { overflow-x:auto; margin-top:1rem; }
       .formalization-table, .heuristic-frontier-table { width:100%; border-collapse:collapse; }
@@ -59,20 +59,19 @@
       .python-formalization-card code, .heuristic-python-card code, .algorithm-code-card code { font-family:var(--font-mono,'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace); font-size:.9rem; line-height:1.55; color:#eef4ff; white-space:pre; }
 
       #heuristica .formula-card { display:flex; flex-direction:column; gap:.75rem; }
-      .heuristic-card-note, .heuristic-explainer-card .formula-line, .heuristic-frontier-card .formula-line, .algorithm-reading-note, .formula-emphasis { margin-top:.9rem; padding:.85rem; border:1px solid var(--line); border-radius:14px; background:var(--soft); color:var(--ink); line-height:1.45; }
+      .heuristic-card-note, .heuristic-explainer-card .formula-line, .heuristic-frontier-card .formula-line, .algorithm-reading-note, .formula-emphasis, .admissibility-rule { margin-top:.9rem; padding:.85rem; border:1px solid var(--line); border-radius:14px; background:var(--soft); color:var(--ink); line-height:1.45; }
       .heuristic-card-note { margin-top:auto; font-size:.96rem; }
-      .heuristic-card-note strong, .heuristic-explainer-card .formula-line strong, .heuristic-frontier-card .formula-line strong, .algorithm-reading-note strong { color:var(--blue); }
-      .formula-emphasis { color:var(--violet); font-size:1.25rem; font-weight:900; text-align:center; }
+      .heuristic-card-note strong, .heuristic-explainer-card .formula-line strong, .heuristic-frontier-card .formula-line strong, .algorithm-reading-note strong, .admissibility-rule strong { color:var(--blue); }
+      .formula-emphasis, .admissibility-equation-inline { color:var(--violet); font-size:1.25rem; font-weight:900; text-align:center; }
       .heuristic-callout .concept-icon { min-width:5.4rem; padding:.65rem .75rem; font-size:clamp(1.6rem,3vw,2.4rem); line-height:1; white-space:nowrap; letter-spacing:-.04em; }
       .heuristic-explainer-card { border-left:5px solid var(--blue); }
       .heuristic-frontier-card { border-left:5px solid var(--violet); }
 
-      .algorithm-code-card { display:grid; gap:.75rem; align-content:start; }
-      .algorithm-code-card .code-block { margin-top:.25rem; }
-      .didactic-label, .algorithm-choice-card .choice-rule, .runner-rule { display:inline-flex; width:max-content; max-width:100%; padding:.35rem .65rem; border-radius:999px; background:var(--soft); border:1px solid var(--line); color:var(--muted); font-size:.74rem; font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
-      .algorithm-choice-card { display:grid; gap:.75rem; align-content:start; }
+      .algorithm-choice-card, .algorithm-pseudo-card, .algorithm-code-card { display:grid; gap:.75rem; align-content:start; }
+      .didactic-label, .algorithm-choice-card .choice-rule, .runner-rule, .admissibility-label { display:inline-flex; width:max-content; max-width:100%; padding:.35rem .65rem; border-radius:999px; background:var(--soft); border:1px solid var(--line); color:var(--muted); font-size:.74rem; font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
       .algorithm-choice-card ul { display:grid; gap:.55rem; margin:0; padding:0; list-style:none; }
       .algorithm-choice-card .choice-result { padding:.8rem; border-radius:14px; background:rgba(14,165,233,.12); border:1px solid rgba(14,165,233,.25); font-weight:900; color:var(--blue); }
+      .pseudo-list { margin:1rem 0 0; padding:1rem; overflow-x:auto; border-radius:14px; background:#091224; border:1px solid #21304a; color:#eef4ff; font-family:var(--font-mono,'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace); font-size:.9rem; line-height:1.55; white-space:pre; }
 
       .heuristic-area-card small, .romania-reading-grid small, .runner-frontier-card small, .runner-explanation-card small { color:var(--blue); font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
       .heuristic-area-card h3 { margin-top:.55rem; }
@@ -125,9 +124,22 @@
       .runner-explanation-card p { margin:.65rem 0 0; }
       .runner-outcome-card { min-height:56px; font-weight:850; color:var(--violet); }
 
+      .admissibility-explainer { margin-bottom:1.4rem; }
+      .admissibility-mini-card.safe { border-top:5px solid var(--teal); }
+      .admissibility-mini-card.warning { border-top:5px solid var(--amber); }
+      .admissibility-mini-card.problem { border-top:5px solid var(--violet); }
+      .admissibility-mini-card .big-rule { margin-top:.75rem; font-size:clamp(1.6rem,3vw,2.35rem); font-weight:900; letter-spacing:-.04em; color:var(--ink); }
+      .admissibility-example { margin-top:.9rem; padding:.85rem; border:1px solid var(--line); border-radius:14px; background:var(--soft); }
+      .admissibility-example strong, .admissibility-example span { display:block; }
+      .admissibility-example span { margin-top:.25rem; color:var(--muted); }
+      .admissibility-check-table .safe-answer { color:var(--teal); font-weight:900; }
+      .admissibility-check-table .bad-answer { color:var(--amber); font-weight:900; }
+      .admissibility-impact-grid { margin-top:1.4rem; }
+      .admissibility-impact-card { border-left:5px solid var(--blue); }
+
       body.theme-dark .formalization-map-figure img, body.theme-dark .comparison-map-figure img { background:#fff; border-color:#40506b; }
-      body.theme-dark .formalization-card, body.theme-dark .formalization-mini-example, body.theme-dark .python-formalization-card, body.theme-dark .heuristic-explainer-card, body.theme-dark .heuristic-frontier-card, body.theme-dark .heuristic-python-card, body.theme-dark .heuristic-area-card, body.theme-dark .algorithm-choice-card, body.theme-dark .algorithm-code-card, body.theme-dark .comparison-lab-card, body.theme-dark .runner-panel, body.theme-dark .map-status-card, body.theme-dark .concept-anchor-card, body.theme-dark .concept-anchor-grid article, body.theme-dark .romania-summary-card, body.theme-dark .romania-summary-grid article, body.theme-dark .romania-reading-grid article { background:var(--paper); border-color:var(--line); }
-      body.theme-dark .formalization-list li, body.theme-dark .formalization-table th, body.theme-dark .heuristic-frontier-table th, body.theme-dark .heuristic-card-note, body.theme-dark .heuristic-explainer-card .formula-line, body.theme-dark .heuristic-frontier-card .formula-line, body.theme-dark .algorithm-reading-note, body.theme-dark .formula-emphasis, body.theme-dark .didactic-label, body.theme-dark .algorithm-choice-card .choice-rule, body.theme-dark .runner-rule, body.theme-dark .algorithm-choice-card li, body.theme-dark .runner-stats-grid > div, body.theme-dark .runner-frontier-card, body.theme-dark .runner-explanation-card, body.theme-dark .runner-outcome-card { background:var(--soft); }
+      body.theme-dark .formalization-card, body.theme-dark .formalization-mini-example, body.theme-dark .python-formalization-card, body.theme-dark .heuristic-explainer-card, body.theme-dark .heuristic-frontier-card, body.theme-dark .heuristic-python-card, body.theme-dark .heuristic-area-card, body.theme-dark .algorithm-choice-card, body.theme-dark .algorithm-pseudo-card, body.theme-dark .algorithm-code-card, body.theme-dark .comparison-lab-card, body.theme-dark .runner-panel, body.theme-dark .map-status-card, body.theme-dark .concept-anchor-card, body.theme-dark .concept-anchor-grid article, body.theme-dark .romania-summary-card, body.theme-dark .romania-summary-grid article, body.theme-dark .romania-reading-grid article, body.theme-dark .admissibility-mini-card, body.theme-dark .admissibility-impact-card { background:var(--paper); border-color:var(--line); }
+      body.theme-dark .formalization-list li, body.theme-dark .formalization-table th, body.theme-dark .heuristic-frontier-table th, body.theme-dark .heuristic-card-note, body.theme-dark .heuristic-explainer-card .formula-line, body.theme-dark .heuristic-frontier-card .formula-line, body.theme-dark .algorithm-reading-note, body.theme-dark .formula-emphasis, body.theme-dark .didactic-label, body.theme-dark .algorithm-choice-card .choice-rule, body.theme-dark .runner-rule, body.theme-dark .algorithm-choice-card li, body.theme-dark .runner-stats-grid > div, body.theme-dark .runner-frontier-card, body.theme-dark .runner-explanation-card, body.theme-dark .runner-outcome-card, body.theme-dark .admissibility-rule, body.theme-dark .admissibility-example { background:var(--soft); }
       body.theme-dark .interactive-romania-map { background:linear-gradient(145deg,#121c2f,#0e1828); border-color:#30405e; }
       body.theme-dark .route-edge { stroke:#52647f; }
       body.theme-dark .route-node { background:#172033; color:var(--ink); border-color:#40506b; }
@@ -136,7 +148,7 @@
       body.theme-dark .route-node.greedy-current.astar-current { background:#3d2c15; border-color:#f4b95e; }
       body.theme-dark .runner-frontier-card li { background:var(--paper); border-color:var(--line); }
 
-      @media(max-width:980px){#visao .overview-grid,.formalization-compare,.python-formalization-grid,.heuristic-example-grid,.heuristic-decision-grid,.heuristic-areas-grid,.algorithm-code-pair,.comparison-panels,.map-status-strip,.concept-anchor-grid,.romania-summary-grid,.romania-reading-grid,.guided-status-grid{grid-template-columns:1fr}}
+      @media(max-width:980px){#visao .overview-grid,.formalization-compare,.python-formalization-grid,.heuristic-example-grid,.heuristic-decision-grid,.heuristic-areas-grid,.algorithm-didactic-grid,.comparison-panels,.map-status-strip,.concept-anchor-grid,.romania-summary-grid,.romania-reading-grid,.guided-status-grid,.admissibility-example-grid,.admissibility-impact-grid{grid-template-columns:1fr}}
       @media(max-width:720px){.runner-panel-header,.runner-actions{flex-direction:column}.runner-rule{white-space:normal}.runner-stats-grid{grid-template-columns:1fr}.interactive-romania-map{min-height:560px}.route-node{min-width:72px;font-size:.86rem}}
     `;
     document.head.appendChild(style);
@@ -285,37 +297,27 @@ print("A* escolhe:", escolha_astar["cidade"])</code></pre></article><div class="
     if (questions?.[0]) questions[0].querySelector('p').textContent = 'Registre o caminho encontrado e some os custos das estradas.';
     if (questions?.[1]) questions[1].querySelector('p').textContent = 'Observe o momento em que a rota aparentemente direta por Fagaras perde para a alternativa por Rimnicu Vilcea e Pitesti.';
     if (questions?.[2]) questions[2].querySelector('p').textContent = 'Fagaras parece mais perto de Bucharest pela heurística, mas o custo real Fagaras → Bucharest é alto.';
-    const tableBody = document.querySelector('.heuristic-check-table tbody');
-    if (tableBody) tableBody.innerHTML = `<tr><td>Arad</td><td>366</td><td>418</td><td><strong>Sim</strong></td></tr><tr><td>Sibiu</td><td>253</td><td>278</td><td><strong>Sim</strong></td></tr><tr><td>Fagaras</td><td>176</td><td>211</td><td><strong>Sim</strong></td></tr><tr><td>Rimnicu Vilcea</td><td>193</td><td>198</td><td><strong>Sim</strong></td></tr><tr><td>Pitesti</td><td>100</td><td>101</td><td><strong>Sim</strong></td></tr><tr><td>Bucharest</td><td>0</td><td>0</td><td><strong>Sim</strong></td></tr>`;
   };
 
   const insertAlgorithmDidacticPanels = () => {
     const greedySection = document.querySelector('#gulosa');
     const astarSection = document.querySelector('#astar');
-
-    if (greedySection && !greedySection.querySelector('.algorithm-code-pair')) {
+    if (greedySection && !greedySection.querySelector('.algorithm-didactic-grid')) {
       greedySection.querySelector('.algorithm-layout')?.classList.add('legacy-algorithm-layout-hidden');
       const note = greedySection.querySelector('.note-banner');
-      const html = `<div class="algorithm-code-pair"><article class="algorithm-code-card"><span class="didactic-label">Pseudocódigo</span><h3>Busca gulosa em passos</h3><p>Mesmo ciclo geral da busca. A diferença está na linha que escolhe o próximo estado: sempre o menor <strong>h(n)</strong>.</p><pre class="code-block"><code><span class="fn">BUSCA_GULOSA</span>(inicial, objetivo, sucessores, h):
-    fronteira ← fila de prioridade
-    inserir inicial com prioridade h(inicial)
-    visitados ← conjunto vazio
+      const html = `<div class="algorithm-didactic-grid"><article class="algorithm-pseudo-card"><span class="didactic-label">Pseudocódigo</span><h3>Como a gulosa decide?</h3><p>Ela escolhe, na fronteira, o estado que parece mais próximo do objetivo segundo <strong>h(n)</strong>.</p><pre class="pseudo-list">BUSCA_GULOSA(inicial, objetivo):
+    colocar inicial na fronteira
 
-    <span class="kw">enquanto</span> fronteira não estiver vazia:
-        estado ← retirar menor h(estado)
+    enquanto a fronteira não estiver vazia:
+        estado ← retirar o menor h(estado)
 
-        <span class="kw">se</span> estado já foi visitado:
-            continuar
-
-        marcar estado como visitado
-
-        <span class="kw">se</span> estado é objetivo:
+        se estado é objetivo:
             devolver caminho
 
-        <span class="kw">para cada</span> sucessor de estado:
-            inserir sucessor com prioridade h(sucessor)
+        expandir estado
+        inserir sucessores na fronteira
 
-    devolver falha</code></pre><div class="algorithm-reading-note"><strong>Leitura:</strong> a busca gulosa pergunta qual estado parece mais perto do objetivo agora.</div></article><article class="algorithm-code-card"><span class="didactic-label">Python</span><h3>O mesmo critério em Python</h3><p>A prioridade da fila é o menor valor de <strong>h(vizinho)</strong>. O custo da estrada existe no problema, mas não entra na decisão da gulosa.</p><pre class="code-block"><code>from heapq import heappush, heappop
+    devolver fracasso</pre><div class="algorithm-reading-note"><strong>Leitura didática:</strong> a gulosa pergunta: <em>qual estado parece mais perto do objetivo agora?</em></div></article><article class="algorithm-code-card"><span class="didactic-label">Python</span><h3>Exemplo mínimo em Python</h3><p>A prioridade da fila é o menor valor de <strong>h(n)</strong>.</p><pre><code>from heapq import heappush, heappop
 
 def busca_gulosa(inicio, objetivo, sucessores, h):
     fronteira = []
@@ -335,37 +337,31 @@ def busca_gulosa(inicio, objetivo, sucessores, h):
 
         for vizinho, custo in sucessores[estado]:
             if vizinho not in visitados:
-                heappush(
-                    fronteira,
-                    (h[vizinho], vizinho, caminho + [vizinho])
-                )
+                heappush(fronteira, (h[vizinho], vizinho, caminho + [vizinho]))
 
-    return None</code></pre><div class="algorithm-reading-note"><strong>Ponto de atenção:</strong> rápido não significa necessariamente mais barato.</div></article></div>`;
+    return None</code></pre><div class="algorithm-reading-note"><strong>Observe:</strong> o problema pode ter custo nas estradas, mas a gulosa escolhe usando apenas <strong>h(vizinho)</strong>.</div></article></div>`;
       if (note) note.insertAdjacentHTML('beforebegin', html);
     }
-
-    if (astarSection && !astarSection.querySelector('.algorithm-code-pair')) {
+    if (astarSection && !astarSection.querySelector('.algorithm-didactic-grid')) {
       astarSection.querySelector('.algorithm-layout')?.classList.add('legacy-algorithm-layout-hidden');
-      astarSection.querySelector('.container')?.insertAdjacentHTML('beforeend', `<div class="algorithm-code-pair"><article class="algorithm-code-card"><span class="didactic-label">Pseudocódigo</span><h3>A* em passos</h3><p>O A* mantém o ciclo da busca, mas muda a prioridade: usa o custo já pago mais a estimativa restante.</p><div class="formula-emphasis">f(n) = g(n) + h(n)</div><pre class="code-block"><code><span class="fn">A_ESTRELA</span>(inicial, objetivo, sucessores, h):
-    fronteira ← fila de prioridade
+      astarSection.querySelector('.container')?.insertAdjacentHTML('beforeend', `<div class="algorithm-didactic-grid"><article class="algorithm-pseudo-card"><span class="didactic-label">Pseudocódigo</span><h3>Como o A* decide?</h3><p>O A* combina o custo já acumulado com a estimativa restante.</p><div class="formula-emphasis">f(n) = g(n) + h(n)</div><pre class="pseudo-list">A_ESTRELA(inicial, objetivo):
+    colocar inicial na fronteira
     g(inicial) ← 0
-    inserir inicial com prioridade g(inicial) + h(inicial)
 
-    <span class="kw">enquanto</span> fronteira não estiver vazia:
-        estado ← retirar menor f(estado)
+    enquanto a fronteira não estiver vazia:
+        estado ← retirar o menor f(estado)
 
-        <span class="kw">se</span> estado é objetivo:
+        se estado é objetivo:
             devolver caminho
 
-        <span class="kw">para cada</span> sucessor de estado:
-            novo_g ← g(estado) + custo(estado, sucessor)
+        para cada sucessor:
+            novo_g ← g(estado) + custo
 
-            <span class="kw">se</span> novo_g melhora o custo conhecido:
+            se novo_g melhora o custo conhecido:
                 atualizar g(sucessor)
-                prioridade ← novo_g + h(sucessor)
-                inserir sucessor na fronteira
+                inserir com prioridade novo_g + h(sucessor)
 
-    devolver falha</code></pre><div class="algorithm-reading-note"><strong>Leitura:</strong> o A* pergunta qual alternativa parece melhor considerando o que já custou e o que ainda parece faltar.</div></article><article class="algorithm-code-card"><span class="didactic-label">Python</span><h3>O mesmo critério em Python</h3><p>A prioridade da fila passa a ser <strong>novo_g + h[vizinho]</strong>. Por isso o A* compara caminho acumulado e estimativa.</p><pre class="code-block"><code>from heapq import heappush, heappop
+    devolver fracasso</pre><div class="algorithm-reading-note"><strong>Leitura didática:</strong> o A* pergunta: <em>qual estado parece mais promissor considerando o que já custou e o que ainda parece faltar?</em></div></article><article class="algorithm-code-card"><span class="didactic-label">Python</span><h3>Exemplo mínimo em Python</h3><p>A prioridade da fila passa a ser <strong>g(n) + h(n)</strong>.</p><pre><code>from heapq import heappush, heappop
 
 def a_estrela(inicio, objetivo, sucessores, h):
     fronteira = []
@@ -385,13 +381,75 @@ def a_estrela(inicio, objetivo, sucessores, h):
             if vizinho not in melhor_g or novo_g < melhor_g[vizinho]:
                 melhor_g[vizinho] = novo_g
                 novo_f = novo_g + h[vizinho]
+                heappush(fronteira, (novo_f, vizinho, caminho + [vizinho], novo_g))
 
-                heappush(
-                    fronteira,
-                    (novo_f, vizinho, caminho + [vizinho], novo_g)
-                )
+    return None, None</code></pre><div class="algorithm-reading-note"><strong>Observe:</strong> o A* combina <strong>custo já percorrido</strong> com <strong>estimativa do que falta</strong>.</div></article></div>`);
+    }
+  };
 
-    return None, None</code></pre><div class="algorithm-reading-note"><strong>Ponto de atenção:</strong> o A* pode evitar uma rota aparentemente direta quando o custo acumulado começa a ficar alto.</div></article></div>`);
+  const enhanceAdmissibilitySection = () => {
+    const section = document.querySelector('#admissibilidade');
+    const container = section?.querySelector('.container');
+    if (!container || container.querySelector('.admissibility-explainer')) return;
+
+    const heading = container.querySelector('.section-heading');
+    const title = heading?.querySelector('h2');
+    const intro = heading?.querySelector('p:last-child');
+    if (title) title.textContent = 'Heurística admissível: uma estimativa que não exagera';
+    if (intro) intro.textContent = 'Para o A*, não basta que a heurística pareça intuitiva. Ela também precisa ser segura: pode subestimar o custo restante, mas não deve superestimar o melhor caminho real até o objetivo.';
+
+    heading?.insertAdjacentHTML('afterend', `
+      <div class="admissibility-explainer">
+        <div class="admissibility-example-grid">
+          <article class="admissibility-mini-card safe">
+            <span class="admissibility-label">Admissível</span>
+            <h3>Não exagera</h3>
+            <p>Uma heurística admissível nunca passa do melhor custo real que ainda falta até o objetivo.</p>
+            <div class="big-rule">h(n) ≤ h*(n)</div>
+            <div class="admissibility-example"><strong>Fagaras</strong><span>h(n)=176 e melhor custo real=211. Como 176 ≤ 211, está ok.</span></div>
+          </article>
+          <article class="admissibility-mini-card warning">
+            <span class="admissibility-label">Pode errar</span>
+            <h3>Mas erra para baixo</h3>
+            <p>A heurística não precisa acertar exatamente. Ela pode dizer que falta menos do que realmente falta.</p>
+            <div class="big-rule">otimista, não perfeita</div>
+            <div class="admissibility-example"><strong>Pitesti</strong><span>h(n)=100 e melhor custo real=101. Quase acertou, mas não passou do real.</span></div>
+          </article>
+          <article class="admissibility-mini-card problem">
+            <span class="admissibility-label">Não admissível</span>
+            <h3>Exagera o custo</h3>
+            <p>Quando a estimativa fica maior que o melhor custo real restante, ela deixa de ser admissível.</p>
+            <div class="big-rule">h(n) > h*(n)</div>
+            <div class="admissibility-example"><strong>Fagaras hipotético</strong><span>h(n)=250 e melhor custo real=211. Como 250 > 211, exagerou.</span></div>
+          </article>
+        </div>
+        <div class="admissibility-rule"><strong>Resumo para guardar:</strong> admissível = não exagera. Não admissível = exagera. A heurística admissível pode ser imprecisa, mas não pode tornar o caminho restante artificialmente mais caro do que ele realmente é no melhor caso.</div>
+      </div>`);
+
+    const definition = container.querySelector('.admissibility-definition');
+    if (definition) {
+      definition.innerHTML = `<span>Ideia formal</span><div class="admissibility-equation">h(n) ≤ h*(n)</div><p><strong>h(n)</strong> é a estimativa usada pelo algoritmo. <strong>h*(n)</strong> é o melhor custo real restante até o objetivo.</p>`;
+    }
+
+    const copy = container.querySelector('.admissibility-copy');
+    if (copy) {
+      copy.innerHTML = `<h3>Por que a palavra é “admissível”?</h3><p>Porque essa heurística é aceita como uma pista segura para o A*. Ela pode ser otimista, mas não cria um obstáculo artificial contra um caminho que ainda pode ser bom.</p><p>Em problemas de rota, a distância em linha reta costuma ser um bom exemplo: normalmente ela não passa do custo real de viajar pelas estradas.</p>`;
+    }
+
+    const table = container.querySelector('.heuristic-check-table');
+    if (table) {
+      table.classList.add('admissibility-check-table');
+      table.innerHTML = `<thead><tr><th>Caso</th><th>h(n)</th><th>Melhor custo real restante</th><th>Admissível?</th><th>Por quê?</th></tr></thead><tbody><tr><td>Fagaras</td><td>176</td><td>211</td><td><span class="safe-answer">Sim</span></td><td>A estimativa é menor que o custo real.</td></tr><tr><td>Rimnicu Vilcea</td><td>193</td><td>198</td><td><span class="safe-answer">Sim</span></td><td>Também não passa do melhor custo real.</td></tr><tr><td>Pitesti</td><td>100</td><td>101</td><td><span class="safe-answer">Sim</span></td><td>Quase acerta, mas continua abaixo.</td></tr><tr><td>Fagaras hipotético</td><td>250</td><td>211</td><td><span class="bad-answer">Não</span></td><td>Exagerou: 250 é maior que 211.</td></tr><tr><td>Pitesti hipotético</td><td>130</td><td>101</td><td><span class="bad-answer">Não</span></td><td>Exagerou o custo restante.</td></tr><tr><td>Bucharest hipotético</td><td>10</td><td>0</td><td><span class="bad-answer">Não</span></td><td>No objetivo, a estimativa correta deve ser 0.</td></tr></tbody>`;
+    }
+
+    const tableWrap = container.querySelector('.heuristic-check-table-wrap');
+    if (tableWrap && !container.querySelector('.admissibility-impact-grid')) {
+      tableWrap.insertAdjacentHTML('afterend', `<div class="admissibility-impact-grid"><article class="admissibility-impact-card"><h3>Por que isso importa para o A*?</h3><p>O A* calcula <strong>f(n)=g(n)+h(n)</strong>. Se h(n) exagera, f(n) também fica artificialmente alto. O algoritmo pode passar a tratar um caminho promissor como se ele fosse ruim demais.</p></article><article class="admissibility-impact-card"><h3>O risco de uma heurística não admissível</h3><p>Ela pode fazer uma rota boa parecer pior do que realmente é. Com isso, o A* pode perder a garantia clássica de encontrar a solução de menor custo.</p></article></div>`);
+    }
+
+    const warning = container.querySelector('.note-banner.warning');
+    if (warning) {
+      warning.innerHTML = `<strong>Não confunda:</strong> admissível não significa perfeita. Uma heurística pode subestimar bastante e ainda ser admissível. O problema começa quando ela superestima, porque isso pode distorcer a comparação feita pelo A*.`;
     }
   };
 
@@ -415,6 +473,7 @@ def a_estrela(inicio, objetivo, sucessores, h):
   };
 
   const edgeKey = (a, b) => [a, b].sort().join('-');
+
   const buildRouteMap = () => `<div class="comparison-lab-card"><h3>Mapa interativo simplificado</h3><p>Avance cada painel para destacar, no mesmo mapa, o estado atual, a fronteira e o caminho parcial de cada estratégia.</p><div class="interactive-romania-map" aria-label="Mapa interativo simplificado da Romênia para comparação entre busca gulosa e A estrela"><svg viewBox="0 0 100 70" preserveAspectRatio="none" aria-hidden="true"><line class="route-edge" data-edge="Arad-Zerind" x1="13" y1="42" x2="21" y2="29"></line><line class="route-edge" data-edge="Oradea-Zerind" x1="21" y1="29" x2="29" y2="15"></line><line class="route-edge" data-edge="Oradea-Sibiu" x1="29" y1="15" x2="43" y2="31"></line><line class="route-edge" data-edge="Arad-Sibiu" x1="13" y1="42" x2="43" y2="31"></line><line class="route-edge" data-edge="Arad-Timisoara" x1="13" y1="42" x2="22" y2="56"></line><line class="route-edge" data-edge="Fagaras-Sibiu" x1="43" y1="31" x2="62" y2="24"></line><line class="route-edge" data-edge="Bucharest-Fagaras" x1="62" y1="24" x2="83" y2="41"></line><line class="route-edge" data-edge="Rimnicu Vilcea-Sibiu" x1="43" y1="31" x2="52" y2="47"></line><line class="route-edge" data-edge="Pitesti-Rimnicu Vilcea" x1="52" y1="47" x2="68" y2="50"></line><line class="route-edge" data-edge="Bucharest-Pitesti" x1="68" y1="50" x2="83" y2="41"></line><line class="route-edge" data-edge="Craiova-Rimnicu Vilcea" x1="52" y1="47" x2="55" y2="62"></line></svg><div class="route-node" data-city="Arad" style="left:13%;top:60%"><strong>Arad</strong><small>h=366</small></div><div class="route-node" data-city="Zerind" style="left:21%;top:41%"><strong>Zerind</strong><small>h=374</small></div><div class="route-node" data-city="Oradea" style="left:29%;top:22%"><strong>Oradea</strong><small>h=380</small></div><div class="route-node" data-city="Sibiu" style="left:43%;top:44%"><strong>Sibiu</strong><small>h=253</small></div><div class="route-node" data-city="Timisoara" style="left:22%;top:80%"><strong>Timisoara</strong><small>h=329</small></div><div class="route-node" data-city="Fagaras" style="left:62%;top:34%"><strong>Fagaras</strong><small>h=176</small></div><div class="route-node" data-city="Rimnicu Vilcea" style="left:52%;top:67%"><strong>Rimnicu Vilcea</strong><small>h=193</small></div><div class="route-node" data-city="Pitesti" style="left:68%;top:71%"><strong>Pitesti</strong><small>h=100</small></div><div class="route-node goal" data-city="Bucharest" style="left:83%;top:59%"><strong>Bucharest</strong><small>h=0</small></div><div class="route-node" data-city="Craiova" style="left:55%;top:88%"><strong>Craiova</strong><small>h=160</small></div></div></div>`;
 
   const buildInteractiveComparisonLab = () => {
@@ -440,6 +499,7 @@ def a_estrela(inicio, objetivo, sucessores, h):
         }
       });
     };
+
     const renderRunner = (runner) => {
       const frame = comparisonFrames[runner][state[runner]];
       const set = (selector, value) => { const el = document.querySelector(selector); if (el) el.textContent = value; };
@@ -454,6 +514,7 @@ def a_estrela(inicio, objetivo, sucessores, h):
       if (frontierEl) frontierEl.innerHTML = frame.frontier.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
       refreshMap();
     };
+
     const stepRunner = (runner) => { if (state[runner] < comparisonFrames[runner].length - 1) { state[runner] += 1; renderRunner(runner); } };
     const resetRunner = (runner) => { state[runner] = 0; renderRunner(runner); };
     document.querySelectorAll('[data-action="step"]').forEach((button) => button.addEventListener('click', () => stepRunner(button.dataset.runner)));
@@ -473,5 +534,6 @@ def a_estrela(inicio, objetivo, sucessores, h):
   insertConceptAnchorCard();
   configureRomaniaReference();
   insertAlgorithmDidacticPanels();
+  enhanceAdmissibilitySection();
   buildInteractiveComparisonLab();
 })();
