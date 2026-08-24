@@ -48,179 +48,14 @@
       }
 
       .formalization-section .section-heading {
-        max-width: 880px;
+        margin-bottom: 1.35rem;
       }
 
-      .formalization-compare {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
-        margin-top: 1.6rem;
+      .formalization-map-figure {
+        margin: 1.2rem 0 1.35rem;
       }
 
-      .formalization-card {
-        padding: 1.25rem 1.35rem;
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        background: var(--paper);
-        box-shadow: var(--shadow);
-      }
-
-      .formalization-card h3 {
-        margin: 0 0 .85rem;
-      }
-
-      .formalization-list {
-        display: grid;
-        gap: .7rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .formalization-list li {
-        padding: .8rem .9rem;
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        background: var(--soft);
-      }
-
-      .formalization-list strong {
-        display: block;
-        margin-bottom: .2rem;
-      }
-
-      .formalization-list span {
-        display: block;
-        color: var(--muted);
-      }
-
-      .formalization-mini-example {
-        margin-top: 1.4rem;
-        padding: 1.25rem 1.35rem;
-        border: 1px solid var(--line);
-        border-left: 5px solid var(--teal);
-        border-radius: 20px;
-        background: var(--paper);
-        box-shadow: var(--shadow);
-      }
-
-      .formalization-mini-example h3 {
-        margin: 0 0 .55rem;
-      }
-
-      .formalization-mini-example p {
-        margin: 0;
-      }
-
-      .formalization-table-wrap {
-        margin-top: 1rem;
-        overflow-x: auto;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        background: var(--paper);
-      }
-
-      .formalization-table {
-        width: 100%;
-        min-width: 640px;
-        border-collapse: collapse;
-      }
-
-      .formalization-table th,
-      .formalization-table td {
-        padding: .85rem 1rem;
-        text-align: left;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .formalization-table th {
-        background: var(--soft);
-        font-size: .76rem;
-        letter-spacing: .05em;
-        text-transform: uppercase;
-      }
-
-      .formalization-table tr:last-child td {
-        border-bottom: 0;
-      }
-
-      .problem-upgrade-card {
-        margin-top: 1.4rem;
-        padding: 1.35rem 1.45rem;
-        border: 1px solid var(--line);
-        border-left: 5px solid var(--violet);
-        border-radius: 20px;
-        background: var(--paper);
-        box-shadow: var(--shadow);
-      }
-
-      .problem-upgrade-card h3 { margin: 0 0 .6rem; }
-      .problem-upgrade-card p { margin: 0; }
-
-      .problem-upgrade-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
-        margin-top: 1rem;
-      }
-
-      .problem-upgrade-grid article {
-        padding: 1rem;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        background: var(--soft);
-      }
-
-      .problem-upgrade-grid strong,
-      .problem-upgrade-grid span { display: block; }
-      .problem-upgrade-grid span { margin-top: .35rem; color: var(--muted); }
-
-      .concept-anchor-card {
-        margin-top: 1.6rem;
-        padding: 1.25rem 1.35rem;
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        background: var(--paper);
-        box-shadow: var(--shadow);
-      }
-
-      .concept-anchor-card h3 { margin: 0 0 .65rem; }
-      .concept-anchor-card p { margin: 0; }
-
-      .concept-anchor-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 1rem;
-      }
-
-      .concept-anchor-grid article {
-        padding: .95rem;
-        border: 1px solid var(--line);
-        border-radius: 15px;
-        background: var(--soft);
-      }
-
-      .concept-anchor-grid strong,
-      .concept-anchor-grid span { display: block; }
-      .concept-anchor-grid span { margin-top: .35rem; color: var(--muted); font-size: .92rem; }
-
-      .guided-simulator { grid-template-columns: 1fr; }
-      .guided-graph-card,
-      .guided-control-card { width: 100%; }
-
-      .romania-reference-map {
-        min-height: 0 !important;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        overflow: visible;
-      }
-
-      .romania-reference-figure { margin: 0; }
-
-      .romania-reference-figure img {
+      .formalization-map-figure img {
         display: block;
         width: 100%;
         max-width: 1120px;
@@ -231,7 +66,7 @@
         box-shadow: 0 14px 35px rgba(35, 50, 78, .12);
       }
 
-      .romania-reference-figure figcaption {
+      .formalization-map-figure figcaption {
         max-width: 1120px;
         margin: .75rem auto 0;
         color: var(--muted);
@@ -239,20 +74,203 @@
         line-height: 1.55;
       }
 
-      .romania-reference-figure figcaption strong { color: var(--ink); }
+      .formalization-map-figure figcaption strong {
+        color: var(--ink);
+      }
+
+      .formalization-compare,
+      .python-formalization-grid,
+      .romania-summary-grid,
+      .romania-reading-grid,
+      .guided-status-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .formalization-compare,
+      .python-formalization-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .romania-summary-grid,
+      .romania-reading-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .guided-status-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .formalization-card,
+      .formalization-mini-example,
+      .python-formalization-card,
+      .concept-anchor-card,
+      .romania-summary-card,
+      .romania-reading-grid article {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--paper);
+        box-shadow: var(--shadow);
+      }
+
+      .formalization-card,
+      .formalization-mini-example,
+      .python-formalization-card,
+      .concept-anchor-card,
+      .romania-summary-card {
+        padding: 1.2rem;
+      }
+
+      .formalization-card h3,
+      .formalization-mini-example h3,
+      .python-formalization-card h3,
+      .concept-anchor-card h3 {
+        margin: 0 0 .7rem;
+      }
+
+      .formalization-list {
+        display: grid;
+        gap: .65rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .formalization-list li {
+        padding: .85rem;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--soft);
+      }
+
+      .formalization-list strong,
+      .formalization-list span,
+      .romania-summary-grid strong,
+      .romania-summary-grid span {
+        display: block;
+      }
+
+      .formalization-list span,
+      .romania-summary-grid span {
+        margin-top: .28rem;
+        color: var(--muted);
+      }
+
+      .formalization-mini-example {
+        margin-top: 1.1rem;
+      }
+
+      .formalization-mini-example p,
+      .concept-anchor-card p,
+      .romania-summary-card > p {
+        margin: 0;
+      }
+
+      .formalization-table-wrap {
+        overflow-x: auto;
+        margin-top: 1rem;
+      }
+
+      .formalization-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .formalization-table th,
+      .formalization-table td {
+        padding: .75rem;
+        border: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .formalization-table th {
+        background: var(--soft);
+      }
+
+      .python-formalization-grid {
+        margin-top: 1.1rem;
+      }
+
+      .python-formalization-card p {
+        margin: 0 0 .75rem;
+        color: var(--muted);
+      }
+
+      .python-formalization-card pre {
+        margin: 0;
+        padding: 1rem;
+        overflow-x: auto;
+        border-radius: 14px;
+        background: #091224;
+        border: 1px solid #21304a;
+      }
+
+      .python-formalization-card code {
+        font-family: var(--font-mono, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace);
+        font-size: .9rem;
+        line-height: 1.55;
+        color: #eef4ff;
+        white-space: pre;
+      }
+
+      .concept-anchor-card {
+        margin-top: 1.6rem;
+      }
+
+      .concept-anchor-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 1rem;
+      }
+
+      .concept-anchor-grid article,
+      .romania-summary-grid article {
+        padding: .95rem;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: var(--soft);
+      }
+
+      .concept-anchor-grid strong,
+      .concept-anchor-grid span {
+        display: block;
+      }
+
+      .concept-anchor-grid span {
+        margin-top: .35rem;
+        color: var(--muted);
+        font-size: .92rem;
+      }
+
+      .guided-simulator {
+        grid-template-columns: 1fr;
+      }
+
+      .guided-graph-card,
+      .guided-control-card {
+        width: 100%;
+      }
+
+      .romania-summary {
+        min-height: 0 !important;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        overflow: visible;
+      }
+
+      .romania-summary-card > p {
+        margin-bottom: 1rem;
+      }
 
       .romania-reading-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
         margin-top: 1.4rem;
       }
 
       .romania-reading-grid article {
         padding: 1.1rem;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: var(--paper);
       }
 
       .romania-reading-grid small {
@@ -262,31 +280,49 @@
         text-transform: uppercase;
       }
 
-      .romania-reading-grid h3 { margin: .75rem 0 .45rem; }
-      .romania-reading-grid p { margin: 0; }
-      .guided-status-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .romania-reading-grid h3 {
+        margin: .75rem 0 .45rem;
+      }
 
-      body.theme-dark .romania-reference-figure img { background: #ffffff; border-color: #40506b; }
+      .romania-reading-grid p {
+        margin: 0;
+      }
+
+      body.theme-dark .formalization-map-figure img {
+        background: #ffffff;
+        border-color: #40506b;
+      }
+
       body.theme-dark .formalization-card,
       body.theme-dark .formalization-mini-example,
-      body.theme-dark .formalization-table-wrap,
-      body.theme-dark .problem-upgrade-card,
-      body.theme-dark .problem-upgrade-grid article,
+      body.theme-dark .python-formalization-card,
       body.theme-dark .concept-anchor-card,
       body.theme-dark .concept-anchor-grid article,
-      body.theme-dark .romania-reading-grid article { background: var(--paper); border-color: var(--line); }
+      body.theme-dark .romania-summary-card,
+      body.theme-dark .romania-summary-grid article,
+      body.theme-dark .romania-reading-grid article {
+        background: var(--paper);
+        border-color: var(--line);
+      }
+
       body.theme-dark .formalization-list li,
-      body.theme-dark .formalization-table th { background: var(--soft); }
+      body.theme-dark .formalization-table th {
+        background: var(--soft);
+      }
 
       @media (max-width: 980px) {
         #visao .overview-grid,
         .formalization-compare,
-        .problem-upgrade-grid,
+        .python-formalization-grid,
         .concept-anchor-grid,
+        .romania-summary-grid,
         .romania-reading-grid,
-        .guided-status-grid { grid-template-columns: 1fr; }
+        .guided-status-grid {
+          grid-template-columns: 1fr;
+        }
       }
     `;
+
     document.head.appendChild(style);
   };
 
@@ -332,8 +368,13 @@
           <div class="section-heading">
             <p class="eyebrow">Formulação do problema</p>
             <h2>O que muda quando a busca passa a usar heurística?</h2>
-            <p>Antes de falar de algoritmo, precisamos ajustar a descrição do problema. Na busca não informada, o algoritmo enxerga apenas a estrutura do espaço de estados. Na busca informada, a mesma formulação precisa carregar informação de custo e uma estimativa de proximidade do objetivo.</p>
+            <p>Antes de falar de algoritmo, precisamos ajustar a descrição do problema. Na busca não informada, o algoritmo enxerga apenas a estrutura do espaço de estados. Na busca informada, a mesma formulação precisa carregar custos e uma estimativa de proximidade do objetivo.</p>
           </div>
+
+          <figure class="formalization-map-figure">
+            <img src="assets/mapa-romenia-russell-norvig-fig-3-1.png" alt="Mapa simplificado de parte da Romênia, com cidades conectadas por estradas e distâncias entre elas." loading="lazy">
+            <figcaption><strong>Problema de referência da aula.</strong> Vamos usar o mapa da Romênia para contextualizar a mudança de formulação: de um grafo usado por BFS/DFS para um problema de busca informada, com custos e heurística.</figcaption>
+          </figure>
 
           <div class="formalization-compare">
             <article class="formalization-card">
@@ -369,6 +410,51 @@
                 </tbody>
               </table>
             </div>
+          </div>
+
+          <div class="python-formalization-grid">
+            <article class="python-formalization-card">
+              <h3>Antes: Python para BFS/DFS</h3>
+              <p>O problema podia ser descrito apenas como conexões entre estados. O algoritmo decidia a ordem pela estrutura da fronteira.</p>
+              <pre><code>estado_inicial = "Arad"
+objetivo = "Bucharest"
+
+mapa = {
+    "Arad": ["Zerind", "Sibiu", "Timisoara"],
+    "Sibiu": ["Arad", "Fagaras", "Rimnicu Vilcea", "Oradea"],
+    "Fagaras": ["Sibiu", "Bucharest"],
+    "Rimnicu Vilcea": ["Sibiu", "Pitesti", "Craiova"],
+}
+
+# BFS: fronteira como fila
+# DFS: fronteira como pilha</code></pre>
+            </article>
+
+            <article class="python-formalization-card">
+              <h3>Agora: Python com heurística</h3>
+              <p>O problema passa a carregar custo real das ações e uma estimativa h(n), permitindo busca gulosa e A*.</p>
+              <pre><code>estado_inicial = "Arad"
+objetivo = "Bucharest"
+
+mapa = {
+    "Arad": [("Zerind", 75), ("Sibiu", 140), ("Timisoara", 118)],
+    "Sibiu": [("Arad", 140), ("Fagaras", 99), ("Rimnicu Vilcea", 80)],
+    "Fagaras": [("Sibiu", 99), ("Bucharest", 211)],
+    "Rimnicu Vilcea": [("Sibiu", 80), ("Pitesti", 97), ("Craiova", 146)],
+}
+
+heuristica = {
+    "Arad": 366,
+    "Sibiu": 253,
+    "Fagaras": 176,
+    "Rimnicu Vilcea": 193,
+    "Pitesti": 100,
+    "Bucharest": 0,
+}
+
+# Gulosa: prioridade = h(n)
+# A*: prioridade = g(n) + h(n)</code></pre>
+            </article>
           </div>
         </div>
       </section>
@@ -409,22 +495,24 @@
     const graphLegend = root.querySelector('.graph-legend');
     const graph = root.querySelector('.guided-graph');
 
-    if (sectionTitle) sectionTitle.textContent = 'Greedy e A* no mapa da Romênia';
-    if (sectionIntro) sectionIntro.textContent = 'Vamos usar o exemplo clássico de rotas: sair de Arad e chegar a Bucharest. O mapa fornece as conexões e os custos das estradas; a busca informada acrescenta uma heurística para estimar o quanto falta até o destino.';
-    if (graphTitle) graphTitle.textContent = 'Mapa de referência';
+    if (sectionTitle) sectionTitle.textContent = 'Greedy e A* no mesmo problema de rotas';
+    if (sectionIntro) sectionIntro.textContent = 'Retomamos o problema contextualizado na formulação inicial. Agora o foco é observar como a fronteira muda quando usamos apenas h(n) ou a soma g(n)+h(n).';
+    if (graphTitle) graphTitle.textContent = 'Retomando o cenário';
     if (graphIntro) graphIntro.innerHTML = 'Objetivo: sair de <strong>Arad</strong> e chegar a <strong>Bucharest</strong> com menor custo.';
-    if (graphLegend) graphLegend.innerHTML = '<span>arestas = estradas</span><span>números = custos das estradas</span>';
+    if (graphLegend) graphLegend.innerHTML = '<span>Busca gulosa: prioriza menor h(n)</span><span>A*: prioriza menor f(n)=g(n)+h(n)</span>';
 
     if (graph) {
-      graph.classList.add('romania-reference-map');
-      graph.setAttribute('aria-label', 'Figura de referência com o mapa simplificado da Romênia');
+      graph.classList.add('romania-summary');
+      graph.setAttribute('aria-label', 'Resumo do problema da Romênia para comparação entre busca gulosa e A estrela');
       graph.innerHTML = `
-        <figure class="romania-reference-figure">
-          <img src="assets/mapa-romenia-russell-norvig-fig-3-1.png" alt="Mapa simplificado de parte da Romênia, com cidades conectadas por estradas e distâncias entre elas." loading="lazy">
-          <figcaption>
-            <strong>Figura de referência.</strong> Mapa simplificado da Romênia usado como base para o problema de rotas. Fonte: Russell, S.; Norvig, P. <em>Artificial Intelligence: A Modern Approach</em>, Figure 3.1.
-          </figcaption>
-        </figure>
+        <div class="romania-summary-card">
+          <p>O grafo continua sendo o mesmo. O que muda é a informação usada para organizar a fronteira e decidir qual alternativa explorar primeiro.</p>
+          <div class="romania-summary-grid">
+            <article><strong>Estado inicial e objetivo</strong><span>Partimos de Arad e queremos chegar a Bucharest.</span></article>
+            <article><strong>Ponto crítico da comparação</strong><span>Em Sibiu, a escolha entre Fagaras e Rimnicu Vilcea mostra bem a diferença entre usar só h(n) ou combinar g(n)+h(n).</span></article>
+            <article><strong>Resultado esperado</strong><span>Greedy tende a seguir Arad → Sibiu → Fagaras. A* acaba preferindo a rota por Rimnicu Vilcea e Pitesti.</span></article>
+          </div>
+        </div>
       `;
     }
 
@@ -432,9 +520,9 @@
       const graphCard = root.querySelector('.guided-graph-card');
       graphCard?.insertAdjacentHTML('beforeend', `
         <div class="romania-reading-grid">
-          <article><small>01</small><h3>O que o mapa fornece?</h3><p>Ele define os estados, as conexões entre cidades e o custo real de cada estrada.</p></article>
-          <article><small>02</small><h3>O que ainda falta?</h3><p>Para busca informada, precisamos acrescentar h(n): uma estimativa de distância de cada cidade até Bucharest.</p></article>
-          <article><small>03</small><h3>Por que isso muda a busca?</h3><p>A fronteira deixa de seguir apenas ordem de chegada ou profundidade e passa a ser ordenada por uma estimativa.</p></article>
+          <article><small>01</small><h3>O que o problema já tinha?</h3><p>Estados, conexões entre cidades e custo real das estradas.</p></article>
+          <article><small>02</small><h3>O que foi acrescentado?</h3><p>Uma heurística h(n), que funciona como uma pista sobre o quanto falta até Bucharest.</p></article>
+          <article><small>03</small><h3>O que isso permite comparar?</h3><p>Agora podemos observar a diferença entre ordenar a fronteira por h(n) ou por g(n)+h(n).</p></article>
         </div>
       `);
     }
@@ -476,15 +564,12 @@
   const modeButtons = [...root.querySelectorAll('[data-mode]')];
   const stepButton = root.querySelector('[data-step]');
   const resetButton = root.querySelector('[data-reset]');
-
   const currentEl = root.querySelector('[data-current]');
   const frontierEl = root.querySelector('[data-frontier]');
   const costEl = root.querySelector('[data-cost]');
   const pathEl = root.querySelector('[data-path]');
   const explanationEl = root.querySelector('[data-explanation]');
   const outcomeEl = root.querySelector('[data-outcome]');
-
-  if (!stepButton || !resetButton || !currentEl || !frontierEl || !costEl || !pathEl || !explanationEl || !outcomeEl) return;
 
   const frames = {
     greedy: [
@@ -511,14 +596,12 @@
   const render = () => {
     const frame = frames[mode][frameIndex];
     if (!frame) return;
-
     currentEl.textContent = frame.current;
     frontierEl.textContent = frame.frontier;
     costEl.textContent = frame.cost;
     pathEl.textContent = frame.path;
     explanationEl.textContent = frame.explanation;
     outcomeEl.textContent = frame.outcome || '';
-
     const atEnd = frameIndex === frames[mode].length - 1;
     stepButton.disabled = atEnd;
     stepButton.textContent = atEnd ? 'Execução concluída' : 'Executar um passo';
@@ -543,8 +626,6 @@
       render();
     }
   });
-
   resetButton.addEventListener('click', reset);
-
   render();
 })();
