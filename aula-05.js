@@ -1,6 +1,5 @@
 (() => {
   const root = document.querySelector('[data-guided-search]');
-  if (!root) return;
 
   const injectAula05Adjustments = () => {
     if (document.getElementById('aula05-ajustes-finais')) return;
@@ -14,9 +13,7 @@
         gap: 22px;
       }
 
-      #visao .overview-grid .topics-card {
-        grid-row: auto !important;
-      }
+      #visao .overview-grid .topics-card { grid-row: auto !important; }
 
       #visao .competency-stack {
         display: grid;
@@ -30,24 +27,13 @@
         padding: 1.15rem 1.25rem;
       }
 
-      #visao .competency-stack .competency h3 {
-        margin-bottom: .55rem;
-      }
+      #visao .competency-stack .competency h3 { margin-bottom: .55rem; }
+      #visao .competency-stack .competency .skill { margin-top: 0; gap: .6rem; }
+      #visao .competency-stack .competency .skill strong { min-height: 34px; }
+      #visao .competency-stack .c11 { grid-column: auto !important; }
 
-      #visao .competency-stack .competency .skill {
-        margin-top: 0;
-        gap: .6rem;
-      }
-
-      #visao .competency-stack .competency .skill strong {
-        min-height: 34px;
-      }
-
-      #visao .competency-stack .c11 {
-        grid-column: auto !important;
-      }
-
-      .problem-upgrade-card {
+      .problem-upgrade-card,
+      .concept-anchor-card {
         margin-top: 1.4rem;
         padding: 1.35rem 1.45rem;
         border: 1px solid var(--line);
@@ -57,60 +43,47 @@
         box-shadow: var(--shadow);
       }
 
-      .problem-upgrade-card h3 { margin: 0 0 .6rem; }
-      .problem-upgrade-card p { margin: 0; }
+      .concept-anchor-card { margin-top: 1.6rem; border-left-color: var(--teal); }
+      .problem-upgrade-card h3,
+      .concept-anchor-card h3 { margin: 0 0 .6rem; }
+      .problem-upgrade-card p,
+      .concept-anchor-card p { margin: 0; }
 
-      .problem-upgrade-grid {
+      .problem-upgrade-grid,
+      .concept-anchor-grid,
+      .romania-reading-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
         margin-top: 1rem;
       }
 
-      .problem-upgrade-grid article {
+      .problem-upgrade-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .concept-anchor-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+      .romania-reading-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 1.4rem; }
+
+      .problem-upgrade-grid article,
+      .concept-anchor-grid article,
+      .romania-reading-grid article {
         padding: 1rem;
         border: 1px solid var(--line);
         border-radius: 16px;
         background: var(--soft);
       }
 
+      .concept-anchor-grid article,
+      .romania-reading-grid article { background: var(--paper); }
       .problem-upgrade-grid strong,
-      .problem-upgrade-grid span { display: block; }
-      .problem-upgrade-grid span { margin-top: .35rem; color: var(--muted); }
-
-      .concept-anchor-card {
-        margin-top: 1.6rem;
-        padding: 1.25rem 1.35rem;
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        background: var(--paper);
-        box-shadow: var(--shadow);
-      }
-
-      .concept-anchor-card h3 { margin: 0 0 .65rem; }
-      .concept-anchor-card p { margin: 0; }
-
-      .concept-anchor-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 1rem;
-      }
-
-      .concept-anchor-grid article {
-        padding: .95rem;
-        border: 1px solid var(--line);
-        border-radius: 15px;
-        background: var(--soft);
-      }
-
+      .problem-upgrade-grid span,
       .concept-anchor-grid strong,
       .concept-anchor-grid span { display: block; }
-      .concept-anchor-grid span { margin-top: .35rem; color: var(--muted); font-size: .92rem; }
+      .problem-upgrade-grid span,
+      .concept-anchor-grid span { margin-top: .35rem; color: var(--muted); }
+      .concept-anchor-grid span { font-size: .92rem; }
 
       .guided-simulator { grid-template-columns: 1fr; }
       .guided-graph-card,
       .guided-control-card { width: 100%; }
+      .guided-status-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
       .romania-reference-map {
         min-height: 0 !important;
@@ -142,31 +115,9 @@
       }
 
       .romania-reference-figure figcaption strong { color: var(--ink); }
-
-      .romania-reading-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
-        margin-top: 1.4rem;
-      }
-
-      .romania-reading-grid article {
-        padding: 1.1rem;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: var(--paper);
-      }
-
-      .romania-reading-grid small {
-        color: var(--blue);
-        font-weight: 850;
-        letter-spacing: .06em;
-        text-transform: uppercase;
-      }
-
+      .romania-reading-grid small { color: var(--blue); font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
       .romania-reading-grid h3 { margin: .75rem 0 .45rem; }
       .romania-reading-grid p { margin: 0; }
-      .guided-status-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
       body.theme-dark .romania-reference-figure img { background: #ffffff; border-color: #40506b; }
       body.theme-dark .problem-upgrade-card,
@@ -203,6 +154,14 @@
 
     list.innerHTML = orderedTopics.map((topic) => `<div>${topic}</div>`).join('');
     list.dataset.ordered = 'true';
+  };
+
+  const improveBfsDfsBridgeText = () => {
+    const paragraph = document.querySelector('#ponte .warmup h2 + p');
+    if (!paragraph || paragraph.dataset.updated === 'true') return;
+
+    paragraph.textContent = 'BFS e DFS não usam pistas sobre o destino. Eles apenas seguem a regra da estrutura: fila no BFS, pilha no DFS. A busca informada muda isso ao acrescentar uma estimativa de proximidade do objetivo.';
+    paragraph.dataset.updated = 'true';
   };
 
   const compactCompetencyCards = () => {
@@ -262,6 +221,8 @@
   };
 
   const configureRomaniaReference = () => {
+    if (!root) return;
+
     const section = root.closest('section');
     const sectionTitle = section?.querySelector('.section-heading h2');
     const sectionIntro = section?.querySelector('.section-heading p:last-child');
@@ -328,10 +289,13 @@
 
   injectAula05Adjustments();
   organizeTopicList();
+  improveBfsDfsBridgeText();
   compactCompetencyCards();
   insertProblemUpgradeCard();
   insertConceptAnchorCard();
   configureRomaniaReference();
+
+  if (!root) return;
 
   const modeButtons = [...root.querySelectorAll('[data-mode]')];
   const stepButton = root.querySelector('[data-step]');
