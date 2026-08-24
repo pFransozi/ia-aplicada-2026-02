@@ -344,7 +344,8 @@ def bfs(estado_inicial, objetivo_atingido, sucessores):
           <div class="study-callout violet"><strong>2 · Visitados controlam ciclos</strong><p>Em um grafo finito, registrar estados já descobertos impede que a busca fique repetindo o mesmo ciclo. Com esse controle, a busca termina, embora a primeira solução encontrada não precise ser a mais curta nem a de menor custo.</p></div>
           <div class="study-callout teal"><strong>3 · Guarda menos alternativas</strong><p>Como aprofunda um caminho antes de manter várias camadas simultaneamente, a DFS costuma armazenar menos estados ao mesmo tempo que a BFS.</p></div>
         </div>
-        <p>Na análise clássica de busca em árvore, essa vantagem de memória aparece como <span class="formula">O(bm)</span>, onde <strong>b</strong> é o fator de ramificação e <strong>m</strong> é a profundidade máxima considerada (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
+        <p>Na análise clássica de busca em árvore, dizemos que a DFS usa espaço <span class="formula">O(bm)</span>. Uma forma simples de ler essa expressão é pensar em <strong>b × m</strong>: <strong>b</strong> representa quantos sucessores um estado pode gerar, e <strong>m</strong> representa até quantos níveis de profundidade a busca pode descer. A DFS precisa manter o caminho atual e algumas alternativas deixadas para trás em cada nível, mas não precisa guardar uma camada inteira da árvore ao mesmo tempo.</p>
+        <div class="study-callout teal"><strong>Como interpretar O(bm)</strong><p>O ponto principal não é calcular uma quantidade exata de estados. A notação mostra o tipo de crescimento da memória: ela aumenta aproximadamente com a quantidade de alternativas por nível multiplicada pela profundidade alcançada. Isso ajuda a explicar por que a DFS costuma consumir muito menos memória que a BFS em árvores de busca grandes (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p></div>
       </div>
     </div></section>
 
