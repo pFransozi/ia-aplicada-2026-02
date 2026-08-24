@@ -282,10 +282,10 @@ def bfs(estado_inicial, objetivo_atingido, sucessores):
     </div></section>
 
     <section class="study-section alt" id="dfs"><div class="container">
-      <div class="study-heading"><p class="study-kicker">Parte IV · Depth-First Search</p><h2>DFS transforma recência em prioridade</h2><p>A busca em profundidade organiza a fronteira como uma pilha. O último estado inserido é o primeiro a ser retirado, e a estratégia aprofunda um ramo antes de voltar às alternativas.</p></div>
+      <div class="study-heading"><p class="study-kicker">Parte IV · Depth-First Search</p><h2>DFS aprofunda um caminho antes de voltar às alternativas</h2><p>A busca em profundidade organiza a fronteira como uma pilha. Isso faz com que o estado descoberto mais recentemente seja explorado primeiro. Na prática, a DFS continua avançando pelo caminho atual enquanto houver novos estados; só depois retorna para tentar outras possibilidades.</p></div>
       <div class="callout-grid">
         <div class="study-callout"><strong>Estrutura</strong><p>Pilha LIFO, último a entrar, primeiro a sair.</p></div>
-        <div class="study-callout violet"><strong>Política</strong><p>Explorar primeiro o caminho descoberto mais recentemente.</p></div>
+        <div class="study-callout violet"><strong>Política</strong><p>Continuar pelo caminho atual antes de voltar às alternativas.</p></div>
         <div class="study-callout teal"><strong>Efeito</strong><p>Pode chegar rápido a estados profundos, mas a primeira solução encontrada depende muito da ordem dos sucessores.</p></div>
       </div>
       <div class="study-grid equal">
@@ -333,12 +333,18 @@ def bfs(estado_inicial, objetivo_atingido, sucessores):
       </div>
       <div class="study-prose">
         <p>A linha mais importante para entender a DFS é <code>pop()</code>. Ela retira o item mais recente da pilha. Com isso, os sucessores recém-descobertos passam à frente das alternativas mais antigas.</p>
-        <h3>A ordem dos sucessores faz diferença</h3>
-        <p>DFS é particularmente sensível à ordem de geração dos sucessores. Se os sucessores forem gerados como <code>A</code>, <code>B</code> e <code>C</code>, eles serão empilhados nessa ordem, e <code>C</code> será retirado primeiro. Isso pode mudar o ramo explorado primeiro, o caminho encontrado e a quantidade de estados expandidos antes do objetivo.</p>
-        <h3>Completude, ciclos e memória</h3>
-        <p>Em um espaço infinito, a DFS pode continuar descendo por um ramo e nunca voltar para outra alternativa que contém uma solução. Por isso, ela não é completa nesse tipo de busca em árvore.</p>
-        <p>Em grafos finitos com controle de visitados, a situação melhora: como o mesmo estado não é inserido repetidamente, a busca termina. Ainda assim, a primeira solução encontrada não precisa ser a mais curta nem a de menor custo.</p>
-        <p>A vantagem clássica da DFS é a memória. Como ela aprofunda um caminho antes de guardar muitas camadas ao mesmo tempo, tende a manter menos alternativas simultaneamente que a BFS. Em busca em árvore, a análise tradicional apresenta espaço <span class="formula">O(bm)</span>, onde <strong>b</strong> é o fator de ramificação e <strong>m</strong> é a profundidade máxima considerada (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
+        <h3>A ordem dos sucessores define qual ramo vem primeiro</h3>
+        <p>Quando um estado tem vários sucessores, a DFS precisa colocá-los na pilha em alguma ordem. Como a pilha retira primeiro o último item inserido, essa ordem determina qual sucessor será explorado antes.</p>
+        <p>Se os sucessores forem <code>A</code>, <code>B</code> e <code>C</code> e forem empilhados nessa ordem, a pilha termina com <code>C</code> no topo. Portanto, a DFS seguirá primeiro por <code>C</code>. Se a ordem de inserção mudar, o primeiro ramo explorado também pode mudar — e, com isso, podem mudar o caminho encontrado e a quantidade de estados visitados até chegar ao objetivo.</p>
+        <div class="study-callout violet"><strong>Regra para lembrar</strong><p>Na pilha, o último sucessor colocado é o primeiro a ser explorado.</p></div>
+        <h3>Quando a DFS termina, quando pode se perder e por que usa menos memória</h3>
+        <p>Para entender o comportamento da DFS, vale separar três questões: se ela sempre encontra uma solução existente, como evita ficar andando em ciclos e quanto precisa guardar na memória.</p>
+        <div class="callout-grid">
+          <div class="study-callout"><strong>1 · Pode se perder em profundidade</strong><p>Em um espaço infinito, a DFS pode continuar descendo por um único ramo e nunca voltar para outra alternativa que contém uma solução. Nesse cenário, dizemos que a DFS não é completa.</p></div>
+          <div class="study-callout violet"><strong>2 · Visitados controlam ciclos</strong><p>Em um grafo finito, registrar estados já descobertos impede que a busca fique repetindo o mesmo ciclo. Com esse controle, a busca termina, embora a primeira solução encontrada não precise ser a mais curta nem a de menor custo.</p></div>
+          <div class="study-callout teal"><strong>3 · Guarda menos alternativas</strong><p>Como aprofunda um caminho antes de manter várias camadas simultaneamente, a DFS costuma armazenar menos estados ao mesmo tempo que a BFS.</p></div>
+        </div>
+        <p>Na análise clássica de busca em árvore, essa vantagem de memória aparece como <span class="formula">O(bm)</span>, onde <strong>b</strong> é o fator de ramificação e <strong>m</strong> é a profundidade máxima considerada (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
       </div>
     </div></section>
 
