@@ -47,7 +47,8 @@
         grid-column: auto !important;
       }
 
-      .problem-upgrade-card {
+      .problem-upgrade-card,
+      .source-anchor-card {
         margin-top: 1.4rem;
         padding: 1.35rem 1.45rem;
         border: 1px solid var(--line);
@@ -57,22 +58,26 @@
         box-shadow: var(--shadow);
       }
 
-      .problem-upgrade-card h3 {
+      .problem-upgrade-card h3,
+      .source-anchor-card h3 {
         margin: 0 0 .6rem;
       }
 
-      .problem-upgrade-card p {
+      .problem-upgrade-card p,
+      .source-anchor-card p {
         margin: 0;
       }
 
-      .problem-upgrade-grid {
+      .problem-upgrade-grid,
+      .source-anchor-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
         margin-top: 1rem;
       }
 
-      .problem-upgrade-grid article {
+      .problem-upgrade-grid article,
+      .source-anchor-grid article {
         padding: 1rem;
         border: 1px solid var(--line);
         border-radius: 16px;
@@ -80,11 +85,14 @@
       }
 
       .problem-upgrade-grid strong,
-      .problem-upgrade-grid span {
+      .problem-upgrade-grid span,
+      .source-anchor-grid strong,
+      .source-anchor-grid span {
         display: block;
       }
 
-      .problem-upgrade-grid span {
+      .problem-upgrade-grid span,
+      .source-anchor-grid span {
         margin-top: .35rem;
         color: var(--muted);
       }
@@ -133,37 +141,52 @@
         color: var(--ink);
       }
 
-      .romania-reading-grid {
+      .romania-reading-grid,
+      .reference-anchor-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 14px;
         margin-top: 1.4rem;
       }
 
-      .romania-reading-grid article {
+      .romania-reading-grid article,
+      .reference-anchor-grid article {
         padding: 1.1rem;
         border: 1px solid var(--line);
         border-radius: 18px;
         background: var(--paper);
       }
 
-      .romania-reading-grid small {
+      .romania-reading-grid small,
+      .reference-anchor-grid small {
         color: var(--blue);
         font-weight: 850;
         letter-spacing: .06em;
         text-transform: uppercase;
       }
 
-      .romania-reading-grid h3 {
+      .romania-reading-grid h3,
+      .reference-anchor-grid h3 {
         margin: .75rem 0 .45rem;
       }
 
-      .romania-reading-grid p {
+      .romania-reading-grid p,
+      .reference-anchor-grid p {
         margin: 0;
       }
 
       .guided-status-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .source-anchor-section .section-heading {
+        margin-bottom: 1rem;
+      }
+
+      .source-anchor-note {
+        margin-top: 1.1rem;
+        color: var(--muted);
+        font-size: .95rem;
       }
 
       body.theme-dark .romania-reference-figure img {
@@ -173,7 +196,10 @@
 
       body.theme-dark .problem-upgrade-card,
       body.theme-dark .problem-upgrade-grid article,
-      body.theme-dark .romania-reading-grid article {
+      body.theme-dark .source-anchor-card,
+      body.theme-dark .source-anchor-grid article,
+      body.theme-dark .romania-reading-grid article,
+      body.theme-dark .reference-anchor-grid article {
         background: var(--paper);
         border-color: var(--line);
       }
@@ -181,7 +207,9 @@
       @media (max-width: 980px) {
         #visao .overview-grid,
         .problem-upgrade-grid,
+        .source-anchor-grid,
         .romania-reading-grid,
+        .reference-anchor-grid,
         .guided-status-grid {
           grid-template-columns: 1fr;
         }
@@ -225,6 +253,37 @@
       </div>
     `;
     bridge.insertAdjacentElement('afterend', card);
+  };
+
+  const insertHeuristicAnchor = () => {
+    const container = document.querySelector('#heuristica .container');
+    const callout = container?.querySelector('.heuristic-callout');
+    if (!container || !callout || container.querySelector('.source-anchor-card')) return;
+
+    callout.insertAdjacentHTML('afterend', `
+      <div class="source-anchor-card">
+        <h3>Como avaliar se uma heurística ajuda?</h3>
+        <p>Uma heurística não é apenas um número colocado no algoritmo. Ela precisa representar uma aproximação defensável do problema real. No caso de rotas, a distância em linha reta é útil porque se relaciona com proximidade espacial; em outros domínios, a pista precisa ser construída a partir das características daquele problema.</p>
+        <div class="source-anchor-grid">
+          <article>
+            <strong>Relação com o domínio</strong>
+            <span>A estimativa deve ter conexão clara com o objetivo. Se a pista não conversa com o problema, ela só organiza a fronteira de forma arbitrária.</span>
+          </article>
+          <article>
+            <strong>Custo de cálculo</strong>
+            <span>A heurística deve ser mais barata do que resolver o problema completo. Caso contrário, ela deixa de orientar e passa a ser outro problema.</span>
+          </article>
+          <article>
+            <strong>Qualidade da estimativa</strong>
+            <span>Quanto melhor a estimativa, menor tende a ser a parte do espaço de estados explorada sem necessidade.</span>
+          </article>
+          <article>
+            <strong>Garantias</strong>
+            <span>Quando a estimativa não exagera o custo restante, ela permite discutir admissibilidade e custo ótimo no A*.</span>
+          </article>
+        </div>
+      </div>
+    `);
   };
 
   const configureRomaniaReference = () => {
@@ -308,10 +367,74 @@
     }
   };
 
+  const insertBibliographicAnchor = () => {
+    if (document.querySelector('#base-conceitual-aula05')) return;
+
+    const comparisonSection = document.querySelector('#comparacao');
+    const closingSection = document.querySelector('#fechamento');
+    if (!comparisonSection && !closingSection) return;
+
+    const section = document.createElement('section');
+    section.className = 'section section-soft source-anchor-section';
+    section.id = 'base-conceitual-aula05';
+    section.innerHTML = `
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Base conceitual</p>
+          <h2>De onde vêm as ideias usadas nesta aula</h2>
+          <p>Esta aula foi organizada a partir da ementa da disciplina e dos capítulos sobre representação, espaço de estados, busca heurística, busca gulosa, A*, admissibilidade e qualidade de heurísticas.</p>
+        </div>
+
+        <div class="reference-anchor-grid">
+          <article>
+            <small>Formulação</small>
+            <h3>O problema precisa ser representado antes de ser resolvido</h3>
+            <p>Estados, ações, sucessores, objetivo e custos formam a base para transformar uma situação real em um problema computável.</p>
+          </article>
+          <article>
+            <small>Busca informada</small>
+            <h3>A fronteira passa a usar uma pista do domínio</h3>
+            <p>A heurística h(n) orienta a escolha dos próximos estados, mas não substitui a análise do custo real do caminho.</p>
+          </article>
+          <article>
+            <small>A*</small>
+            <h3>O algoritmo combina passado e futuro</h3>
+            <p>O custo acumulado g(n) registra o que já foi gasto, enquanto h(n) estima o que ainda falta. A prioridade passa a ser f(n)=g(n)+h(n).</p>
+          </article>
+          <article>
+            <small>Garantia</small>
+            <h3>Nem toda heurística preserva a melhor solução</h3>
+            <p>A discussão de admissibilidade mostra quando uma heurística pode orientar a busca sem exagerar o custo restante.</p>
+          </article>
+          <article>
+            <small>Comparação</small>
+            <h3>Heurísticas melhores tendem a explorar menos</h3>
+            <p>Ao comparar estratégias, o foco não é decorar algoritmos, mas observar que informação cada uma usa para ordenar a fronteira.</p>
+          </article>
+          <article>
+            <small>Exemplo clássico</small>
+            <h3>O mapa da Romênia conecta teoria e experimento</h3>
+            <p>O mesmo problema permite enxergar a diferença entre escolher o que parece mais perto e escolher o menor custo total estimado.</p>
+          </article>
+        </div>
+
+        <p class="source-anchor-note">Referências de apoio: Russell & Norvig, <em>Artificial Intelligence: A Modern Approach</em>, capítulos 3.5 e 3.6; Luger, <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>, capítulo 4; plano/ementa da disciplina.</p>
+      </div>
+    `;
+
+    if (closingSection) {
+      closingSection.insertAdjacentElement('beforebegin', section);
+    } else {
+      comparisonSection.insertAdjacentElement('afterend', section);
+    }
+  };
+
   injectAula05Adjustments();
   compactCompetencyCards();
   insertProblemUpgradeCard();
+  insertHeuristicAnchor();
   configureRomaniaReference();
+  insertBibliographicAnchor();
 
   const modeButtons = [...root.querySelectorAll('[data-mode]')];
   const stepButton = root.querySelector('[data-step]');
