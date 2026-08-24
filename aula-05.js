@@ -1,5 +1,6 @@
 (() => {
   const root = document.querySelector('[data-guided-search]');
+  if (!root) return;
 
   const injectAula05Adjustments = () => {
     if (document.getElementById('aula05-ajustes-finais')) return;
@@ -13,7 +14,9 @@
         gap: 22px;
       }
 
-      #visao .overview-grid .topics-card { grid-row: auto !important; }
+      #visao .overview-grid .topics-card {
+        grid-row: auto !important;
+      }
 
       #visao .competency-stack {
         display: grid;
@@ -27,13 +30,122 @@
         padding: 1.15rem 1.25rem;
       }
 
-      #visao .competency-stack .competency h3 { margin-bottom: .55rem; }
-      #visao .competency-stack .competency .skill { margin-top: 0; gap: .6rem; }
-      #visao .competency-stack .competency .skill strong { min-height: 34px; }
-      #visao .competency-stack .c11 { grid-column: auto !important; }
+      #visao .competency-stack .competency h3 {
+        margin-bottom: .55rem;
+      }
 
-      .problem-upgrade-card,
-      .concept-anchor-card {
+      #visao .competency-stack .competency .skill {
+        margin-top: 0;
+        gap: .6rem;
+      }
+
+      #visao .competency-stack .competency .skill strong {
+        min-height: 34px;
+      }
+
+      #visao .competency-stack .c11 {
+        grid-column: auto !important;
+      }
+
+      .formalization-section .section-heading {
+        max-width: 880px;
+      }
+
+      .formalization-compare {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 1.6rem;
+      }
+
+      .formalization-card {
+        padding: 1.25rem 1.35rem;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--paper);
+        box-shadow: var(--shadow);
+      }
+
+      .formalization-card h3 {
+        margin: 0 0 .85rem;
+      }
+
+      .formalization-list {
+        display: grid;
+        gap: .7rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .formalization-list li {
+        padding: .8rem .9rem;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--soft);
+      }
+
+      .formalization-list strong {
+        display: block;
+        margin-bottom: .2rem;
+      }
+
+      .formalization-list span {
+        display: block;
+        color: var(--muted);
+      }
+
+      .formalization-mini-example {
+        margin-top: 1.4rem;
+        padding: 1.25rem 1.35rem;
+        border: 1px solid var(--line);
+        border-left: 5px solid var(--teal);
+        border-radius: 20px;
+        background: var(--paper);
+        box-shadow: var(--shadow);
+      }
+
+      .formalization-mini-example h3 {
+        margin: 0 0 .55rem;
+      }
+
+      .formalization-mini-example p {
+        margin: 0;
+      }
+
+      .formalization-table-wrap {
+        margin-top: 1rem;
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--paper);
+      }
+
+      .formalization-table {
+        width: 100%;
+        min-width: 640px;
+        border-collapse: collapse;
+      }
+
+      .formalization-table th,
+      .formalization-table td {
+        padding: .85rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .formalization-table th {
+        background: var(--soft);
+        font-size: .76rem;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+      }
+
+      .formalization-table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .problem-upgrade-card {
         margin-top: 1.4rem;
         padding: 1.35rem 1.45rem;
         border: 1px solid var(--line);
@@ -43,47 +155,60 @@
         box-shadow: var(--shadow);
       }
 
-      .concept-anchor-card { margin-top: 1.6rem; border-left-color: var(--teal); }
-      .problem-upgrade-card h3,
-      .concept-anchor-card h3 { margin: 0 0 .6rem; }
-      .problem-upgrade-card p,
-      .concept-anchor-card p { margin: 0; }
+      .problem-upgrade-card h3 { margin: 0 0 .6rem; }
+      .problem-upgrade-card p { margin: 0; }
 
-      .problem-upgrade-grid,
-      .concept-anchor-grid,
-      .romania-reading-grid {
+      .problem-upgrade-grid {
         display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
         margin-top: 1rem;
       }
 
-      .problem-upgrade-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .concept-anchor-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-      .romania-reading-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 1.4rem; }
-
-      .problem-upgrade-grid article,
-      .concept-anchor-grid article,
-      .romania-reading-grid article {
+      .problem-upgrade-grid article {
         padding: 1rem;
         border: 1px solid var(--line);
         border-radius: 16px;
         background: var(--soft);
       }
 
-      .concept-anchor-grid article,
-      .romania-reading-grid article { background: var(--paper); }
       .problem-upgrade-grid strong,
-      .problem-upgrade-grid span,
+      .problem-upgrade-grid span { display: block; }
+      .problem-upgrade-grid span { margin-top: .35rem; color: var(--muted); }
+
+      .concept-anchor-card {
+        margin-top: 1.6rem;
+        padding: 1.25rem 1.35rem;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--paper);
+        box-shadow: var(--shadow);
+      }
+
+      .concept-anchor-card h3 { margin: 0 0 .65rem; }
+      .concept-anchor-card p { margin: 0; }
+
+      .concept-anchor-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 1rem;
+      }
+
+      .concept-anchor-grid article {
+        padding: .95rem;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: var(--soft);
+      }
+
       .concept-anchor-grid strong,
       .concept-anchor-grid span { display: block; }
-      .problem-upgrade-grid span,
-      .concept-anchor-grid span { margin-top: .35rem; color: var(--muted); }
-      .concept-anchor-grid span { font-size: .92rem; }
+      .concept-anchor-grid span { margin-top: .35rem; color: var(--muted); font-size: .92rem; }
 
       .guided-simulator { grid-template-columns: 1fr; }
       .guided-graph-card,
       .guided-control-card { width: 100%; }
-      .guided-status-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
       .romania-reference-map {
         min-height: 0 !important;
@@ -115,19 +240,47 @@
       }
 
       .romania-reference-figure figcaption strong { color: var(--ink); }
-      .romania-reading-grid small { color: var(--blue); font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
+
+      .romania-reading-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 1.4rem;
+      }
+
+      .romania-reading-grid article {
+        padding: 1.1rem;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--paper);
+      }
+
+      .romania-reading-grid small {
+        color: var(--blue);
+        font-weight: 850;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+
       .romania-reading-grid h3 { margin: .75rem 0 .45rem; }
       .romania-reading-grid p { margin: 0; }
+      .guided-status-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
       body.theme-dark .romania-reference-figure img { background: #ffffff; border-color: #40506b; }
+      body.theme-dark .formalization-card,
+      body.theme-dark .formalization-mini-example,
+      body.theme-dark .formalization-table-wrap,
       body.theme-dark .problem-upgrade-card,
       body.theme-dark .problem-upgrade-grid article,
       body.theme-dark .concept-anchor-card,
       body.theme-dark .concept-anchor-grid article,
       body.theme-dark .romania-reading-grid article { background: var(--paper); border-color: var(--line); }
+      body.theme-dark .formalization-list li,
+      body.theme-dark .formalization-table th { background: var(--soft); }
 
       @media (max-width: 980px) {
         #visao .overview-grid,
+        .formalization-compare,
         .problem-upgrade-grid,
         .concept-anchor-grid,
         .romania-reading-grid,
@@ -156,14 +309,6 @@
     list.dataset.ordered = 'true';
   };
 
-  const improveBfsDfsBridgeText = () => {
-    const paragraph = document.querySelector('#ponte .warmup h2 + p');
-    if (!paragraph || paragraph.dataset.updated === 'true') return;
-
-    paragraph.textContent = 'BFS e DFS não usam pistas sobre o destino. Eles apenas seguem a regra da estrutura: fila no BFS, pilha no DFS. A busca informada muda isso ao acrescentar uma estimativa de proximidade do objetivo.';
-    paragraph.dataset.updated = 'true';
-  };
-
   const compactCompetencyCards = () => {
     const overview = document.querySelector('#visao .overview-grid');
     if (!overview || overview.querySelector('.competency-stack')) return;
@@ -177,28 +322,63 @@
     competencyCards.forEach((card) => stack.appendChild(card));
   };
 
-  const insertProblemUpgradeCard = () => {
-    const container = document.querySelector('#ponte .container');
-    const bridge = container?.querySelector('.bridge-grid');
-    if (!container || !bridge || container.querySelector('.problem-upgrade-card')) return;
+  const insertFormalizationSection = () => {
+    const percurso = document.querySelector('#percurso');
+    if (!percurso || document.querySelector('#formalizacao-informada')) return;
 
-    const card = document.createElement('div');
-    card.className = 'problem-upgrade-card';
-    card.innerHTML = `
-      <h3>Agora a formulação do problema precisa ficar mais rica</h3>
-      <p>Na Aula 04, para BFS e DFS, bastava descrever estados, ações, sucessores e objetivo. Na busca informada, o objetivo continua o mesmo, mas a representação precisa incluir informação para comparar alternativas.</p>
-      <div class="problem-upgrade-grid">
-        <article>
-          <strong>Antes: problema de busca não informada</strong>
-          <span>estado inicial, ações possíveis, função de sucessores, teste de objetivo e controle de visitados.</span>
-        </article>
-        <article>
-          <strong>Agora: problema de busca informada</strong>
-          <span>além dos itens anteriores, entram custo de ação, custo acumulado g(n) e heurística h(n).</span>
-        </article>
-      </div>
-    `;
-    bridge.insertAdjacentElement('afterend', card);
+    percurso.insertAdjacentHTML('afterend', `
+      <section class="section section-soft formalization-section" id="formalizacao-informada">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Formulação do problema</p>
+            <h2>O que muda quando a busca passa a usar heurística?</h2>
+            <p>Antes de falar de algoritmo, precisamos ajustar a descrição do problema. Na busca não informada, o algoritmo enxerga apenas a estrutura do espaço de estados. Na busca informada, a mesma formulação precisa carregar informação de custo e uma estimativa de proximidade do objetivo.</p>
+          </div>
+
+          <div class="formalization-compare">
+            <article class="formalization-card">
+              <h3>Como ficava na Aula 04</h3>
+              <ul class="formalization-list">
+                <li><strong>Estado inicial</strong><span>Arad.</span></li>
+                <li><strong>Objetivo</strong><span>Chegar a Bucharest.</span></li>
+                <li><strong>Sucessores</strong><span>Cidades diretamente conectadas por estradas.</span></li>
+                <li><strong>Critério de expansão</strong><span>Fila no BFS ou pilha no DFS.</span></li>
+              </ul>
+            </article>
+
+            <article class="formalization-card">
+              <h3>Como precisa ficar na Aula 05</h3>
+              <ul class="formalization-list">
+                <li><strong>Custo da ação</strong><span>Distância de cada estrada, como Arad → Sibiu = 140.</span></li>
+                <li><strong>Custo acumulado g(n)</strong><span>Quanto já foi gasto do início até o estado atual.</span></li>
+                <li><strong>Heurística h(n)</strong><span>Estimativa de quanto falta de cada cidade até Bucharest.</span></li>
+                <li><strong>Prioridade</strong><span>Menor h(n) na gulosa; menor g(n)+h(n) no A*.</span></li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="formalization-mini-example">
+            <h3>Exemplo rápido no mapa da Romênia</h3>
+            <p>Ao chegar em Sibiu, duas alternativas importantes aparecem. Fagaras parece um pouco mais próxima do destino pela heurística, mas Rimnicu Vilcea tem menor custo total estimado quando somamos o que já foi gasto com o que ainda parece faltar.</p>
+            <div class="formalization-table-wrap">
+              <table class="formalization-table">
+                <thead><tr><th>Alternativa</th><th>g(n)</th><th>h(n)</th><th>g(n)+h(n)</th><th>Leitura</th></tr></thead>
+                <tbody>
+                  <tr><td>Fagaras</td><td>239</td><td>176</td><td>415</td><td>Boa pela heurística, mas com custo acumulado maior.</td></tr>
+                  <tr><td>Rimnicu Vilcea</td><td>220</td><td>193</td><td>413</td><td>Menos atraente pela heurística isolada, mas melhor para A*.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    `);
+  };
+
+  const updateBridgeText = () => {
+    const paragraph = document.querySelector('#ponte .warmup h2 + p');
+    if (!paragraph) return;
+    paragraph.textContent = 'BFS e DFS não usam pistas sobre o destino. Eles apenas seguem a regra da estrutura: fila no BFS, pilha no DFS. A busca informada muda isso ao acrescentar uma estimativa de proximidade do objetivo.';
   };
 
   const insertConceptAnchorCard = () => {
@@ -221,8 +401,6 @@
   };
 
   const configureRomaniaReference = () => {
-    if (!root) return;
-
     const section = root.closest('section');
     const sectionTitle = section?.querySelector('.section-heading h2');
     const sectionIntro = section?.querySelector('.section-heading p:last-child');
@@ -289,13 +467,11 @@
 
   injectAula05Adjustments();
   organizeTopicList();
-  improveBfsDfsBridgeText();
   compactCompetencyCards();
-  insertProblemUpgradeCard();
+  insertFormalizationSection();
+  updateBridgeText();
   insertConceptAnchorCard();
   configureRomaniaReference();
-
-  if (!root) return;
 
   const modeButtons = [...root.querySelectorAll('[data-mode]')];
   const stepButton = root.querySelector('[data-step]');
@@ -307,6 +483,8 @@
   const pathEl = root.querySelector('[data-path]');
   const explanationEl = root.querySelector('[data-explanation]');
   const outcomeEl = root.querySelector('[data-outcome]');
+
+  if (!stepButton || !resetButton || !currentEl || !frontierEl || !costEl || !pathEl || !explanationEl || !outcomeEl) return;
 
   const frames = {
     greedy: [
