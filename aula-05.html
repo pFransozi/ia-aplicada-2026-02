@@ -468,28 +468,57 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Comparação de estratégias</p>
-          <h2>O critério de prioridade muda o comportamento da busca</h2>
-          <p>Agora podemos colocar lado a lado as quatro estratégias trabalhadas nas duas aulas.</p>
+          <h2>Quatro formas de decidir o próximo estado</h2>
+          <p>Depois de observar Greedy e A* no mapa da Romênia, a comparação fica mais clara quando perguntamos: <strong>qual informação organiza a fronteira?</strong></p>
         </div>
 
-        <div class="comparison-table-wrap">
+        <div class="search-mode-grid">
+          <article class="search-mode-card">
+            <span class="search-mode-label">Sem pista</span>
+            <h4>BFS e DFS</h4>
+            <p>Usam apenas a estrutura da fronteira. BFS segue a fila; DFS segue a pilha. Eles não avaliam se um estado parece mais perto do objetivo.</p>
+          </article>
+          <article class="search-mode-card search-mode-informed">
+            <span class="search-mode-label">Com pista</span>
+            <h4>Gulosa e A*</h4>
+            <p>Usam uma heurística <strong>h(n)</strong> para estimar o que falta. A diferença é que a gulosa usa só a pista, enquanto o A* também usa o custo já pago.</p>
+          </article>
+        </div>
+
+        <div class="search-mode-takeaway" style="margin-top:1.4rem">
+          <strong>Leitura rápida:</strong> BFS e DFS mudam a <em>ordem estrutural</em> da exploração; Greedy e A* mudam a <em>prioridade</em> usando informação do problema.
+        </div>
+
+        <div class="comparison-table-wrap" style="margin-top:1.4rem">
           <table class="comparison-table search-strategy-table">
             <thead>
-              <tr><th>Estratégia</th><th>Prioriza</th><th>Usa heurística?</th><th>Observação principal</th></tr>
+              <tr><th>Estratégia</th><th>Como escolhe o próximo estado?</th><th>Informação usada</th><th>Quando ajuda</th><th>Cuidado principal</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>BFS</strong></td><td>menor profundidade</td><td>Não</td><td>Com custos iguais por ação, encontra solução com menor número de passos.</td></tr>
-              <tr><td><strong>DFS</strong></td><td>maior profundidade atual</td><td>Não</td><td>Aprofunda rapidamente, mas a primeira solução pode ser ruim ou nem aparecer em espaços infinitos.</td></tr>
-              <tr><td><strong>Gulosa</strong></td><td>menor h(n)</td><td>Sim</td><td>Pode ser rápida, mas confia apenas na estimativa e não garante menor custo.</td></tr>
-              <tr><td><strong>A*</strong></td><td>menor g(n)+h(n)</td><td>Sim</td><td>Equilibra custo acumulado e estimativa restante; com as condições adequadas, encontra solução ótima.</td></tr>
+              <tr><td><strong>BFS</strong></td><td>retira primeiro o estado mais antigo da fila</td><td>ordem de chegada e profundidade</td><td>quando os custos das ações são iguais e queremos a solução com menos passos</td><td>pode crescer muito em largura e consumir bastante memória</td></tr>
+              <tr><td><strong>DFS</strong></td><td>retira primeiro o estado mais recente da pilha</td><td>caminho atual e profundidade</td><td>quando queremos explorar rapidamente um caminho até o fundo</td><td>pode seguir um ramo ruim por muito tempo e a primeira solução pode não ser boa</td></tr>
+              <tr><td><strong>Gulosa</strong></td><td>retira o estado com menor <strong>h(n)</strong></td><td>estimativa do que parece faltar até o objetivo</td><td>quando existe uma pista simples e queremos chegar rápido a alguma solução</td><td>ignora o custo já acumulado; pode escolher um caminho direto, mas caro</td></tr>
+              <tr><td><strong>A*</strong></td><td>retira o estado com menor <strong>g(n)+h(n)</strong></td><td>custo real já pago mais estimativa restante</td><td>quando os custos importam e a heurística ajuda a orientar a busca</td><td>depende da qualidade da heurística e pode exigir mais memória para controlar custos</td></tr>
             </tbody>
           </table>
         </div>
 
-        <div class="comparison-prompts">
-          <article><span>Cenário A</span><h3>Mapa grande, destino conhecido e custos de estrada</h3><p>Qual estratégia tende a aproveitar melhor uma boa estimativa de distância restante?</p></article>
-          <article><span>Cenário B</span><h3>Heurística ruim ou pouco relacionada ao objetivo</h3><p>Que efeito você espera no número de estados explorados e na qualidade das decisões?</p></article>
-          <article><span>Cenário C</span><h3>O caminho mais curto em passos não é o mais barato</h3><p>Por que considerar g(n) passa a ser importante?</p></article>
+        <div class="search-mode-grid" style="margin-top:1.4rem">
+          <article class="search-mode-card">
+            <span class="search-mode-label">Aula 04</span>
+            <h4>Fila ou pilha mudam o percurso</h4>
+            <p>Na busca não informada, o algoritmo não sabe qual alternativa parece melhor. Ele apenas segue a disciplina da fronteira.</p>
+          </article>
+          <article class="search-mode-card search-mode-informed">
+            <span class="search-mode-label">Aula 05</span>
+            <h4>Heurística muda a prioridade</h4>
+            <p>Na busca informada, o algoritmo usa uma pista para ordenar alternativas. O A* dá um passo a mais: soma essa pista ao custo real já percorrido.</p>
+          </article>
+          <article class="search-mode-card">
+            <span class="search-mode-label">Síntese</span>
+            <h4>Não existe estratégia universal</h4>
+            <p>A escolha depende do problema: custos iguais ou diferentes, qualidade da heurística, tamanho do espaço de estados e necessidade de garantir menor custo.</p>
+          </article>
         </div>
       </div>
     </section>
