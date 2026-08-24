@@ -4,343 +4,66 @@
 
   const injectAula05Adjustments = () => {
     if (document.getElementById('aula05-ajustes-finais')) return;
-
     const style = document.createElement('style');
     style.id = 'aula05-ajustes-finais';
     style.textContent = `
-      #visao .overview-grid {
-        grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
-        align-items: start;
-        gap: 22px;
-      }
-
-      #visao .overview-grid .topics-card {
-        grid-row: auto !important;
-      }
-
-      #visao .competency-stack {
-        display: grid;
-        gap: 14px;
-        align-content: start;
-      }
-
-      #visao .competency-stack .competency {
-        align-self: start;
-        min-height: 0;
-        padding: 1.15rem 1.25rem;
-      }
-
-      #visao .competency-stack .competency h3 {
-        margin-bottom: .55rem;
-      }
-
-      #visao .competency-stack .competency .skill {
-        margin-top: 0;
-        gap: .6rem;
-      }
-
-      #visao .competency-stack .competency .skill strong {
-        min-height: 34px;
-      }
-
-      #visao .competency-stack .c11 {
-        grid-column: auto !important;
-      }
-
-      .formalization-section .section-heading {
-        margin-bottom: 1.35rem;
-      }
-
-      .formalization-map-figure {
-        margin: 1.2rem 0 1.35rem;
-      }
-
-      .formalization-map-figure img {
-        display: block;
-        width: 100%;
-        max-width: 1120px;
-        margin: 0 auto;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: #ffffff;
-        box-shadow: 0 14px 35px rgba(35, 50, 78, .12);
-      }
-
-      .formalization-map-figure figcaption {
-        max-width: 1120px;
-        margin: .75rem auto 0;
-        color: var(--muted);
-        font-size: .92rem;
-        line-height: 1.55;
-      }
-
-      .formalization-map-figure figcaption strong {
-        color: var(--ink);
-      }
-
-      .formalization-compare,
-      .python-formalization-grid,
-      .romania-summary-grid,
-      .romania-reading-grid,
-      .guided-status-grid {
-        display: grid;
-        gap: 14px;
-      }
-
-      .formalization-compare,
-      .python-formalization-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .romania-summary-grid,
-      .romania-reading-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .guided-status-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
-
-      .formalization-card,
-      .formalization-mini-example,
-      .python-formalization-card,
-      .concept-anchor-card,
-      .romania-summary-card,
-      .romania-reading-grid article {
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        background: var(--paper);
-        box-shadow: var(--shadow);
-      }
-
-      .formalization-card,
-      .formalization-mini-example,
-      .python-formalization-card,
-      .concept-anchor-card,
-      .romania-summary-card {
-        padding: 1.2rem;
-      }
-
-      .formalization-card h3,
-      .formalization-mini-example h3,
-      .python-formalization-card h3,
-      .concept-anchor-card h3 {
-        margin: 0 0 .7rem;
-      }
-
-      .formalization-list {
-        display: grid;
-        gap: .65rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .formalization-list li {
-        padding: .85rem;
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        background: var(--soft);
-      }
-
-      .formalization-list strong,
-      .formalization-list span,
-      .romania-summary-grid strong,
-      .romania-summary-grid span {
-        display: block;
-      }
-
-      .formalization-list span,
-      .romania-summary-grid span {
-        margin-top: .28rem;
-        color: var(--muted);
-      }
-
-      .formalization-mini-example {
-        margin-top: 1.1rem;
-      }
-
-      .formalization-mini-example p,
-      .concept-anchor-card p,
-      .romania-summary-card > p {
-        margin: 0;
-      }
-
-      .formalization-table-wrap {
-        overflow-x: auto;
-        margin-top: 1rem;
-      }
-
-      .formalization-table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      .formalization-table th,
-      .formalization-table td {
-        padding: .75rem;
-        border: 1px solid var(--line);
-        text-align: left;
-        vertical-align: top;
-      }
-
-      .formalization-table th {
-        background: var(--soft);
-      }
-
-      .python-formalization-grid {
-        margin-top: 1.1rem;
-      }
-
-      .python-formalization-card p {
-        margin: 0 0 .75rem;
-        color: var(--muted);
-      }
-
-      .python-formalization-card pre {
-        margin: 0;
-        padding: 1rem;
-        overflow-x: auto;
-        border-radius: 14px;
-        background: #091224;
-        border: 1px solid #21304a;
-      }
-
-      .python-formalization-card code {
-        font-family: var(--font-mono, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace);
-        font-size: .9rem;
-        line-height: 1.55;
-        color: #eef4ff;
-        white-space: pre;
-      }
-
-      .concept-anchor-card {
-        margin-top: 1.6rem;
-      }
-
-      .concept-anchor-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 1rem;
-      }
-
-      .concept-anchor-grid article,
-      .romania-summary-grid article {
-        padding: .95rem;
-        border: 1px solid var(--line);
-        border-radius: 15px;
-        background: var(--soft);
-      }
-
-      .concept-anchor-grid strong,
-      .concept-anchor-grid span {
-        display: block;
-      }
-
-      .concept-anchor-grid span {
-        margin-top: .35rem;
-        color: var(--muted);
-        font-size: .92rem;
-      }
-
-      .guided-simulator {
-        grid-template-columns: 1fr;
-      }
-
-      .guided-graph-card,
-      .guided-control-card {
-        width: 100%;
-      }
-
-      .romania-summary {
-        min-height: 0 !important;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        overflow: visible;
-      }
-
-      .romania-summary-card > p {
-        margin-bottom: 1rem;
-      }
-
-      .romania-reading-grid {
-        margin-top: 1.4rem;
-      }
-
-      .romania-reading-grid article {
-        padding: 1.1rem;
-      }
-
-      .romania-reading-grid small {
-        color: var(--blue);
-        font-weight: 850;
-        letter-spacing: .06em;
-        text-transform: uppercase;
-      }
-
-      .romania-reading-grid h3 {
-        margin: .75rem 0 .45rem;
-      }
-
-      .romania-reading-grid p {
-        margin: 0;
-      }
-
-      body.theme-dark .formalization-map-figure img {
-        background: #ffffff;
-        border-color: #40506b;
-      }
-
-      body.theme-dark .formalization-card,
-      body.theme-dark .formalization-mini-example,
-      body.theme-dark .python-formalization-card,
-      body.theme-dark .concept-anchor-card,
-      body.theme-dark .concept-anchor-grid article,
-      body.theme-dark .romania-summary-card,
-      body.theme-dark .romania-summary-grid article,
-      body.theme-dark .romania-reading-grid article {
-        background: var(--paper);
-        border-color: var(--line);
-      }
-
-      body.theme-dark .formalization-list li,
-      body.theme-dark .formalization-table th {
-        background: var(--soft);
-      }
-
-      @media (max-width: 980px) {
-        #visao .overview-grid,
-        .formalization-compare,
-        .python-formalization-grid,
-        .concept-anchor-grid,
-        .romania-summary-grid,
-        .romania-reading-grid,
-        .guided-status-grid {
-          grid-template-columns: 1fr;
-        }
-      }
+      #visao .overview-grid{grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);align-items:start;gap:22px}
+      #visao .overview-grid .topics-card{grid-row:auto!important}
+      #visao .competency-stack{display:grid;gap:14px;align-content:start}
+      #visao .competency-stack .competency{align-self:start;min-height:0;padding:1.15rem 1.25rem}
+      #visao .competency-stack .competency h3{margin-bottom:.55rem}
+      #visao .competency-stack .competency .skill{margin-top:0;gap:.6rem}
+      #visao .competency-stack .competency .skill strong{min-height:34px}
+      #visao .competency-stack .c11{grid-column:auto!important}
+      .formalization-section .section-heading{margin-bottom:1.35rem}
+      .formalization-map-figure{margin:1.2rem 0 1.35rem}
+      .formalization-map-figure img{display:block;width:100%;max-width:1120px;margin:0 auto;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 14px 35px rgba(35,50,78,.12)}
+      .formalization-map-figure figcaption{max-width:1120px;margin:.75rem auto 0;color:var(--muted);font-size:.92rem;line-height:1.55}
+      .formalization-map-figure figcaption strong{color:var(--ink)}
+      .formalization-compare,.python-formalization-grid,.romania-summary-grid,.romania-reading-grid,.guided-status-grid{display:grid;gap:14px}
+      .formalization-compare,.python-formalization-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .romania-summary-grid,.romania-reading-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .guided-status-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .formalization-card,.formalization-mini-example,.python-formalization-card,.concept-anchor-card,.romania-summary-card,.romania-reading-grid article{border:1px solid var(--line);border-radius:20px;background:var(--paper);box-shadow:var(--shadow)}
+      .formalization-card,.formalization-mini-example,.python-formalization-card,.concept-anchor-card,.romania-summary-card{padding:1.2rem}
+      .formalization-card h3,.formalization-mini-example h3,.python-formalization-card h3,.concept-anchor-card h3{margin:0 0 .7rem}
+      .formalization-list{display:grid;gap:.65rem;margin:0;padding:0;list-style:none}
+      .formalization-list li,.concept-anchor-grid article,.romania-summary-grid article{padding:.9rem;border:1px solid var(--line);border-radius:15px;background:var(--soft)}
+      .formalization-list strong,.formalization-list span,.romania-summary-grid strong,.romania-summary-grid span,.concept-anchor-grid strong,.concept-anchor-grid span{display:block}
+      .formalization-list span,.romania-summary-grid span,.concept-anchor-grid span{margin-top:.3rem;color:var(--muted)}
+      .formalization-mini-example,.python-formalization-grid{margin-top:1.1rem}
+      .formalization-mini-example p,.concept-anchor-card p,.romania-summary-card>p{margin:0}
+      .formalization-table-wrap{overflow-x:auto;margin-top:1rem}
+      .formalization-table{width:100%;border-collapse:collapse}
+      .formalization-table th,.formalization-table td{padding:.75rem;border:1px solid var(--line);text-align:left;vertical-align:top}
+      .formalization-table th{background:var(--soft)}
+      .python-formalization-card p{margin:0 0 .75rem;color:var(--muted)}
+      .python-formalization-card pre{margin:0;padding:1rem;overflow-x:auto;border-radius:14px;background:#091224;border:1px solid #21304a}
+      .python-formalization-card code{font-family:var(--font-mono,Consolas,monospace);font-size:.9rem;line-height:1.55;color:#eef4ff;white-space:pre}
+      .concept-anchor-card{margin-top:1.6rem}
+      .concept-anchor-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:1rem}
+      .concept-anchor-grid span{font-size:.92rem}
+      .guided-simulator{grid-template-columns:1fr}
+      .guided-graph-card,.guided-control-card{width:100%}
+      .romania-summary{min-height:0!important;padding:0;border:0;background:transparent;overflow:visible}
+      .romania-summary-card>p{margin-bottom:1rem}
+      .romania-reading-grid{margin-top:1.4rem}
+      .romania-reading-grid article{padding:1.1rem}
+      .romania-reading-grid small{color:var(--blue);font-weight:850;letter-spacing:.06em;text-transform:uppercase}
+      .romania-reading-grid h3{margin:.75rem 0 .45rem}
+      .romania-reading-grid p{margin:0}
+      body.theme-dark .formalization-map-figure img{background:#fff;border-color:#40506b}
+      body.theme-dark .formalization-card,body.theme-dark .formalization-mini-example,body.theme-dark .python-formalization-card,body.theme-dark .concept-anchor-card,body.theme-dark .concept-anchor-grid article,body.theme-dark .romania-summary-card,body.theme-dark .romania-summary-grid article,body.theme-dark .romania-reading-grid article{background:var(--paper);border-color:var(--line)}
+      body.theme-dark .formalization-list li,body.theme-dark .formalization-table th{background:var(--soft)}
+      @media(max-width:980px){#visao .overview-grid,.formalization-compare,.python-formalization-grid,.concept-anchor-grid,.romania-summary-grid,.romania-reading-grid,.guided-status-grid{grid-template-columns:1fr}}
     `;
-
     document.head.appendChild(style);
   };
 
   const organizeTopicList = () => {
     const list = document.querySelector('#visao .topic-list');
     if (!list || list.dataset.ordered === 'true') return;
-
-    const orderedTopics = [
-      'Busca informada',
-      'Função heurística h(n)',
-      'Busca gulosa',
-      'Custo acumulado g(n)',
-      'Função f(n) = g(n) + h(n)',
-      'Algoritmo A*',
-      'Admissibilidade',
-      'Comparação de estratégias'
-    ];
-
+    const orderedTopics = ['Busca informada','Função heurística h(n)','Busca gulosa','Custo acumulado g(n)','Função f(n) = g(n) + h(n)','Algoritmo A*','Admissibilidade','Comparação de estratégias'];
     list.innerHTML = orderedTopics.map((topic) => `<div>${topic}</div>`).join('');
     list.dataset.ordered = 'true';
   };
@@ -348,10 +71,8 @@
   const compactCompetencyCards = () => {
     const overview = document.querySelector('#visao .overview-grid');
     if (!overview || overview.querySelector('.competency-stack')) return;
-
     const competencyCards = [...overview.querySelectorAll(':scope > article.competency')];
     if (!competencyCards.length) return;
-
     const stack = document.createElement('div');
     stack.className = 'competency-stack';
     competencyCards[0].before(stack);
@@ -361,35 +82,31 @@
   const insertFormalizationSection = () => {
     const percurso = document.querySelector('#percurso');
     if (!percurso || document.querySelector('#formalizacao-informada')) return;
-
     percurso.insertAdjacentHTML('afterend', `
-      <section class="section section-soft formalization-section" id="formalizacao-informada">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">Formulação do problema</p>
+      <section class='section section-soft formalization-section' id='formalizacao-informada'>
+        <div class='container'>
+          <div class='section-heading'>
+            <p class='eyebrow'>Formulação do problema</p>
             <h2>O que muda quando a busca passa a usar heurística?</h2>
             <p>Antes de falar de algoritmo, precisamos ajustar a descrição do problema. Na busca não informada, o algoritmo enxerga apenas a estrutura do espaço de estados. Na busca informada, a mesma formulação precisa carregar custos e uma estimativa de proximidade do objetivo.</p>
           </div>
-
-          <figure class="formalization-map-figure">
-            <img src="assets/mapa-romenia-russell-norvig-fig-3-1.png" alt="Mapa simplificado de parte da Romênia, com cidades conectadas por estradas e distâncias entre elas." loading="lazy">
+          <figure class='formalization-map-figure'>
+            <img src='assets/mapa-romenia-russell-norvig-fig-3-1.png' alt='Mapa simplificado de parte da Romênia, com cidades conectadas por estradas e distâncias entre elas.' loading='lazy'>
             <figcaption><strong>Problema de referência da aula.</strong> Vamos usar o mapa da Romênia para contextualizar a mudança de formulação: de um grafo usado por BFS/DFS para um problema de busca informada, com custos e heurística.</figcaption>
           </figure>
-
-          <div class="formalization-compare">
-            <article class="formalization-card">
+          <div class='formalization-compare'>
+            <article class='formalization-card'>
               <h3>Como ficava na Aula 04</h3>
-              <ul class="formalization-list">
+              <ul class='formalization-list'>
                 <li><strong>Estado inicial</strong><span>Arad.</span></li>
                 <li><strong>Objetivo</strong><span>Chegar a Bucharest.</span></li>
                 <li><strong>Sucessores</strong><span>Cidades diretamente conectadas por estradas.</span></li>
                 <li><strong>Critério de expansão</strong><span>Fila no BFS ou pilha no DFS.</span></li>
               </ul>
             </article>
-
-            <article class="formalization-card">
+            <article class='formalization-card'>
               <h3>Como precisa ficar na Aula 05</h3>
-              <ul class="formalization-list">
+              <ul class='formalization-list'>
                 <li><strong>Custo da ação</strong><span>Distância de cada estrada, como Arad → Sibiu = 140.</span></li>
                 <li><strong>Custo acumulado g(n)</strong><span>Quanto já foi gasto do início até o estado atual.</span></li>
                 <li><strong>Heurística h(n)</strong><span>Estimativa de quanto falta de cada cidade até Bucharest.</span></li>
@@ -397,12 +114,11 @@
               </ul>
             </article>
           </div>
-
-          <div class="formalization-mini-example">
+          <div class='formalization-mini-example'>
             <h3>Exemplo rápido no mapa da Romênia</h3>
             <p>Ao chegar em Sibiu, duas alternativas importantes aparecem. Fagaras parece um pouco mais próxima do destino pela heurística, mas Rimnicu Vilcea tem menor custo total estimado quando somamos o que já foi gasto com o que ainda parece faltar.</p>
-            <div class="formalization-table-wrap">
-              <table class="formalization-table">
+            <div class='formalization-table-wrap'>
+              <table class='formalization-table'>
                 <thead><tr><th>Alternativa</th><th>g(n)</th><th>h(n)</th><th>g(n)+h(n)</th><th>Leitura</th></tr></thead>
                 <tbody>
                   <tr><td>Fagaras</td><td>239</td><td>176</td><td>415</td><td>Boa pela heurística, mas com custo acumulado maior.</td></tr>
@@ -411,45 +127,74 @@
               </table>
             </div>
           </div>
-
-          <div class="python-formalization-grid">
-            <article class="python-formalization-card">
+          <div class='python-formalization-grid'>
+            <article class='python-formalization-card'>
               <h3>Antes: Python para BFS/DFS</h3>
               <p>O problema podia ser descrito apenas como conexões entre estados. O algoritmo decidia a ordem pela estrutura da fronteira.</p>
-              <pre><code>estado_inicial = "Arad"
-objetivo = "Bucharest"
+              <pre><code>estado_inicial = 'Arad'
+objetivo = 'Bucharest'
 
 mapa = {
-    "Arad": ["Zerind", "Sibiu", "Timisoara"],
-    "Sibiu": ["Arad", "Fagaras", "Rimnicu Vilcea", "Oradea"],
-    "Fagaras": ["Sibiu", "Bucharest"],
-    "Rimnicu Vilcea": ["Sibiu", "Pitesti", "Craiova"],
+    'Arad': ['Zerind', 'Sibiu', 'Timisoara'],
+    'Sibiu': ['Arad', 'Fagaras', 'Rimnicu Vilcea', 'Oradea'],
+    'Fagaras': ['Sibiu', 'Bucharest'],
+    'Rimnicu Vilcea': ['Sibiu', 'Pitesti', 'Craiova'],
 }
 
 # BFS: fronteira como fila
 # DFS: fronteira como pilha</code></pre>
             </article>
-
-            <article class="python-formalization-card">
+            <article class='python-formalization-card'>
               <h3>Agora: Python com heurística</h3>
-              <p>O problema passa a carregar custo real das ações e uma estimativa h(n), permitindo busca gulosa e A*.</p>
-              <pre><code>estado_inicial = "Arad"
-objetivo = "Bucharest"
+              <p>O problema passa a carregar custo real das ações e uma estimativa h(n). Assim, a busca gulosa pode priorizar apenas h(n), enquanto A* pode combinar o custo já percorrido g(n) com a estimativa do que ainda falta.</p>
+              <pre><code>estado_inicial = 'Arad'
+objetivo = 'Bucharest'
 
 mapa = {
-    "Arad": [("Zerind", 75), ("Sibiu", 140), ("Timisoara", 118)],
-    "Sibiu": [("Arad", 140), ("Fagaras", 99), ("Rimnicu Vilcea", 80)],
-    "Fagaras": [("Sibiu", 99), ("Bucharest", 211)],
-    "Rimnicu Vilcea": [("Sibiu", 80), ("Pitesti", 97), ("Craiova", 146)],
+    'Arad': [('Zerind', 75), ('Sibiu', 140), ('Timisoara', 118)],
+    'Zerind': [('Arad', 75), ('Oradea', 71)],
+    'Oradea': [('Zerind', 71), ('Sibiu', 151)],
+    'Sibiu': [('Arad', 140), ('Oradea', 151), ('Fagaras', 99), ('Rimnicu Vilcea', 80)],
+    'Fagaras': [('Sibiu', 99), ('Bucharest', 211)],
+    'Rimnicu Vilcea': [('Sibiu', 80), ('Pitesti', 97), ('Craiova', 146)],
+    'Pitesti': [('Rimnicu Vilcea', 97), ('Craiova', 138), ('Bucharest', 101)],
+    'Timisoara': [('Arad', 118), ('Lugoj', 111)],
+    'Lugoj': [('Timisoara', 111), ('Mehadia', 70)],
+    'Mehadia': [('Lugoj', 70), ('Drobeta', 75)],
+    'Drobeta': [('Mehadia', 75), ('Craiova', 120)],
+    'Craiova': [('Drobeta', 120), ('Rimnicu Vilcea', 146), ('Pitesti', 138)],
+    'Bucharest': [('Fagaras', 211), ('Pitesti', 101), ('Giurgiu', 90), ('Urziceni', 85)],
+    'Giurgiu': [('Bucharest', 90)],
+    'Urziceni': [('Bucharest', 85), ('Hirsova', 98), ('Vaslui', 142)],
+    'Hirsova': [('Urziceni', 98), ('Eforie', 86)],
+    'Eforie': [('Hirsova', 86)],
+    'Vaslui': [('Urziceni', 142), ('Iasi', 92)],
+    'Iasi': [('Vaslui', 92), ('Neamt', 87)],
+    'Neamt': [('Iasi', 87)],
 }
 
+# h(n): estimativa de distância até Bucharest.
 heuristica = {
-    "Arad": 366,
-    "Sibiu": 253,
-    "Fagaras": 176,
-    "Rimnicu Vilcea": 193,
-    "Pitesti": 100,
-    "Bucharest": 0,
+    'Arad': 366,
+    'Bucharest': 0,
+    'Craiova': 160,
+    'Drobeta': 242,
+    'Eforie': 161,
+    'Fagaras': 176,
+    'Giurgiu': 77,
+    'Hirsova': 151,
+    'Iasi': 226,
+    'Lugoj': 244,
+    'Mehadia': 241,
+    'Neamt': 234,
+    'Oradea': 380,
+    'Pitesti': 100,
+    'Rimnicu Vilcea': 193,
+    'Sibiu': 253,
+    'Timisoara': 329,
+    'Urziceni': 80,
+    'Vaslui': 199,
+    'Zerind': 374,
 }
 
 # Gulosa: prioridade = h(n)
@@ -463,20 +208,18 @@ heuristica = {
 
   const updateBridgeText = () => {
     const paragraph = document.querySelector('#ponte .warmup h2 + p');
-    if (!paragraph) return;
-    paragraph.textContent = 'BFS e DFS não usam pistas sobre o destino. Eles apenas seguem a regra da estrutura: fila no BFS, pilha no DFS. A busca informada muda isso ao acrescentar uma estimativa de proximidade do objetivo.';
+    if (paragraph) paragraph.textContent = 'BFS e DFS não usam pistas sobre o destino. Eles apenas seguem a regra da estrutura: fila no BFS, pilha no DFS. A busca informada muda isso ao acrescentar uma estimativa de proximidade do objetivo.';
   };
 
   const insertConceptAnchorCard = () => {
     const heuristicSection = document.querySelector('#heuristica .container');
     const principles = heuristicSection?.querySelector('.heuristic-callout');
     if (!heuristicSection || !principles || heuristicSection.querySelector('.concept-anchor-card')) return;
-
     principles.insertAdjacentHTML('afterend', `
-      <div class="concept-anchor-card">
+      <div class='concept-anchor-card'>
         <h3>Como avaliar se uma heurística ajuda?</h3>
         <p>Uma heurística não é julgada apenas por parecer intuitiva. Ela precisa ser conectada ao domínio do problema, barata de calcular e útil para ordenar a fronteira sem esconder o custo real do caminho.</p>
-        <div class="concept-anchor-grid">
+        <div class='concept-anchor-grid'>
           <article><strong>Domínio</strong><span>A estimativa precisa ter relação com o objetivo.</span></article>
           <article><strong>Custo de cálculo</strong><span>Calcular h(n) não pode ser tão caro quanto resolver o problema.</span></article>
           <article><strong>Qualidade da pista</strong><span>Quanto melhor a estimativa, menor tende a ser a exploração desnecessária.</span></article>
@@ -494,20 +237,18 @@ heuristica = {
     const graphIntro = root.querySelector('.graph-heading p');
     const graphLegend = root.querySelector('.graph-legend');
     const graph = root.querySelector('.guided-graph');
-
     if (sectionTitle) sectionTitle.textContent = 'Greedy e A* no mesmo problema de rotas';
     if (sectionIntro) sectionIntro.textContent = 'Retomamos o problema contextualizado na formulação inicial. Agora o foco é observar como a fronteira muda quando usamos apenas h(n) ou a soma g(n)+h(n).';
     if (graphTitle) graphTitle.textContent = 'Retomando o cenário';
     if (graphIntro) graphIntro.innerHTML = 'Objetivo: sair de <strong>Arad</strong> e chegar a <strong>Bucharest</strong> com menor custo.';
     if (graphLegend) graphLegend.innerHTML = '<span>Busca gulosa: prioriza menor h(n)</span><span>A*: prioriza menor f(n)=g(n)+h(n)</span>';
-
     if (graph) {
       graph.classList.add('romania-summary');
       graph.setAttribute('aria-label', 'Resumo do problema da Romênia para comparação entre busca gulosa e A estrela');
       graph.innerHTML = `
-        <div class="romania-summary-card">
+        <div class='romania-summary-card'>
           <p>O grafo continua sendo o mesmo. O que muda é a informação usada para organizar a fronteira e decidir qual alternativa explorar primeiro.</p>
-          <div class="romania-summary-grid">
+          <div class='romania-summary-grid'>
             <article><strong>Estado inicial e objetivo</strong><span>Partimos de Arad e queremos chegar a Bucharest.</span></article>
             <article><strong>Ponto crítico da comparação</strong><span>Em Sibiu, a escolha entre Fagaras e Rimnicu Vilcea mostra bem a diferença entre usar só h(n) ou combinar g(n)+h(n).</span></article>
             <article><strong>Resultado esperado</strong><span>Greedy tende a seguir Arad → Sibiu → Fagaras. A* acaba preferindo a rota por Rimnicu Vilcea e Pitesti.</span></article>
@@ -515,18 +256,16 @@ heuristica = {
         </div>
       `;
     }
-
     if (!section?.querySelector('.romania-reading-grid')) {
       const graphCard = root.querySelector('.guided-graph-card');
       graphCard?.insertAdjacentHTML('beforeend', `
-        <div class="romania-reading-grid">
+        <div class='romania-reading-grid'>
           <article><small>01</small><h3>O que o problema já tinha?</h3><p>Estados, conexões entre cidades e custo real das estradas.</p></article>
           <article><small>02</small><h3>O que foi acrescentado?</h3><p>Uma heurística h(n), que funciona como uma pista sobre o quanto falta até Bucharest.</p></article>
           <article><small>03</small><h3>O que isso permite comparar?</h3><p>Agora podemos observar a diferença entre ordenar a fronteira por h(n) ou por g(n)+h(n).</p></article>
         </div>
       `);
     }
-
     const costExample = document.querySelector('.cost-example');
     if (costExample) {
       const blocks = costExample.querySelectorAll('div');
@@ -534,12 +273,10 @@ heuristica = {
       if (blocks[1]) blocks[1].innerHTML = '<small>Estimativa de Pitesti até Bucharest</small><strong>h(n) = 100</strong>';
       if (blocks[2]) blocks[2].innerHTML = '<small>Estimativa total por Pitesti</small><strong>f(n) = 417</strong>';
     }
-
     const questions = section?.querySelectorAll('.experiment-questions article');
     if (questions?.[0]) questions[0].querySelector('p').textContent = 'Registre o caminho encontrado e some os custos das estradas.';
     if (questions?.[1]) questions[1].querySelector('p').textContent = 'Observe o momento em que a rota aparentemente direta por Fagaras perde para a alternativa por Rimnicu Vilcea e Pitesti.';
     if (questions?.[2]) questions[2].querySelector('p').textContent = 'Fagaras parece mais perto de Bucharest pela heurística, mas o custo real Fagaras → Bucharest é alto.';
-
     const tableBody = document.querySelector('.heuristic-check-table tbody');
     if (tableBody) {
       tableBody.innerHTML = `
@@ -573,20 +310,20 @@ heuristica = {
 
   const frames = {
     greedy: [
-      { current: '—', frontier: 'Arad · h=366', cost: '0', path: 'Arad', explanation: 'Começamos em Arad. Na busca gulosa, a fronteira será ordenada somente pela menor estimativa h(n) até Bucharest.' },
-      { current: 'Arad', frontier: 'Sibiu · h=253  |  Timisoara · h=329  |  Zerind · h=374', cost: '0', path: 'Arad', explanation: 'Ao expandir Arad, aparecem três alternativas. Sibiu parece mais perto de Bucharest, então é escolhido primeiro.' },
-      { current: 'Sibiu', frontier: 'Fagaras · h=176  |  Rimnicu Vilcea · h=193  |  Timisoara · h=329  |  Zerind · h=374  |  Oradea · h=380', cost: '140', path: 'Arad → Sibiu', explanation: 'Sibiu gera Fagaras e Rimnicu Vilcea. Como Fagaras tem o menor h(n), a busca gulosa segue por ele.' },
-      { current: 'Fagaras', frontier: 'Bucharest · h=0  |  Rimnicu Vilcea · h=193  |  Timisoara · h=329  |  Zerind · h=374  |  Oradea · h=380', cost: '239', path: 'Arad → Sibiu → Fagaras', explanation: 'Fagaras parece excelente pela heurística. Ao expandi-lo, Bucharest entra na fronteira com h=0.' },
-      { current: 'Bucharest', frontier: 'Rimnicu Vilcea · h=193  |  Timisoara · h=329  |  Zerind · h=374  |  Oradea · h=380', cost: '450', path: 'Arad → Sibiu → Fagaras → Bucharest', explanation: 'Bucharest é retirado da fronteira e satisfaz o objetivo. A busca termina sem investigar a alternativa por Rimnicu Vilcea e Pitesti.', outcome: 'Busca gulosa: solução com custo 450. Foi direta, mas não encontrou a rota de menor custo.' }
+      {current:'—',frontier:'Arad · h=366',cost:'0',path:'Arad',explanation:'Começamos em Arad. Na busca gulosa, a fronteira será ordenada somente pela menor estimativa h(n) até Bucharest.'},
+      {current:'Arad',frontier:'Sibiu · h=253  |  Timisoara · h=329  |  Zerind · h=374',cost:'0',path:'Arad',explanation:'Ao expandir Arad, aparecem três alternativas. Sibiu parece mais perto de Bucharest, então é escolhido primeiro.'},
+      {current:'Sibiu',frontier:'Fagaras · h=176  |  Rimnicu Vilcea · h=193  |  Timisoara · h=329  |  Zerind · h=374  |  Oradea · h=380',cost:'140',path:'Arad → Sibiu',explanation:'Sibiu gera Fagaras e Rimnicu Vilcea. Como Fagaras tem o menor h(n), a busca gulosa segue por ele.'},
+      {current:'Fagaras',frontier:'Bucharest · h=0  |  Rimnicu Vilcea · h=193  |  Timisoara · h=329  |  Zerind · h=374  |  Oradea · h=380',cost:'239',path:'Arad → Sibiu → Fagaras',explanation:'Fagaras parece excelente pela heurística. Ao expandi-lo, Bucharest entra na fronteira com h=0.'},
+      {current:'Bucharest',frontier:'Rimnicu Vilcea · h=193  |  Timisoara · h=329  |  Zerind · h=374  |  Oradea · h=380',cost:'450',path:'Arad → Sibiu → Fagaras → Bucharest',explanation:'Bucharest é retirado da fronteira e satisfaz o objetivo. A busca termina sem investigar a alternativa por Rimnicu Vilcea e Pitesti.',outcome:'Busca gulosa: solução com custo 450. Foi direta, mas não encontrou a rota de menor custo.'}
     ],
     astar: [
-      { current: '—', frontier: 'Arad · f=366', cost: '0', path: 'Arad', explanation: 'Começamos em Arad. No A*, cada prioridade é calculada por f(n)=g(n)+h(n).' },
-      { current: 'Arad', frontier: 'Sibiu · f=393  |  Timisoara · f=447  |  Zerind · f=449', cost: '0', path: 'Arad', explanation: 'Depois de expandir Arad: Sibiu tem g=140 e h=253, então f=393. É a menor prioridade da fronteira.' },
-      { current: 'Sibiu', frontier: 'Rimnicu Vilcea · f=413  |  Fagaras · f=415  |  Timisoara · f=447  |  Zerind · f=449  |  Oradea · f=671', cost: '140', path: 'Arad → Sibiu', explanation: 'Sibiu gera Rimnicu Vilcea e Fagaras. A rota por Rimnicu Vilcea tem f=220+193=413, ligeiramente melhor que Fagaras.' },
-      { current: 'Rimnicu Vilcea', frontier: 'Fagaras · f=415  |  Pitesti · f=417  |  Timisoara · f=447  |  Zerind · f=449  |  Craiova · f=526  |  Oradea · f=671', cost: '220', path: 'Arad → Sibiu → Rimnicu Vilcea', explanation: 'Rimnicu Vilcea aproxima o algoritmo de Pitesti, mas Fagaras ainda tem f um pouco menor. O A* mantém as alternativas concorrendo.' },
-      { current: 'Fagaras', frontier: 'Pitesti · f=417  |  Timisoara · f=447  |  Zerind · f=449  |  Bucharest · f=450  |  Craiova · f=526  |  Oradea · f=671', cost: '239', path: 'Arad → Sibiu → Fagaras', explanation: 'Fagaras gera Bucharest com custo total 450. O objetivo apareceu, mas não é escolhido ainda porque Pitesti tem f=417.' },
-      { current: 'Pitesti', frontier: 'Bucharest · f=418  |  Timisoara · f=447  |  Zerind · f=449  |  Craiova · f=526  |  Oradea · f=671', cost: '317', path: 'Arad → Sibiu → Rimnicu Vilcea → Pitesti', explanation: 'Pitesti gera uma rota melhor para Bucharest: g=418 e h=0. Agora Bucharest passa a ter a menor prioridade.' },
-      { current: 'Bucharest', frontier: 'Timisoara · f=447  |  Zerind · f=449  |  Craiova · f=526  |  Oradea · f=671', cost: '418', path: 'Arad → Sibiu → Rimnicu Vilcea → Pitesti → Bucharest', explanation: 'Bucharest é o menor estado da fronteira e satisfaz o objetivo. O caminho encontrado custa 418.', outcome: 'A*: solução com custo 418. Ao combinar g(n) e h(n), evitou aceitar a rota mais cara por Fagaras.' }
+      {current:'—',frontier:'Arad · f=366',cost:'0',path:'Arad',explanation:'Começamos em Arad. No A*, cada prioridade é calculada por f(n)=g(n)+h(n).'},
+      {current:'Arad',frontier:'Sibiu · f=393  |  Timisoara · f=447  |  Zerind · f=449',cost:'0',path:'Arad',explanation:'Depois de expandir Arad: Sibiu tem g=140 e h=253, então f=393. É a menor prioridade da fronteira.'},
+      {current:'Sibiu',frontier:'Rimnicu Vilcea · f=413  |  Fagaras · f=415  |  Timisoara · f=447  |  Zerind · f=449  |  Oradea · f=671',cost:'140',path:'Arad → Sibiu',explanation:'Sibiu gera Rimnicu Vilcea e Fagaras. A rota por Rimnicu Vilcea tem f=220+193=413, ligeiramente melhor que Fagaras.'},
+      {current:'Rimnicu Vilcea',frontier:'Fagaras · f=415  |  Pitesti · f=417  |  Timisoara · f=447  |  Zerind · f=449  |  Craiova · f=526  |  Oradea · f=671',cost:'220',path:'Arad → Sibiu → Rimnicu Vilcea',explanation:'Rimnicu Vilcea aproxima o algoritmo de Pitesti, mas Fagaras ainda tem f um pouco menor. O A* mantém as alternativas concorrendo.'},
+      {current:'Fagaras',frontier:'Pitesti · f=417  |  Timisoara · f=447  |  Zerind · f=449  |  Bucharest · f=450  |  Craiova · f=526  |  Oradea · f=671',cost:'239',path:'Arad → Sibiu → Fagaras',explanation:'Fagaras gera Bucharest com custo total 450. O objetivo apareceu, mas não é escolhido ainda porque Pitesti tem f=417.'},
+      {current:'Pitesti',frontier:'Bucharest · f=418  |  Timisoara · f=447  |  Zerind · f=449  |  Craiova · f=526  |  Oradea · f=671',cost:'317',path:'Arad → Sibiu → Rimnicu Vilcea → Pitesti',explanation:'Pitesti gera uma rota melhor para Bucharest: g=418 e h=0. Agora Bucharest passa a ter a menor prioridade.'},
+      {current:'Bucharest',frontier:'Timisoara · f=447  |  Zerind · f=449  |  Craiova · f=526  |  Oradea · f=671',cost:'418',path:'Arad → Sibiu → Rimnicu Vilcea → Pitesti → Bucharest',explanation:'Bucharest é o menor estado da fronteira e satisfaz o objetivo. O caminho encontrado custa 418.',outcome:'A*: solução com custo 418. Ao combinar g(n) e h(n), evitou aceitar a rota mais cara por Fagaras.'}
     ]
   };
 
@@ -596,15 +333,17 @@ heuristica = {
   const render = () => {
     const frame = frames[mode][frameIndex];
     if (!frame) return;
-    currentEl.textContent = frame.current;
-    frontierEl.textContent = frame.frontier;
-    costEl.textContent = frame.cost;
-    pathEl.textContent = frame.path;
-    explanationEl.textContent = frame.explanation;
-    outcomeEl.textContent = frame.outcome || '';
+    if (currentEl) currentEl.textContent = frame.current;
+    if (frontierEl) frontierEl.textContent = frame.frontier;
+    if (costEl) costEl.textContent = frame.cost;
+    if (pathEl) pathEl.textContent = frame.path;
+    if (explanationEl) explanationEl.textContent = frame.explanation;
+    if (outcomeEl) outcomeEl.textContent = frame.outcome || '';
     const atEnd = frameIndex === frames[mode].length - 1;
-    stepButton.disabled = atEnd;
-    stepButton.textContent = atEnd ? 'Execução concluída' : 'Executar um passo';
+    if (stepButton) {
+      stepButton.disabled = atEnd;
+      stepButton.textContent = atEnd ? 'Execução concluída' : 'Executar um passo';
+    }
   };
 
   const reset = () => {
@@ -620,12 +359,12 @@ heuristica = {
     });
   });
 
-  stepButton.addEventListener('click', () => {
+  stepButton?.addEventListener('click', () => {
     if (frameIndex < frames[mode].length - 1) {
       frameIndex += 1;
       render();
     }
   });
-  resetButton.addEventListener('click', reset);
+  resetButton?.addEventListener('click', reset);
   render();
 })();
