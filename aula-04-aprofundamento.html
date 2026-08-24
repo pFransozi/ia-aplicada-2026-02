@@ -22,7 +22,7 @@
     .study-meta { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.3rem; }
     .study-meta span { padding: .35rem .7rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--surface); font-size: .84rem; }
     .study-toc-shell { position: sticky; top: 76px; z-index: 60; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb,var(--bg) 94%,transparent); backdrop-filter: blur(14px); }
-    .study-toc { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: .5rem; padding: .85rem 0; }
+    .study-toc { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: .5rem; padding: .85rem 0; }
     .study-toc a { padding: .72rem .7rem; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; text-align: center; color: var(--muted); background: var(--surface); font-size: .78rem; font-weight: 800; line-height: 1.2; }
     .study-toc a:hover { color: var(--primary); border-color: var(--primary); }
     .study-section { padding: 5.5rem 0; scroll-margin-top: 155px; }
@@ -134,7 +134,7 @@
     </section>
 
     <div class="study-toc-shell" aria-label="Sumário do aprofundamento"><div class="container study-toc">
-      <a href="#modelo">Modelo de busca</a><a href="#controle">Fronteira e repetição</a><a href="#bfs">Busca em largura</a><a href="#dfs">Busca em profundidade</a><a href="#complexidade">Complexidade</a><a href="#implementacao">Implementação</a>
+      <a href="#modelo">Modelo de busca</a><a href="#controle">Fronteira e repetição</a><a href="#bfs">Busca em largura</a><a href="#dfs">Busca em profundidade</a><a href="#complexidade">Complexidade</a><a href="#implementacao">Implementação</a><a href="#aplicacoes">Aplicações</a>
     </div></div>
 
     <section class="study-section" id="modelo"><div class="container">
@@ -422,14 +422,27 @@ metricas["ordem_expansao"].append(estado)
 metricas["pico_fronteira"] = max(
     metricas["pico_fronteira"], len(fronteira)
 )</code></pre>
-        <h3>Extensão opcional: existe um meio-termo entre BFS e DFS?</h3>
-        <p>Em <strong>iterative deepening</strong>, executamos uma DFS limitada primeiro à profundidade 0, depois 1, 2, 3 e assim por diante. Sob as condições da análise clássica, a técnica mantém requisitos de memória próximos aos de DFS e recupera a exploração progressiva por profundidade; com custos unitários, encontra uma solução mais rasa (Russell; Norvig, 2022, §3.4; Luger, 2009, §3.2).</p>
-        <p>Ela não precisa fazer parte da implementação obrigatória desta aula. Seu valor aqui é mostrar que estratégias de busca podem ser projetadas a partir de trade-offs, e não apenas memorizadas como uma lista de algoritmos.</p>
-        <div class="study-callout teal"><strong>Ponte para a próxima etapa</strong><p>BFS, DFS e aprofundamento iterativo ainda não usam uma estimativa para decidir se um estado parece mais promissor que outro. Quando o espaço cresce demais, surge a pergunta: podemos usar conhecimento do domínio para escolher melhor o próximo estado? Essa é a entrada para busca heurística.</p></div>
       </div>
     </div></section>
 
-    <section class="study-section" id="sintese"><div class="container">
+    <section class="study-section" id="aplicacoes"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte VII · Aplicações</p><h2>Onde BFS e DFS aparecem em problemas reais?</h2><p>Os exemplos com mapas e labirintos ajudam a enxergar o mecanismo, mas BFS e DFS são técnicas gerais de exploração de grafos e espaços de estados. Por isso, aparecem como algoritmos diretos ou como componentes de soluções maiores em várias áreas da computação.</p></div>
+      <div class="mini-grid">
+        <article class="mini-card"><h4>Redes e comunicação</h4><p>BFS pode ser usada para descobrir dispositivos ou nós por camadas e para encontrar caminhos com o menor número de saltos quando todas as conexões são tratadas da mesma forma. BFS e DFS também ajudam a verificar alcance e conectividade em redes.</p></article>
+        <article class="mini-card"><h4>Web e redes sociais</h4><p>Exploração de páginas por níveis, descoberta de vizinhanças em grafos sociais, graus de separação e análise de conexões podem usar BFS ou DFS, dependendo da ordem de exploração desejada.</p></article>
+        <article class="mini-card"><h4>Sistemas de arquivos e armazenamento</h4><p>Ferramentas que percorrem diretórios, indexam arquivos, procuram conteúdos ou analisam estruturas hierárquicas frequentemente utilizam percursos em profundidade ou em largura.</p></article>
+        <article class="mini-card"><h4>Engenharia de software</h4><p>Grafos de dependências, chamadas entre funções, módulos, pacotes e fluxos de execução podem ser percorridos para descobrir componentes alcançáveis, detectar ciclos e analisar relações entre partes de um sistema.</p></article>
+        <article class="mini-card"><h4>Mapas, robótica e navegação simples</h4><p>Em mapas não ponderados ou ambientes em que cada movimento tem o mesmo custo, BFS é uma referência natural para encontrar uma sequência mínima de passos. Em sistemas maiores, ela também serve como linha de base para comparar estratégias mais sofisticadas.</p></article>
+        <article class="mini-card"><h4>Jogos, quebra-cabeças e configurações</h4><p>Problemas em que uma situação pode gerar várias próximas situações podem ser explorados com BFS ou DFS. Esses métodos são especialmente úteis para alcançar estados, testar regras e construir baselines antes de introduzir heurísticas.</p></article>
+      </div>
+      <div class="callout-grid two">
+        <div class="study-callout"><strong>Quando BFS costuma fazer sentido</strong><p>Quando queremos explorar primeiro o que está mais perto do início, encontrar o menor número de passos em grafos sem pesos ou organizar a descoberta por níveis.</p></div>
+        <div class="study-callout violet"><strong>Quando DFS costuma fazer sentido</strong><p>Quando queremos percorrer profundamente uma estrutura, explorar um ramo por vez ou reduzir a quantidade de alternativas mantidas simultaneamente em memória.</p></div>
+      </div>
+      <div class="study-callout teal"><strong>Em sistemas reais, eles também aparecem como blocos de construção</strong><p>BFS e DFS nem sempre aparecem isoladamente como a solução final. Muitas ferramentas e algoritmos mais especializados usam ideias de travessia de grafos, controle de visitados e exploração sistemática que partem exatamente desses fundamentos (Russell; Norvig, 2022, cap. 3; Luger, 2009, cap. 3; Hurbans, 2020, cap. 2).</p></div>
+    </div></section>
+
+    <section class="study-section alt" id="sintese"><div class="container">
       <div class="study-heading"><p class="study-kicker">Síntese final</p><h2>O que deve permanecer depois dos detalhes</h2><p>BFS e DFS não são apenas fila versus pilha. A estrutura da fronteira implementa uma política de exploração, e essa política produz garantias e custos diferentes.</p></div>
       <div class="check-grid">
         <article class="check-card"><span>01</span><strong>Modelo</strong><p>Distinguir a representação do problema da estrutura construída durante a busca.</p></article>
@@ -441,10 +454,10 @@ metricas["pico_fronteira"] = max(
       </div>
     </div></section>
 
-    <section class="study-section alt" id="referencias"><div class="container">
+    <section class="study-section" id="referencias"><div class="container">
       <div class="study-heading"><p class="study-kicker">Referências utilizadas</p><h2>Leituras que sustentam este aprofundamento</h2><p>As referências no corpo do texto foram padronizadas entre parênteses, deixando o foco da explicação no conceito e mantendo a fonte indicada ao final da ideia.</p></div>
       <ul class="references study-prose">
-        <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Global Edition. Pearson, 2022. Capítulo 3, especialmente §§ 3.3 a 3.4: algoritmos de busca, estratégias não informadas, BFS, DFS, aprofundamento iterativo e comparação por completude, optimalidade de custo, tempo e espaço.</li>
+        <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Global Edition. Pearson, 2022. Capítulo 3, especialmente §§ 3.3 a 3.4: algoritmos de busca, estratégias não informadas, BFS, DFS e comparação por completude, optimalidade de custo, tempo e espaço.</li>
         <li>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson/Addison-Wesley, 2009. Capítulo 3: estruturas e estratégias para busca em espaço de estados; Capítulo 6, §6.1: busca baseada em recursão.</li>
         <li>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. Manning, 2020. Capítulo 2: fundamentos de busca, representação de estados, busca não informada, BFS, DFS, filas, pilhas, visitados e reconstrução de caminhos.</li>
         <li>FINLAY, Janet; DIX, Alan. <em>An Introduction to Artificial Intelligence</em>. Routledge, 2002. Capítulo 3: busca, busca exaustiva e poda simples como apoio conceitual complementar.</li>
