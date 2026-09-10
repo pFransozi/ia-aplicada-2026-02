@@ -235,7 +235,7 @@ print(next(ordem))  # 1
 print(next(ordem))  # 2</code></pre>
 <p>Cada chamada de <code>next(ordem)</code> fornece um novo número. Nas buscas, criamos um contador novo e chamamos <code>next</code> uma vez por inserção. Assim, uma entrada mais antiga vence um empate de prioridade. Como esse número é único, Python não precisa comparar os estados nem os caminhos.</p>
 <h3>5. O que as implementações precisam guardar?</h3>
-<p>Além de escolher uma cidade, queremos devolver o caminho e seu custo. Por isso, as entradas dos algoritmos terão cinco campos:</p>
+<p>Além da cidade a explorar, precisamos guardar como chegamos até ela e quanto esse caminho custou. Por isso, cada item inserido na fronteira terá cinco campos: prioridade, ordem de inserção, estado, caminho e custo acumulado.</p>
 <pre class="code-block"><code># (prioridade, ordem, estado, caminho, custo_acumulado)
 entrada = (
     176,
