@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+  <script src="theme-init.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Aula 05 de Inteligência Artificial Aplicada: busca informada, função heurística, busca gulosa, custo acumulado, algoritmo A*, admissibilidade e comparação de estratégias.">
@@ -11,8 +12,9 @@
   <link rel="stylesheet" href="aula-05.css">
   <script defer src="script.js"></script>
   <script defer src="aula-05.js"></script>
+  <link rel="stylesheet" href="lesson-standard.css">
 </head>
-<body class="lesson-page">
+<body class="lesson-page lesson-standard">
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
   <div class="progress" id="progress" aria-hidden="true"></div>
 
@@ -45,7 +47,7 @@
     </div>
   </header>
 
-  <main id="conteudo">
+  <div class="lesson-shell lesson-page-grid"><main id="conteudo">
     <section class="hero" id="inicio">
       <div class="container hero-grid">
         <div>
@@ -640,7 +642,7 @@ heappush(fronteira, (prioridade, cidade))</code></pre>
         </div>
       </div>
     </section>
-  </main>
+  </main><aside class="lesson-toc" aria-label="Índice desta aula"><div class="lesson-toc-head"><span class="lesson-toc-label">Nesta aula</span><button class="lesson-toc-toggle" type="button" aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#visao">O que vamos desenvolver</a><a href="#percurso">Da ordem fixa para a escolha orientada</a><a href="#ponte">O problema não mudou. A informação disponível mudou.</a><a href="#heuristica">Uma estimativa do que ainda falta</a><a href="#estrutura-fronteira">Greedy e A* precisam de fila de prioridade</a><a href="#gulosa">Escolha o estado que parece mais perto do objetivo</a><a href="#custo">Antes de olhar para frente, registre o que já foi gasto</a><a href="#astar">Equilibre o custo do caminho com a estimativa do que falta</a><a href="#simulador">Greedy e A* no mesmo grafo</a><a href="#admissibilidade">Uma heurística otimista não exagera o custo restante</a><a href="#comparacao">Quatro formas de decidir o próximo estado</a><a href="#fechamento">O que precisa ficar desta aula</a><a href="#referencias">Base conceitual da aula</a></nav><span class="lesson-toc-current" aria-hidden="true"></span></aside></div>
 
   <footer class="site-footer">
     <div class="container footer-grid">
@@ -651,5 +653,6 @@ heappush(fronteira, (prioridade, cidade))</code></pre>
       </div>
     </div>
   </footer>
+  <script defer src="lesson-standard.js"></script>
 </body>
 </html>

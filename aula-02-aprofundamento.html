@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+  <script src="theme-init.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Material de aprofundamento da Aula 02 de Inteligência Artificial Aplicada: fundamentos, evolução, agentes, tipos de problemas, aplicações, limites, riscos e uso crítico de IA generativa.">
@@ -88,8 +89,9 @@
       .study-nav .nav-label { display: none; }
     }
   </style>
+  <link rel="stylesheet" href="lesson-standard.css">
 </head>
-<body class="study-page">
+<body class="study-page lesson-standard">
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
 
   <header class="site-header" id="inicio">
@@ -110,7 +112,7 @@
     </div>
   </header>
 
-  <main id="conteudo">
+  <div class="lesson-shell lesson-page-grid"><main id="conteudo">
     <section class="study-hero">
       <div class="container study-hero-grid">
         <div>
@@ -232,7 +234,7 @@
           <p>Considere um sistema de diagnóstico de falhas de software. A base pode conter uma regra como: se o servidor está acessível e o serviço não responde, há indício de falha no serviço. Os fatos do caso entram na memória de trabalho, o motor verifica quais regras são aplicáveis e novas conclusões podem alimentar inferências seguintes.</p>
 
           <figure class="figure-light">
-            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.png?v=20260817-remaster2" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.png?v=20260817-remaster2" data-dark-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04-dark.png?v=20260817-remaster2" alt="Fluxo do especialista à inferência em um sistema baseado em regras">
+            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.png?v=20260817-remaster2" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.png?v=20260817-remaster2" data-dark-src="assets/aula-02-aprofundamento-04-dark.png" alt="Fluxo do especialista à inferência em um sistema baseado em regras">
             <figcaption>Nos sistemas especialistas clássicos, novos casos não atualizam automaticamente as regras.</figcaption>
           </figure>
 
@@ -308,7 +310,7 @@
         </div>
 
         <figure class="figure-light">
-          <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-06.png?v=20260817-remaster2" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-06.png?v=20260817-remaster2" data-dark-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-06-dark.png?v=20260817-remaster2" alt="Comparação entre automação, regras, IA e sistemas híbridos">
+          <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-06.png?v=20260817-remaster2" alt="Comparação entre automação, regras, IA e sistemas híbridos">
           <figcaption>Quatro formas de estruturar soluções computacionais e seus diferentes papéis.</figcaption>
         </figure>
 
@@ -330,7 +332,7 @@
           <p>Em software, percepções podem ser eventos, arquivos, mensagens, chamadas de API, dados de sensores ou entradas do usuário. Ações podem ser classificações, recomendações, comandos, atualizações de banco de dados ou chamadas de ferramentas.</p>
 
           <figure class="figure-light">
-            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-07.png?v=20260817-remaster2" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-07.png?v=20260817-remaster2" data-dark-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-07-dark.png?v=20260817-remaster2" alt="Ciclo básico de interação de um agente">
+            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-07.png?v=20260817-remaster2" alt="Ciclo básico de interação de um agente">
             <figcaption>Ambiente, percepções, agente, ações e novo estado do ambiente formam um ciclo contínuo.</figcaption>
           </figure>
 
@@ -338,7 +340,7 @@
           <p>Entre perceber e agir, um agente pode manter estado interno ou conhecimento sobre situações anteriores. Seu comportamento é orientado por algum objetivo, e a decisão consiste em selecionar uma ação considerando percepções, estado, restrições e consequências possíveis. Para avaliar o agente, precisamos ainda de um critério de desempenho.</p>
 
           <figure class="figure-light">
-            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-08.png?v=20260817-remaster2" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-08.png?v=20260817-remaster2" data-dark-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-08-dark.png?v=20260817-remaster2" alt="Estudo de caso de um aspirador robô como agente">
+            <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-08.png?v=20260817-remaster2" alt="Estudo de caso de um aspirador robô como agente">
             <figcaption>O aspirador robô ajuda a visualizar objetivo, ambiente, percepções, estado, decisão, ações e critérios de desempenho.</figcaption>
           </figure>
 
@@ -576,7 +578,7 @@
         </div>
       </div>
     </section>
-  </main>
+  </main><aside class="lesson-toc" aria-label="Índice desta aula"><div class="lesson-toc-head"><span class="lesson-toc-label">Nesta aula</span><button class="lesson-toc-toggle" type="button" aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#fundamentos">O que estamos chamando de Inteligência Artificial?</a><a href="#simbolica">IA simbólica e sistemas baseados em conhecimento</a><a href="#aprendizado">Conexionismo, aprendizado de máquina e modelos generativos</a><a href="#agentes">Automação, regras, IA, sistemas híbridos e agentes</a><a href="#problemas">Tipos de problemas e aplicações contemporâneas</a><a href="#riscos">Desempenho não é o único critério</a><a href="#referencias">Leituras que sustentam este material</a></nav><span class="lesson-toc-current" aria-hidden="true"></span></aside></div>
 
   <footer class="site-footer">
     <div class="container footer-grid">
@@ -584,5 +586,6 @@
       <a href="index.html">Portal da disciplina</a>
     </div>
   </footer>
+  <script defer src="lesson-standard.js"></script>
 </body>
 </html>

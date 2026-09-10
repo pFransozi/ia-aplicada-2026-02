@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+  <script src="theme-init.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Aula 04 de Inteligência Artificial Aplicada: busca não informada, fronteira, expansão de estados, busca em largura (BFS), busca em profundidade (DFS) e comparação experimental.">
@@ -11,8 +12,9 @@
   <link rel="stylesheet" href="aula-04-figuras.css">
   <script defer src="script.js"></script>
   <script defer src="aula-04.js"></script>
+  <link rel="stylesheet" href="lesson-standard.css">
 </head>
-<body class="lesson-page">
+<body class="lesson-page lesson-standard">
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
   <div class="progress" id="progress" aria-hidden="true"></div>
 
@@ -43,7 +45,7 @@
     </div>
   </header>
 
-  <main id="conteudo">
+  <div class="lesson-shell lesson-page-grid"><main id="conteudo">
     <section class="hero" id="inicio">
       <div class="container hero-grid">
         <div>
@@ -479,7 +481,7 @@
         </div>
       </div>
     </section>
-  </main>
+  </main><aside class="lesson-toc" aria-label="Índice desta aula"><div class="lesson-toc-head"><span class="lesson-toc-label">Nesta aula</span><button class="lesson-toc-toggle" type="button" aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#visao">O que vamos desenvolver</a><a href="#percurso">Da representação à execução da busca</a><a href="#aquecimento">O robô já sabe como o prédio é representado</a><a href="#busca">Buscar é organizar as alternativas até encontrar o objetivo</a><a href="#bfs">Explore primeiro os estados mais próximos do início</a><a href="#dfs">Aprofunde um caminho antes de tentar alternativas</a><a href="#comparacao">O esqueleto é parecido. A estratégia muda o comportamento.</a><a href="#simulador">O mesmo grafo, duas ordens de exploração</a><a href="#fechamento">O que precisa estar claro ao final da aula</a></nav><span class="lesson-toc-current" aria-hidden="true"></span></aside></div>
 
   <footer class="site-footer">
     <div class="container footer-grid">
@@ -487,5 +489,6 @@
       <div style="display:flex;gap:1rem;flex-wrap:wrap"><a href="aula-03.html">← Aula 03</a><a href="#inicio">Voltar ao início ↑</a></div>
     </div>
   </footer>
+  <script defer src="lesson-standard.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+  <script src="theme-init.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Aula 03 de Inteligência Artificial Aplicada: formulação de problemas, abstração, estados, ações, objetivos, restrições, critérios de sucesso e espaço de estados.">
@@ -420,8 +421,9 @@
       body { font-size: 11pt; }
     }
   </style>
+  <link rel="stylesheet" href="lesson-standard.css">
 </head>
-<body class="lesson-page">
+<body class="lesson-page lesson-standard">
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
   <div class="progress" id="progress" aria-hidden="true"></div>
 
@@ -453,7 +455,7 @@
     </div>
   </header>
 
-  <main id="conteudo">
+  <div class="lesson-shell lesson-page-grid"><main id="conteudo">
     <section class="hero" id="inicio">
       <div class="container hero-grid">
         <div>
@@ -1001,7 +1003,7 @@ print(objetivo_atingido("laboratorio"))
         </div>
       </div>
     </section>
-  </main>
+  </main><aside class="lesson-toc" aria-label="Índice desta aula"><div class="lesson-toc-head"><span class="lesson-toc-label">Nesta aula</span><button class="lesson-toc-toggle" type="button" aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#visao">O que vamos desenvolver</a><a href="#percurso">Do problema real ao espaço de estados</a><a href="#aquecimento">Um robô precisa fazer uma entrega</a><a href="#abstracao">O mundo real contém informação demais</a><a href="#formulacao">A anatomia de um problema de busca</a><a href="#codigo">Da representação conceitual para Python</a><a href="#espaco">De uma situação para um conjunto de possibilidades</a><a href="#representacao">Uma representação pode ser simples e ainda assim estar errada</a><a href="#atividade">Agora formule um problema</a><a href="#verificacao">Consegue distinguir os conceitos?</a><a href="#ponte">Temos o problema. Ainda falta o solucionador.</a><a href="#fechamento">O que você precisa levar desta aula</a></nav><span class="lesson-toc-current" aria-hidden="true"></span></aside></div>
 
   <footer class="site-footer">
     <div class="container footer-grid">
@@ -1115,5 +1117,6 @@ print(objetivo_atingido("laboratorio"))
       updateActiveLink();
     }, { passive: true });
   </script>
+  <script defer src="lesson-standard.js"></script>
 </body>
 </html>

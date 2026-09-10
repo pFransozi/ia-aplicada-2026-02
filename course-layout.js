@@ -19,6 +19,7 @@
   themeToggle?.addEventListener('click', () => {
     const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
     root.dataset.theme = nextTheme;
+    root.style.colorScheme = nextTheme;
     try { localStorage.setItem('ia-aplicada-theme', nextTheme); } catch (_) { /* preference is optional */ }
     syncTheme();
   });

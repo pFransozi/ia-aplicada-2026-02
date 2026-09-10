@@ -30,6 +30,8 @@ window.addEventListener('load', removeDuplicateRussellNorvigReference);
 
 const applyTheme = (theme) => {
   const isDark = theme === 'dark';
+  document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+  document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
   document.body.classList.toggle('theme-dark', isDark);
 
   document.querySelectorAll('[data-light-src][data-dark-src]').forEach((image) => {
