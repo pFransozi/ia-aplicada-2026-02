@@ -53,17 +53,7 @@
       }
     }
 
-    // Remove os blocos finais que não devem mais aparecer nesta aula.
-    document.querySelector('#fechamento')?.remove();
-    document.querySelector('#referencias')?.remove();
-    document.querySelector('.lesson-toc')?.remove();
-    document.querySelector('.site-footer')?.remove();
-
-    // Remove links de navegação que apontavam para os blocos eliminados.
-    document.querySelectorAll('a[href="#fechamento"], a[href="#referencias"]')
-      .forEach((link) => link.remove());
-
-    // Remove eventuais chamadas duplicadas para a prática em Jupyter.
+    // Remove eventuais chamadas para a prática em Jupyter solicitadas para exclusão.
     document.querySelectorAll('p, article').forEach((elemento) => {
       if (elemento.textContent.includes('Prática em Jupyter:')) {
         const card = elemento.closest('.guided-exercise');
