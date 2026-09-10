@@ -70,6 +70,13 @@
  .lesson-five .overview-grid,.lesson-five .map-status-strip,.lesson-five .runner-stats-grid { grid-template-columns:1fr; }
  .lesson-five .runner-panel-header { flex-direction:column; }
 }
+
+/* Mantém os pixels e a geometria do mapa; adapta somente as cores no tema escuro.
+   Branco passa a #141414, e textos/estradas escuros ficam claros. */
+:root[data-theme="dark"] .lesson-five img[src="assets/mapa-romenia-russell-norvig-fig-3-1.png"],
+body.lesson-five.theme-dark img[src="assets/mapa-romenia-russell-norvig-fig-3-1.png"] {
+  filter: invert(0.92) hue-rotate(180deg);
+}
 </style>
   <link rel="stylesheet" href="lesson-standard.css">
 </head>
