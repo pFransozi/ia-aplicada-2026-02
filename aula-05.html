@@ -377,9 +377,56 @@ def busca_greedy(estado_inicial, objetivo_atingido, sucessores, heuristica):
 <section class="section" id="simulador"><div class="container"><div class="section-heading"><p class="eyebrow">Experimento comparativo</p><h2>Prever, executar e explicar</h2></div><p>Use a execução guiada abaixo para acompanhar o mesmo mapa. Antes de avançar cada painel, escolha o próximo estado e justifique com h ou f. Os passos são uma sequência preparada para Arad → Bucharest; o código Python acima executa a busca sobre o mapa completo.</p>
 <div data-guided-search hidden></div>
 </div></section>
-<section class="section" id="admissibilidade"><div class="container"><div class="section-heading"><p class="eyebrow">Admissibilidade</p><h2>Admissibilidade: não superestimar</h2></div><p>Uma heurística é <strong>admissível</strong> quando não ultrapassa o custo do melhor caminho restante em nenhum estado: <strong>h(n) ≤ h*(n)</strong>. O símbolo h* representa esse melhor custo real. Ele serve para analisar a heurística; não precisa ser conhecido pelo algoritmo durante a busca.</p><p>Uma estimativa pode ficar abaixo do custo real ou ser igual a ele. No mapa, a distância em linha reta é um limite inferior à distância por estradas. Estamos comparando quilômetros com quilômetros.</p>
-<article class="card guided-exercise"><h3>Prática guiada</h3><div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Caso</th><th scope="col">h proposto</th><th scope="col">Melhor custo restante</th><th scope="col">Respeita a condição?</th></tr></thead><tbody><tr><td>Fagaras</td><td>176</td><td>211</td><td>?</td></tr><tr><td>Fagaras</td><td>211</td><td>211</td><td>?</td></tr><tr><td>Fagaras</td><td>250</td><td>211</td><td>?</td></tr><tr><td>Pitesti</td><td>100</td><td>101</td><td>?</td></tr><tr><td>Bucharest</td><td>10</td><td>0</td><td>?</td></tr></tbody></table></div><p>Classifique cada linha e explique. Verificar somente Fagaras basta para declarar toda a heurística admissível?</p></article>
-<h3>O que isso garante para o A*?</h3><p>Neste grafo finito, com custos positivos, h não negativa e admissível, h(objetivo)=0 e a implementação que aceita melhorias e reabre estados, A* encontra uma solução de menor custo. Testar o objetivo ao retirá-lo da fronteira faz parte dessa implementação.</p><p>Se h superestima, uma rota boa pode receber prioridade artificialmente alta e a garantia de menor custo deixa de valer. Isso não significa que toda execução retornará uma solução ruim. A greedy, por usar apenas h, não ganha garantia de menor custo só porque a heurística é admissível.</p><p class="note-banner">Admissível não significa precisa. h=0 em todos os estados é admissível neste problema; nesse caso, A* passa a ordenar somente por g, como a busca de custo uniforme. Uma estimativa pouco informativa pode exigir mais exploração.</p></div></section>
+<section class="section" id="admissibilidade"><div class="container">
+<div class="section-heading"><p class="eyebrow">Admissibilidade</p><h2>Admissibilidade: uma estimativa que não exagera</h2><p>Até aqui, usamos h(n) para dizer qual alternativa <strong>parece</strong> mais próxima do objetivo. Agora precisamos de uma pergunta diferente: <strong>quando essa estimativa é segura para o A*?</strong></p></div>
+
+<h3>1. Comece por um caso concreto</h3>
+<p>Considere <strong>Fagaras</strong>. Pelo mapa, o melhor caminho restante até Bucharest custa <strong>211 km</strong>. A heurística usada na aula informa <strong>h(Fagaras) = 176 km</strong>.</p>
+<div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">O que estamos comparando?</th><th scope="col">Valor</th></tr></thead><tbody><tr><td>Estimativa da heurística</td><td><strong>176 km</strong></td></tr><tr><td>Melhor custo real que ainda falta</td><td><strong>211 km</strong></td></tr></tbody></table></div>
+<p>Como <strong>176 ≤ 211</strong>, a heurística não exagerou. Ela foi <strong>otimista</strong>: estimou um valor menor do que o custo que realmente será necessário.</p>
+<p class="note-banner"><strong>Ideia principal:</strong> uma heurística admissível pode subestimar o que falta. O que ela não pode fazer é dizer que falta <em>mais</em> do que o melhor caminho realmente custa.</p>
+
+<h3>2. Agora a fórmula faz sentido</h3>
+<p>Para escrever essa ideia de forma geral, usamos dois símbolos:</p>
+<div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Símbolo</th><th scope="col">Significado</th></tr></thead><tbody><tr><td><strong>h(n)</strong></td><td>A estimativa que a heurística fornece para o custo restante.</td></tr><tr><td><strong>h*(n)</strong></td><td>O custo real do <strong>melhor</strong> caminho possível daquele estado até o objetivo.</td></tr></tbody></table></div>
+<p>Uma heurística é admissível quando, para todos os estados, vale:</p>
+<p class="note-banner" style="text-align:center;font-size:1.15rem"><strong>h(n) ≤ h*(n)</strong></p>
+<p>Leia assim: <strong>“a estimativa não pode ser maior do que o melhor custo real que falta.”</strong> O A* usa h(n) durante a busca. Já h*(n) é uma referência teórica para analisarmos se a heurística é adequada; o algoritmo não precisa conhecê-lo.</p>
+
+<h3>3. Três situações possíveis</h3>
+<div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Estado</th><th scope="col">h(n)</th><th scope="col">h*(n)</th><th scope="col">Admissível?</th><th scope="col">Por quê?</th></tr></thead><tbody>
+<tr><td>Fagaras</td><td>176</td><td>211</td><td><strong>Sim</strong></td><td>Subestima o custo restante.</td></tr>
+<tr><td>Fagaras</td><td>211</td><td>211</td><td><strong>Sim</strong></td><td>A estimativa é exatamente igual ao melhor custo real.</td></tr>
+<tr><td>Fagaras</td><td>250</td><td>211</td><td><strong>Não</strong></td><td>Superestima: faz o caminho parecer mais caro do que ele realmente pode ser.</td></tr>
+<tr><td>Pitesti</td><td>100</td><td>101</td><td><strong>Sim</strong></td><td>100 ≤ 101.</td></tr>
+<tr><td>Bucharest</td><td>0</td><td>0</td><td><strong>Sim</strong></td><td>No objetivo, não falta custo algum.</td></tr>
+</tbody></table></div>
+<p><strong>Igual também vale.</strong> Admissível não significa “sempre menor”; significa “nunca maior”.</p>
+
+<h3>4. Por que a distância em linha reta funciona neste mapa?</h3>
+<p>Imagine Fagaras e Bucharest como dois pontos no mapa. A distância em linha reta liga diretamente esses pontos. Uma viagem pelas estradas precisa seguir os trechos disponíveis e, por isso, não consegue ser menor do que essa distância direta.</p>
+<p>Assim, a linha reta funciona como um <strong>limite inferior</strong>: ela pode dizer 176 km quando a estrada exige 211 km, mas não deveria dizer 250 km para um percurso que pode ser feito em 211 km.</p>
+<p class="note-banner"><strong>Não confunda:</strong> h(n) não informa o custo da estrada seguinte e não informa o custo exato da rota. Ela apenas estima quanto ainda falta até o objetivo.</p>
+
+<h3>5. Por que superestimar pode atrapalhar o A*?</h3>
+<p>O A* escolhe pela soma <strong>f(n) = g(n) + h(n)</strong>. Portanto, se h(n) for artificialmente alta, uma rota que na realidade é boa pode receber um f(n) alto e parecer pior do que deveria.</p>
+<p>No nosso exemplo, Rimnicu Vilcea aparece com <strong>g=220</strong> e <strong>h=193</strong>, então <strong>f=413</strong>. Se inventássemos uma heurística exagerada de 260, essa mesma alternativa passaria a ter <strong>f=480</strong>. O caminho não ficou mais caro; apenas a estimativa o fez parecer pior.</p>
+<p>É exatamente esse tipo de distorção que a admissibilidade evita.</p>
+
+<h3>6. O que a admissibilidade permite afirmar sobre o A*?</h3>
+<p>Com uma heurística que não superestima, o A* pode usar a estimativa para orientar a exploração sem transformar uma rota promissora em uma alternativa artificialmente cara. Nas condições adotadas nesta aula, isso permite ao algoritmo devolver uma solução de <strong>menor custo</strong>.</p>
+<article class="card guided-exercise"><h3>Detalhe técnico — depois que a ideia estiver clara</h3><details><summary>Quais são as condições usadas nesta implementação?</summary><p>Estamos trabalhando com um grafo finito, custos positivos, h(n) não negativa e admissível, h(objetivo)=0, atualização de <code>melhor_g</code> quando uma rota mais barata é encontrada e reabertura do estado quando necessário. Além disso, o objetivo é aceito quando sua entrada válida é <strong>retirada</strong> da fronteira. Nessas condições, a implementação de A* usada na aula encontra uma solução de menor custo.</p></details></article>
+
+<article class="card guided-exercise"><h3>Prática guiada</h3><ol>
+<li>Em Fagaras, h=250 e h*=211. A heurística é admissível? Por quê?</li>
+<li>Em Bucharest, uma heurística informa h=10. Ela pode ser admissível?</li>
+<li>Verificar apenas Fagaras é suficiente para declarar <strong>toda</strong> a heurística admissível?</li>
+<li>Se definirmos h=0 para todas as cidades, a heurística é admissível? Ela ainda ajuda muito a orientar a busca?</li>
+</ol><details><summary>Confira depois de responder</summary><ol><li>Não. 250 &gt; 211, portanto há superestimação.</li><li>Não. No objetivo, h*=0; para ser admissível, h também precisa ser 0.</li><li>Não. A condição deve valer para todos os estados considerados.</li><li>Sim. Zero nunca superestima um custo restante não negativo, mas a heurística deixa de oferecer informação útil sobre qual estado parece mais próximo do objetivo.</li></ol></details></article>
+
+<p class="note-banner"><strong>Admissível não significa perfeita.</strong> Uma heurística pode ser admissível e pouco informativa. Também não transforma a busca Greedy em ótima: a Greedy continua escolhendo apenas por h e ignora o custo já percorrido g.</p>
+<p class="note-banner"><strong>Prática em Jupyter:</strong> use o notebook com um exemplo resolvido e dois exercícios para cada algoritmo. <a href="https://colab.research.google.com/github/pFransozi/ia-aplicada-2026-02/blob/main/aula-05-busca-informada-pratica.ipynb" target="_blank" rel="noopener">Abrir no Google Colab</a> · <a href="aula-05-busca-informada-pratica.ipynb">arquivo .ipynb</a>.</p>
+</div></section>
 <section class="section" id="fechamento"><div class="container"><div class="section-heading"><p class="eyebrow">Fechamento</p><h2>Síntese e verificação</h2></div><div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Estratégia</th><th scope="col">Quem sai primeiro?</th></tr></thead><tbody><tr><td>BFS</td><td>A entrada mais antiga da fila.</td></tr><tr><td>DFS</td><td>A entrada mais recente da pilha.</td></tr><tr><td>Greedy</td><td>A entrada com menor h.</td></tr><tr><td>A*</td><td>A entrada com menor g+h.</td></tr></tbody></table></div><p>Antes de encerrar, explique: o que é um estado neste mapa; como obter seus sucessores; por que g e h são diferentes; por que o A* guarda <code>melhor_g</code>; e o que torna uma heurística admissível.</p><p>Para estudar o código: execute o modelo, a implementação da greedy, a implementação do A* e o bloco de comparação, nessa ordem.</p></div></section>    <section class="section" id="referencias">
       <div class="container">
         <div class="section-heading">
