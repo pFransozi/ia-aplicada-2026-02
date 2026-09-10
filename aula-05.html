@@ -9,163 +9,71 @@
   <title>Aula 05 — Inteligência Artificial Aplicada</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="aula-04.css">
-  <link rel="stylesheet" href="aula-05.css">
   <script defer src="script.js"></script>
 
-  <link rel="stylesheet" href="lesson-standard.css">
 <style>
-      #visao .overview-grid { grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); align-items:start; gap:22px; }
-      #visao .overview-grid .topics-card { grid-row:auto !important; }
-      #visao .competency-stack { display:grid; gap:14px; align-content:start; }
-      #visao .competency-stack .competency { align-self:start; min-height:0; padding:1.15rem 1.25rem; }
-      #visao .competency-stack .competency h3 { margin-bottom:.55rem; }
-      #visao .competency-stack .competency .skill { margin-top:0; gap:.6rem; }
-      #visao .competency-stack .competency .skill strong { min-height:34px; }
-      #visao .competency-stack .c11 { grid-column:auto !important; }
-      #heuristica .prompt-box { display:block !important; }
-      #heuristica .prompt-box strong { font-size:0; }
-      #heuristica .prompt-box strong::after { content:'Para pensar durante a aula'; font-size:1rem; }
-      .legacy-algorithm-layout-hidden, .legacy-guided-search-hidden { display:none !important; }
-
-      .formalization-section .section-heading { margin-bottom:1.35rem; }
-      .formalization-map-figure, .comparison-map-figure { margin:1.2rem 0 1.35rem; }
-      .formalization-map-figure img, .comparison-map-figure img { display:block; width:100%; max-width:1120px; margin:0 auto; border:1px solid var(--line); border-radius:18px; background:#fff; box-shadow:0 14px 35px rgba(35,50,78,.12); }
-      .formalization-map-figure figcaption, .comparison-map-figure figcaption { max-width:1120px; margin:.75rem auto 0; color:var(--muted); font-size:.92rem; line-height:1.55; }
-      .formalization-map-figure figcaption strong, .comparison-map-figure figcaption strong { color:var(--ink); }
-
-      .formalization-compare, .python-formalization-grid, .heuristic-example-grid, .heuristic-decision-grid, .heuristic-areas-grid, .romania-summary-grid, .romania-reading-grid, .guided-status-grid, .algorithm-didactic-grid, .comparison-panels, .map-status-strip, .runner-stats-grid, .admissibility-example-grid, .admissibility-impact-grid { display:grid; gap:14px; }
-      .formalization-compare, .python-formalization-grid, .heuristic-example-grid, .heuristic-decision-grid, .algorithm-didactic-grid, .comparison-panels, .map-status-strip, .runner-stats-grid, .admissibility-impact-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .heuristic-areas-grid, .romania-summary-grid, .romania-reading-grid, .admissibility-example-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
-      .guided-status-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
-
-      .formalization-card, .formalization-mini-example, .python-formalization-card, .heuristic-explainer-card, .heuristic-frontier-card, .heuristic-python-card, .heuristic-area-card, .algorithm-choice-card, .algorithm-pseudo-card, .algorithm-code-card, .comparison-lab-card, .runner-panel, .map-status-card, .concept-anchor-card, .romania-summary-card, .romania-reading-grid article, .admissibility-mini-card, .admissibility-impact-card { border:1px solid var(--line); border-radius:20px; background:var(--paper); box-shadow:var(--shadow); }
-      .formalization-card, .formalization-mini-example, .python-formalization-card, .heuristic-explainer-card, .heuristic-frontier-card, .heuristic-python-card, .heuristic-area-card, .algorithm-choice-card, .algorithm-pseudo-card, .algorithm-code-card, .comparison-lab-card, .runner-panel, .map-status-card, .concept-anchor-card, .romania-summary-card, .admissibility-mini-card, .admissibility-impact-card { padding:1.2rem; }
-      .formalization-card h3, .formalization-mini-example h3, .python-formalization-card h3, .heuristic-explainer-card h3, .heuristic-frontier-card h3, .heuristic-python-card h3, .heuristic-area-card h3, .algorithm-choice-card h3, .algorithm-pseudo-card h3, .algorithm-code-card h3, .runner-panel h3, .concept-anchor-card h3, .admissibility-mini-card h3, .admissibility-impact-card h3 { margin:0 0 .7rem; }
-
-      .formalization-list { display:grid; gap:.65rem; margin:0; padding:0; list-style:none; }
-      .formalization-list li, .concept-anchor-grid article, .romania-summary-grid article, .algorithm-choice-card li { padding:.9rem; border:1px solid var(--line); border-radius:15px; background:var(--soft); }
-      .formalization-list strong, .formalization-list span, .romania-summary-grid strong, .romania-summary-grid span, .heuristic-area-card span, .admissibility-mini-card strong, .admissibility-mini-card span { display:block; }
-      .formalization-list span, .romania-summary-grid span, .heuristic-area-card span, .admissibility-mini-card span { margin-top:.28rem; color:var(--muted); }
-      .formalization-mini-example, .python-formalization-grid, .heuristic-explainer-card, .heuristic-frontier-card, .heuristic-decision-grid, .heuristic-python-card, .heuristic-areas-grid, .algorithm-didactic-grid, .admissibility-explainer, .admissibility-impact-grid { margin-top:1.1rem; }
-      .formalization-mini-example p, .concept-anchor-card p, .romania-summary-card > p, .heuristic-explainer-card p, .heuristic-frontier-card p, .heuristic-python-card p, .heuristic-area-card p, .algorithm-choice-card p, .algorithm-pseudo-card p, .algorithm-code-card p, .runner-explanation-card p, .admissibility-mini-card p, .admissibility-impact-card p { margin:0; }
-
-      .formalization-table-wrap, .heuristic-table-wrap { overflow-x:auto; margin-top:1rem; }
-      .formalization-table, .heuristic-frontier-table { width:100%; border-collapse:collapse; }
-      .formalization-table th, .formalization-table td, .heuristic-frontier-table th, .heuristic-frontier-table td { padding:.75rem; border:1px solid var(--line); text-align:left; vertical-align:top; }
-      .formalization-table th, .heuristic-frontier-table th { background:var(--soft); }
-      .heuristic-frontier-table td:nth-child(n+2), .heuristic-frontier-table th:nth-child(n+2) { text-align:center; }
-
-      .python-formalization-card p, .heuristic-python-card p, .algorithm-code-card p { margin:0 0 .75rem; color:var(--muted); }
-      .python-formalization-card pre, .heuristic-python-card pre, .algorithm-code-card pre { margin:0; padding:1rem; overflow-x:auto; border-radius:14px; background:#091224; border:1px solid #21304a; }
-      .python-formalization-card code, .heuristic-python-card code, .algorithm-code-card code { font-family:var(--font-mono,'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace); font-size:.9rem; line-height:1.55; color:#eef4ff; white-space:pre; }
-
-      #heuristica .formula-card { display:flex; flex-direction:column; gap:.75rem; }
-      .heuristic-card-note, .heuristic-explainer-card .formula-line, .heuristic-frontier-card .formula-line, .algorithm-reading-note, .formula-emphasis, .admissibility-rule { margin-top:.9rem; padding:.85rem; border:1px solid var(--line); border-radius:14px; background:var(--soft); color:var(--ink); line-height:1.45; }
-      .heuristic-card-note { margin-top:auto; font-size:.96rem; }
-      .heuristic-card-note strong, .heuristic-explainer-card .formula-line strong, .heuristic-frontier-card .formula-line strong, .algorithm-reading-note strong, .admissibility-rule strong { color:var(--blue); }
-      .formula-emphasis, .admissibility-equation-inline { color:var(--violet); font-size:1.25rem; font-weight:900; text-align:center; }
-      .heuristic-callout .concept-icon { min-width:5.4rem; padding:.65rem .75rem; font-size:clamp(1.6rem,3vw,2.4rem); line-height:1; white-space:nowrap; letter-spacing:-.04em; }
-      .heuristic-explainer-card { border-left:5px solid var(--blue); }
-      .heuristic-frontier-card { border-left:5px solid var(--violet); }
-
-      .algorithm-choice-card, .algorithm-pseudo-card, .algorithm-code-card { display:grid; gap:.75rem; align-content:start; }
-      .didactic-label, .algorithm-choice-card .choice-rule, .runner-rule, .admissibility-label { display:inline-flex; width:max-content; max-width:100%; padding:.35rem .65rem; border-radius:999px; background:var(--soft); border:1px solid var(--line); color:var(--muted); font-size:.74rem; font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
-      .algorithm-choice-card ul { display:grid; gap:.55rem; margin:0; padding:0; list-style:none; }
-      .algorithm-choice-card .choice-result { padding:.8rem; border-radius:14px; background:rgba(14,165,233,.12); border:1px solid rgba(14,165,233,.25); font-weight:900; color:var(--blue); }
-      .pseudo-list { margin:1rem 0 0; padding:1rem; overflow-x:auto; border-radius:14px; background:#091224; border:1px solid #21304a; color:#eef4ff; font-family:var(--font-mono,'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace); font-size:.9rem; line-height:1.55; white-space:pre; }
-
-      .heuristic-area-card small, .romania-reading-grid small, .runner-frontier-card small, .runner-explanation-card small { color:var(--blue); font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
-      .heuristic-area-card h3 { margin-top:.55rem; }
-      .heuristic-area-card span { font-size:.94rem; }
-      .concept-anchor-card { margin-top:1.4rem; }
-      .concept-anchor-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:1rem; }
-      .concept-anchor-grid strong, .concept-anchor-grid span { display:block; }
-      .concept-anchor-grid span { margin-top:.35rem; color:var(--muted); font-size:.92rem; }
-
-      .guided-simulator { grid-template-columns:1fr; }
-      .guided-graph-card, .guided-control-card { width:100%; }
-      .romania-summary { min-height:0 !important; padding:0; border:0; background:transparent; overflow:visible; }
-      .romania-summary-card > p { margin-bottom:1rem; }
-      .romania-reading-grid { margin-top:1.4rem; }
-      .romania-reading-grid article { padding:1.1rem; }
-      .romania-reading-grid h3 { margin:.75rem 0 .45rem; }
-      .romania-reading-grid p { margin:0; }
-
-      .comparison-lab { display:grid; gap:18px; margin-top:1rem; }
-      .interactive-romania-map { position:relative; min-height:430px; overflow:hidden; border:1px solid var(--line); border-radius:22px; background:linear-gradient(145deg,#f9fbff,#eef5ff); }
-      .interactive-romania-map svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
-      .route-edge { stroke:#aebbd2; stroke-width:1.4; transition:stroke .2s ease, stroke-width .2s ease, opacity .2s ease; }
-      .route-edge.greedy-path { stroke:#16a394; stroke-width:3.2; opacity:.95; }
-      .route-edge.astar-path { stroke:#7c63d6; stroke-width:4; opacity:.9; }
-      .route-edge.greedy-path.astar-path { stroke:#334155; stroke-width:5; }
-      .route-node { position:absolute; z-index:2; transform:translate(-50%,-50%); display:grid; place-items:center; min-width:88px; min-height:58px; padding:.42rem .5rem; border:2px solid #cbd5e1; border-radius:16px; background:var(--paper); text-align:center; box-shadow:0 8px 18px rgba(35,50,78,.10); transition:transform .2s ease, border-color .2s ease, background .2s ease; }
-      .route-node strong { display:block; font-size:.92rem; line-height:1.1; }
-      .route-node small { display:block; margin-top:.18rem; color:var(--muted); font-size:.68rem; font-weight:800; }
-      .route-node.goal { border-color:#8b73e6; }
-      .route-node.greedy-frontier { box-shadow:0 0 0 4px rgba(22,163,148,.10), 0 8px 18px rgba(35,50,78,.10); }
-      .route-node.astar-frontier { box-shadow:0 0 0 4px rgba(124,99,214,.11), 0 8px 18px rgba(35,50,78,.10); }
-      .route-node.greedy-current { border-color:#16a394; background:#dff7f3; transform:translate(-50%,-50%) scale(1.08); }
-      .route-node.astar-current { border-color:#7c63d6; background:#eee9ff; transform:translate(-50%,-50%) scale(1.08); }
-      .route-node.greedy-current.astar-current { border-color:#f4b95e; background:#fff3dc; transform:translate(-50%,-50%) scale(1.12); }
-      .map-status-card small, .map-status-card strong { display:block; }
-      .map-status-card small { color:var(--muted); font-weight:850; text-transform:uppercase; letter-spacing:.06em; }
-      .map-status-greedy strong { color:var(--teal); }
-      .map-status-astar strong { color:var(--violet); }
-      .comparison-panels { align-items:start; }
-      .runner-panel { display:grid; gap:1rem; }
-      .runner-panel-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
-      .runner-panel-header h3 { margin:.7rem 0 0; }
-      .runner-actions { display:flex; flex-wrap:wrap; gap:.75rem; }
-      .runner-actions button { padding:.75rem 1rem; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--ink); font-weight:800; cursor:pointer; }
-      .runner-actions button:hover { transform:translateY(-1px); }
-      .runner-stats-grid > div, .runner-frontier-card, .runner-explanation-card, .runner-outcome-card { padding:.95rem; border:1px solid var(--line); border-radius:15px; background:var(--soft); }
-      .runner-stats-grid small, .runner-stats-grid strong { display:block; }
-      .runner-frontier-card ul { display:grid; gap:.55rem; margin:.75rem 0 0; padding:0; list-style:none; }
-      .runner-frontier-card li { padding:.7rem .8rem; border:1px solid var(--line); border-radius:12px; background:var(--paper); }
-      .runner-explanation-card p { margin:.65rem 0 0; }
-      .runner-outcome-card { min-height:56px; font-weight:850; color:var(--violet); }
-
-      .admissibility-explainer { margin-bottom:1.4rem; }
-      .admissibility-mini-card.safe { border-top:5px solid var(--teal); }
-      .admissibility-mini-card.warning { border-top:5px solid var(--amber); }
-      .admissibility-mini-card.problem { border-top:5px solid var(--violet); }
-      .admissibility-mini-card .big-rule { margin-top:.75rem; font-size:clamp(1.6rem,3vw,2.35rem); font-weight:900; letter-spacing:-.04em; color:var(--ink); }
-      .admissibility-example { margin-top:.9rem; padding:.85rem; border:1px solid var(--line); border-radius:14px; background:var(--soft); }
-      .admissibility-example strong, .admissibility-example span { display:block; }
-      .admissibility-example span { margin-top:.25rem; color:var(--muted); }
-      .admissibility-check-table .safe-answer { color:var(--teal); font-weight:900; }
-      .admissibility-check-table .bad-answer { color:var(--amber); font-weight:900; }
-      .admissibility-impact-grid { margin-top:1.4rem; }
-      .admissibility-impact-card { border-left:5px solid var(--blue); }
-
-      body.theme-dark .formalization-map-figure img, body.theme-dark .comparison-map-figure img { background:#fff; border-color:#40506b; }
-      body.theme-dark .formalization-card, body.theme-dark .formalization-mini-example, body.theme-dark .python-formalization-card, body.theme-dark .heuristic-explainer-card, body.theme-dark .heuristic-frontier-card, body.theme-dark .heuristic-python-card, body.theme-dark .heuristic-area-card, body.theme-dark .algorithm-choice-card, body.theme-dark .algorithm-pseudo-card, body.theme-dark .algorithm-code-card, body.theme-dark .comparison-lab-card, body.theme-dark .runner-panel, body.theme-dark .map-status-card, body.theme-dark .concept-anchor-card, body.theme-dark .concept-anchor-grid article, body.theme-dark .romania-summary-card, body.theme-dark .romania-summary-grid article, body.theme-dark .romania-reading-grid article, body.theme-dark .admissibility-mini-card, body.theme-dark .admissibility-impact-card { background:var(--paper); border-color:var(--line); }
-      body.theme-dark .formalization-list li, body.theme-dark .formalization-table th, body.theme-dark .heuristic-frontier-table th, body.theme-dark .heuristic-card-note, body.theme-dark .heuristic-explainer-card .formula-line, body.theme-dark .heuristic-frontier-card .formula-line, body.theme-dark .algorithm-reading-note, body.theme-dark .formula-emphasis, body.theme-dark .didactic-label, body.theme-dark .algorithm-choice-card .choice-rule, body.theme-dark .runner-rule, body.theme-dark .algorithm-choice-card li, body.theme-dark .runner-stats-grid > div, body.theme-dark .runner-frontier-card, body.theme-dark .runner-explanation-card, body.theme-dark .runner-outcome-card, body.theme-dark .admissibility-rule, body.theme-dark .admissibility-example { background:var(--soft); }
-      body.theme-dark .interactive-romania-map { background:linear-gradient(145deg,#121c2f,#0e1828); border-color:#30405e; }
-      body.theme-dark .route-edge { stroke:#52647f; }
-      body.theme-dark .route-node { background:#172033; color:var(--ink); border-color:#40506b; }
-      body.theme-dark .route-node.greedy-current { background:#143a38; border-color:#54d6ca; }
-      body.theme-dark .route-node.astar-current { background:#2a2448; border-color:#b4a5ff; }
-      body.theme-dark .route-node.greedy-current.astar-current { background:#3d2c15; border-color:#f4b95e; }
-      body.theme-dark .runner-frontier-card li { background:var(--paper); border-color:var(--line); }
-
-      @media(max-width:980px){#visao .overview-grid,.formalization-compare,.python-formalization-grid,.heuristic-example-grid,.heuristic-decision-grid,.heuristic-areas-grid,.algorithm-didactic-grid,.comparison-panels,.map-status-strip,.concept-anchor-grid,.romania-summary-grid,.romania-reading-grid,.guided-status-grid,.admissibility-example-grid,.admissibility-impact-grid{grid-template-columns:1fr}}
-      @media(max-width:720px){.runner-panel-header,.runner-actions{flex-direction:column}.runner-rule{white-space:normal}.runner-stats-grid{grid-template-columns:1fr}.interactive-romania-map{min-height:560px}.route-node{min-width:72px;font-size:.86rem}}
-    
-body.lesson-standard .guided-exercise { margin:1.5rem 0; }
-body.lesson-standard details { margin:1rem 0; padding:1rem; border:1px solid var(--line); border-radius:8px; }
-body.lesson-standard summary { cursor:pointer; font-weight:700; color:var(--ink); }
-body.lesson-standard .code-block { font-size:.92rem; line-height:1.6; padding:1.1rem; }
-body.lesson-standard .comparison-table td, body.lesson-standard .comparison-table th { padding:.8rem; }
-body.lesson-standard .comparison-panels { grid-template-columns:1fr; }
-body.lesson-standard .route-node small { font-size:.8rem; }
-body.lesson-standard .route-node strong { font-size:.85rem; }
-body.lesson-standard .interactive-romania-map { min-width:650px; }
-body.lesson-standard .comparison-lab-card { overflow-x:auto; }
-body.lesson-standard .runner-frontier-card ul { grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
+/* Apenas componentes específicos da Aula 05; o tema compartilhado vem por último. */
+.lesson-five .overview-grid { grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:start; }
+.lesson-five .overview-grid .topics-card { grid-row:auto; }
+.lesson-five .competency-stack { display:grid; gap:16px; }
+.lesson-five .competency-stack .competency { grid-column:auto; }
+.lesson-five .section > .container > h3 { margin:2rem 0 .8rem; }
+.lesson-five .guided-exercise { margin:1.5rem 0; }
+.lesson-five .guided-exercise h3 { margin:0 0 .8rem; }
+.lesson-five .guided-exercise details { margin-top:1rem; border-top:1px solid var(--line); padding-top:1rem; }
+.lesson-five .guided-exercise summary { cursor:pointer; font-weight:650; color:var(--blue); }
+.lesson-five .guided-exercise details[open] summary { margin-bottom:1rem; }
+.lesson-five .guided-exercise li + li { margin-top:.5rem; }
+.lesson-five .comparison-table { width:100%; border-collapse:collapse; font-size:.95rem; }
+.lesson-five .comparison-table th,.lesson-five .comparison-table td { text-align:left; padding:.8rem 1rem; border-bottom:1px solid var(--line); vertical-align:top; }
+.lesson-five .comparison-table tr:last-child td { border-bottom:0; }
+.lesson-five .comparison-table-wrap { margin:1.2rem 0; }
+.lesson-five .formalization-map-figure,.lesson-five .comparison-map-figure { margin:1.5rem 0; }
+.lesson-five .formalization-map-figure img,.lesson-five .comparison-map-figure img { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:8px; background:white; }
+.lesson-five figcaption { margin-top:.7rem; font-size:.9rem; color:var(--muted); }
+.lesson-five .comparison-lab { display:grid; gap:16px; margin:1.5rem 0; }
+.lesson-five .comparison-lab-card,.lesson-five .runner-panel,.lesson-five .map-status-card { min-width:0; padding:1.25rem; border:1px solid var(--line); border-radius:8px; background:var(--paper); }
+.lesson-five .comparison-lab-card { overflow-x:auto; }
+.lesson-five .comparison-panels,.lesson-five .map-status-strip,.lesson-five .runner-stats-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.lesson-five .comparison-panels { grid-template-columns:1fr; }
+.lesson-five .runner-panel { display:grid; gap:1rem; }
+.lesson-five .runner-panel-header { display:flex; justify-content:space-between; gap:1rem; align-items:start; }
+.lesson-five .runner-panel-header h3 { margin:.5rem 0 0; }
+.lesson-five .didactic-label,.lesson-five .runner-rule { color:var(--blue); font-size:.85rem; font-weight:650; }
+.lesson-five .runner-actions { display:flex; flex-wrap:wrap; gap:.7rem; }
+.lesson-five .runner-actions button { cursor:pointer; padding:.6rem .9rem; border:1px solid var(--line); border-radius:7px; color:var(--ink); background:var(--paper); }
+.lesson-five .runner-actions button:hover { border-color:var(--blue); background:var(--soft); }
+.lesson-five .runner-stats-grid > div,.lesson-five .runner-frontier-card,.lesson-five .runner-explanation-card,.lesson-five .runner-outcome-card { padding:1rem; border:1px solid var(--line); border-radius:8px; background:var(--soft); overflow-wrap:anywhere; }
+.lesson-five .runner-stats-grid small,.lesson-five .runner-stats-grid strong,.lesson-five .map-status-card small,.lesson-five .map-status-card strong { display:block; }
+.lesson-five .runner-stats-grid small,.lesson-five .map-status-card small { font-size:.85rem; color:var(--muted); }
+.lesson-five .runner-frontier-card ul { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.5rem; padding:0; margin:.75rem 0 0; list-style:none; }
+.lesson-five .runner-frontier-card li { padding:.6rem; border:1px solid var(--line); border-radius:6px; }
+.lesson-five .runner-explanation-card p { margin:.65rem 0 0; }
+.lesson-five .runner-outcome-card { color:var(--blue); font-weight:650; }
+.lesson-five .interactive-romania-map { position:relative; height:470px; min-width:650px; border:1px solid var(--line); border-radius:8px; background:var(--soft); margin-top:1rem; }
+.lesson-five .interactive-romania-map svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.lesson-five .route-edge { stroke:var(--muted); stroke-width:1; opacity:.5; }
+.lesson-five .route-node { position:absolute; transform:translate(-50%,-50%); display:grid; place-items:center; min-width:75px; padding:.45rem; border:1px solid var(--line); border-radius:7px; background:var(--paper); text-align:center; z-index:2; }
+.lesson-five .route-node strong { font-size:.85rem; }
+.lesson-five .route-node small { display:block; font-size:.8rem; color:var(--muted); }
+.lesson-five .route-node.goal { border-color:var(--blue); }
+.lesson-five .route-node.greedy-frontier { outline:2px dashed var(--blue); outline-offset:2px; }
+.lesson-five .route-node.astar-frontier { outline:2px solid var(--blue); outline-offset:2px; }
+.lesson-five .route-node.greedy-current,.lesson-five .route-node.astar-current { border:2px solid var(--blue); background:var(--blue-soft); }
+.lesson-five .route-edge.greedy-path { stroke:var(--blue); stroke-dasharray:3 2; stroke-width:2.5; opacity:1; }
+.lesson-five .route-edge.astar-path { stroke:var(--blue); stroke-width:2.5; opacity:1; }
+.lesson-five .route-edge.greedy-path.astar-path { stroke-width:3.5; stroke-dasharray:none; }
+.lesson-five .legacy-guided-search-hidden { display:none; }
+.lesson-five .references-grid { display:grid; gap:1rem; }
+.lesson-five .reference-card { border-top:1px solid var(--line); padding-top:1rem; }
+@media(max-width:760px) {
+ .lesson-five .overview-grid,.lesson-five .map-status-strip,.lesson-five .runner-stats-grid { grid-template-columns:1fr; }
+ .lesson-five .runner-panel-header { flex-direction:column; }
+}
 </style>
+  <link rel="stylesheet" href="lesson-standard.css">
 </head>
-<body class="lesson-page lesson-standard">
+<body class="lesson-page lesson-standard lesson-five">
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
   <div class="progress" id="progress" aria-hidden="true"></div>
 
@@ -199,8 +107,18 @@ body.lesson-standard .runner-frontier-card ul { grid-template-columns:repeat(aut
   </header>
 
   <div class="lesson-shell lesson-page-grid"><main id="conteudo">
-<section class="hero" id="inicio"><div class="container hero-grid"><div><p class="eyebrow">Aula 05 · Busca informada</p><h1>Do mapa à busca informada</h1><p class="hero-lead">Modele a viagem, organize a fronteira e compare busca gulosa e A* no mapa da Romênia.</p><div class="hero-actions"><a class="button button-primary" href="#modelagem">Começar pelo mapa</a><a class="button button-secondary" href="#simulador">Execução guiada</a></div></div><aside class="guiding-card"><span>Pergunta orientadora</span><blockquote>Como usar uma estimativa sem ignorar o custo do caminho?</blockquote></aside></div></section><section class="section" id="visao"><div class="container"><div class="section-heading"><h2>Percurso da aula</h2></div><p>Vamos representar uma viagem de Arad a Bucharest, usar uma estimativa para orientar a busca e implementar busca gulosa e A*. Ao final, você deverá explicar a modelagem, a prioridade da fronteira e o papel da admissibilidade.</p><p><strong>Percurso:</strong> mapa e modelo → heurística → heapq → busca gulosa → A* → comparação → admissibilidade.</p><p>Competências: C2–H6, aplicar busca informada; C3–H10, comparar estratégias; C11–H38, implementar e validar algoritmos.</p></div></section>
-<section class="section" id="modelagem"><div class="container"><div class="section-heading"><h2>1. Do mapa ao modelo</h2></div><p>Precisamos sair de <strong>Arad</strong> e chegar a <strong>Bucharest</strong> percorrendo a menor distância total. Considere estradas transitáveis nos dois sentidos, com distâncias fixas. Trânsito, combustível e tempo de viagem não fazem parte deste modelo.</p><figure class="formalization-map-figure"><img src="assets/mapa-romenia-russell-norvig-fig-3-1.png" alt="Mapa da Romênia com cidades, estradas e distâncias em quilômetros."><figcaption>Mapa utilizado na aula. Cada cidade será um estado; cada estrada permitirá uma transição.</figcaption></figure>
+<section class="hero" id="inicio"><div class="container hero-grid"><div><p class="eyebrow">Aula 05 · Busca informada</p><h1>Do mapa à busca informada</h1><p class="hero-lead">Modele a viagem, organize a fronteira e compare busca gulosa e A* no mapa da Romênia.</p><div class="hero-actions"><a class="button button-primary" href="#modelagem">Começar pelo mapa</a><a class="button button-secondary" href="#simulador">Execução guiada</a></div></div><aside class="guiding-card"><span>Pergunta orientadora</span><blockquote>Como usar uma estimativa sem ignorar o custo do caminho?</blockquote></aside></div></section><section class="section section-soft" id="visao"><div class="container">
+<div class="section-heading"><p class="eyebrow">Visão da aula</p><h2>O que vamos desenvolver</h2><p>Vamos representar uma viagem de Arad a Bucharest e implementar busca gulosa e A*, explicando as escolhas da fronteira e o papel da admissibilidade.</p></div>
+<div class="overview-grid">
+<article class="card topics-card"><h3>Conteúdo programático</h3><div class="topic-list">
+<div>Modelagem do problema de rotas</div><div>Busca informada e heurística h(n)</div><div>Fila de prioridade com heapq</div><div>Implementação da busca gulosa</div><div>Custo acumulado g(n) e prioridade f(n)</div><div>Implementação do A*</div><div>Comparação guiada e admissibilidade</div>
+</div><div class="note-banner"><strong>Objetivo da aula:</strong> modelar um problema de rotas, implementar busca gulosa e A* e justificar as decisões de cada estratégia.</div></article>
+<div class="competency-stack">
+<article class="card competency"><h3>C2 — Construir soluções eficientes</h3><div class="skill"><strong>H6</strong><span>Aplicar busca informada na construção de soluções.</span></div></article>
+<article class="card competency"><h3>C3 — Comparar estratégias</h3><div class="skill"><strong>H10</strong><span>Comparar heurísticas e estratégias segundo benefícios, custos e limitações.</span></div></article>
+<article class="card competency"><h3>C11 — Desenvolver algoritmos</h3><div class="skill"><strong>H38</strong><span>Implementar e validar busca gulosa e A* em um problema de rotas.</span></div></article>
+</div></div></div></section>
+<section class="section" id="modelagem"><div class="container"><div class="section-heading"><p class="eyebrow">Formulação do problema</p><h2>Do mapa ao modelo</h2></div><p>Precisamos sair de <strong>Arad</strong> e chegar a <strong>Bucharest</strong> percorrendo a menor distância total. Considere estradas transitáveis nos dois sentidos, com distâncias fixas. Trânsito, combustível e tempo de viagem não fazem parte deste modelo.</p><figure class="formalization-map-figure"><img src="assets/mapa-romenia-russell-norvig-fig-3-1.png" alt="Mapa da Romênia com cidades, estradas e distâncias em quilômetros."><figcaption>Mapa utilizado na aula. Cada cidade será um estado; cada estrada permitirá uma transição.</figcaption></figure>
 <article class="card guided-exercise"><h3>Prática guiada</h3><ol><li>O que precisamos guardar para representar um estado?</li><li>Quais são o estado inicial e o teste de objetivo?</li><li>Quais ações são permitidas? Liste os sucessores de Arad.</li><li>O que significam os números nas estradas?</li><li>Como comparamos dois caminhos que chegam ao destino?</li></ol><details><summary>Conferir o raciocínio</summary><div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Elemento</th><th scope="col">Representação</th></tr></thead><tbody><tr><td>Estado</td><td>Cidade atual, por exemplo: Arad.</td></tr><tr><td>Estado inicial</td><td>Arad.</td></tr><tr><td>Ação e transição</td><td>Viajar por uma estrada para uma cidade vizinha; o novo estado é essa cidade.</td></tr><tr><td>Sucessores de Arad</td><td>Zerind, Sibiu e Timisoara.</td></tr><tr><td>Objetivo</td><td>Cidade atual igual a Bucharest.</td></tr><tr><td>Custo de uma ação</td><td>Distância da estrada em quilômetros.</td></tr><tr><td>Custo do caminho</td><td>Soma das distâncias percorridas; queremos minimizar essa soma.</td></tr></tbody></table></div></details></article>
 <p><strong>Estado e caminho são diferentes:</strong> <code>"Sibiu"</code> é um estado; <code>["Arad", "Sibiu"]</code> é um caminho. Podemos chegar à mesma cidade por caminhos com custos diferentes.</p><h3>Transforme uma conexão em Python</h3><pre class="code-block"><code>mapa = {
     "Arad": [("Zerind", 75), ("Sibiu", 140), ("Timisoara", 118)]
@@ -212,7 +130,7 @@ body.lesson-standard .runner-frontier-card ul { grid-template-columns:repeat(aut
     ("Fagaras", 99), ("Rimnicu Vilcea", 80)
 ]</code></pre><p>Não há uma estrada direta de Sibiu a Bucharest no mapa. A função de sucessores descreve apenas uma ação por vez.</p></details></article>
 <p class="note-banner">O modelo descreve o problema. Fila, pilha e prioridade descrevem como o algoritmo explora esse modelo. Custos também podem existir em problemas tratados por busca não informada; BFS minimiza o número de ações, e só minimiza o custo quando os custos das ações são iguais.</p></div></section>
-<section class="section" id="heuristica"><div class="container"><div class="section-heading"><h2>2. Uma estimativa do que falta</h2></div><p>A heurística <strong>h(estado)</strong> estima o custo restante até o objetivo. Neste mapa, usamos a distância em linha reta até Bucharest, em quilômetros. A estrada pode fazer curvas e passar por outras cidades; por isso, a estimativa não é o custo real do percurso.</p>
+<section class="section" id="heuristica"><div class="container"><div class="section-heading"><p class="eyebrow">Função heurística</p><h2>Uma estimativa do que falta</h2></div><p>A heurística <strong>h(estado)</strong> estima o custo restante até o objetivo. Neste mapa, usamos a distância em linha reta até Bucharest, em quilômetros. A estrada pode fazer curvas e passar por outras cidades; por isso, a estimativa não é o custo real do percurso.</p>
 <div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Cidade</th><th scope="col">h: linha reta até Bucharest</th></tr></thead><tbody><tr><td>Sibiu</td><td>253 km</td></tr><tr><td>Fagaras</td><td>176 km</td></tr><tr><td>Rimnicu Vilcea</td><td>193 km</td></tr><tr><td>Bucharest</td><td>0 km</td></tr></tbody></table></div>
 <article class="card guided-exercise"><h3>Prática guiada</h3><p>Entre Fagaras e Rimnicu Vilcea, qual parece mais perto do destino? O valor 176 significa que existe uma estrada de Fagaras a Bucharest com 176 km?</p><details><summary>Conferir o raciocínio</summary><p>Fagaras parece mais perto porque 176 &lt; 193. Mas sua estrada até Bucharest mede 211 km. A heurística é uma estimativa, não uma conexão nem um caminho pronto.</p></details></article>
 <h3>Modelo completo para executar os algoritmos</h3><p>Execute este bloco uma vez. Cada estrada é cadastrada nos dois sentidos. A função <code>sucessores</code> devolve pares <code>(estado, custo)</code>; a função <code>heuristica</code> consulta a tabela de estimativas.</p><pre class="code-block"><code># Estradas nos dois sentidos; distâncias em quilômetros.
@@ -262,7 +180,7 @@ def heuristica(estado):
     return estimativas[estado]
 </code></pre>
 <p>Os algoritmos receberão essas funções. O destino desta tabela é Bucharest: mudar o destino exige rever a heurística.</p></div></section>
-<section class="section" id="estrutura-fronteira"><div class="container"><div class="section-heading"><h2>3. Da fila à fila de prioridade</h2></div><p>BFS retira o mais antigo da fila; DFS retira o mais recente da pilha. Busca gulosa e A* retiram a entrada com <strong>menor prioridade numérica</strong>.</p><p>O módulo <code>heapq</code> usa uma lista como heap mínimo: <code>heappush</code> insere preservando essa organização; <code>heappop</code> retira o menor item. A lista inteira <strong>não fica ordenada</strong>. Inserir e retirar custam O(log n); consultar o menor em <code>fronteira[0]</code> custa O(1), para n entradas.</p>
+<section class="section" id="estrutura-fronteira"><div class="container"><div class="section-heading"><p class="eyebrow">Estrutura da fronteira</p><h2>Da fila à fila de prioridade</h2></div><p>BFS retira o mais antigo da fila; DFS retira o mais recente da pilha. Busca gulosa e A* retiram a entrada com <strong>menor prioridade numérica</strong>.</p><p>O módulo <code>heapq</code> usa uma lista como heap mínimo: <code>heappush</code> insere preservando essa organização; <code>heappop</code> retira o menor item. A lista inteira <strong>não fica ordenada</strong>. Inserir e retirar custam O(log n); consultar o menor em <code>fronteira[0]</code> custa O(1), para n entradas.</p>
 <pre class="code-block"><code>from heapq import heappush, heappop
 
 fronteira = []
@@ -281,7 +199,7 @@ ordem = count()  # Produz 0, 1, 2, ...
 # (prioridade, ordem, estado, caminho, custo_acumulado)
 entrada = (176, next(ordem), "Fagaras", ["Arad", "Sibiu", "Fagaras"], 239)</code></pre>
 <p>O contador é exclusivo de cada busca. O caminho permite devolver a rota encontrada; o custo registra sua distância. A prioridade decide quem sai primeiro. O símbolo <code>_</code> na retirada indica que não usaremos mais o valor do contador.</p></div></section>
-<section class="section" id="gulosa"><div class="container"><div class="section-heading"><h2>4. Busca gulosa: escolher pelo menor h</h2></div><p>A gulosa escolhe, entre <strong>todas as alternativas na fronteira</strong>, a que parece mais perto do objetivo. Ela registra o custo para informar o resultado, mas não o usa na prioridade.</p>
+<section class="section" id="gulosa"><div class="container"><div class="section-heading"><p class="eyebrow">Busca gulosa</p><h2>Busca gulosa: escolher pelo menor h</h2></div><p>A gulosa escolhe, entre <strong>todas as alternativas na fronteira</strong>, a que parece mais perto do objetivo. Ela registra o custo para informar o resultado, mas não o usa na prioridade.</p>
 <ol><li>Inserir o estado inicial com prioridade h.</li><li>Retirar o menor h e ignorar estados já explorados.</li><li>Testar o objetivo.</li><li>Gerar e inserir sucessores; repetir até encontrar o objetivo ou esvaziar a fronteira.</li></ol>
 <pre class="code-block"><code>from heapq import heappush, heappop
 from itertools import count
@@ -321,7 +239,7 @@ def busca_gulosa(estado_inicial, objetivo_atingido, sucessores, heuristica):
 </code></pre>
 <article class="card guided-exercise"><h3>Prática guiada</h3><p>Identifique no código: onde a prioridade é calculada, onde o caminho cresce e onde evitamos expandir novamente uma cidade. Por que guardar o custo não garante uma rota barata?</p><details><summary>Conferir o raciocínio</summary><p>A prioridade vem de <code>heuristica(sucessor)</code>; o caminho cresce em <code>caminho + [sucessor]</code>; <code>visitados</code> impede expansões repetidas. O custo é somado, mas não participa da escolha da próxima entrada.</p></details></article>
 <p><strong>Previsão:</strong> depois de Sibiu, Fagaras tem h=176 e Rimnicu Vilcea tem h=193. A gulosa escolhe Fagaras. Ao gerar Bucharest com h=0, ela o retira em seguida e retorna uma rota de 450 km.</p></div></section>
-<section class="section" id="astar"><div class="container"><div class="section-heading"><h2>5. A*: combinar custo e estimativa</h2></div><p><strong>g</strong> é o custo do caminho encontrado até a cidade; <strong>h</strong> estima o que falta; <strong>f=g+h</strong> estima o total por essa alternativa. g depende do caminho: não é um valor fixo da cidade.</p>
+<section class="section" id="astar"><div class="container"><div class="section-heading"><p class="eyebrow">Algoritmo A*</p><h2>A*: combinar custo e estimativa</h2></div><p><strong>g</strong> é o custo do caminho encontrado até a cidade; <strong>h</strong> estima o que falta; <strong>f=g+h</strong> estima o total por essa alternativa. g depende do caminho: não é um valor fixo da cidade.</p>
 <div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Alternativa após Sibiu</th><th scope="col">g: desde Arad</th><th scope="col">h: até Bucharest</th><th scope="col">f=g+h</th></tr></thead><tbody><tr><td>Fagaras</td><td>140 + 99 = 239</td><td>176</td><td>415</td></tr><tr><td>Rimnicu Vilcea</td><td>140 + 80 = 220</td><td>193</td><td>413</td></tr></tbody></table></div>
 <article class="card guided-exercise"><h3>Prática guiada</h3><p>Qual alternativa o A* retira primeiro? Por que sua escolha difere da gulosa?</p><details><summary>Conferir o raciocínio</summary><p>Rimnicu Vilcea tem o menor f: 413. Fagaras tem o menor h, mas chegar até ela já custou mais. A* compara o total estimado.</p></details></article>
 <h3>Implementação completa</h3><p>Reutilize as importações de <code>heapq</code> e <code>count</code> do bloco anterior. O dicionário <code>melhor_g</code> guarda o menor custo encontrado até cada estado. Quando uma nova rota melhora esse valor, inserimos outra entrada na fronteira, mesmo que a cidade já tenha sido explorada.</p>
@@ -371,13 +289,13 @@ def busca_gulosa(estado_inicial, objetivo_atingido, sucessores, heuristica):
     print(nome, caminho, custo)
 </code></pre>
 <p>Resultados: gulosa — Arad → Sibiu → Fagaras → Bucharest, <strong>450 km</strong>; A* — Arad → Sibiu → Rimnicu Vilcea → Pitesti → Bucharest, <strong>418 km</strong>.</p></div></section>
-<section class="section" id="simulador"><div class="container"><div class="section-heading"><h2>6. Prever, executar e explicar</h2></div><p>Use a execução guiada abaixo para acompanhar o mesmo mapa. Antes de avançar cada painel, escolha o próximo estado e justifique com h ou f. Os passos são uma sequência preparada para Arad → Bucharest; o código Python acima executa a busca sobre o mapa completo.</p>
+<section class="section" id="simulador"><div class="container"><div class="section-heading"><p class="eyebrow">Experimento comparativo</p><h2>Prever, executar e explicar</h2></div><p>Use a execução guiada abaixo para acompanhar o mesmo mapa. Antes de avançar cada painel, escolha o próximo estado e justifique com h ou f. Os passos são uma sequência preparada para Arad → Bucharest; o código Python acima executa a busca sobre o mapa completo.</p>
 <div data-guided-search hidden></div>
 <article class="card guided-exercise"><h3>Prática guiada</h3><ol><li>Após expandir Sibiu, quem cada estratégia escolhe?</li><li>No A*, após expandir Rimnicu Vilcea, por que Fagaras sai antes de Pitesti?</li><li>Quando Bucharest entra com custo 450, por que a busca continua?</li><li>A ordem das cidades exploradas é igual ao caminho devolvido?</li></ol><details><summary>Conferir o raciocínio</summary><ol><li>Gulosa: Fagaras (h=176). A*: Rimnicu Vilcea (f=413).</li><li>Fagaras continua na fronteira com f=415, menor que f=417 de Pitesti. A escolha considera toda a fronteira.</li><li>Pitesti tem f=417 e sai antes de Bucharest. O objetivo só encerra a busca quando é retirado como a próxima alternativa válida.</li><li>Não. A* explora Fagaras, mas a rota final de 418 km passa por Rimnicu Vilcea e Pitesti.</li></ol></details></article></div></section>
-<section class="section" id="admissibilidade"><div class="container"><div class="section-heading"><h2>7. Admissibilidade: não superestimar</h2></div><p>Uma heurística é <strong>admissível</strong> quando não ultrapassa o custo do melhor caminho restante em nenhum estado: <strong>h(n) ≤ h*(n)</strong>. O símbolo h* representa esse melhor custo real. Ele serve para analisar a heurística; não precisa ser conhecido pelo algoritmo durante a busca.</p><p>Uma estimativa pode ficar abaixo do custo real ou ser igual a ele. No mapa, a distância em linha reta é um limite inferior à distância por estradas. Estamos comparando quilômetros com quilômetros.</p>
+<section class="section" id="admissibilidade"><div class="container"><div class="section-heading"><p class="eyebrow">Admissibilidade</p><h2>Admissibilidade: não superestimar</h2></div><p>Uma heurística é <strong>admissível</strong> quando não ultrapassa o custo do melhor caminho restante em nenhum estado: <strong>h(n) ≤ h*(n)</strong>. O símbolo h* representa esse melhor custo real. Ele serve para analisar a heurística; não precisa ser conhecido pelo algoritmo durante a busca.</p><p>Uma estimativa pode ficar abaixo do custo real ou ser igual a ele. No mapa, a distância em linha reta é um limite inferior à distância por estradas. Estamos comparando quilômetros com quilômetros.</p>
 <article class="card guided-exercise"><h3>Prática guiada</h3><div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Caso</th><th scope="col">h proposto</th><th scope="col">Melhor custo restante</th><th scope="col">Respeita a condição?</th></tr></thead><tbody><tr><td>Fagaras</td><td>176</td><td>211</td><td>?</td></tr><tr><td>Fagaras</td><td>211</td><td>211</td><td>?</td></tr><tr><td>Fagaras</td><td>250</td><td>211</td><td>?</td></tr><tr><td>Pitesti</td><td>100</td><td>101</td><td>?</td></tr><tr><td>Bucharest</td><td>10</td><td>0</td><td>?</td></tr></tbody></table></div><p>Classifique cada linha e explique. Verificar somente Fagaras basta para declarar toda a heurística admissível?</p><details><summary>Conferir o raciocínio</summary><p>As respostas são: sim, sim, não, sim, não. Precisamos respeitar a condição em todos os estados. Para as heurísticas não negativas usadas aqui, h no objetivo deve ser zero.</p></details></article>
 <h3>O que isso garante para o A*?</h3><p>Neste grafo finito, com custos positivos, h não negativa e admissível, h(objetivo)=0 e a implementação que aceita melhorias e reabre estados, A* encontra uma solução de menor custo. Testar o objetivo ao retirá-lo da fronteira faz parte dessa implementação.</p><p>Se h superestima, uma rota boa pode receber prioridade artificialmente alta e a garantia de menor custo deixa de valer. Isso não significa que toda execução retornará uma solução ruim. A gulosa, por usar apenas h, não ganha garantia de menor custo só porque a heurística é admissível.</p><p class="note-banner">Admissível não significa precisa. h=0 em todos os estados é admissível neste problema; nesse caso, A* passa a ordenar somente por g, como a busca de custo uniforme. Uma estimativa pouco informativa pode exigir mais exploração.</p></div></section>
-<section class="section" id="fechamento"><div class="container"><div class="section-heading"><h2>Síntese e verificação</h2></div><div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Estratégia</th><th scope="col">Quem sai primeiro?</th></tr></thead><tbody><tr><td>BFS</td><td>A entrada mais antiga da fila.</td></tr><tr><td>DFS</td><td>A entrada mais recente da pilha.</td></tr><tr><td>Gulosa</td><td>A entrada com menor h.</td></tr><tr><td>A*</td><td>A entrada com menor g+h.</td></tr></tbody></table></div><p>Antes de encerrar, explique: o que é um estado neste mapa; como obter seus sucessores; por que g e h são diferentes; por que o A* guarda <code>melhor_g</code>; e o que torna uma heurística admissível.</p><p>Para estudar o código: execute o modelo, a implementação da gulosa, a implementação do A* e o bloco de comparação, nessa ordem.</p></div></section>    <section class="section" id="referencias">
+<section class="section" id="fechamento"><div class="container"><div class="section-heading"><p class="eyebrow">Fechamento</p><h2>Síntese e verificação</h2></div><div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Estratégia</th><th scope="col">Quem sai primeiro?</th></tr></thead><tbody><tr><td>BFS</td><td>A entrada mais antiga da fila.</td></tr><tr><td>DFS</td><td>A entrada mais recente da pilha.</td></tr><tr><td>Gulosa</td><td>A entrada com menor h.</td></tr><tr><td>A*</td><td>A entrada com menor g+h.</td></tr></tbody></table></div><p>Antes de encerrar, explique: o que é um estado neste mapa; como obter seus sucessores; por que g e h são diferentes; por que o A* guarda <code>melhor_g</code>; e o que torna uma heurística admissível.</p><p>Para estudar o código: execute o modelo, a implementação da gulosa, a implementação do A* e o bloco de comparação, nessa ordem.</p></div></section>    <section class="section" id="referencias">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Referências</p>
@@ -390,7 +308,7 @@ def busca_gulosa(estado_inicial, objetivo_atingido, sucessores, heuristica):
         </div>
       </div>
     </section>
-</main><aside class="lesson-toc" aria-label="Índice desta aula"><div class="lesson-toc-head"><span class="lesson-toc-label">Nesta aula</span><button class="lesson-toc-toggle" type="button" aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#visao">Percurso da aula</a><a href="#modelagem">1. Do mapa ao modelo</a><a href="#heuristica">2. Uma estimativa do que falta</a><a href="#estrutura-fronteira">3. Da fila à fila de prioridade</a><a href="#gulosa">4. Busca gulosa: escolher pelo menor h</a><a href="#astar">5. A*: combinar custo e estimativa</a><a href="#simulador">6. Prever, executar e explicar</a><a href="#admissibilidade">7. Admissibilidade: não superestimar</a><a href="#fechamento">Síntese e verificação</a><a href="#referencias">Referências</a></nav><span class="lesson-toc-current" aria-hidden="true"></span></aside></div>  <footer class="site-footer">
+</main><aside class="lesson-toc" aria-label="Índice desta aula"><div class="lesson-toc-head"><span class="lesson-toc-label">Nesta aula</span><button class="lesson-toc-toggle" type="button" aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#visao">O que vamos desenvolver</a><a href="#modelagem">1. Do mapa ao modelo</a><a href="#heuristica">2. Uma estimativa do que falta</a><a href="#estrutura-fronteira">3. Da fila à fila de prioridade</a><a href="#gulosa">4. Busca gulosa: escolher pelo menor h</a><a href="#astar">5. A*: combinar custo e estimativa</a><a href="#simulador">6. Prever, executar e explicar</a><a href="#admissibilidade">7. Admissibilidade: não superestimar</a><a href="#fechamento">Síntese e verificação</a><a href="#referencias">Referências</a></nav><span class="lesson-toc-current" aria-hidden="true"></span></aside></div>  <footer class="site-footer">
     <div class="container footer-grid">
       <div><strong>Inteligência Artificial Aplicada</strong><p>Engenharia de Software · Aula 05</p></div>
       <div class="study-actions">
