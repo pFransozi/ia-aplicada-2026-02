@@ -3,139 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Portal da disciplina Inteligência Artificial Aplicada — Engenharia de Software, 6º período, 2026/2.">
-  <title>IA Aplicada — Página principal</title>
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="script.js"></script>
+  <meta name="description" content="Materiais da disciplina Inteligência Artificial Aplicada — Engenharia de Software, 2026/2.">
+  <title>Inteligência Artificial Aplicada — 2026/2</title>
+  <script src="theme-init.js"></script>
+  <link rel="stylesheet" href="course-layout.css">
 </head>
-<body class="portal-page">
+<body>
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
-
   <header class="site-header" id="inicio">
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html" aria-label="IA Aplicada — página principal">
-        <span class="brand-mark" aria-hidden="true">IA</span>
-        <span><strong>IA Aplicada</strong><small>Engenharia de Software</small></span>
-      </a>
-      <nav class="main-nav portal-nav" aria-label="Navegação principal">
-        <a href="curso.html">Visão geral</a>
-        <a href="aula-02.html">Aula 02</a>
-        <a href="aula-03.html">Aula 03</a>
-        <a href="aula-04.html">Aula 04</a>
-        <a class="nav-highlight" href="aula-05.html">Aula 05</a>
-        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
-          <span class="theme-icon" aria-hidden="true">☾</span>
-          <span class="theme-text">Modo noturno</span>
-        </button>
-      </nav>
+    <div class="shell nav">
+      <a class="brand" href="index.html">IA Aplicada</a>
+      <div class="header-tools">
+        <a class="home-link" href="curso.html">Visão geral do curso</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Alternar tema">◐</button>
+      </div>
     </div>
   </header>
 
-  <main id="conteudo">
-    <section class="portal-hero section-pad">
-      <div class="container portal-hero-grid">
-        <div>
-          <p class="eyebrow">Engenharia de Software · 6º período · 2026/2</p>
-          <h1>Inteligência Artificial Aplicada</h1>
-        </div>
-        <div class="portal-symbol" aria-hidden="true">
-          <span class="portal-symbol-core">IA</span>
-          <span class="symbol-dot dot-1"></span><span class="symbol-dot dot-2"></span><span class="symbol-dot dot-3"></span><span class="symbol-dot dot-4"></span>
-        </div>
+  <main class="shell portal-main" id="conteudo">
+    <div class="portal-intro">
+      <div>
+        <p class="course-kicker">Engenharia de Software · 6º período · 2026/2</p>
+        <h1>Inteligência Artificial Aplicada</h1>
+        <p class="lead">Materiais para formular problemas, comparar técnicas de inteligência artificial e construir soluções sustentadas por experimentos.</p>
+        <div class="quick-links"><a href="curso.html">Conhecer a disciplina →</a><a href="#aulas">Ver aulas ↓</a></div>
       </div>
-    </section>
+      <div class="portal-note">
+        <p><strong>O percurso até aqui</strong></p>
+        <p>Partimos dos fundamentos da IA, aprendemos a representar problemas e avançamos para estratégias de busca sem e com informação heurística.</p>
+      </div>
+    </div>
 
-    <section class="section-pad section-soft" aria-labelledby="materiais-title">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Materiais disponíveis</p>
-          <h2 id="materiais-title">Por onde começar</h2>
-        </div>
-
-        <div class="portal-card-grid">
-          <article class="portal-card portal-card-course">
-            <div class="portal-card-topline"><span>01</span><span>Visão do semestre</span></div>
-            <h3>Visão geral do curso</h3>
-            <p>Conheça o percurso da disciplina, os blocos de conteúdo, as avaliações, o trabalho geral e o protocolo IA-First.</p>
-            <ul class="portal-card-list">
-              <li>Percurso completo</li>
-              <li>Mapa dos conteúdos</li>
-              <li>Avaliações e desafio</li>
-            </ul>
-            <a class="button button-primary" href="curso.html">Abrir visão geral</a>
-          </article>
-
-          <article class="portal-card portal-card-lesson">
-            <div class="portal-card-topline"><span>02</span><span>Primeiro encontro efetivo</span></div>
-            <h3>Aula 02 — O que é IA?</h3>
-            <p>Fundamentos e evolução, agentes inteligentes, tipos de problemas, aplicações, limites e uso crítico de IA generativa.</p>
-            <ul class="portal-card-list">
-              <li>Percurso investigativo</li>
-              <li>Pesquisas orientadas</li>
-              <li>Material ampliado para estudo</li>
-            </ul>
-            <div class="hero-actions">
-              <a class="button button-primary" href="aula-02.html">Abrir Aula 02</a>
-              <a class="button button-secondary" href="aula-02-aprofundamento.html">Material de aprofundamento</a>
-            </div>
-          </article>
-
-          <article class="portal-card portal-card-lesson">
-            <div class="portal-card-topline"><span>03</span><span>Formulação de problemas</span></div>
-            <h3>Aula 03 — Do problema ao espaço de estados</h3>
-            <p>Abstração, estados, ações, objetivos, restrições, critérios de sucesso e representação computacional de problemas de IA.</p>
-            <ul class="portal-card-list">
-              <li>Formulação e abstração</li>
-              <li>Primeira representação em Python</li>
-              <li>Espaço de estados e preparação para busca</li>
-              <li>Aprofundamento teórico da formulação</li>
-            </ul>
-            <div class="hero-actions">
-              <a class="button button-primary" href="aula-03.html">Abrir Aula 03</a>
-              <a class="button button-secondary" href="aula-03-aprofundamento.html">Material de aprofundamento</a>
-            </div>
-          </article>
-
-          <article class="portal-card portal-card-lesson">
-            <div class="portal-card-topline"><span>04</span><span>Busca não informada</span></div>
-            <h3>Aula 04 — BFS e DFS</h3>
-            <p>Fronteira, expansão de estados, busca em largura, busca em profundidade e comparação experimental das estratégias de exploração.</p>
-            <ul class="portal-card-list">
-              <li>Apresentação curta dos algoritmos</li>
-              <li>Simulador interativo BFS × DFS</li>
-              <li>Laboratório e investigação em Python</li>
-              <li>Aprofundamento sobre garantias e complexidade</li>
-            </ul>
-            <div class="hero-actions">
-              <a class="button button-primary" href="aula-04.html">Abrir Aula 04</a>
-              <a class="button button-secondary" href="aula-04-aprofundamento.html">Material de aprofundamento</a>
-            </div>
-          </article>
-
-          <article class="portal-card portal-card-lesson">
-            <div class="portal-card-topline"><span>05</span><span>Busca informada</span></div>
-            <h3>Aula 05 — Heurísticas, Greedy e A*</h3>
-            <p>Função heurística, custo acumulado, busca gulosa, A*, admissibilidade e comparação experimental de estratégias.</p>
-            <ul class="portal-card-list">
-              <li>Construção e avaliação de heurísticas</li>
-              <li>Greedy Best-First Search</li>
-              <li>A* com g(n) + h(n)</li>
-              <li>Simulador comparativo e admissibilidade</li>
-            </ul>
-            <div class="hero-actions">
-              <a class="button button-primary" href="aula-05.html">Abrir Aula 05</a>
-            </div>
-          </article>
-        </div>
+    <section class="portal-section" id="aulas" aria-labelledby="aulas-title">
+      <div class="portal-section-head">
+        <div><p class="course-kicker">Materiais publicados</p><h2 id="aulas-title">Aulas e aprofundamentos</h2></div>
+        <p>Os materiais estão organizados na ordem em que os conceitos são trabalhados.</p>
+      </div>
+      <div class="lesson-list">
+        <a class="lesson" href="curso.html"><span class="lesson-number">01</span><div><span class="lesson-title">Visão geral do curso</span><small>Percurso, conteúdos, avaliação, trabalho geral e protocolo IA-First.</small></div><span class="lesson-actions">Abrir →</span></a>
+        <div class="lesson"><span class="lesson-number">02</span><div><span class="lesson-title">O que realmente é Inteligência Artificial?</span><small>Fundamentos, agentes inteligentes, aplicações, limites e uso crítico de IA generativa.</small></div><span class="lesson-actions"><a href="aula-02.html">Aula</a><a href="aula-02-aprofundamento.html">Aprofundamento</a></span></div>
+        <div class="lesson"><span class="lesson-number">03</span><div><span class="lesson-title">Do problema ao espaço de estados</span><small>Abstração, estados, ações, objetivos, restrições e representação computacional.</small></div><span class="lesson-actions"><a href="aula-03.html">Aula</a><a href="aula-03-aprofundamento.html">Aprofundamento</a></span></div>
+        <div class="lesson"><span class="lesson-number">04</span><div><span class="lesson-title">Busca não informada — BFS e DFS</span><small>Fronteira, expansão de estados e comparação das estratégias de exploração.</small></div><span class="lesson-actions"><a href="aula-04.html">Aula</a><a href="aula-04-aprofundamento.html">Aprofundamento</a></span></div>
+        <a class="lesson" href="aula-05.html"><span class="lesson-number">05</span><div><span class="lesson-title">Busca informada — heurísticas, Greedy e A*</span><small>Custo acumulado, função heurística, admissibilidade e comparação experimental.</small></div><span class="lesson-actions">Abrir →</span></a>
       </div>
     </section>
   </main>
-
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div><strong>Inteligência Artificial Aplicada</strong><p>Engenharia de Software · 2026/2</p></div>
-      <a href="#inicio">Voltar ao início ↑</a>
-    </div>
-  </footer>
+  <footer><div class="shell">Inteligência Artificial Aplicada · Engenharia de Software · 2026/2</div></footer>
+  <script src="course-layout.js"></script>
 </body>
 </html>
