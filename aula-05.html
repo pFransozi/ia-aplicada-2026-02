@@ -184,25 +184,78 @@ def heuristica(estado):
     return estimativas[estado]
 </code></pre>
 <p>Os algoritmos receberão essas funções. O destino desta tabela é Bucharest: mudar o destino exige rever a heurística.</p></div></section>
-<section class="section" id="estrutura-fronteira"><div class="container"><div class="section-heading"><p class="eyebrow">Estrutura da fronteira</p><h2>Da fila à fila de prioridade</h2></div><p>BFS retira o mais antigo da fila; DFS retira o mais recente da pilha. Busca gulosa e A* retiram a entrada com <strong>menor prioridade numérica</strong>.</p><p>O módulo <code>heapq</code> usa uma lista como heap mínimo: <code>heappush</code> insere preservando essa organização; <code>heappop</code> retira o menor item. A lista inteira <strong>não fica ordenada</strong>. Inserir e retirar custam O(log n); consultar o menor em <code>fronteira[0]</code> custa O(1), para n entradas.</p>
+<section class="section" id="estrutura-fronteira"><div class="container">
+<div class="section-heading"><p class="eyebrow">Estrutura da fronteira</p><h2>Da fila à fila de prioridade</h2><p>A fronteira guarda alternativas que já encontramos e que ainda estão disponíveis para explorar. A cada passo, precisamos escolher qual delas retirar.</p></div>
+<h3>1. O que muda em relação a BFS e DFS?</h3>
+<p>Imagine três entradas inseridas nesta ordem: <strong>Rimnicu Vilcea</strong>, <strong>Fagaras</strong> e <strong>Sibiu</strong>. Aqui vamos apenas experimentar a estrutura de dados com cidades do mapa, sem representar uma etapa específica da busca.</p>
+<div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Organização</th><th>Regra de retirada</th><th>Primeira cidade retirada</th></tr></thead><tbody>
+<tr><td>Fila — BFS</td><td>A primeira que entrou.</td><td>Rimnicu Vilcea.</td></tr>
+<tr><td>Pilha — DFS</td><td>A última que entrou.</td><td>Sibiu.</td></tr>
+<tr><td>Fila de prioridade — usando h</td><td>A que tem o menor valor: 193, 176 ou 253.</td><td>Fagaras, com 176.</td></tr>
+</tbody></table></div>
+<p class="note-banner"><strong>Menor número = atendimento primeiro.</strong> Na busca gulosa, esse número é h. No A*, será g + h. A estrutura guarda as entradas; o algoritmo define como calcular sua prioridade.</p>
+<h3>2. Como guardar uma prioridade junto da cidade?</h3>
+<p>Usamos uma tupla com dois valores. O primeiro serve para comparar; o segundo identifica a cidade.</p>
+<pre class="code-block"><code>entrada = (176, "Fagaras")
+#           ↑       ↑
+#       prioridade  estado</code></pre>
+<p>Essa tupla é uma <strong>entrada da fronteira</strong>. No mapa, a tupla <code>("Fagaras", 99)</code> tem outro papel: descreve um sucessor de Sibiu e o custo da estrada. Cada estrutura guarda informações para uma finalidade diferente.</p>
+<h3>3. Inserir e retirar com heapq</h3>
+<p>O Python oferece o módulo <code>heapq</code> para organizar uma lista como um <strong>heap mínimo</strong>: uma estrutura que mantém o menor item na primeira posição. Usaremos duas operações:</p>
+<ul><li><code>heappush(fronteira, entrada)</code>: insere uma entrada e ajusta o heap.</li><li><code>heappop(fronteira)</code>: retira e devolve a menor entrada, ajustando o que restou.</li></ul>
 <pre class="code-block"><code>from heapq import heappush, heappop
 
+# Começamos com a fronteira vazia.
 fronteira = []
+
+# Inserimos cada cidade com sua prioridade.
 heappush(fronteira, (193, "Rimnicu Vilcea"))
 heappush(fronteira, (176, "Fagaras"))
 heappush(fronteira, (253, "Sibiu"))
 
-prioridade, estado = heappop(fronteira)
-print(prioridade, estado)  # 176 Fagaras</code></pre>
-<article class="card guided-exercise"><h3>Prática guiada</h3><p>Após essa retirada, qual cidade sai na próxima chamada de <code>heappop</code>? Se usássemos uma fila comum, qual teria saído primeiro?</p></article>
-<h3>Tuplas e desempate</h3><p>Python compara tuplas da esquerda para a direita. Se as prioridades empatarem no exemplo acima, comparará os nomes das cidades. Para desempatar pela ordem de inserção e evitar comparar estados que não tenham uma ordem definida, usamos um contador.</p>
+# Retiramos a entrada de menor prioridade.
+entrada = heappop(fronteira)
+print(entrada)  # (176, "Fagaras")
+
+# Separamos os dois valores da tupla.
+prioridade, estado = entrada
+print(prioridade)  # 176
+print(estado)      # Fagaras</code></pre>
+<p>Fagaras saiu porque tem o menor número, mesmo tendo entrado depois de Rimnicu Vilcea. As outras entradas continuam disponíveis na fronteira.</p>
+<p><strong>Consultar não é retirar:</strong> <code>fronteira[0]</code> mostra o menor item sem removê-lo. Já <code>heappop</code> o remove. Não use <code>pop()</code> para escolher o menor: ele retira o último elemento da lista.</p>
+<p>O heap <strong>não mantém a lista inteira ordenada</strong>. Ele mantém uma organização suficiente para acessar e retirar o menor. Para exibir as entradas em ordem, podemos usar <code>sorted(fronteira)</code>, que cria uma lista ordenada para consulta.</p>
+<article class="card guided-exercise"><h3>Prática guiada</h3><ol><li>Depois da retirada de Fagaras, qual cidade sairá na próxima chamada de <code>heappop</code>?</li><li>Antes dessa próxima retirada, insira <code>(100, "Pitesti")</code>. Quem deve sair agora? Justifique.</li><li>Escreva uma instrução para consultar o menor item sem removê-lo.</li></ol></article>
+<h3>4. E quando duas prioridades empatam?</h3>
+<p>Python compara tuplas da esquerda para a direita. Em <code>(prioridade, cidade)</code>, se os números empatarem, ele comparará os nomes. Para usar a ordem de chegada como desempate, acrescentamos um contador antes da cidade.</p>
 <pre class="code-block"><code>from itertools import count
 
-ordem = count()  # Produz 0, 1, 2, ...
-# Formato usado nas implementações:
-# (prioridade, ordem, estado, caminho, custo_acumulado)
-entrada = (176, next(ordem), "Fagaras", ["Arad", "Sibiu", "Fagaras"], 239)</code></pre>
-<p>O contador é exclusivo de cada busca. O caminho permite devolver a rota encontrada; o custo registra sua distância. A prioridade decide quem sai primeiro. O símbolo <code>_</code> na retirada indica que não usaremos mais o valor do contador.</p></div></section>
+ordem = count()
+print(next(ordem))  # 0
+print(next(ordem))  # 1
+print(next(ordem))  # 2</code></pre>
+<p>Cada chamada de <code>next(ordem)</code> fornece um novo número. Nas buscas, criamos um contador novo e chamamos <code>next</code> uma vez por inserção. Assim, uma entrada mais antiga vence um empate de prioridade. Como esse número é único, Python não precisa comparar os estados nem os caminhos.</p>
+<h3>5. O que as implementações precisam guardar?</h3>
+<p>Além de escolher uma cidade, queremos devolver o caminho e seu custo. Por isso, as entradas dos algoritmos terão cinco campos:</p>
+<pre class="code-block"><code># (prioridade, ordem, estado, caminho, custo_acumulado)
+entrada = (
+    176,
+    0,
+    "Fagaras",
+    ["Arad", "Sibiu", "Fagaras"],
+    239
+)</code></pre>
+<div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Campo</th><th>Para que serve?</th></tr></thead><tbody>
+<tr><td>Prioridade: 176</td><td>Decide qual entrada retirar. Neste exemplo da gulosa, é h(Fagaras).</td></tr>
+<tr><td>Ordem: 0</td><td>Desempata prioridades iguais pela ordem de inserção.</td></tr>
+<tr><td>Estado: Fagaras</td><td>Identifica a cidade que será examinada.</td></tr>
+<tr><td>Caminho: Arad → Sibiu → Fagaras</td><td>Registra a rota encontrada até essa cidade.</td></tr>
+<tr><td>Custo acumulado: 239</td><td>Soma as estradas do caminho: 140 + 99.</td></tr>
+</tbody></table></div>
+<p>Na retirada, separamos esses campos em variáveis. O <code>_</code> recebe a ordem de inserção, que já cumpriu seu papel no desempate:</p>
+<pre class="code-block"><code>prioridade, _, estado, caminho, custo = heappop(fronteira)</code></pre>
+<p>Essa linha será usada dentro dos algoritmos, quando a fronteira contiver entradas com cinco campos. O primeiro exemplo desta seção usava apenas dois campos para apresentar as operações.</p>
+<p><strong>Custo das operações:</strong> com n entradas, inserir ou retirar custa O(log n), e consultar o menor custa O(1). Isso permite selecionar o próximo item sem ordenar toda a fronteira a cada passo.</p>
+</div></section>
 <section class="section" id="gulosa"><div class="container"><div class="section-heading"><p class="eyebrow">Busca gulosa</p><h2>Busca gulosa: escolher pelo menor h</h2></div><p>A gulosa escolhe, entre <strong>todas as alternativas na fronteira</strong>, a que parece mais perto do objetivo. Ela registra o custo para informar o resultado, mas não o usa na prioridade.</p>
 <ol><li>Inserir o estado inicial com prioridade h.</li><li>Retirar o menor h e ignorar estados já explorados.</li><li>Testar o objetivo.</li><li>Gerar e inserir sucessores; repetir até encontrar o objetivo ou esvaziar a fronteira.</li></ol>
 <pre class="code-block"><code>from heapq import heappush, heappop
