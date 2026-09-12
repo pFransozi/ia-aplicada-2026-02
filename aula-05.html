@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <script src="theme-init.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Aula 05 de Inteligência Artificial Aplicada: busca informada, função heurística, busca greedy, custo acumulado, algoritmo A*, admissibilidade e comparação de estratégias.">
@@ -79,9 +78,10 @@ body.lesson-five.theme-dark img[src="assets/mapa-romenia-russell-norvig-fig-3-1.
 }
 .lesson-five .route-cost { position:absolute; transform:translate(-50%,-50%); z-index:3; padding:2px 5px; border:1px solid var(--line); border-radius:4px; background:var(--paper); color:var(--ink); font-size:12px; font-weight:650; line-height:1.2; pointer-events:none; }
 </style>
-  <link rel="stylesheet" href="lesson-standard.css">
+  <script src="https://pfransozi.github.io/assets/js/ensino.js?v=1"></script>
+  <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=1">
 </head>
-<body class="lesson-page lesson-standard lesson-five">
+<body class="teaching-page teaching-lesson lesson-page  lesson-five">
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
   <div class="progress" id="progress" aria-hidden="true"></div>
 
@@ -408,24 +408,6 @@ def busca_greedy(estado_inicial, objetivo_atingido, sucessores, heuristica):
 <p>Assim, a linha reta funciona como um <strong>limite inferior</strong>: ela pode dizer 176 km quando a estrada exige 211 km, mas não deveria dizer 250 km para um percurso que pode ser feito em 211 km.</p>
 <p class="note-banner"><strong>Não confunda:</strong> h(n) não informa o custo da estrada seguinte e não informa o custo exato da rota. Ela apenas estima quanto ainda falta até o objetivo.</p>
 
-<h3>5. Por que superestimar pode atrapalhar o A*?</h3>
-<p>O A* escolhe pela soma <strong>f(n) = g(n) + h(n)</strong>. Portanto, se h(n) for artificialmente alta, uma rota que na realidade é boa pode receber um f(n) alto e parecer pior do que deveria.</p>
-<p>No nosso exemplo, Rimnicu Vilcea aparece com <strong>g=220</strong> e <strong>h=193</strong>, então <strong>f=413</strong>. Se inventássemos uma heurística exagerada de 260, essa mesma alternativa passaria a ter <strong>f=480</strong>. O caminho não ficou mais caro; apenas a estimativa o fez parecer pior.</p>
-<p>É exatamente esse tipo de distorção que a admissibilidade evita.</p>
-
-<h3>6. O que a admissibilidade permite afirmar sobre o A*?</h3>
-<p>Com uma heurística que não superestima, o A* pode usar a estimativa para orientar a exploração sem transformar uma rota promissora em uma alternativa artificialmente cara. Nas condições adotadas nesta aula, isso permite ao algoritmo devolver uma solução de <strong>menor custo</strong>.</p>
-<article class="card guided-exercise"><h3>Detalhe técnico — depois que a ideia estiver clara</h3><details><summary>Quais são as condições usadas nesta implementação?</summary><p>Estamos trabalhando com um grafo finito, custos positivos, h(n) não negativa e admissível, h(objetivo)=0, atualização de <code>melhor_g</code> quando uma rota mais barata é encontrada e reabertura do estado quando necessário. Além disso, o objetivo é aceito quando sua entrada válida é <strong>retirada</strong> da fronteira. Nessas condições, a implementação de A* usada na aula encontra uma solução de menor custo.</p></details></article>
-
-<article class="card guided-exercise"><h3>Prática guiada</h3><ol>
-<li>Em Fagaras, h=250 e h*=211. A heurística é admissível? Por quê?</li>
-<li>Em Bucharest, uma heurística informa h=10. Ela pode ser admissível?</li>
-<li>Verificar apenas Fagaras é suficiente para declarar <strong>toda</strong> a heurística admissível?</li>
-<li>Se definirmos h=0 para todas as cidades, a heurística é admissível? Ela ainda ajuda muito a orientar a busca?</li>
-</ol><details><summary>Confira depois de responder</summary><ol><li>Não. 250 &gt; 211, portanto há superestimação.</li><li>Não. No objetivo, h*=0; para ser admissível, h também precisa ser 0.</li><li>Não. A condição deve valer para todos os estados considerados.</li><li>Sim. Zero nunca superestima um custo restante não negativo, mas a heurística deixa de oferecer informação útil sobre qual estado parece mais próximo do objetivo.</li></ol></details></article>
-
-<p class="note-banner"><strong>Admissível não significa perfeita.</strong> Uma heurística pode ser admissível e pouco informativa. Também não transforma a busca Greedy em ótima: a Greedy continua escolhendo apenas por h e ignora o custo já percorrido g.</p>
-<p class="note-banner"><strong>Prática em Jupyter:</strong> use o notebook com um exemplo resolvido e dois exercícios para cada algoritmo. <a href="https://colab.research.google.com/github/pFransozi/ia-aplicada-2026-02/blob/main/aula-05-busca-informada-pratica.ipynb" target="_blank" rel="noopener">Abrir no Google Colab</a> · <a href="aula-05-busca-informada-pratica.ipynb">arquivo .ipynb</a>.</p>
 </div></section>
 <section class="section" id="fechamento"><div class="container"><div class="section-heading"><p class="eyebrow">Fechamento</p><h2>Síntese e verificação</h2></div><div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Estratégia</th><th scope="col">Quem sai primeiro?</th></tr></thead><tbody><tr><td>BFS</td><td>A entrada mais antiga da fila.</td></tr><tr><td>DFS</td><td>A entrada mais recente da pilha.</td></tr><tr><td>Greedy</td><td>A entrada com menor h.</td></tr><tr><td>A*</td><td>A entrada com menor g+h.</td></tr></tbody></table></div><p>Antes de encerrar, explique: o que é um estado neste mapa; como obter seus sucessores; por que g e h são diferentes; por que o A* guarda <code>melhor_g</code>; e o que torna uma heurística admissível.</p><p>Para estudar o código: execute o modelo, a implementação da greedy, a implementação do A* e o bloco de comparação, nessa ordem.</p></div></section>    <section class="section" id="referencias">
       <div class="container">
@@ -534,6 +516,5 @@ def busca_greedy(estado_inicial, objetivo_atingido, sucessores, heuristica):
 
   buildInteractiveComparisonLab();
 })();</script>
-<script defer src="lesson-standard.js"></script>
 </body>
 </html>

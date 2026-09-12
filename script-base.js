@@ -47,12 +47,13 @@ const applyTheme = (theme) => {
   }
 };
 
-const savedTheme = localStorage.getItem('ia-aplicada-theme');
-applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+const savedTheme = localStorage.getItem('theme');
+const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+applyTheme(savedTheme === 'dark' || (savedTheme !== 'light' && prefersDark) ? 'dark' : 'light');
 
 themeToggle?.addEventListener('click', () => {
   const nextTheme = document.body.classList.contains('theme-dark') ? 'light' : 'dark';
-  localStorage.setItem('ia-aplicada-theme', nextTheme);
+  localStorage.setItem('theme', nextTheme);
   applyTheme(nextTheme);
 });
 
