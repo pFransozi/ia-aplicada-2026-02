@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aula 07 de Inteligência Artificial Aplicada: incerteza, probabilidade condicional, Teorema de Bayes, evidências, atualização de crenças, independência e limites da inferência probabilística.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Aula 07 — Inteligência Artificial Aplicada</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="aula-04.css">
+  <script defer src="script.js"></script>
+  <style>
+    .lesson-seven .overview-grid { grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:start; }
+    .lesson-seven .competency-stack { display:grid; gap:16px; }
+    .lesson-seven .concept-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:1.4rem 0; }
+    .lesson-seven .concept-grid .card { margin:0; }
+    .lesson-seven .comparison-table { width:100%; border-collapse:collapse; font-size:.95rem; }
+    .lesson-seven .comparison-table th,.lesson-seven .comparison-table td { text-align:left; padding:.8rem 1rem; border-bottom:1px solid var(--line); vertical-align:top; }
+    .lesson-seven .comparison-table tr:last-child td { border-bottom:0; }
+    .lesson-seven .comparison-table-wrap { margin:1.2rem 0 1.5rem; overflow-x:auto; }
+    .lesson-seven .formula { margin:1rem 0; padding:1rem 1.1rem; border:1px solid var(--line); border-radius:8px; background:var(--soft); font-size:1.05rem; overflow-x:auto; }
+    .lesson-seven .formula strong { color:var(--blue); }
+    .lesson-seven .prob-flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:.75rem; align-items:center; margin:1.4rem 0; }
+    .lesson-seven .prob-flow > div { padding:1rem; border:1px solid var(--line); border-radius:8px; background:var(--paper); text-align:center; }
+    .lesson-seven .prob-flow .arrow { border:0; background:transparent; padding:0; color:var(--blue); font-weight:700; }
+    .lesson-seven .frequency-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:1.2rem 0; }
+    .lesson-seven .frequency-grid > div { padding:1rem; border:1px solid var(--line); border-radius:8px; background:var(--paper); }
+    .lesson-seven .frequency-grid strong,.lesson-seven .frequency-grid span { display:block; }
+    .lesson-seven .frequency-grid strong { font-size:1.2rem; color:var(--blue); }
+    .lesson-seven .guided-exercise { margin:1.5rem 0; }
+    .lesson-seven .guided-exercise h3 { margin-top:0; }
+    .lesson-seven .warning-card { border-left:3px solid var(--blue); padding:1rem 1.1rem; background:var(--soft); border-radius:0 8px 8px 0; margin:1rem 0; }
+    .lesson-seven .bayes-lab { display:grid; gap:16px; margin:1.5rem 0; }
+    .lesson-seven .bayes-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .lesson-seven .bayes-controls label { display:grid; gap:.35rem; font-size:.9rem; color:var(--muted); }
+    .lesson-seven .bayes-controls input { width:100%; padding:.7rem; border:1px solid var(--line); border-radius:7px; background:var(--paper); color:var(--ink); }
+    .lesson-seven .bayes-result { padding:1rem 1.1rem; border:1px solid var(--line); border-radius:8px; background:var(--soft); }
+    .lesson-seven .bayes-result strong { color:var(--blue); font-size:1.2rem; }
+    .lesson-seven .reference-card { border-top:1px solid var(--line); padding-top:1rem; }
+    @media(max-width:760px) {
+      .lesson-seven .overview-grid,.lesson-seven .concept-grid,.lesson-seven .frequency-grid,.lesson-seven .bayes-controls { grid-template-columns:1fr; }
+      .lesson-seven .prob-flow { grid-template-columns:1fr; }
+      .lesson-seven .prob-flow .arrow { transform:rotate(90deg); }
+    }
+  </style>
+  <script src="https://pfransozi.github.io/assets/js/ensino.js?v=6"></script>
+  <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=6">
+</head>
+<body class="teaching-page teaching-lesson lesson-page lesson-seven">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="IA Aplicada — página principal"><span class="brand-mark" aria-hidden="true">IA</span><span><strong>IA Aplicada</strong><small>Aula 07</small></span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal"><span class="sr-only">Abrir menu</span><span></span><span></span><span></span></button>
+      <nav id="menu-principal" class="main-nav" aria-label="Navegação da aula">
+        <a href="index.html">Página principal</a><a href="curso.html">Visão geral</a><a href="#transicao">Transição</a><a href="#condicional">Condicional</a><a href="#bayes">Bayes</a><a href="#atualizacao">Atualização</a><a href="#independencia">Independência</a><a href="#pratica">Prática</a><a href="#fechamento">Checklist</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-text">Modo noturno</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="lesson-shell lesson-page-grid"><main id="conteudo">
+    <section class="hero" id="inicio"><div class="container hero-grid"><div><p class="eyebrow">Aula 07 · Raciocínio sob incerteza</p><h1>Quando uma regra não é suficiente</h1><p class="hero-lead">Use evidências para atualizar a confiança em uma hipótese com probabilidade condicional e Teorema de Bayes.</p><div class="hero-actions"><a class="button button-primary" href="#transicao">Começar pela incerteza</a><a class="button button-secondary" href="#pratica">Ir para a prática</a></div></div><aside class="guiding-card"><span>Pergunta orientadora</span><blockquote>Se uma evidência torna uma hipótese mais provável, quanto nossa crença deve mudar?</blockquote></aside></div></section>
+
+    <section class="section section-soft" id="visao"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Visão da aula</p><h2>O que vamos desenvolver</h2><p>Esta aula reúne o conteúdo que antes estava separado em duas etapas: introdução ao raciocínio probabilístico e atualização de crenças com novas evidências.</p></div>
+      <div class="overview-grid">
+        <article class="card topics-card"><h3>Conteúdo programático</h3><div class="topic-list"><div>Incerteza em sistemas de IA</div><div>Probabilidade conjunta e condicional</div><div>Evidência, hipótese e probabilidade a priori</div><div>Teorema de Bayes</div><div>Probabilidade posterior e atualização de crenças</div><div>Independência e independência condicional</div><div>Informação incompleta e limites da inferência</div></div><div class="note-banner"><strong>Objetivo da aula:</strong> interpretar evidências probabilísticas, aplicar Bayes em um caso simples e reconhecer hipóteses e limites do modelo.</div></article>
+        <div class="competency-stack">
+          <article class="card competency"><h3>C2 — Aplicar procedimentos</h3><div class="skill"><strong>H6</strong><span>Aplicar raciocínio probabilístico na análise de situações com informação incompleta.</span></div></article>
+          <article class="card competency"><h3>C3 — Avaliar evidências</h3><div class="skill"><strong>H9/H10</strong><span>Identificar informações relevantes e analisar como hipóteses e evidências alteram uma decisão.</span></div></article>
+          <article class="card competency"><h3>C11 — Modelar e interpretar</h3><div class="skill"><strong>H38</strong><span>Implementar um cálculo simples de atualização e interpretar corretamente o resultado.</span></div></article>
+        </div>
+      </div>
+    </div></section>
+
+    <section class="section" id="transicao"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Da Aula 06 para a Aula 07</p><h2>Do verdadeiro ou falso para graus de crença</h2></div>
+      <p>Na aula anterior, representamos conhecimento por fatos e regras. Uma regra como <code>SE banco_indisponivel ENTÃO api_pode_falhar</code> produz uma conclusão quando sua condição é satisfeita.</p>
+      <p>No mundo real, porém, muitas evidências não determinam uma conclusão. Elas apenas tornam uma hipótese <strong>mais ou menos plausível</strong>.</p>
+      <div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Raciocínio por regras</th><th>Raciocínio sob incerteza</th></tr></thead><tbody><tr><td>“A condição foi satisfeita?”</td><td>“Quanto esta evidência muda minha confiança?”</td></tr><tr><td>Conclusão categórica</td><td>Conclusão probabilística</td></tr><tr><td>Verdadeiro / falso</td><td>Graus de crença</td></tr><tr><td>Fatos + regras</td><td>Hipóteses + evidências + probabilidades</td></tr></tbody></table></div>
+      <article class="card guided-exercise"><h3>Problema disparador</h3><p>Uma API apresenta <strong>timeout</strong>. Isso prova que o banco de dados está indisponível?</p><p><strong>Não.</strong> O timeout é uma evidência compatível com várias causas. Precisamos distinguir a hipótese que queremos avaliar da evidência observada.</p></article>
+      <div class="prob-flow"><div><strong>Hipótese</strong><br>incidente no banco</div><div class="arrow">→</div><div><strong>Evidência</strong><br>timeout da API</div><div class="arrow">→</div><div><strong>Atualização</strong><br>nova confiança na hipótese</div></div>
+      <p class="note-banner">Russell e Norvig destacam que os primeiros sistemas especialistas estritamente lógicos tiveram dificuldade em domínios do mundo real justamente porque muitas situações exigem tratamento explícito da incerteza.</p>
+    </div></section>
+
+    <section class="section section-soft" id="probabilidade"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Leitura probabilística</p><h2>Antes da fórmula: o que os números significam?</h2></div>
+      <div class="concept-grid">
+        <article class="card"><h3>Probabilidade a priori</h3><p>É a confiança na hipótese <strong>antes</strong> da nova evidência.</p><div class="formula"><code>P(H)</code></div><p>Exemplo: antes de observar o timeout, estimamos 10% de chance de haver um incidente no banco.</p></article>
+        <article class="card"><h3>Probabilidade condicional</h3><p>É a probabilidade de um evento quando já sabemos que outro ocorreu.</p><div class="formula"><code>P(E | H)</code></div><p>Exemplo: se houver incidente no banco, qual a chance de observar timeout?</p></article>
+      </div>
+      <p>O símbolo <code>|</code> pode ser lido como <strong>“dado que”</strong>. Assim, <code>P(E|H)</code> significa “probabilidade da evidência E, dado que a hipótese H é verdadeira”.</p>
+      <div class="warning-card"><strong>A ordem importa.</strong> <code>P(timeout | incidente)</code> não é a mesma coisa que <code>P(incidente | timeout)</code>. Essa inversão é uma das principais razões para usar o Teorema de Bayes.</div>
+      <h3>Probabilidade conjunta, sem aprofundar a álgebra</h3>
+      <p><code>P(H ∩ E)</code> representa a probabilidade de hipótese e evidência ocorrerem juntas. Pela regra do produto:</p>
+      <div class="formula"><code>P(H ∩ E) = P(E | H) × P(H)</code></div>
+      <p>Essa relação é a ponte para Bayes: podemos calcular a mesma ocorrência conjunta olhando a relação pelas duas direções.</p>
+    </div></section>
+
+    <section class="section" id="condicional"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Causa e diagnóstico</p><h2>O que sabemos nem sempre está na direção da pergunta</h2></div>
+      <p>Em muitos problemas, sabemos como uma causa produz um efeito, mas queremos raciocinar na direção contrária.</p>
+      <div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Conhecimento disponível</th><th>Pergunta que queremos responder</th></tr></thead><tbody><tr><td><code>P(timeout | incidente)</code></td><td><code>P(incidente | timeout)</code></td></tr><tr><td>“Se o banco falhar, com que frequência há timeout?”</td><td>“Dado um timeout, qual a chance de o banco ter falhado?”</td></tr></tbody></table></div>
+      <p>Russell e Norvig usam exatamente essa distinção entre <strong>P(efeito|causa)</strong> e <strong>P(causa|efeito)</strong>: a primeira segue a direção causal; a segunda é a direção típica do diagnóstico.</p>
+    </div></section>
+
+    <section class="section section-soft" id="bayes"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Teorema de Bayes</p><h2>Atualizar uma hipótese depois de observar uma evidência</h2></div>
+      <div class="formula"><strong>Bayes:</strong><br><code>P(H | E) = [P(E | H) × P(H)] / P(E)</code></div>
+      <p>Para o uso em sala, é mais prático escrever o denominador explicitamente para uma hipótese binária:</p>
+      <div class="formula"><code>P(H | E) = P(E|H)P(H) / [P(E|H)P(H) + P(E|¬H)P(¬H)]</code></div>
+      <p>Considere:</p>
+      <ul><li><code>P(H)=0,10</code>: 10% dos incidentes analisados envolvem indisponibilidade do banco;</li><li><code>P(E|H)=0,80</code>: quando o banco está indisponível, 80% dos casos apresentam timeout;</li><li><code>P(E|¬H)=0,20</code>: mesmo sem falha no banco, 20% dos casos apresentam timeout por outros motivos.</li></ul>
+      <div class="formula"><code>P(H|E) = (0,80 × 0,10) / [(0,80 × 0,10) + (0,20 × 0,90)] ≈ 0,308</code></div>
+      <p>Depois de observar o timeout, a confiança na hipótese de incidente no banco sobe de <strong>10%</strong> para aproximadamente <strong>30,8%</strong>.</p>
+      <div class="warning-card"><strong>Importante:</strong> a evidência aumentou bastante a probabilidade, mas não tornou a hipótese certa. A maioria dos timeouts ainda pode ter outra causa.</div>
+
+      <h3>A mesma conta sem fórmula: pense em 100 casos</h3>
+      <div class="frequency-grid"><div><strong>10</strong><span>têm incidente no banco</span><small>80% deles → 8 timeouts</small></div><div><strong>90</strong><span>não têm incidente no banco</span><small>20% deles → 18 timeouts</small></div><div><strong>26</strong><span>timeouts no total</span><small>8 deles vieram do incidente</small></div></div>
+      <p>Entre os 26 casos com timeout, 8 realmente têm incidente no banco: <code>8/26 ≈ 30,8%</code>.</p>
+    </div></section>
+
+    <section class="section" id="atualizacao"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Nova evidência</p><h2>O posterior de hoje pode virar o prior da próxima atualização</h2></div>
+      <p>Suponha que, depois do timeout, surge uma segunda evidência: <strong>o pool de conexões está esgotado</strong>. A confiança anterior de 30,8% passa a ser o ponto de partida da nova atualização.</p>
+      <p>Para um exemplo didático, considere <code>P(pool_esgotado|H)=0,70</code> e <code>P(pool_esgotado|¬H)=0,10</code>.</p>
+      <div class="formula"><code>novo posterior = (0,70 × 0,308) / [(0,70 × 0,308) + (0,10 × 0,692)] ≈ 0,757</code></div>
+      <p>Com as duas evidências, a confiança na hipótese chega a aproximadamente <strong>75,7%</strong>.</p>
+      <div class="prob-flow"><div><strong>Prior</strong><br>10%</div><div class="arrow">→ timeout →</div><div><strong>Posterior 1</strong><br>30,8%</div><div class="arrow">→ pool esgotado →</div><div><strong>Posterior 2</strong><br>75,7%</div></div>
+      <p class="note-banner">A ideia central não é decorar a fórmula: é compreender que <strong>evidência nova deve atualizar, e não apagar, o que já sabíamos</strong>.</p>
+    </div></section>
+
+    <section class="section section-soft" id="independencia"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Uma hipótese importante</p><h2>Podemos combinar qualquer evidência?</h2></div>
+      <p>Não. Duas evidências podem carregar informação repetida. Se tratarmos sinais fortemente relacionados como se fossem independentes, podemos contar a mesma informação duas vezes.</p>
+      <div class="concept-grid"><article class="card"><h3>Independência</h3><p>Conhecer um evento não altera a probabilidade do outro.</p><div class="formula"><code>P(X,Y) = P(X)P(Y)</code></div></article><article class="card"><h3>Independência condicional</h3><p>Dois sinais podem tornar-se independentes quando condicionamos em uma causa comum.</p><div class="formula"><code>P(X,Y | H) = P(X|H)P(Y|H)</code></div></article></div>
+      <p>Russell e Norvig mostram que a independência condicional permite representar relações probabilísticas de forma mais eficiente, mas ela precisa ser uma hipótese defensável sobre o domínio.</p>
+      <article class="card guided-exercise"><h3>Pense antes de multiplicar</h3><p>“Tempo de resposta alto” e “timeout” são duas evidências realmente independentes sobre uma falha? Ou uma pode ser consequência da outra?</p><p>Se forem altamente correlacionadas, combiná-las como evidências independentes pode exagerar a confiança.</p></article>
+    </div></section>
+
+    <section class="section" id="pratica"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Prática guiada</p><h2>Diagnóstico probabilístico de um incidente</h2></div>
+      <article class="card guided-exercise"><h3>Cenário</h3><p>Uma equipe monitora falhas de autenticação. A hipótese <strong>H</strong> é “o serviço de identidade está indisponível”. A evidência <strong>E</strong> é “houve aumento abrupto de erros 401”.</p><ul><li><code>P(H)=0,05</code></li><li><code>P(E|H)=0,90</code></li><li><code>P(E|¬H)=0,10</code></li></ul><ol><li>Antes da evidência, qual é a confiança na hipótese?</li><li>Qual número representa a chance de observar o erro quando a hipótese é verdadeira?</li><li>Calcule <code>P(H|E)</code>.</li><li>O resultado prova que o serviço de identidade caiu?</li><li>Que nova evidência você gostaria de coletar antes de agir?</li></ol><details><summary>Conferir cálculo</summary><div class="formula"><code>P(H|E) = (0,90×0,05) / [(0,90×0,05)+(0,10×0,95)] ≈ 0,321</code></div><p>A evidência eleva a confiança de 5% para aproximadamente 32,1%, mas ainda não prova a hipótese.</p></details></article>
+
+      <h3>Calculadora didática</h3>
+      <p>Altere os valores e observe como o prior e a qualidade da evidência afetam o posterior.</p>
+      <div class="bayes-lab card"><div class="bayes-controls"><label>Prior P(H)<input id="prior" type="number" min="0" max="1" step="0.01" value="0.10"></label><label>P(E|H)<input id="likelihood" type="number" min="0" max="1" step="0.01" value="0.80"></label><label>P(E|¬H)<input id="falseEvidence" type="number" min="0" max="1" step="0.01" value="0.20"></label></div><div class="bayes-result"><span>Posterior P(H|E): </span><strong id="posterior">30,8%</strong><p id="bayesExplanation">A evidência elevou a confiança em relação ao prior.</p></div></div>
+
+      <h3>Versão em Python</h3>
+      <pre class="code-block"><code>def atualizar_bayes(prior, p_e_dado_h, p_e_dado_nao_h):
+    numerador = p_e_dado_h * prior
+    denominador = numerador + p_e_dado_nao_h * (1 - prior)
+    return numerador / denominador
+
+posterior = atualizar_bayes(
+    prior=0.10,
+    p_e_dado_h=0.80,
+    p_e_dado_nao_h=0.20
+)
+
+print(f"Posterior: {posterior:.3f}")</code></pre>
+      <article class="card guided-exercise"><h3>Exercício de código</h3><p>Use o resultado da primeira atualização como <code>prior</code> de uma segunda evidência. Depois, altere os valores para criar um caso em que a nova evidência <strong>diminua</strong> a confiança na hipótese.</p></article>
+    </div></section>
+
+    <section class="section section-soft" id="limites"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Leitura crítica</p><h2>Bayes atualiza crenças; não corrige um modelo ruim</h2></div>
+      <div class="concept-grid"><article class="card"><h3>O prior importa</h3><p>Hipóteses muito raras podem continuar pouco prováveis mesmo diante de uma evidência relativamente forte.</p></article><article class="card"><h3>As probabilidades precisam vir de algum lugar</h3><p>Se <code>P(E|H)</code> ou <code>P(H)</code> forem estimativas ruins, o posterior também será.</p></article><article class="card"><h3>Independência é uma hipótese</h3><p>Evidências correlacionadas não devem ser combinadas mecanicamente como se fossem independentes.</p></article><article class="card"><h3>Probabilidade não é certeza</h3><p>Um posterior alto sustenta uma decisão; ele não transforma uma hipótese em fato.</p></article></div>
+      <p>O exemplo de meningite apresentado por Russell e Norvig é especialmente útil para essa leitura: mesmo uma evidência fortemente associada à doença pode produzir uma probabilidade posterior pequena quando a doença é muito rara. O prior não pode ser ignorado.</p>
+    </div></section>
+
+    <section class="section" id="fechamento"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Fechamento</p><h2>Checklist da aula</h2></div>
+      <ul class="checklist"><li>Consigo diferenciar uma regra determinística de uma relação probabilística.</li><li>Consigo interpretar <code>P(A|B)</code> como “probabilidade de A dado B”.</li><li>Não confundo <code>P(E|H)</code> com <code>P(H|E)</code>.</li><li>Consigo identificar prior, evidência, verossimilhança e posterior.</li><li>Consigo aplicar Bayes em um caso binário simples.</li><li>Entendo que o posterior pode ser atualizado quando novas evidências aparecem.</li><li>Reconheço por que independência e independência condicional importam.</li><li>Consigo apontar limitações da inferência quando dados ou hipóteses são inadequados.</li></ul>
+      <div class="note-banner"><strong>Ideia para levar:</strong> sistemas inteligentes raramente trabalham com informação perfeita. O desafio não é eliminar a incerteza, mas atualizá-la de forma coerente à medida que novas evidências aparecem.</div>
+    </div></section>
+
+    <section class="section section-soft" id="referencias"><div class="container"><div class="section-heading"><p class="eyebrow">Base teórica</p><h2>Referências utilizadas</h2></div><div class="references-grid"><article class="reference-card"><strong>Russell &amp; Norvig — Inteligência Artificial</strong><p>Capítulos sobre quantificação da incerteza e raciocínio probabilístico: probabilidade condicional, independência, regra de Bayes e combinação de evidências.</p></article><article class="reference-card"><strong>Luger — Artificial Intelligence: Structures and Strategies for Complex Problem Solving</strong><p>Capítulos sobre métodos estocásticos e raciocínio em situações incertas, contextualizando probabilidade e sistemas especialistas.</p></article></div></div></section>
+  </main>
+
+  <aside class="toc" aria-label="Índice desta aula"><div class="toc-head"><span class="toc-label">Nesta aula</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#transicao">Da regra à incerteza</a><a href="#probabilidade">Probabilidade</a><a href="#condicional">Causa × diagnóstico</a><a href="#bayes">Bayes</a><a href="#atualizacao">Nova evidência</a><a href="#independencia">Independência</a><a href="#pratica">Prática</a><a href="#limites">Limites</a><a href="#fechamento">Checklist</a></nav></aside>
+  </div>
+
+  <footer><div class="container">Inteligência Artificial Aplicada · Aula 07 · Engenharia de Software · 2026/2</div></footer>
+  <script>
+    (function () {
+      const prior = document.getElementById('prior');
+      const likelihood = document.getElementById('likelihood');
+      const falseEvidence = document.getElementById('falseEvidence');
+      const posterior = document.getElementById('posterior');
+      const explanation = document.getElementById('bayesExplanation');
+      if (!prior || !likelihood || !falseEvidence || !posterior) return;
+      function clamp(v) { v = Number(v); return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0; }
+      function update() {
+        const p = clamp(prior.value), lh = clamp(likelihood.value), fp = clamp(falseEvidence.value);
+        const num = lh * p;
+        const den = num + fp * (1 - p);
+        if (den === 0) { posterior.textContent = 'indefinido'; explanation.textContent = 'Com estes valores, a evidência tem probabilidade zero nos dois cenários.'; return; }
+        const post = num / den;
+        posterior.textContent = (post * 100).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%';
+        if (Math.abs(post - p) < 0.0005) explanation.textContent = 'A evidência praticamente não alterou a confiança.';
+        else if (post > p) explanation.textContent = 'A evidência elevou a confiança em relação ao prior.';
+        else explanation.textContent = 'A evidência reduziu a confiança em relação ao prior.';
+      }
+      [prior, likelihood, falseEvidence].forEach(el => el.addEventListener('input', update));
+      update();
+    })();
+  </script>
+</body>
+</html>
