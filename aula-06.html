@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aula 06 de Inteligência Artificial Aplicada: representação do conhecimento, fatos, regras, bases de conhecimento, inferência, encadeamento e limitações de sistemas baseados em regras.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Aula 06 — Inteligência Artificial Aplicada</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="aula-04.css">
+  <script defer src="script.js"></script>
+
+  <style>
+    .lesson-six .overview-grid { grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:start; }
+    .lesson-six .competency-stack { display:grid; gap:16px; }
+    .lesson-six .comparison-table { width:100%; border-collapse:collapse; font-size:.95rem; }
+    .lesson-six .comparison-table th,
+    .lesson-six .comparison-table td { text-align:left; padding:.8rem 1rem; border-bottom:1px solid var(--line); vertical-align:top; }
+    .lesson-six .comparison-table tr:last-child td { border-bottom:0; }
+    .lesson-six .comparison-table-wrap { margin:1.2rem 0 1.5rem; overflow-x:auto; }
+    .lesson-six .concept-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:1.4rem 0; }
+    .lesson-six .concept-grid .card { margin:0; }
+    .lesson-six .flow { display:grid; gap:.55rem; margin:1.4rem 0; }
+    .lesson-six .flow-step { display:grid; grid-template-columns:minmax(150px,.7fr) 30px minmax(220px,1fr); gap:.7rem; align-items:center; }
+    .lesson-six .flow-step strong,
+    .lesson-six .flow-step span:last-child { padding:.8rem 1rem; border:1px solid var(--line); border-radius:8px; background:var(--paper); }
+    .lesson-six .flow-step .arrow { text-align:center; color:var(--blue); font-weight:700; }
+    .lesson-six .knowledge-architecture { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:.8rem; align-items:center; margin:1.5rem 0; }
+    .lesson-six .knowledge-architecture > div { padding:1rem; border:1px solid var(--line); border-radius:8px; background:var(--paper); text-align:center; }
+    .lesson-six .knowledge-architecture .arrow { border:0; background:transparent; padding:0; color:var(--blue); font-weight:700; }
+    .lesson-six .guided-exercise { margin:1.5rem 0; }
+    .lesson-six .guided-exercise h3 { margin-top:0; }
+    .lesson-six .trace { padding:1rem 1.1rem; border-left:3px solid var(--blue); background:var(--soft); border-radius:0 8px 8px 0; margin:1rem 0; }
+    .lesson-six .trace p { margin:.35rem 0; }
+    .lesson-six .reference-card { border-top:1px solid var(--line); padding-top:1rem; }
+    @media(max-width:760px) {
+      .lesson-six .overview-grid,
+      .lesson-six .concept-grid { grid-template-columns:1fr; }
+      .lesson-six .flow-step { grid-template-columns:1fr; }
+      .lesson-six .flow-step .arrow { transform:rotate(90deg); }
+      .lesson-six .knowledge-architecture { grid-template-columns:1fr; }
+      .lesson-six .knowledge-architecture .arrow { transform:rotate(90deg); }
+    }
+  </style>
+
+  <script src="https://pfransozi.github.io/assets/js/ensino.js?v=6"></script>
+  <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=6">
+</head>
+<body class="teaching-page teaching-lesson lesson-page lesson-six">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="IA Aplicada — página principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span><strong>IA Aplicada</strong><small>Aula 06</small></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">
+        <span class="sr-only">Abrir menu</span><span></span><span></span><span></span>
+      </button>
+      <nav id="menu-principal" class="main-nav" aria-label="Navegação da aula">
+        <a href="index.html">Página principal</a>
+        <a href="curso.html">Visão geral</a>
+        <a href="#busca-conhecimento">Busca × conhecimento</a>
+        <a href="#representar">Representar</a>
+        <a href="#arquitetura">Arquitetura</a>
+        <a href="#inferencia">Inferência</a>
+        <a href="#encadeamento">Encadeamento</a>
+        <a href="#pratica">Prática</a>
+        <a href="#limites">Limites</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-text">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="lesson-shell lesson-page-grid">
+    <main id="conteudo">
+      <section class="hero" id="inicio">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Aula 06 · Representação do conhecimento</p>
+            <h1>Como representar conhecimento e tirar conclusões</h1>
+            <p class="hero-lead">Da busca por caminhos ao raciocínio sobre fatos, regras e relações.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#busca-conhecimento">Começar pela diferença</a>
+              <a class="button button-secondary" href="#pratica">Ir para a prática</a>
+            </div>
+          </div>
+          <aside class="guiding-card">
+            <span>Pergunta orientadora</span>
+            <blockquote>Se um sistema sabe algumas coisas sobre um domínio, o que ele pode concluir a partir delas?</blockquote>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="visao">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Visão da aula</p>
+            <h2>O que vamos desenvolver</h2>
+            <p>Vamos representar conhecimento explicitamente, separar fatos de regras e acompanhar como um mecanismo de inferência produz novas conclusões.</p>
+          </div>
+          <div class="overview-grid">
+            <article class="card topics-card">
+              <h3>Conteúdo programático</h3>
+              <div class="topic-list">
+                <div>Busca versus raciocínio baseado em conhecimento</div>
+                <div>Fatos, relações, regras e conclusões</div>
+                <div>Base de conhecimento e mecanismo de inferência</div>
+                <div>Encadeamento para frente</div>
+                <div>Encadeamento para trás</div>
+                <div>Conflitos, lacunas e ambiguidades</div>
+                <div>Limites do conhecimento determinístico</div>
+              </div>
+              <div class="note-banner"><strong>Objetivo da aula:</strong> representar um pequeno domínio por fatos e regras, executar inferências simples e reconhecer limites de um sistema baseado em conhecimento.</div>
+            </article>
+            <div class="competency-stack">
+              <article class="card competency"><h3>C2 — Construir soluções</h3><div class="skill"><strong>H6</strong><span>Aplicar técnicas de representação e inferência na construção de uma solução baseada em conhecimento.</span></div></article>
+              <article class="card competency"><h3>C11 — Desenvolver algoritmos</h3><div class="skill"><strong>H38</strong><span>Desenvolver uma base de fatos e regras, testar o mecanismo de inferência e reconhecer suas limitações.</span></div></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="busca-conhecimento">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Mudança de perspectiva</p>
+            <h2>Da busca ao raciocínio</h2>
+            <p>Nas aulas anteriores, a pergunta principal era como chegar de um estado inicial a um objetivo. Agora a pergunta muda: dado aquilo que o sistema sabe, o que pode ser concluído?</p>
+          </div>
+
+          <div class="comparison-table-wrap card">
+            <table class="comparison-table">
+              <thead><tr><th></th><th>IA baseada em busca</th><th>IA baseada em conhecimento</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Representamos</strong></td><td>Estados e ações</td><td>Fatos, relações e regras</td></tr>
+                <tr><td><strong>Começamos com</strong></td><td>Estado inicial</td><td>Conhecimento disponível</td></tr>
+                <tr><td><strong>Processo</strong></td><td>Explorar alternativas</td><td>Aplicar regras de inferência</td></tr>
+                <tr><td><strong>Pergunta</strong></td><td>“Como chego ao objetivo?”</td><td>“O que posso concluir?”</td></tr>
+                <tr><td><strong>Resultado</strong></td><td>Caminho ou solução</td><td>Nova informação ou conclusão</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="concept-grid">
+            <article class="card">
+              <p class="eyebrow">Busca</p>
+              <h3>Arad → Bucharest</h3>
+              <p>O algoritmo escolhe estados sucessivos até encontrar um caminho para o objetivo.</p>
+              <pre class="code-block"><code>Arad
+  ↓ ação
+Sibiu
+  ↓ ação
+Rimnicu Vilcea
+  ↓ ação
+Pitesti
+  ↓ ação
+Bucharest</code></pre>
+            </article>
+            <article class="card">
+              <p class="eyebrow">Conhecimento</p>
+              <h3>Fatos → conclusão</h3>
+              <p>O sistema aplica regras sobre aquilo que já sabe e deriva uma informação que não estava explicitamente armazenada.</p>
+              <pre class="code-block"><code>api_retorna_500
+        ↓ regra
+existe_falha_backend
+        ↓ regra + banco_indisponivel
+causa_provavel_banco</code></pre>
+            </article>
+          </div>
+
+          <div class="note-banner"><strong>A conexão continua existindo:</strong> uma inferência também pode ser vista como uma busca em um espaço de possíveis conclusões. A diferença está no significado do problema: em vez de buscar um caminho físico, buscamos o que decorre do conhecimento disponível.</div>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="representar">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Representação do conhecimento</p>
+            <h2>O que o sistema sabe?</h2>
+            <p>Representar conhecimento significa transformar informações sobre um domínio em uma forma que o programa consiga armazenar, consultar e usar para raciocinar.</p>
+          </div>
+
+          <div class="concept-grid">
+            <article class="card"><p class="eyebrow">Fato</p><h3>Algo considerado verdadeiro no caso atual</h3><pre class="code-block"><code>api_retorna_500
+banco_indisponivel</code></pre></article>
+            <article class="card"><p class="eyebrow">Relação</p><h3>Conecta elementos do domínio</h3><pre class="code-block"><code>depende_de(api, banco)
+executa_em(api, servidor_01)</code></pre></article>
+            <article class="card"><p class="eyebrow">Regra</p><h3>Conhecimento geral sobre o domínio</h3><pre class="code-block"><code>SE api_retorna_500
+E banco_indisponivel
+ENTÃO causa_provavel_banco</code></pre></article>
+            <article class="card"><p class="eyebrow">Conclusão</p><h3>Informação derivada</h3><pre class="code-block"><code>causa_provavel_banco</code></pre></article>
+          </div>
+
+          <div class="note-banner"><strong>Ponto-chave:</strong> armazenar conhecimento não é a mesma coisa que inferir conhecimento. A base guarda o que sabemos; o mecanismo de inferência usa esse conteúdo para produzir novas conclusões.</div>
+
+          <h3>Conhecimento declarativo × comportamento codificado</h3>
+          <div class="concept-grid">
+            <article class="card">
+              <h3>Abordagem procedural</h3>
+              <pre class="code-block"><code>if erro_500 and banco_indisponivel:
+    causa = "banco"</code></pre>
+              <p>A regra sobre o domínio está embutida diretamente no código de controle.</p>
+            </article>
+            <article class="card">
+              <h3>Abordagem baseada em conhecimento</h3>
+              <pre class="code-block"><code>FATOS
+erro_500
+banco_indisponivel
+
+REGRA
+SE erro_500 E banco_indisponivel
+ENTÃO causa_banco</code></pre>
+              <p>O conhecimento do domínio fica explícito e separado do mecanismo que aplica as regras.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="arquitetura">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Arquitetura</p>
+            <h2>Base de conhecimento + mecanismo de inferência</h2>
+            <p>Um sistema baseado em conhecimento separa o que sabe do processo usado para raciocinar sobre esse conhecimento.</p>
+          </div>
+
+          <div class="knowledge-architecture" aria-label="Arquitetura simplificada de um sistema baseado em conhecimento">
+            <div><strong>Dados do caso</strong><br><small>fatos observados</small></div>
+            <div class="arrow">→</div>
+            <div><strong>Mecanismo de inferência</strong><br><small>aplica as regras</small></div>
+            <div class="arrow">↔</div>
+            <div><strong>Base de conhecimento</strong><br><small>fatos gerais + regras</small></div>
+          </div>
+
+          <p>O resultado é uma conclusão que pode ser acompanhada por uma explicação: <em>quais fatos foram usados e quais regras foram aplicadas?</em></p>
+
+          <article class="card guided-exercise">
+            <h3>Leitura da arquitetura</h3>
+            <p>Considere a regra:</p>
+            <pre class="code-block"><code>SE banco_indisponivel
+E sistema_depende_do_banco
+ENTÃO sistema_pode_falhar</code></pre>
+            <p>Agora considere os dados do caso:</p>
+            <pre class="code-block"><code>banco_indisponivel
+api_depende_do_banco</code></pre>
+            <p><strong>Pergunta:</strong> o que pertence ao conhecimento geral do domínio e o que pertence apenas ao caso que estamos analisando?</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="inferencia">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Inferência</p>
+            <h2>Produzindo novo conhecimento</h2>
+            <p>Uma regra pode gerar uma informação nova. Essa nova informação pode ativar outra regra, criando uma cadeia de raciocínio.</p>
+          </div>
+
+          <pre class="code-block"><code>Fatos:
+A
+B
+
+Regras:
+R1: SE A E B → C
+R2: SE C → D</code></pre>
+
+          <div class="flow">
+            <div class="flow-step"><strong>A + B</strong><span class="arrow">→</span><span>R1 é aplicável; concluímos C.</span></div>
+            <div class="flow-step"><strong>A + B + C</strong><span class="arrow">→</span><span>R2 passa a ser aplicável; concluímos D.</span></div>
+            <div class="flow-step"><strong>A + B + C + D</strong><span class="arrow">→</span><span>Não há nova regra aplicável; o processo pode parar.</span></div>
+          </div>
+
+          <div class="note-banner"><strong>Observe:</strong> C e D não foram informados como fatos iniciais. Eles foram derivados pelo sistema.</div>
+        </div>
+      </section>
+
+      <section class="section" id="encadeamento">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Estratégias de inferência</p>
+            <h2>Para frente ou para trás?</h2>
+            <p>Podemos raciocinar a partir dos fatos disponíveis ou começar por uma conclusão que desejamos verificar.</p>
+          </div>
+
+          <h3>Encadeamento para frente: “o que posso concluir?”</h3>
+          <pre class="code-block"><code>Fatos:
+erro_500
+banco_indisponivel
+
+R1: SE erro_500 → falha_backend
+R2: SE falha_backend E banco_indisponivel → suspeita_banco
+R3: SE suspeita_banco → verificar_conexao_banco</code></pre>
+
+          <div class="trace">
+            <p><strong>Passo 1:</strong> erro_500 permite aplicar R1 → falha_backend.</p>
+            <p><strong>Passo 2:</strong> falha_backend + banco_indisponivel permitem aplicar R2 → suspeita_banco.</p>
+            <p><strong>Passo 3:</strong> suspeita_banco permite aplicar R3 → verificar_conexao_banco.</p>
+          </div>
+
+          <h3>Encadeamento para trás: “o que preciso provar?”</h3>
+          <p>Suponha que a consulta seja:</p>
+          <pre class="code-block"><code>suspeita_banco ?</code></pre>
+          <p>Procuramos uma regra que conclua <code>suspeita_banco</code>:</p>
+          <pre class="code-block"><code>SE falha_backend E banco_indisponivel
+ENTÃO suspeita_banco</code></pre>
+          <p>Agora a pergunta vira: <code>falha_backend?</code> e <code>banco_indisponivel?</code>. Para provar <code>falha_backend</code>, encontramos outra regra:</p>
+          <pre class="code-block"><code>SE erro_500
+ENTÃO falha_backend</code></pre>
+          <p>Como <code>erro_500</code> e <code>banco_indisponivel</code> são fatos, a consulta pode ser sustentada.</p>
+
+          <div class="comparison-table-wrap card">
+            <table class="comparison-table">
+              <thead><tr><th>Estratégia</th><th>Começa por</th><th>Pergunta principal</th></tr></thead>
+              <tbody>
+                <tr><td>Para frente</td><td>Fatos disponíveis</td><td>O que posso concluir?</td></tr>
+                <tr><td>Para trás</td><td>Objetivo ou hipótese</td><td>O que preciso saber para provar isso?</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="pratica">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Prática guiada</p>
+            <h2>Diagnóstico de uma aplicação web</h2>
+            <p>Vamos construir uma pequena base de conhecimento para investigar uma falha de software.</p>
+          </div>
+
+          <h3>Fatos observados</h3>
+          <pre class="code-block"><code>F1: api_retorna_500
+F2: banco_indisponivel
+F3: servidor_tem_espaco</code></pre>
+
+          <h3>Regras disponíveis</h3>
+          <pre class="code-block"><code>R1:
+SE api_retorna_500
+ENTÃO existe_falha_backend
+
+R2:
+SE existe_falha_backend E banco_indisponivel
+ENTÃO causa_provavel_banco
+
+R3:
+SE existe_falha_backend E disco_cheio
+ENTÃO causa_provavel_disco
+
+R4:
+SE causa_provavel_banco
+ENTÃO verificar_conexao_banco</code></pre>
+
+          <article class="card guided-exercise">
+            <h3>Etapa 1 — Identifique a estrutura</h3>
+            <ol>
+              <li>Quais elementos são fatos?</li>
+              <li>Quais elementos são regras?</li>
+              <li>Em cada regra, o que é condição e o que é conclusão?</li>
+              <li>Qual informação ainda não está nos fatos, mas pode ser derivada?</li>
+            </ol>
+          </article>
+
+          <article class="card guided-exercise">
+            <h3>Etapa 2 — Execute manualmente</h3>
+            <p>Comece apenas com F1, F2 e F3. Aplique as regras possíveis e registre cada novo fato produzido. Pare quando nenhuma nova informação puder ser adicionada.</p>
+          </article>
+
+          <article class="card guided-exercise">
+            <h3>Etapa 3 — Explique a conclusão</h3>
+            <p>Se o sistema concluir <code>verificar_conexao_banco</code>, produza a cadeia de justificativa mostrando os fatos e regras utilizados.</p>
+          </article>
+
+          <h3>Transforme a ideia em Python</h3>
+          <p>A estrutura abaixo já representa os fatos e as regras. Complete apenas o núcleo do mecanismo de inferência.</p>
+          <pre class="code-block"><code>fatos = {
+    "api_retorna_500",
+    "banco_indisponivel",
+    "servidor_tem_espaco"
+}
+
+regras = [
+    ({"api_retorna_500"}, "existe_falha_backend"),
+    ({"existe_falha_backend", "banco_indisponivel"}, "causa_provavel_banco"),
+    ({"existe_falha_backend", "disco_cheio"}, "causa_provavel_disco"),
+    ({"causa_provavel_banco"}, "verificar_conexao_banco")
+]
+
+houve_mudanca = True
+
+while houve_mudanca:
+    houve_mudanca = False
+
+    # 1. percorra as regras
+    # 2. verifique se todas as condições estão em fatos
+    # 3. se a conclusão ainda não existir, adicione-a
+    # 4. marque que houve mudança
+
+print(fatos)</code></pre>
+
+          <div class="note-banner"><strong>Objetivo da prática:</strong> perceber que o algoritmo de inferência pode permanecer genérico enquanto o conhecimento do domínio é alterado pela inclusão, remoção ou modificação de regras.</div>
+        </div>
+      </section>
+
+      <section class="section" id="limites">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Limites</p>
+            <h2>Regras não resolvem tudo</h2>
+            <p>Sistemas baseados em conhecimento são úteis porque tornam o raciocínio explícito, mas dependem diretamente da qualidade e da completude das regras representadas.</p>
+          </div>
+
+          <div class="concept-grid">
+            <article class="card">
+              <p class="eyebrow">Conflito</p>
+              <h3>Duas regras recomendam ações incompatíveis</h3>
+              <pre class="code-block"><code>SE temperatura_alta
+ENTÃO ligar_ventilacao
+
+SE sensor_manutencao
+ENTÃO nao_ligar_ventilacao</code></pre>
+              <p>Se as duas condições forem verdadeiras, precisamos decidir qual regra tem prioridade.</p>
+            </article>
+            <article class="card">
+              <p class="eyebrow">Lacuna</p>
+              <h3>Não saber não significa saber o contrário</h3>
+              <pre class="code-block"><code>SE falha_backend E banco_indisponivel
+ENTÃO causa_banco</code></pre>
+              <p>Se sabemos apenas <code>falha_backend</code>, não podemos concluir que o banco está disponível nem indisponível.</p>
+            </article>
+          </div>
+
+          <h3>O limite que leva à próxima aula</h3>
+          <p>Considere a regra:</p>
+          <pre class="code-block"><code>SE febre E tosse
+ENTÃO gripe</code></pre>
+          <p>Ela é muito forte: febre e tosse não tornam a hipótese “gripe” automaticamente verdadeira. Em muitos problemas reais, uma evidência apenas torna uma hipótese <strong>mais ou menos provável</strong>.</p>
+
+          <div class="note-banner"><strong>Próxima etapa:</strong> quando fatos e regras determinísticos não são suficientes, precisamos representar incerteza. Na próxima aula, vamos usar probabilidade condicional e o Teorema de Bayes para atualizar crenças a partir de evidências.</div>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="fechamento">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Fechamento</p>
+            <h2>Checklist da Aula 06</h2>
+          </div>
+          <ul class="checklist">
+            <li>Consigo diferenciar um problema de busca de um problema de inferência.</li>
+            <li>Consigo identificar fatos, relações, regras e conclusões.</li>
+            <li>Consigo explicar a função de uma base de conhecimento.</li>
+            <li>Consigo acompanhar uma inferência por encadeamento para frente.</li>
+            <li>Entendo a ideia de começar por um objetivo no encadeamento para trás.</li>
+            <li>Consigo identificar conflitos, lacunas e limitações em uma base de regras.</li>
+            <li>Entendo por que a incerteza exige um mecanismo diferente de uma regra determinística.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="referencias">
+        <div class="container">
+          <div class="section-heading"><p class="eyebrow">Base teórica</p><h2>Referências utilizadas</h2></div>
+          <div class="references-grid">
+            <article class="reference-card"><strong>RUSSELL, Stuart; NORVIG, Peter.</strong> <em>Inteligência Artificial</em>. Seções sobre agentes baseados em conhecimento, lógica e inferência.</article>
+            <article class="reference-card"><strong>LUGER, George F.</strong> <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. Seções sobre sistemas de produção, sistemas especialistas e engenharia do conhecimento.</article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="toc" aria-label="Índice desta aula">
+      <div class="toc-head"><span class="toc-label">Nesta aula</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div>
+      <nav>
+        <a href="#busca-conhecimento">Busca × conhecimento</a>
+        <a href="#representar">Representar conhecimento</a>
+        <a href="#arquitetura">Arquitetura</a>
+        <a href="#inferencia">Inferência</a>
+        <a href="#encadeamento">Encadeamento</a>
+        <a href="#pratica">Prática guiada</a>
+        <a href="#limites">Limites</a>
+        <a href="#fechamento">Checklist</a>
+        <a href="#referencias">Referências</a>
+      </nav>
+    </aside>
+  </div>
+
+  <footer><div class="container">Inteligência Artificial Aplicada · Engenharia de Software · 2026/2</div></footer>
+</body>
+</html>
