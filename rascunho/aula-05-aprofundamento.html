@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Material de aprofundamento da Aula 05 de Inteligência Artificial Aplicada: busca informada, funções de avaliação, Greedy Best-First, A*, admissibilidade, consistência, dominância e construção de heurísticas.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Aula 05 | Material de aprofundamento | Inteligência Artificial Aplicada</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script defer src="../script.js"></script>
+  <style>
+    .study-page { background: var(--bg); color: var(--text); }
+    .study-page .site-header { background: color-mix(in srgb, var(--bg) 92%, transparent); }
+    .study-hero { padding: 6rem 0 5rem; background: radial-gradient(circle at 88% 18%, rgba(124,103,232,.15), transparent 27rem), radial-gradient(circle at 8% 78%, rgba(49,94,251,.11), transparent 24rem), var(--bg); }
+    .study-hero-grid { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(280px,.7fr); gap: 3.5rem; align-items: end; }
+    .study-hero h1 { margin: 0; max-width: 980px; font-size: clamp(3rem,6.5vw,6rem); line-height: .96; letter-spacing: -.055em; }
+    .study-lead { max-width: 860px; margin: 1.5rem 0 0; color: var(--muted); font-size: clamp(1.15rem,2vw,1.42rem); }
+    .study-card { padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .study-card strong { display: block; margin-bottom: .55rem; color: var(--primary); }
+    .study-card p:last-child { margin-bottom: 0; }
+    .study-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.7rem; }
+    .study-meta { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.3rem; }
+    .study-meta span { padding: .35rem .7rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--surface); font-size: .84rem; }
+    .study-toc-shell { position: sticky; top: 76px; z-index: 60; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb,var(--bg) 94%,transparent); backdrop-filter: blur(14px); }
+    .study-toc { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: .5rem; padding: .85rem 0; }
+    .study-toc a { padding: .72rem .7rem; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; text-align: center; color: var(--muted); background: var(--surface); font-size: .78rem; font-weight: 800; line-height: 1.2; }
+    .study-toc a:hover { color: var(--primary); border-color: var(--primary); }
+    .study-section { padding: 5.5rem 0; scroll-margin-top: 155px; }
+    .study-section.alt { background: var(--surface-soft); }
+    .study-heading { max-width: 950px; margin-bottom: 2.2rem; }
+    .study-heading h2 { margin: 0; font-size: clamp(2.15rem,4vw,3.6rem); line-height: 1.04; letter-spacing: -.045em; }
+    .study-heading > p:last-child { margin: 1rem 0 0; color: var(--muted); font-size: 1.05rem; }
+    .study-kicker { margin: 0 0 .65rem; color: var(--primary); font-size: .76rem; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+    .study-prose { max-width: 1060px; min-width: 0; }
+    .study-prose h3 { margin: 2.4rem 0 .8rem; font-size: 1.55rem; }
+    .study-prose h3:first-child { margin-top: 0; }
+    .study-prose h4 { margin: 1.65rem 0 .55rem; font-size: 1.08rem; }
+    .study-prose p, .study-prose li { color: var(--muted); }
+    .study-prose p { margin: 0 0 1.05rem; }
+    .study-prose ul, .study-prose ol { padding-left: 1.3rem; }
+    .study-prose li + li { margin-top: .42rem; }
+    .study-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(280px,.8fr); gap: 2rem; align-items: start; }
+    .study-grid.equal { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .study-stack { display: grid; gap: 1rem; }
+    .study-callout { padding: 1.15rem 1.25rem; border-left: 4px solid var(--primary); border-radius: 0 16px 16px 0; background: color-mix(in srgb,var(--primary) 9%,var(--surface)); }
+    .study-callout strong { display: block; margin-bottom: .35rem; color: var(--primary); }
+    .study-callout p { margin: 0; color: var(--muted); }
+    .study-callout.violet { border-left-color: var(--secondary); background: color-mix(in srgb,var(--secondary) 10%,var(--surface)); }
+    .study-callout.violet strong { color: var(--secondary); }
+    .study-callout.teal { border-left-color: var(--accent); background: color-mix(in srgb,var(--accent) 10%,var(--surface)); }
+    .study-callout.teal strong { color: var(--accent); }
+    .callout-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; margin: 1.8rem 0; }
+    .callout-grid.two { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .study-table-wrap { margin: 1.5rem 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .study-table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    .study-table th, .study-table td { padding: .9rem; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+    .study-table th { background: color-mix(in srgb,var(--primary) 10%,var(--surface)); color: var(--text); font-size: .82rem; }
+    .study-table td { color: var(--muted); font-size: .9rem; }
+    .study-table tr:last-child td { border-bottom: 0; }
+    .mini-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .mini-grid.three { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .mini-card { padding: 1.2rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .mini-card h4 { margin: 0 0 .45rem; }
+    .mini-card p { margin: 0; color: var(--muted); }
+    .formula { display: inline-block; margin: .35rem 0; padding: .45rem .65rem; border-radius: 10px; background: var(--surface-soft); color: var(--text); font-family: "SFMono-Regular",Consolas,monospace; font-size: .9rem; }
+    .equation-panel { margin: 1.4rem 0; padding: 1.25rem 1.4rem; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+    .equation-panel .equation { display: block; margin: .2rem 0 .75rem; color: var(--text); font: 700 clamp(1.2rem,2vw,1.6rem)/1.4 "SFMono-Regular",Consolas,monospace; }
+    .equation-panel p { margin: 0; color: var(--muted); }
+    .search-family { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .search-family article { padding: 1.25rem; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+    .search-family strong { display: block; margin-bottom: .55rem; color: var(--primary); }
+    .search-family .big-formula { display: block; margin-bottom: .65rem; color: var(--text); font: 800 1.2rem/1.4 "SFMono-Regular",Consolas,monospace; }
+    .search-family p { margin: 0; color: var(--muted); font-size: .92rem; }
+    .flow-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .75rem; margin: 1.5rem 0; }
+    .flow-step { position: relative; padding: 1.1rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .flow-step b { display: block; margin-bottom: .35rem; color: var(--text); }
+    .flow-step span { color: var(--muted); font-size: .9rem; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .metric-card { padding: 1.25rem; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+    .metric-card small { display: block; color: var(--muted); }
+    .metric-card strong { display: block; margin: .35rem 0; color: var(--primary); font-size: 1.65rem; }
+    .metric-card p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .scale-row { display: grid; grid-template-columns: 110px 1fr; gap: 1rem; align-items: center; margin: .85rem 0; }
+    .scale-row strong { color: var(--text); }
+    .scale-track { position: relative; height: 14px; border-radius: 999px; background: var(--surface-soft); border: 1px solid var(--line); overflow: hidden; }
+    .scale-fill { height: 100%; background: var(--primary); border-radius: inherit; }
+    .scale-fill.mid { width: 31%; }
+    .scale-fill.high { width: 69%; }
+    .scale-fill.full { width: 100%; opacity: .28; }
+    .references { padding-left: 1.2rem; }
+    .references li + li { margin-top: .65rem; }
+    .study-page .site-footer { border-top: 1px solid var(--line); }
+    @media (max-width: 980px) {
+      .study-hero-grid, .study-grid, .study-grid.equal { grid-template-columns: 1fr; }
+      .study-toc { grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .search-family, .metric-grid, .mini-grid.three, .callout-grid, .callout-grid.two, .flow-strip { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 680px) {
+      .study-hero { padding: 4.2rem 0 3.5rem; }
+      .study-toc-shell { position: static; }
+      .study-toc { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .study-section { padding: 4rem 0; scroll-margin-top: 90px; }
+      .mini-grid, .mini-grid.three, .search-family, .metric-grid, .callout-grid, .callout-grid.two, .flow-strip { grid-template-columns: 1fr; }
+      .study-nav .nav-label { display: none; }
+      .scale-row { grid-template-columns: 1fr; gap: .4rem; }
+    }
+  </style>
+  <script src="https://pfransozi.github.io/assets/js/ensino.js?v=9"></script>
+  <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=13">
+</head>
+<body class="teaching-page teaching-lesson study-page">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="site-header" id="inicio">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html" aria-label="IA Aplicada, página principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span><strong>IA Aplicada</strong><small>Engenharia de Software</small></span>
+      </a>
+      <nav class="main-nav study-nav" aria-label="Navegação principal">
+        <a href="../aula-05.html">Aula 05</a>
+        <a class="nav-highlight" href="aula-05-aprofundamento.html">Aprofundamento</a>
+        <a href="../index.html">Portal</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-text nav-label">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="lesson-shell lesson-page-grid"><main id="conteudo">
+    <section class="study-hero">
+      <div class="container study-hero-grid">
+        <div>
+          <p class="eyebrow">Aula 05 · material de aprofundamento</p>
+          <h1>Busca informada: qualidade da heurística e garantias do A*</h1>
+          <p class="study-lead">Este material aprofunda o papel das funções de avaliação, a diferença entre custo conhecido e custo estimado, as garantias do A* e o efeito da qualidade da heurística sobre o espaço de busca.</p>
+          <div class="study-meta"><span>Engenharia de Software</span><span>Leitura ampliada</span><span>Sem atividade</span></div>
+          <div class="study-actions">
+            <a class="button button-primary" href="#familia">Começar a leitura</a>
+            <a class="button button-secondary" href="../aula-05.html">Voltar à aula principal</a>
+          </div>
+        </div>
+        <aside class="study-card"><strong>Como usar este material</strong><p>Este aprofundamento retoma ideias apresentadas de forma mais breve na Aula 05 e desenvolve suas relações conceituais e formais. Não há exercícios ou entregas nesta página.</p></aside>
+      </div>
+    </section>
+
+    <div class="study-toc-shell" aria-label="Sumário do aprofundamento"><div class="container study-toc">
+      <a href="#familia">Família de buscas</a><a href="#funcoes">g, h e f</a><a href="#greedy-astar">Greedy e A*</a><a href="#garantias">Garantias</a><a href="#qualidade">Qualidade da heurística</a><a href="#construcao">Construção</a><a href="#custo-informacao">Custo da informação</a>
+    </div></div>
+
+    <section class="study-section" id="familia"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte I · A ideia unificadora</p><h2>Busca informada não é outro espaço de estados</h2><p>O problema continua sendo representado por estados e transições. O que muda é o critério usado para decidir qual estado da fronteira deve ser expandido primeiro.</p></div>
+      <div class="study-prose">
+        <h3>Best-first search: escolher o estado mais promissor</h3>
+        <p>Na busca não informada, a organização da fronteira depende principalmente da ordem de descoberta: uma fila produz o comportamento de BFS e uma pilha produz o comportamento de DFS. Na busca informada, uma <strong>função de avaliação</strong> atribui prioridade aos nós da fronteira.</p>
+        <p>Russell e Norvig descrevem a busca informada como uma estratégia que usa conhecimento específico do domínio para orientar a exploração. Luger apresenta a mesma ideia por meio de uma lista <em>open</em> ordenada pelo mérito heurístico: o algoritmo mantém alternativas disponíveis, mas expande primeiro aquela que parece mais promissora.</p>
+        <div class="study-callout"><strong>A heurística não altera o problema.</strong><p>Ela altera a ordem de exploração. As cidades, transições, custos e objetivo continuam sendo os mesmos; o que muda é qual alternativa recebe prioridade na fronteira.</p></div>
+        <h3>Uma mesma arquitetura, diferentes funções de prioridade</h3>
+        <p>Busca de custo uniforme, Greedy Best-First e A* podem ser compreendidas dentro de uma mesma família. Todas selecionam um nó da fronteira a partir de uma função de avaliação; o que muda é a informação considerada.</p>
+      </div>
+      <div class="search-family">
+        <article><strong>Custo uniforme</strong><span class="big-formula">f(n) = g(n)</span><p>Olha apenas para o custo já acumulado desde o estado inicial.</p></article>
+        <article><strong>Greedy Best-First</strong><span class="big-formula">f(n) = h(n)</span><p>Olha apenas para a estimativa do que ainda falta até um objetivo.</p></article>
+        <article><strong>A*</strong><span class="big-formula">f(n) = g(n) + h(n)</span><p>Combina o custo já conhecido com a estimativa do custo restante.</p></article>
+      </div>
+      <div class="study-prose">
+        <p>Essa visão ajuda a perceber que Greedy e A* não são técnicas desconectadas. São formas diferentes de responder à mesma pergunta: <strong>qual elemento da fronteira deve ser expandido agora?</strong></p>
+      </div>
+    </div></section>
+
+    <section class="study-section alt" id="funcoes"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte II · Três quantidades diferentes</p><h2>g(n), h(n) e f(n) respondem a perguntas diferentes</h2><p>Confundir essas três quantidades é uma das principais fontes de erro ao interpretar a busca informada.</p></div>
+      <div class="mini-grid three">
+        <article class="mini-card"><h4>g(n): o que já custou</h4><p>É o custo do caminho usado para chegar do estado inicial ao nó atual. Não é uma estimativa: é informação acumulada durante a busca.</p></article>
+        <article class="mini-card"><h4>h(n): o que parece faltar</h4><p>É uma estimativa do custo do caminho mais barato do estado atual até um objetivo. Ela depende de conhecimento sobre o domínio.</p></article>
+        <article class="mini-card"><h4>f(n): a prioridade</h4><p>No A*, soma o custo conhecido e o custo estimado para representar uma estimativa do custo total de uma solução que passa por n.</p></article>
+      </div>
+      <div class="study-prose">
+        <h3>Heurística não significa “distância em linha reta”</h3>
+        <p>No mapa da Romênia, a distância em linha reta até Bucharest é uma heurística natural porque se relaciona com o custo real das estradas. Porém, isso é apenas um caso particular. Formalmente, <strong>h(n) estima o custo restante</strong>. Esse custo pode representar tempo, energia, quantidade de operações, transformações necessárias, recursos consumidos ou outra medida relevante para o problema.</p>
+        <p>Luger, por exemplo, discute a diferença mínima de edição entre duas strings como um problema em que inserções, remoções e substituições possuem custos. Esse tipo de exemplo ajuda a separar a noção de “distância” da ideia exclusivamente espacial.</p>
+        <div class="study-callout violet"><strong>Conhecimento do domínio</strong><p>A função h não é obtida apenas das regras de transição. No exemplo de rotas, saber que distância em linha reta se correlaciona com distância por estrada é informação adicional sobre o mundo.</p></div>
+        <h3>O mesmo estado pode ser alcançado por custos diferentes</h3>
+        <p>O estado representa uma configuração do problema; o caminho representa como chegamos a ela. Por isso, duas sequências diferentes de ações podem alcançar o mesmo estado com valores diferentes de g(n). Uma implementação correta de A* precisa conservar o melhor custo conhecido para cada estado e aceitar uma atualização quando um caminho mais barato é descoberto.</p>
+      </div>
+      <div class="flow-strip">
+        <div class="flow-step"><b>Estado</b><span>“Onde estou no problema?”</span></div>
+        <div class="flow-step"><b>Caminho</b><span>“Como cheguei até aqui?”</span></div>
+        <div class="flow-step"><b>g(n)</b><span>“Quanto esse caminho custou?”</span></div>
+      </div>
+    </div></section>
+
+    <section class="study-section" id="greedy-astar"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte III · Estimar o futuro sem esquecer o passado</p><h2>Por que Greedy pode ser rápido — e ainda assim escolher uma rota pior</h2><p>A diferença entre Greedy e A* aparece no tipo de informação que cada estratégia aceita na decisão local.</p></div>
+      <div class="study-grid">
+        <div class="study-prose">
+          <h3>Greedy Best-First olha apenas para h(n)</h3>
+          <p>A busca Greedy expande o nó com o menor valor de h(n): aquele que, segundo a heurística, parece mais próximo do objetivo. Essa escolha pode produzir uma solução rapidamente quando a estimativa é boa, mas ignora completamente quanto já foi gasto para chegar ao nó atual.</p>
+          <p>No exemplo clássico da Romênia, a busca Greedy com distância em linha reta chega rapidamente a Bucharest, mas a rota obtida via Sibiu e Fagaras é <strong>32 milhas mais longa</strong> que a rota de menor custo via Rimnicu Vilcea e Pitesti. O problema não está na representação do mapa; está no critério de prioridade usado.</p>
+          <h3>A* combina evidência acumulada e estimativa</h3>
+          <p>O A* usa <span class="formula">f(n) = g(n) + h(n)</span>. Assim, um estado só parece realmente promissor quando combina um caminho já percorrido razoável com uma estimativa restante também favorável.</p>
+        </div>
+        <aside class="study-stack">
+          <div class="study-card"><strong>Greedy pergunta</strong><p>“Qual alternativa parece mais perto do objetivo agora?”</p></div>
+          <div class="study-card"><strong>A* pergunta</strong><p>“Qual alternativa parece produzir o menor custo total, considerando o que já paguei e o que ainda estimo pagar?”</p></div>
+        </aside>
+      </div>
+      <div class="equation-panel"><span class="equation">Greedy: f(n) = h(n)</span><p>O passado é ignorado. Uma rota já cara ainda pode receber prioridade se sua estimativa restante for pequena.</p></div>
+      <div class="equation-panel"><span class="equation">A*: f(n) = g(n) + h(n)</span><p>O custo parcial e a estimativa restante passam a competir dentro da mesma função de avaliação.</p></div>
+      <div class="study-prose">
+        <h3>O A* não “sabe” o custo futuro</h3>
+        <p>A soma g+h não transforma a estimativa em conhecimento certo. h(n) continua sendo uma aproximação. A diferença é que o algoritmo estrutura a decisão de forma a combinar informação conhecida com informação heurística — e as garantias que obtemos dependem das propriedades dessa heurística.</p>
+      </div>
+    </div></section>
+
+    <section class="study-section alt" id="garantias"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte IV · Quando o A* preserva a solução de menor custo</p><h2>Admissibilidade e consistência não são sinônimos</h2><p>As duas propriedades limitam o comportamento da heurística, mas o fazem de maneiras diferentes.</p></div>
+      <div class="study-prose">
+        <h3>Admissibilidade: não superestimar o custo ótimo restante</h3>
+        <p>Considere <strong>h*(n)</strong> como o custo real do melhor caminho de n até um objetivo. Uma heurística é admissível quando nunca estima acima desse valor:</p>
+        <div class="equation-panel"><span class="equation">h(n) ≤ h*(n)</span><p>A heurística pode acertar ou ser otimista. O que ela não pode fazer, se quisermos a garantia clássica de optimalidade, é fazer um caminho promissor parecer mais caro do que realmente é.</p></div>
+        <p>Russell e Norvig mostram que, usando uma heurística admissível, o A* pode ser demonstrado como ótimo em custo nas condições apresentadas para o algoritmo. A intuição é que um nó pertencente a um caminho ótimo não deve ser descartado em favor de uma solução mais cara apenas por causa de uma superestimativa.</p>
+        <h3>Consistência: a estimativa também precisa ser coerente localmente</h3>
+        <p>Uma propriedade mais forte é a consistência. Para um nó n e um sucessor n′ alcançado por uma ação de custo c(n,a,n′), a heurística é consistente quando:</p>
+        <div class="equation-panel"><span class="equation">h(n) ≤ c(n,a,n′) + h(n′)</span><p>Essa desigualdade é uma forma da desigualdade triangular: a estimativa a partir de n não deve ser maior que “ir até o vizinho” e continuar estimando a partir dele.</p></div>
+        <p>Toda heurística consistente é admissível, mas uma heurística admissível não precisa ser consistente. Russell e Norvig destacam ainda uma consequência operacional importante: com consistência, a primeira chegada adequada a um estado ocorre por um caminho ótimo, reduzindo a necessidade de reabrir estados com custos menores encontrados depois.</p>
+        <h3>Monotonicidade na terminologia de Luger</h3>
+        <p>Luger discute a propriedade de <strong>monotonicidade</strong> ao perguntar se um estado já descoberto poderá aparecer mais tarde por um caminho mais barato. Na formulação moderna usada por Russell e Norvig, a condição de consistência implica que os valores de f ao longo de um caminho não diminuem.</p>
+      </div>
+      <div class="callout-grid">
+        <div class="study-callout"><strong>Admissível</strong><p>Controla a relação entre h(n) e o custo ótimo verdadeiro até o objetivo.</p></div>
+        <div class="study-callout violet"><strong>Consistente</strong><p>Controla a relação entre estimativas de estados vizinhos e o custo da transição.</p></div>
+        <div class="study-callout teal"><strong>Consequência prática</strong><p>Consistência torna o comportamento de A* mais estável em buscas em grafo e evita atualizações desnecessárias.</p></div>
+      </div>
+    </div></section>
+
+    <section class="study-section" id="qualidade"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte V · Nem toda heurística admissível é igualmente útil</p><h2>Informatividade, dominância e quantidade de busca</h2><p>Uma heurística pode ser segura e ainda fornecer pouca orientação.</p></div>
+      <div class="study-prose">
+        <h3>Ser admissível não significa ser informativa</h3>
+        <p>Suponha que o custo ótimo restante de um estado seja 10. As estimativas h₁(n)=2 e h₂(n)=8 são admissíveis. Porém, h₂ está muito mais próxima do custo real e, em princípio, consegue separar melhor alternativas promissoras das pouco promissoras.</p>
+        <div class="scale-row"><strong>h₁(n) = 2</strong><div class="scale-track"><div class="scale-fill mid"></div></div></div>
+        <div class="scale-row"><strong>h₂(n) = 8</strong><div class="scale-track"><div class="scale-fill high"></div></div></div>
+        <div class="scale-row"><strong>h*(n) = 10</strong><div class="scale-track"><div class="scale-fill full"></div></div></div>
+        <h3>Dominância</h3>
+        <p>Russell e Norvig dizem que uma heurística h₂ <strong>domina</strong> h₁ quando h₂(n) ≥ h₁(n) para todos os nós relevantes, mantendo as propriedades necessárias. Nesse caso, A* com h₂ não expande mais nós que A* com h₁, salvo efeitos de desempate. Luger aborda a mesma questão sob o conceito de <strong>informatividade</strong>: quanto mais informação útil a avaliação contém, menor tende a ser a parte do espaço que precisa ser examinada.</p>
+        <h3>O 8-puzzle como exemplo de comparação</h3>
+        <p>Russell e Norvig apresentam duas heurísticas clássicas para o 8-puzzle. A primeira, h₁, conta peças fora da posição. A segunda, h₂, soma as distâncias Manhattan de cada peça até sua posição final. Em um exemplo do livro, h₁=8, h₂=18 e o custo ótimo real da solução é 26. As duas estimativas são admissíveis, mas h₂ utiliza mais informação sobre a configuração.</p>
+      </div>
+      <div class="metric-grid">
+        <article class="metric-card"><small>Peças fora do lugar</small><strong>h₁ = 8</strong><p>Detecta quantas peças precisam mudar, mas não quanto cada uma precisa se deslocar.</p></article>
+        <article class="metric-card"><small>Distância Manhattan</small><strong>h₂ = 18</strong><p>Considera a distância horizontal e vertical acumulada das peças até o objetivo.</p></article>
+        <article class="metric-card"><small>Custo ótimo real</small><strong>h* = 26</strong><p>É o valor que a heurística tenta aproximar sem ultrapassar.</p></article>
+      </div>
+      <div class="study-prose">
+        <h3>Fator de ramificação efetivo</h3>
+        <p>Uma forma de medir empiricamente a qualidade de uma heurística é observar quantos nós ela faz a busca gerar. Russell e Norvig usam o <strong>fator de ramificação efetivo</strong>, b*, que responde aproximadamente: “que fator de ramificação uma árvore uniforme teria de possuir para gerar a mesma quantidade de nós até essa profundidade?” Valores próximos de 1 indicam uma exploração muito concentrada.</p>
+      </div>
+      <div class="study-table-wrap"><table class="study-table">
+        <thead><tr><th>Profundidade da solução</th><th>BFS — nós gerados</th><th>A* com h₁</th><th>A* com h₂</th><th>b* de h₂</th></tr></thead>
+        <tbody>
+          <tr><td>10</td><td>1.033</td><td>116</td><td>48</td><td>1,27</td></tr>
+          <tr><td>20</td><td>91.493</td><td>9.905</td><td>1.318</td><td>1,34</td></tr>
+          <tr><td>26</td><td>395.355</td><td>110.372</td><td>10.080</td><td>1,35</td></tr>
+        </tbody>
+      </table></div>
+      <div class="study-prose"><p>Os valores acima são recortes da comparação apresentada por Russell e Norvig para instâncias aleatórias do 8-puzzle, com médias sobre múltiplos problemas. O ponto central não é memorizar os números, mas observar a diferença de escala: uma heurística mais informativa pode reduzir drasticamente a quantidade de estados examinados.</p></div>
+    </div></section>
+
+    <section class="study-section alt" id="construcao"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte VI · De onde vem h(n)?</p><h2>Uma heurística pode nascer de um problema mais simples</h2><p>Na aula principal, a heurística aparece pronta. Em problemas reais, projetar essa função é parte central da modelagem.</p></div>
+      <div class="study-prose">
+        <h3>Problemas relaxados</h3>
+        <p>Russell e Norvig apresentam uma técnica clássica para obter heurísticas admissíveis: criar um <strong>problema relaxado</strong>, isto é, uma versão do problema original com menos restrições. Como a versão relaxada permite mais possibilidades, sua solução ótima não pode custar mais que a solução ótima do problema original.</p>
+        <div class="equation-panel"><span class="equation">custo ótimo do problema relaxado ≤ custo ótimo do problema original</span><p>Por isso, o custo exato da solução do problema relaxado pode funcionar como uma estimativa admissível para o problema original.</p></div>
+        <h3>O 8-puzzle mostra de onde surgem h₁ e h₂</h3>
+        <p>No problema original, uma peça só pode mover para uma posição adjacente quando essa posição está vazia. Ao remover restrições, surgem versões simplificadas:</p>
+      </div>
+      <div class="flow-strip">
+        <div class="flow-step"><b>Problema original</b><span>Movimento depende de adjacência e da posição vazia.</span></div>
+        <div class="flow-step"><b>Relaxamento para h₂</b><span>Ignoramos a exigência da posição vazia. A soma das distâncias Manhattan passa a representar o custo exato dessa versão simplificada.</span></div>
+        <div class="flow-step"><b>Relaxamento para h₁</b><span>Permitimos que uma peça vá diretamente ao destino. Contar peças fora do lugar passa a ser o custo exato da versão ainda mais relaxada.</span></div>
+      </div>
+      <div class="study-prose">
+        <p>Essa construção explica por que essas heurísticas não são apenas palpites arbitrários. Elas correspondem a soluções exatas de problemas relacionados, porém mais fáceis.</p>
+        <h3>Combinar heurísticas também tem custo</h3>
+        <p>Se várias heurísticas admissíveis estão disponíveis, Russell e Norvig observam que podemos usar <span class="formula">h(n) = max(h₁(n), …, hₖ(n))</span>. O máximo continua admissível e domina cada componente, desde que as condições correspondentes sejam preservadas. A contrapartida é o tempo necessário para calcular todas as estimativas.</p>
+      </div>
+      <div class="study-callout teal"><strong>Projetar h(n) é engenharia.</strong><p>Uma boa heurística deve ser informativa o bastante para reduzir a busca e barata o bastante para não gastar, no próprio cálculo da estimativa, o tempo que pretendíamos economizar.</p></div>
+    </div></section>
+
+    <section class="study-section" id="custo-informacao"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte VII · O valor e o preço da informação</p><h2>Mais informação costuma reduzir a busca — mas não vem de graça</h2><p>A avaliação heurística também consome processamento. O objetivo não é obter a estimativa mais sofisticada possível, e sim reduzir o custo total da solução.</p></div>
+      <div class="study-grid">
+        <div class="study-prose">
+          <h3>O caso limite h(n)=0</h3>
+          <p>Se a heurística atribui zero a todos os estados, o A* continua correto como mecanismo de busca, mas perde toda orientação heurística:</p>
+          <div class="equation-panel"><span class="equation">f(n) = g(n) + 0 = g(n)</span><p>Nesse caso, o critério de prioridade coincide com o da busca de custo uniforme.</p></div>
+          <p>Esse caso é conceitualmente importante porque mostra que a vantagem do A* não está apenas na fórmula g+h. Ela depende de h carregar informação útil sobre o problema.</p>
+          <h3>Informatividade versus custo computacional</h3>
+          <p>Luger chama atenção para um trade-off importante: uma heurística mais informada tende a reduzir o número de estados avaliados, mas pode exigir mais CPU para calcular a própria estimativa. O custo relevante é a soma desses dois componentes.</p>
+        </div>
+        <aside class="study-stack">
+          <div class="study-card"><strong>Heurística muito barata e fraca</strong><p>Cada avaliação custa pouco, mas a busca pode precisar examinar uma grande parte do espaço.</p></div>
+          <div class="study-card"><strong>Heurística muito sofisticada</strong><p>Pode reduzir fortemente o espaço explorado, mas cada avaliação pode se tornar cara.</p></div>
+          <div class="study-card"><strong>Objetivo prático</strong><p>Minimizar o custo total do processo de busca, não apenas uma das parcelas isoladamente.</p></div>
+        </aside>
+      </div>
+      <div class="study-prose">
+        <h3>Heurísticas orientam; não substituem a modelagem</h3>
+        <p>Uma heurística só pode avaliar os estados que a representação torna disponíveis. Se estados, ações, custos ou objetivo foram definidos de forma inadequada, uma busca sofisticada apenas explorará com eficiência o modelo errado.</p>
+        <p>Por isso, a sequência conceitual das aulas permanece importante: primeiro formulamos o problema, depois escolhemos como explorar o espaço de estados e, por fim, acrescentamos conhecimento heurístico para orientar essa exploração.</p>
+      </div>
+      <div class="callout-grid">
+        <div class="study-callout"><strong>Busca não informada</strong><p>Explora usando principalmente a estrutura da fronteira e as regras do problema.</p></div>
+        <div class="study-callout violet"><strong>Busca informada</strong><p>Adiciona conhecimento do domínio para priorizar alternativas.</p></div>
+        <div class="study-callout teal"><strong>Boa heurística</strong><p>Reduz o trabalho sem destruir as garantias desejadas e sem custar mais do que economiza.</p></div>
+      </div>
+
+      <div class="study-heading" style="margin-top:4rem"><p class="study-kicker">Síntese</p><h2>O que a Aula 05 deixa mais claro quando olhamos por baixo do algoritmo</h2></div>
+      <div class="study-prose">
+        <p>A busca informada não cria um novo problema: ela altera a maneira de escolher estados da fronteira. Greedy usa apenas a estimativa restante; A* combina custo acumulado e estimativa restante. As garantias do A* dependem das propriedades da heurística, especialmente admissibilidade e consistência. Entre heurísticas seguras, as mais informativas tendem a reduzir a quantidade de busca, mas seu custo de cálculo também precisa ser considerado.</p>
+        <p>Em outras palavras, a heurística representa <strong>conhecimento incorporado ao processo de busca</strong>. Projetá-la bem é uma forma de transformar conhecimento sobre o domínio em eficiência computacional.</p>
+      </div>
+
+      <div class="study-heading" style="margin-top:4rem"><p class="study-kicker">Referências utilizadas</p><h2>Base conceitual deste aprofundamento</h2></div>
+      <div class="study-prose">
+        <ol class="references">
+          <li>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed., Global Edition. Pearson, 2022. Cap. 3: busca informada, A*, admissibilidade, consistência, qualidade e construção de heurísticas.</li>
+          <li>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson/Addison-Wesley, 2009. Cap. 4: best-first search, funções heurísticas, admissibilidade, monotonicidade, informatividade e custo da busca.</li>
+          <li>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. Manning, 2020. Caps. 2 e 3: fundamentos de busca e busca inteligente.</li>
+        </ol>
+      </div>
+    </div></section>
+  </main></div>
+
+  <footer class="site-footer"><div class="container"><p>Inteligência Artificial Aplicada · Engenharia de Software</p></div></footer>
+</body>
+</html>
