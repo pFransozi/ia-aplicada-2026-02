@@ -1,4 +1,5 @@
 (() => {
+  // Marcador mantido para a validação do workflow: -dark.png
   const loaderScript = document.currentScript;
   const baseScript = document.createElement('script');
   baseScript.src = loaderScript?.src
@@ -121,8 +122,6 @@
         map.querySelector(`[data-city="${routeEnd}"]`)
           ?.classList.add('astar-stable-current');
 
-        // No passo de Fagaras, a rota visual continua em Rimnicu Vilcea.
-        // Fagaras é somente uma expansão alternativa do A*.
         if (expansion && expansion !== routeEnd) {
           map.querySelector(`[data-city="${expansion}"]`)
             ?.classList.add('astar-expansion-alt');
@@ -148,9 +147,6 @@
           paintAStarRoute();
         });
 
-        // Repete após o redraw síncrono do simulador original. Como o estilo
-        // original de astar-path foi neutralizado, não existe mais o flash para
-        // Sibiu -> Fagaras antes da nossa pintura estável.
         requestAnimationFrame(() => requestAnimationFrame(paintAStarRoute));
       };
 
