@@ -98,6 +98,20 @@
 
       const edgeKey = (a, b) => [a, b].sort().join('-');
 
+      const clarifyFrontierEntries = () => {
+        section.querySelectorAll('[data-astar-frontier] li').forEach((item) => {
+          const text = item.textContent.trim();
+
+          if (text === 'Bucharest · g=450 · f=450') {
+            item.textContent = 'Bucharest via Fagaras · g=450 · f=450';
+          } else if (text === 'Bucharest · g=418 · f=418 (válida)') {
+            item.textContent = 'Bucharest via Pitesti · g=418 · f=418 (válida)';
+          } else if (text === 'Bucharest · g=450 · f=450 (obsoleta)') {
+            item.textContent = 'Bucharest via Fagaras · g=450 · f=450 (obsoleta)';
+          }
+        });
+      };
+
       const paintAStarRoute = () => {
         const statusText = statusEl.textContent?.trim() || '';
         if (!statusText.startsWith('A*')) return;
@@ -135,6 +149,8 @@
             mapStatus.textContent = `A* · rota em ${routeEnd}`;
           }
         }
+
+        clarifyFrontierEntries();
       };
 
       let paintScheduled = false;
