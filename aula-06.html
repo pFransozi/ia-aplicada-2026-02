@@ -34,19 +34,13 @@
     .lesson-six .trace { padding:1rem 1.1rem; border-left:3px solid var(--blue); background:var(--soft); border-radius:0 8px 8px 0; margin:1rem 0; }
     .lesson-six .trace p { margin:.35rem 0; }
     .lesson-six .reference-card { border-top:1px solid var(--line); padding-top:1rem; }
-    .lesson-six .time-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:1.2rem 0 0; }
-    .lesson-six .time-card { padding:1rem; border:1px solid var(--line); border-radius:10px; background:var(--paper); }
-    .lesson-six .time-card strong { display:block; margin-bottom:.35rem; }
-    .lesson-six .time-card span { display:block; font-size:.85rem; color:var(--muted); margin-bottom:.45rem; }
     .lesson-six .compact-card { padding:1rem 1.1rem; }
     @media(max-width:900px) {
-      .lesson-six .time-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
       .lesson-six .concept-grid.three { grid-template-columns:1fr; }
     }
     @media(max-width:760px) {
       .lesson-six .overview-grid,
-      .lesson-six .concept-grid,
-      .lesson-six .time-grid { grid-template-columns:1fr; }
+      .lesson-six .concept-grid { grid-template-columns:1fr; }
       .lesson-six .flow-step { grid-template-columns:1fr; }
       .lesson-six .flow-step .arrow { transform:rotate(90deg); }
       .lesson-six .knowledge-architecture { grid-template-columns:1fr; }
@@ -131,15 +125,6 @@
               <article class="card competency"><h3>C2 — Construir soluções</h3><div class="skill"><strong>H6</strong><span>Aplicar técnicas de representação e inferência na construção de uma solução baseada em conhecimento.</span></div></article>
               <article class="card competency"><h3>C11 — Desenvolver algoritmos</h3><div class="skill"><strong>H38</strong><span>Desenvolver uma base simples de fatos e regras e acompanhar sua execução.</span></div></article>
             </div>
-          </div>
-
-          <div class="time-grid" aria-label="Roteiro sugerido para 90 minutos">
-            <div class="time-card"><span>0–10 min</span><strong>Retomada</strong>Da busca para o conhecimento.</div>
-            <div class="time-card"><span>10–25 min</span><strong>Representação</strong>Fatos, relações e regras.</div>
-            <div class="time-card"><span>25–55 min</span><strong>Inferência</strong>Base de conhecimento e encadeamento.</div>
-            <div class="time-card"><span>55–80 min</span><strong>Prática</strong>Diagnóstico de uma aplicação web.</div>
-            <div class="time-card"><span>80–87 min</span><strong>Limites</strong>Lacuna, conflito e incerteza.</div>
-            <div class="time-card"><span>87–90 min</span><strong>Síntese</strong>Três ideias para levar da aula.</div>
           </div>
         </div>
       </section>
@@ -433,7 +418,7 @@ ENTÃO gripe ?</code></pre>
     <aside class="toc" aria-label="Índice desta aula">
       <div class="toc-head"><span class="toc-label">Nesta aula</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div>
       <nav>
-        <a href="#visao">Roteiro de 90 min</a>
+        <a href="#visao">Visão da aula</a>
         <a href="#busca-conhecimento">Busca → conhecimento</a>
         <a href="#representar">Fatos e regras</a>
         <a href="#inferencia">Inferência</a>
