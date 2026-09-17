@@ -185,7 +185,7 @@
     </div></section>
 
     <section class="study-section" id="greedy-astar"><div class="container">
-      <div class="study-heading"><p class="study-kicker">Parte III · Estimar o futuro sem esquecer o passado</p><h2>Por que Greedy pode encontrar uma solução rapidamente — e ainda assim escolher uma rota de maior custo</h2><p>A diferença entre Greedy e A* aparece no tipo de informação que cada estratégia aceita na decisão local.</p></div>
+      <div class="study-heading"><p class="study-kicker">Parte III · Estimar o futuro sem esquecer o passado</p><h2>Por que Greedy pode encontrar uma solução rapidamente e ainda assim escolher uma rota de maior custo</h2><p>A diferença entre Greedy e A* aparece no tipo de informação que cada estratégia aceita na decisão local.</p></div>
       <div class="study-grid">
         <div class="study-prose">
           <h3>Greedy Best-First olha apenas para h(n)</h3>
@@ -201,7 +201,7 @@
       </div>
       <div class="equation-panel"><span class="equation">Greedy: f(n) = h(n)</span><p>O passado é ignorado. Uma rota já cara ainda pode receber prioridade se sua estimativa restante for pequena.</p></div>
       <div class="equation-panel"><span class="equation">A*: f(n) = g(n) + h(n)</span><p>O custo parcial e a estimativa restante passam a competir dentro da mesma função de avaliação.</p></div>
-      <div class="study-prose"><h3>O A* não “sabe” o custo futuro</h3><p>A soma g+h não transforma a estimativa em conhecimento certo. h(n) continua sendo uma aproximação. A diferença é que o algoritmo estrutura a decisão de forma a combinar informação conhecida com informação heurística — e as garantias obtidas dependem das propriedades dessa heurística.</p></div>
+      <div class="study-prose"><h3>O A* não “sabe” o custo futuro</h3><p>A soma g+h não transforma a estimativa em conhecimento certo. h(n) continua sendo uma aproximação. A diferença é que o algoritmo estrutura a decisão de forma a combinar informação conhecida com informação heurística, e as garantias obtidas dependem das propriedades dessa heurística.</p></div>
     </div></section>
 
     <section class="study-section alt" id="garantias"><div class="container">
@@ -248,7 +248,7 @@
         <p>Uma forma de avaliar empiricamente a qualidade de uma heurística é observar quantos nós ela faz a busca gerar. O <strong>fator de ramificação efetivo</strong>, b*, pergunta aproximadamente: “que fator de ramificação uma árvore uniforme teria de possuir para gerar a mesma quantidade de nós até essa profundidade?” Valores próximos de 1 indicam uma exploração mais concentrada.</p>
       </div>
       <div class="study-table-wrap"><table class="study-table">
-        <thead><tr><th>Profundidade da solução</th><th>BFS — nós gerados</th><th>A* com h₁</th><th>A* com h₂</th><th>b* de h₂</th></tr></thead>
+        <thead><tr><th>Profundidade da solução</th><th>BFS: nós gerados</th><th>A* com h₁</th><th>A* com h₂</th><th>b* de h₂</th></tr></thead>
         <tbody>
           <tr><td>10</td><td>1.033</td><td>116</td><td>48</td><td>1,27</td></tr>
           <tr><td>20</td><td>91.493</td><td>9.905</td><td>1.318</td><td>1,34</td></tr>
@@ -281,7 +281,7 @@
     </div></section>
 
     <section class="study-section" id="custo-informacao"><div class="container">
-      <div class="study-heading"><p class="study-kicker">Parte VII · O valor e o preço da informação</p><h2>Mais informação costuma reduzir a busca — mas não vem de graça</h2><p>A avaliação heurística também consome processamento. O objetivo não é obter a estimativa mais sofisticada possível, e sim reduzir o custo total da solução.</p></div>
+      <div class="study-heading"><p class="study-kicker">Parte VII · O valor e o preço da informação</p><h2>Mais informação costuma reduzir a busca, mas não vem de graça</h2><p>A avaliação heurística também consome processamento. O objetivo não é obter a estimativa mais sofisticada possível, e sim reduzir o custo total da solução.</p></div>
       <div class="study-grid">
         <div class="study-prose">
           <h3>O caso limite h(n)=0</h3>
