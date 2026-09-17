@@ -174,11 +174,34 @@ existe_falha_backend</code></pre>
             <p>Um programa não entende uma situação como nós. Primeiro precisamos transformar o que sabemos sobre o problema em elementos explícitos que ele consiga armazenar e relacionar.</p>
           </div>
 
+          <article class="card compact-card">
+            <p class="eyebrow">Situação do mundo real</p>
+            <h3>Uma API de vendas começou a retornar erro 500</h3>
+            <p>Ao investigar o incidente, a equipe verifica que o banco de dados está indisponível e sabe que a API depende desse banco. Queremos transformar essas informações em uma representação que o sistema consiga utilizar.</p>
+            <pre class="code-block"><code>Situação observada
+"A API retorna erro 500, o banco está indisponível
+ e a API depende do banco."
+
+↓ modelagem
+
+FATOS
+api_retorna_500
+banco_indisponivel
+
+RELAÇÃO
+depende_de(api, banco)
+
+REGRA
+SE api_retorna_500 E banco_indisponivel
+ENTÃO suspeita_banco</code></pre>
+            <p>Essa modelagem será a base para identificar três elementos: <strong>fato</strong>, <strong>relação</strong> e <strong>regra</strong>.</p>
+          </article>
+
           <div class="concept-grid three">
             <article class="card">
               <p class="eyebrow">Fato</p>
               <h3>O que sabemos?</h3>
-              <p><strong>Descreve o caso:</strong> uma informação considerada verdadeira no caso que estamos analisando.</p>
+              <p><strong>Descreve o caso.</strong> No exemplo, são informações observadas durante o incidente.</p>
               <pre class="code-block"><code>api_retorna_500
 banco_indisponivel</code></pre>
             </article>
@@ -186,7 +209,7 @@ banco_indisponivel</code></pre>
             <article class="card">
               <p class="eyebrow">Relação</p>
               <h3>Como as coisas se conectam?</h3>
-              <p><strong>Organiza os elementos do domínio:</strong> mostra como eles se relacionam.</p>
+              <p><strong>Organiza os elementos do domínio.</strong> No exemplo, registra uma dependência conhecida.</p>
               <pre class="code-block"><code>depende_de(api, banco)</code></pre>
             </article>
 
@@ -194,27 +217,12 @@ banco_indisponivel</code></pre>
               <p class="eyebrow">Regra</p>
               <h3>O que pode ser concluído?</h3>
               <p><strong>Diz o que pode ser concluído</strong> quando certas condições são satisfeitas.</p>
-              <pre class="code-block"><code>SE api_retorna_500
-ENTÃO existe_falha_backend</code></pre>
+              <pre class="code-block"><code>SE api_retorna_500 E banco_indisponivel
+ENTÃO suspeita_banco</code></pre>
             </article>
           </div>
 
-          <article class="card compact-card">
-            <p class="eyebrow">Um mesmo exemplo</p>
-            <h3>Da observação para uma representação</h3>
-            <pre class="code-block"><code>Observamos:
-"A API retorna erro 500 e o banco está indisponível."
-
-Representamos:
-FATOS
-api_retorna_500
-banco_indisponivel
-
-REGRA
-SE api_retorna_500 E banco_indisponivel
-ENTÃO suspeita_banco</code></pre>
-            <p>Ainda não estamos executando a regra. Nesta etapa, apenas organizamos o conhecimento para que o sistema possa usá-lo. A execução virá na inferência.</p>
-          </article>
+          <div class="note-banner"><strong>Importante:</strong> até aqui estamos apenas representando o conhecimento. Verificar se a regra pode ser aplicada e produzir <code>suspeita_banco</code> é tarefa da inferência.</div>
         </div>
       </section>
 
