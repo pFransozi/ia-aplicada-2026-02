@@ -364,82 +364,109 @@ R3: SE falha_associada_ao_banco
         <div class="container">
           <div class="section-heading">
             <p class="eyebrow">Prática guiada</p>
-            <h2>Diagnóstico de uma aplicação web</h2>
-            <p>Vamos reutilizar a mesma base para executar a inferência e observar como mudanças nos fatos alteram as conclusões.</p>
+            <h2>Projete um sistema de diagnóstico de incidentes</h2>
+            <p>Sistemas baseados em conhecimento combinam bem com tarefas de diagnóstico: observações viram fatos, conhecimento técnico vira regra e a inferência ajuda a levantar hipóteses ou indicar a próxima verificação.</p>
           </div>
 
-          <div class="concept-grid">
-            <article class="card">
-              <h3>Fatos observados</h3>
-              <pre class="code-block"><code>F1: api_retorna_500
-F2: banco_indisponivel
-F3: servidor_tem_espaco</code></pre>
-            </article>
-            <article class="card">
-              <h3>Regras disponíveis</h3>
-              <pre class="code-block"><code>R1: SE api_retorna_500
-    E banco_indisponivel
-    ENTÃO falha_associada_ao_banco
+          <article class="card compact-card">
+            <p class="eyebrow">Cenário</p>
+            <h3>Uma plataforma de vendas apresenta falhas intermitentes</h3>
+            <p>Usuários relatam erros <code>500</code> e respostas muito lentas. Durante a investigação, a equipe coleta:</p>
+            <ul>
+              <li>a API retorna erro 500;</li>
+              <li>a latência da API está alta;</li>
+              <li>o banco de dados está acessível;</li>
+              <li>o número de conexões abertas com o banco está no limite;</li>
+              <li>o cache está indisponível;</li>
+              <li>o servidor possui espaço em disco.</li>
+            </ul>
+            <p>A arquitetura também informa que a API depende do banco de dados e utiliza um serviço de cache.</p>
+          </article>
 
-R2: SE api_retorna_500
-    E disco_cheio
-    ENTÃO falha_associada_ao_disco
-
-R3: SE falha_associada_ao_banco
-    ENTÃO verificar_conexao_banco
-
-R4: SE falha_associada_ao_disco
-    ENTÃO verificar_espaco_disco</code></pre>
-            </article>
-          </div>
+          <div class="note-banner"><strong>Objetivo do sistema:</strong> a partir das observações do incidente, indicar quais problemas podem estar associados à falha e quais verificações devem ser realizadas em seguida.</div>
 
           <article class="card guided-exercise">
-            <h3>1. Execute manualmente</h3>
+            <h3>1. Modele os fatos</h3>
+            <p>Transforme as observações relevantes em fatos simples. Um exemplo já está resolvido:</p>
+            <pre class="code-block"><code>"A API retorna erro 500"
+        ↓
+api_retorna_500</code></pre>
+            <p>Agora modele as demais observações. Procure usar nomes curtos, consistentes e sem incluir conclusões antecipadas.</p>
+          </article>
+
+          <article class="card guided-exercise">
+            <h3>2. Modele as relações do domínio</h3>
+            <p>Nem toda informação é um fato do incidente. Algumas descrevem como os componentes do sistema se relacionam.</p>
+            <pre class="code-block"><code>"A API depende do banco"
+        ↓
+depende_de(api, banco)</code></pre>
+            <p>Represente também a relação entre a API e o cache.</p>
+          </article>
+
+          <article class="card guided-exercise">
+            <h3>3. Transforme conhecimento técnico em regras</h3>
+            <p>A equipe fornece o conhecimento abaixo em linguagem natural. Converta cada item para o formato <code>SE ... ENTÃO ...</code>.</p>
             <ol>
-              <li>Comece apenas com F1, F2 e F3.</li>
-              <li>Procure uma regra cujas condições já sejam verdadeiras.</li>
-              <li>Adicione a conclusão dessa regra aos fatos conhecidos.</li>
-              <li>Repita até nenhuma regra produzir informação nova.</li>
-              <li>Identifique também qual regra ficou bloqueada e qual condição estava faltando.</li>
+              <li>Se a API retorna erro 500 e o banco está indisponível, investigar falha de acesso ao banco.</li>
+              <li>Se a latência da API está alta e o número de conexões com o banco está no limite, investigar saturação do pool de conexões.</li>
+              <li>Se a API apresenta falha e o cache está indisponível, investigar o serviço de cache.</li>
+              <li>Se a API apresenta falha e o disco está cheio, investigar armazenamento.</li>
             </ol>
+            <p>Uma regra pode produzir uma hipótese intermediária; outra regra pode usar essa hipótese para recomendar uma ação de verificação.</p>
           </article>
 
           <article class="card guided-exercise">
-            <h3>2. Troque o cenário</h3>
-            <p>Agora remova <code>banco_indisponivel</code> e <code>servidor_tem_espaco</code> e adicione <code>disco_cheio</code>. Antes de executar o código, preveja qual cadeia de conclusões deverá aparecer.</p>
+            <h3>4. Execute a inferência manualmente</h3>
+            <p>Com os fatos do cenário e as regras que você modelou:</p>
+            <ol>
+              <li>liste os fatos inicialmente conhecidos;</li>
+              <li>marque quais regras têm todas as condições satisfeitas;</li>
+              <li>adicione as conclusões produzidas aos fatos conhecidos;</li>
+              <li>repita o processo enquanto surgirem novas conclusões;</li>
+              <li>registre também as regras que ficaram bloqueadas e qual condição estava faltando.</li>
+            </ol>
+            <p>Ao final, represente pelo menos uma cadeia de explicação:</p>
+            <pre class="code-block"><code>evidência 1 + evidência 2
+          ↓ regra
+hipótese de diagnóstico
+          ↓ regra
+próxima verificação</code></pre>
           </article>
 
           <article class="card guided-exercise">
-            <h3>3. Compare com o mecanismo em Python</h3>
-            <p>O mecanismo não precisa conhecer o significado de “banco” ou “disco”. Ele apenas verifica se as condições de cada regra estão presentes nos fatos.</p>
-            <pre class="code-block"><code>fatos = {
-    "api_retorna_500",
-    "banco_indisponivel",
-    "servidor_tem_espaco"
-}
-
-regras = [
-    ({"api_retorna_500", "banco_indisponivel"}, "falha_associada_ao_banco"),
-    ({"api_retorna_500", "disco_cheio"}, "falha_associada_ao_disco"),
-    ({"falha_associada_ao_banco"}, "verificar_conexao_banco"),
-    ({"falha_associada_ao_disco"}, "verificar_espaco_disco")
-]
-
-houve_mudanca = True
-
-while houve_mudanca:
-    houve_mudanca = False
-
-    for condicoes, conclusao in regras:
-        # Todas as condições precisam estar nos fatos conhecidos.
-        if condicoes.issubset(fatos) and conclusao not in fatos:
-            fatos.add(conclusao)
-            houve_mudanca = True
-
-print(fatos)</code></pre>
+            <h3>5. Projete o sistema de inteligência</h3>
+            <p>Agora pense na implementação. O programa deve manter separadas a <strong>base de conhecimento</strong> e o <strong>mecanismo de inferência</strong>.</p>
+            <div class="knowledge-architecture" aria-label="Arquitetura sugerida para o sistema de diagnóstico">
+              <div><strong>Fatos observados</strong><br><small>entrada do incidente</small></div>
+              <div class="arrow">→</div>
+              <div><strong>Mecanismo de inferência</strong><br><small>procura regras aplicáveis</small></div>
+              <div class="arrow">↔</div>
+              <div><strong>Base de regras</strong><br><small>conhecimento técnico</small></div>
+            </div>
+            <p>Construa em Python um sistema capaz de:</p>
+            <ul>
+              <li>armazenar fatos observados;</li>
+              <li>armazenar regras com condições e conclusão;</li>
+              <li>identificar automaticamente regras aplicáveis;</li>
+              <li>adicionar novas conclusões aos fatos conhecidos;</li>
+              <li>repetir a inferência enquanto novas conclusões forem produzidas;</li>
+              <li>mostrar as conclusões e indicar qual regra produziu cada uma.</li>
+            </ul>
+            <div class="note-banner"><strong>Não há código pronto nesta etapa.</strong> A ideia é usar a modelagem construída acima como especificação para o programa.</div>
           </article>
 
-          <div class="note-banner"><strong>O ponto da prática não é decorar esse código.</strong> É perceber que o mesmo mecanismo pode produzir resultados diferentes quando mudamos os fatos ou as regras da base de conhecimento.</div>
+          <article class="card guided-exercise">
+            <h3>6. Teste um segundo incidente</h3>
+            <p>Depois que o sistema funcionar, teste outro conjunto de fatos:</p>
+            <pre class="code-block"><code>api_retorna_500
+disco_cheio
+cache_disponivel
+banco_disponivel
+conexoes_banco_normais</code></pre>
+            <p>Sem alterar o mecanismo de inferência, quais conclusões deveriam mudar? Se o programa estiver bem separado, apenas os fatos de entrada precisam ser substituídos.</p>
+          </article>
+
+          <div class="note-banner"><strong>Ideia central da prática:</strong> o desafio principal não é escrever um <code>if</code> para cada situação, mas transformar conhecimento do domínio em uma base de regras que possa ser usada por um mecanismo de inferência genérico.</div>
         </div>
       </section>
 
