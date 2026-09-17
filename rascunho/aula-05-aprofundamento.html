@@ -83,6 +83,10 @@
     .scale-fill.mid { width: 31%; }
     .scale-fill.high { width: 69%; }
     .scale-fill.full { width: 100%; opacity: .28; }
+    .reference-list { display: grid; gap: 1rem; margin-top: 1.5rem; }
+    .reference-item { padding: 1.2rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .reference-item strong { display: block; margin-bottom: .35rem; color: var(--text); }
+    .reference-item p { margin: 0; color: var(--muted); }
     .study-page .site-footer { border-top: 1px solid var(--line); }
     @media (max-width: 980px) {
       .study-hero-grid, .study-grid { grid-template-columns: 1fr; }
@@ -311,6 +315,15 @@
       <div class="study-prose">
         <p>A busca informada não cria um novo problema: ela altera a maneira de escolher estados da fronteira. Greedy usa apenas a estimativa restante; A* combina custo acumulado e estimativa restante. As garantias do A* dependem das propriedades da heurística, especialmente admissibilidade e consistência. Entre heurísticas seguras, as mais informativas tendem a reduzir a quantidade de busca, mas seu custo de cálculo também precisa ser considerado.</p>
         <p>Em outras palavras, a heurística representa <strong>conhecimento incorporado ao processo de busca</strong>. Projetá-la bem é uma forma de transformar conhecimento sobre o domínio em eficiência computacional.</p>
+      </div>
+    </div></section>
+
+    <section class="study-section alt" id="referencias"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Referências</p><h2>Livros utilizados como base conceitual</h2><p>As ideias apresentadas neste aprofundamento foram organizadas a partir das obras abaixo.</p></div>
+      <div class="reference-list">
+        <article class="reference-item"><strong>Artificial Intelligence: A Modern Approach</strong><p>RUSSELL, Stuart J.; NORVIG, Peter. 4. ed. Global Edition. Pearson, 2022. Especialmente o capítulo sobre resolução de problemas por busca, busca informada, A*, admissibilidade, consistência e construção de heurísticas.</p></article>
+        <article class="reference-item"><strong>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</strong><p>LUGER, George F. 6. ed. Pearson/Addison-Wesley, 2009. Especialmente os capítulos sobre busca em espaço de estados, busca heurística, best-first search, admissibilidade, monotonicidade e informatividade.</p></article>
+        <article class="reference-item"><strong>Grokking Artificial Intelligence Algorithms</strong><p>HURBANS, Rishal. Manning, 2020. Especialmente os capítulos sobre fundamentos de busca e busca inteligente.</p></article>
       </div>
     </div></section>
   </main></div>
