@@ -244,14 +244,26 @@ existe_falha_backend</code></pre>
           <article class="card compact-card">
             <p class="eyebrow">Situação do mundo real</p>
             <h3>Uma API de vendas começou a falhar</h3>
-            <p>A equipe observa que a API está retornando erro 500. Ela também sabe que a API depende do banco de dados e que o banco está indisponível.</p>
-            <p>Para que um sistema consiga raciocinar sobre esse cenário, precisamos <strong>modelar</strong> essas informações.</p>
-            <pre class="code-block"><code>api_retorna_500
+            <p>Durante a investigação, a equipe observa que a API retorna erro 500, o banco de dados está indisponível e o servidor ainda possui espaço em disco. A equipe também sabe que a API depende do banco e executa no <code>servidor_01</code>.</p>
+            <p>Existem duas causas comuns que queremos representar: uma falha associada ao banco de dados ou uma falha associada ao disco do servidor.</p>
+            <pre class="code-block"><code>FATOS
+api_retorna_500
 banco_indisponivel
-depende_de(api, banco)
+servidor_tem_espaco
 
-SE api_retorna_500 E banco_indisponivel
-ENTÃO suspeita_banco</code></pre>
+RELAÇÕES
+depende_de(api, banco)
+executa_em(api, servidor_01)
+
+REGRAS
+R1: SE api_retorna_500 E banco_indisponivel
+    ENTÃO falha_associada_ao_banco
+
+R2: SE api_retorna_500 E disco_cheio
+    ENTÃO falha_associada_ao_disco
+
+R3: SE falha_associada_ao_banco
+    ENTÃO verificar_conexao_banco</code></pre>
             <p>Essa modelagem será nossa referência para entender os três componentes abaixo.</p>
           </article>
 
@@ -259,29 +271,33 @@ ENTÃO suspeita_banco</code></pre>
             <article class="card">
               <p class="eyebrow">Fato</p>
               <h3>O que sabemos?</h3>
-              <p><strong>Descreve o caso:</strong> uma informação considerada verdadeira no caso que estamos analisando.</p>
+              <p><strong>Descreve o caso:</strong> informações observadas durante o incidente.</p>
               <pre class="code-block"><code>api_retorna_500
-banco_indisponivel</code></pre>
+banco_indisponivel
+servidor_tem_espaco</code></pre>
             </article>
 
             <article class="card">
               <p class="eyebrow">Relação</p>
               <h3>Como as coisas se conectam?</h3>
-              <p><strong>Organiza os elementos do domínio:</strong> mostra como eles se relacionam.</p>
-              <pre class="code-block"><code>depende_de(api, banco)</code></pre>
+              <p><strong>Organiza os elementos do domínio:</strong> registra dependências e vínculos conhecidos.</p>
+              <pre class="code-block"><code>depende_de(api, banco)
+executa_em(api, servidor_01)</code></pre>
             </article>
 
             <article class="card">
               <p class="eyebrow">Regra</p>
               <h3>O que pode ser concluído?</h3>
               <p><strong>Diz o que pode ser concluído</strong> quando certas condições são satisfeitas.</p>
-              <pre class="code-block"><code>SE api_retorna_500
-E banco_indisponivel
-ENTÃO suspeita_banco</code></pre>
+              <pre class="code-block"><code>R1: erro_500 + banco_indisponivel
+    → falha_associada_ao_banco
+
+R2: erro_500 + disco_cheio
+    → falha_associada_ao_disco</code></pre>
             </article>
           </div>
 
-          <div class="note-banner"><strong>Nesta etapa, estamos apenas representando.</strong> Ainda não executamos a regra nem produzimos a conclusão. Isso acontece no próximo componente da técnica: a inferência.</div>
+          <div class="note-banner"><strong>Nesta etapa, estamos apenas representando.</strong> A base contém mais de uma possibilidade. Descobrir quais regras realmente podem ser aplicadas aos fatos disponíveis é tarefa da inferência.</div>
         </div>
       </section>
 
@@ -302,28 +318,29 @@ ENTÃO suspeita_banco</code></pre>
           </div>
 
           <h3>Encadeamento para frente</h3>
-          <p>Começamos com aquilo que sabemos e avançamos produzindo novas conclusões.</p>
+          <p>Começamos com aquilo que sabemos e verificamos, uma a uma, quais regras têm todas as suas condições satisfeitas.</p>
 
           <pre class="code-block"><code>Fatos iniciais:
 api_retorna_500
 banco_indisponivel
+servidor_tem_espaco
 
-R1: SE api_retorna_500
-    ENTÃO existe_falha_backend
+R1: SE api_retorna_500 E banco_indisponivel
+    ENTÃO falha_associada_ao_banco
 
-R2: SE existe_falha_backend E banco_indisponivel
-    ENTÃO causa_provavel_banco
+R2: SE api_retorna_500 E disco_cheio
+    ENTÃO falha_associada_ao_disco
 
-R3: SE causa_provavel_banco
+R3: SE falha_associada_ao_banco
     ENTÃO verificar_conexao_banco</code></pre>
 
           <div class="flow">
-            <div class="flow-step"><strong>api_retorna_500</strong><span class="arrow">→</span><span>R1 produz <code>existe_falha_backend</code>.</span></div>
-            <div class="flow-step"><strong>existe_falha_backend + banco_indisponivel</strong><span class="arrow">→</span><span>R2 produz <code>causa_provavel_banco</code>.</span></div>
-            <div class="flow-step"><strong>causa_provavel_banco</strong><span class="arrow">→</span><span>R3 produz <code>verificar_conexao_banco</code>.</span></div>
+            <div class="flow-step"><strong>api_retorna_500 + banco_indisponivel</strong><span class="arrow">→</span><span>R1 pode ser aplicada e produz <code>falha_associada_ao_banco</code>.</span></div>
+            <div class="flow-step"><strong>api_retorna_500 + disco_cheio</strong><span class="arrow">→</span><span>R2 não pode ser aplicada: <code>disco_cheio</code> não é um fato conhecido.</span></div>
+            <div class="flow-step"><strong>falha_associada_ao_banco</strong><span class="arrow">→</span><span>R3 passa a ser aplicável e produz <code>verificar_conexao_banco</code>.</span></div>
           </div>
 
-          <div class="note-banner"><strong>Observe a cadeia:</strong> <code>api_retorna_500 → existe_falha_backend → causa_provavel_banco → verificar_conexao_banco</code>. Nem todos esses fatos existiam no início; parte deles foi derivada.</div>
+          <div class="note-banner"><strong>Observe:</strong> ter uma regra na base não significa que ela será usada. R2 representa uma possibilidade válida, mas não dispara neste caso porque uma de suas condições não está presente.</div>
 
           <article class="card guided-exercise">
             <p class="eyebrow">Só para reconhecer</p>
@@ -348,7 +365,7 @@ R3: SE causa_provavel_banco
           <div class="section-heading">
             <p class="eyebrow">Prática guiada</p>
             <h2>Diagnóstico de uma aplicação web</h2>
-            <p>Vamos usar o mesmo problema para identificar fatos e regras, executar a inferência manualmente e depois observar como o mecanismo pode ser programado.</p>
+            <p>Vamos reutilizar a mesma base para executar a inferência e observar como mudanças nos fatos alteram as conclusões.</p>
           </div>
 
           <div class="concept-grid">
@@ -361,18 +378,18 @@ F3: servidor_tem_espaco</code></pre>
             <article class="card">
               <h3>Regras disponíveis</h3>
               <pre class="code-block"><code>R1: SE api_retorna_500
-    ENTÃO existe_falha_backend
-
-R2: SE existe_falha_backend
     E banco_indisponivel
-    ENTÃO causa_provavel_banco
+    ENTÃO falha_associada_ao_banco
 
-R3: SE existe_falha_backend
+R2: SE api_retorna_500
     E disco_cheio
-    ENTÃO causa_provavel_disco
+    ENTÃO falha_associada_ao_disco
 
-R4: SE causa_provavel_banco
-    ENTÃO verificar_conexao_banco</code></pre>
+R3: SE falha_associada_ao_banco
+    ENTÃO verificar_conexao_banco
+
+R4: SE falha_associada_ao_disco
+    ENTÃO verificar_espaco_disco</code></pre>
             </article>
           </div>
 
@@ -383,13 +400,18 @@ R4: SE causa_provavel_banco
               <li>Procure uma regra cujas condições já sejam verdadeiras.</li>
               <li>Adicione a conclusão dessa regra aos fatos conhecidos.</li>
               <li>Repita até nenhuma regra produzir informação nova.</li>
-              <li>Registre a cadeia que justifica a conclusão final.</li>
+              <li>Identifique também qual regra ficou bloqueada e qual condição estava faltando.</li>
             </ol>
           </article>
 
           <article class="card guided-exercise">
-            <h3>2. Compare com o mecanismo em Python</h3>
-            <p>Os fatos e as regras já estão representados. O algoritmo abaixo precisa apenas verificar regras aplicáveis e adicionar novas conclusões.</p>
+            <h3>2. Troque o cenário</h3>
+            <p>Agora remova <code>banco_indisponivel</code> e <code>servidor_tem_espaco</code> e adicione <code>disco_cheio</code>. Antes de executar o código, preveja qual cadeia de conclusões deverá aparecer.</p>
+          </article>
+
+          <article class="card guided-exercise">
+            <h3>3. Compare com o mecanismo em Python</h3>
+            <p>O mecanismo não precisa conhecer o significado de “banco” ou “disco”. Ele apenas verifica se as condições de cada regra estão presentes nos fatos.</p>
             <pre class="code-block"><code>fatos = {
     "api_retorna_500",
     "banco_indisponivel",
@@ -397,10 +419,10 @@ R4: SE causa_provavel_banco
 }
 
 regras = [
-    ({"api_retorna_500"}, "existe_falha_backend"),
-    ({"existe_falha_backend", "banco_indisponivel"}, "causa_provavel_banco"),
-    ({"existe_falha_backend", "disco_cheio"}, "causa_provavel_disco"),
-    ({"causa_provavel_banco"}, "verificar_conexao_banco")
+    ({"api_retorna_500", "banco_indisponivel"}, "falha_associada_ao_banco"),
+    ({"api_retorna_500", "disco_cheio"}, "falha_associada_ao_disco"),
+    ({"falha_associada_ao_banco"}, "verificar_conexao_banco"),
+    ({"falha_associada_ao_disco"}, "verificar_espaco_disco")
 ]
 
 houve_mudanca = True
@@ -409,8 +431,7 @@ while houve_mudanca:
     houve_mudanca = False
 
     for condicoes, conclusao in regras:
-        # issubset verifica se todas as condições da regra
-        # já aparecem entre os fatos conhecidos.
+        # Todas as condições precisam estar nos fatos conhecidos.
         if condicoes.issubset(fatos) and conclusao not in fatos:
             fatos.add(conclusao)
             houve_mudanca = True
@@ -418,7 +439,7 @@ while houve_mudanca:
 print(fatos)</code></pre>
           </article>
 
-          <div class="note-banner"><strong>O ponto da prática não é decorar esse código.</strong> É perceber que o mecanismo de inferência pode continuar igual enquanto trocamos os fatos e as regras do domínio.</div>
+          <div class="note-banner"><strong>O ponto da prática não é decorar esse código.</strong> É perceber que o mesmo mecanismo pode produzir resultados diferentes quando mudamos os fatos ou as regras da base de conhecimento.</div>
         </div>
       </section>
 
