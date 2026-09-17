@@ -2,8 +2,8 @@
   const loaderScript = document.currentScript;
   const baseScript = document.createElement('script');
   baseScript.src = loaderScript?.src
-    ? new URL('script-custom-base.js?v=20260917-mapfix2', loaderScript.src).href
-    : 'script-custom-base.js?v=20260917-mapfix2';
+    ? new URL('script-custom-base.js?v=20260917-mapfix4', loaderScript.src).href
+    : 'script-custom-base.js?v=20260917-mapfix4';
   baseScript.async = false;
 
   const installAula05MapFix = () => {
@@ -18,9 +18,8 @@
       const map = section?.querySelector('.interactive-romania-map');
       const stepEl = section?.querySelector('[data-astar-step]');
       const statusEl = section?.querySelector('[data-active-map-status] strong');
-      const expandedEl = section?.querySelector('[data-astar-current]');
 
-      if (!section || !map || !stepEl || !statusEl || !expandedEl) {
+      if (!section || !map || !stepEl || !statusEl) {
         window.setTimeout(setup, 0);
         return;
       }
@@ -28,9 +27,52 @@
       if (section.dataset.mapFixV4 === 'true') return;
       section.dataset.mapFixV4 = 'true';
 
+      /*
+       * O simulador original usa frame.path para desenhar o caminho da entrada
+       * que está sendo expandida. Isso faz o mapa parecer "ir" para Fagaras.
+       * Neutralizamos essas classes originais e usamos classes próprias para a
+       * rota progressiva que queremos acompanhar didaticamente.
+       */
+      const style = document.createElement('style');
+      style.id = 'aula05-astar-stable-route';
+      style.textContent = `
+        body.lesson-five #simulador .route-edge.astar-path {
+          stroke: var(--muted) !important;
+          stroke-width: 1 !important;
+          opacity: .5 !important;
+          stroke-dasharray: none !important;
+        }
+
+        body.lesson-five #simulador .route-edge.astar-stable-path {
+          stroke: var(--blue) !important;
+          stroke-width: 4 !important;
+          opacity: 1 !important;
+          stroke-dasharray: none !important;
+          stroke-linecap: round !important;
+        }
+
+        body.lesson-five #simulador .route-node.astar-current {
+          border: 1px solid var(--line) !important;
+          background: var(--paper) !important;
+        }
+
+        body.lesson-five #simulador .route-node.astar-stable-current {
+          border: 2px solid var(--blue) !important;
+          background: var(--blue-soft) !important;
+          box-shadow: 0 0 0 1px var(--blue) !important;
+        }
+
+        body.lesson-five #simulador .route-node.astar-expansion-alt {
+          border: 1px solid var(--amber) !important;
+          background: var(--amber-soft) !important;
+          box-shadow: 0 0 0 1px var(--amber) !important;
+        }
+      `;
+      document.head.appendChild(style);
+
       const intro = map.closest('.comparison-lab-card')?.querySelector('p');
       if (intro) {
-        intro.textContent = 'Os números nas estradas indicam o custo real de cada trecho, em unidades de distância. Abaixo das cidades, h estima a distância restante até Bucharest. No A*, a linha azul acompanha progressivamente a rota principal da solução. Uma expansão alternativa, como Fagaras, é indicada separadamente sem deslocar o destaque principal da rota.';
+        intro.textContent = 'Os números nas estradas indicam o custo real de cada trecho, em unidades de distância. Abaixo das cidades, h estima a distância restante até Bucharest. No A*, a linha azul acompanha a rota principal da solução. Fagaras ainda é expandida pelo algoritmo, mas aparece apenas como uma expansão alternativa e não desloca a rota visual.';
       }
 
       const routeByStep = {
@@ -43,77 +85,57 @@
         6: ['Arad', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti', 'Bucharest']
       };
 
-      const edgeKey = (a, b) => [a, b].sort().join('-');
-
-      const clearAStarVisuals = () => {
-        map.querySelectorAll('.route-edge').forEach((edge) => {
-          // Remove também a classe aplicada pelo simulador original. Sem isso,
-          // o passo de Fagaras continua pintando Sibiu -> Fagaras por baixo.
-          edge.classList.remove('astar-path');
-          edge.style.removeProperty('stroke');
-          edge.style.removeProperty('stroke-width');
-          edge.style.removeProperty('opacity');
-          edge.style.removeProperty('stroke-dasharray');
-          edge.style.removeProperty('stroke-linecap');
-        });
-
-        map.querySelectorAll('.route-node').forEach((node) => {
-          // O simulador original marca frame.current como astar-current. No passo
-          // de Fagaras isso faz o mapa parecer que a rota saiu de Rimnicu Vilcea.
-          node.classList.remove('astar-current');
-          node.style.removeProperty('border-color');
-          node.style.removeProperty('background');
-          node.style.removeProperty('box-shadow');
-        });
+      const expansionByStep = {
+        0: null,
+        1: 'Arad',
+        2: 'Sibiu',
+        3: 'Rimnicu Vilcea',
+        4: 'Fagaras',
+        5: 'Pitesti',
+        6: null
       };
+
+      const edgeKey = (a, b) => [a, b].sort().join('-');
 
       const paintAStarRoute = () => {
         const statusText = statusEl.textContent?.trim() || '';
         if (!statusText.startsWith('A*')) return;
 
-        clearAStarVisuals();
-
         const step = Number(stepEl.textContent || 0);
         const route = routeByStep[step] || ['Arad'];
-        const routeSet = new Set(route);
-        const routeTip = route[route.length - 1];
-        const expandedCity = expandedEl.textContent?.trim() || '';
+        const expansion = expansionByStep[step];
+        const routeEnd = route[route.length - 1];
+
+        map.querySelectorAll('.route-edge.astar-stable-path').forEach((edge) => {
+          edge.classList.remove('astar-stable-path');
+        });
+        map.querySelectorAll('.route-node.astar-stable-current, .route-node.astar-expansion-alt').forEach((node) => {
+          node.classList.remove('astar-stable-current', 'astar-expansion-alt');
+        });
 
         for (let i = 0; i < route.length - 1; i += 1) {
-          const edge = map.querySelector(`[data-edge="${edgeKey(route[i], route[i + 1])}"]`);
-          if (!edge) continue;
-
-          edge.style.setProperty('stroke', 'var(--blue)', 'important');
-          edge.style.setProperty('stroke-width', '4', 'important');
-          edge.style.setProperty('opacity', '1', 'important');
-          edge.style.setProperty('stroke-dasharray', 'none', 'important');
-          edge.style.setProperty('stroke-linecap', 'round', 'important');
+          map.querySelector(`[data-edge="${edgeKey(route[i], route[i + 1])}"]`)
+            ?.classList.add('astar-stable-path');
         }
 
-        // O destaque principal acompanha a ponta da rota que estamos construindo.
-        // Assim, no passo em que Fagaras é expandida, a rota continua visualmente
-        // em Rimnicu Vilcea e só avança para Pitesti no passo seguinte.
-        const routeTipNode = map.querySelector(`[data-city="${routeTip}"]`);
-        if (routeTipNode) {
-          routeTipNode.style.setProperty('border-color', 'var(--blue)', 'important');
-          routeTipNode.style.setProperty('background', 'var(--blue-soft)', 'important');
-          routeTipNode.style.setProperty('box-shadow', '0 0 0 2px var(--blue)', 'important');
+        map.querySelector(`[data-city="${routeEnd}"]`)
+          ?.classList.add('astar-stable-current');
+
+        // No passo de Fagaras, a rota visual continua em Rimnicu Vilcea.
+        // Fagaras é somente uma expansão alternativa do A*.
+        if (expansion && expansion !== routeEnd) {
+          map.querySelector(`[data-city="${expansion}"]`)
+            ?.classList.add('astar-expansion-alt');
         }
 
-        // A expansão alternativa continua visível, mas como informação secundária.
-        if (expandedCity && !routeSet.has(expandedCity)) {
-          const expandedNode = map.querySelector(`[data-city="${expandedCity}"]`);
-          if (expandedNode) {
-            expandedNode.style.setProperty('border-color', 'var(--amber)', 'important');
-            expandedNode.style.setProperty('background', 'var(--amber-soft)', 'important');
-            expandedNode.style.setProperty('box-shadow', '0 0 0 2px var(--amber)', 'important');
+        const mapStatus = section.querySelector('[data-active-map-status] strong');
+        if (mapStatus) {
+          if (expansion && expansion !== routeEnd) {
+            mapStatus.textContent = `A* · rota em ${routeEnd} · expandindo ${expansion}`;
+          } else {
+            mapStatus.textContent = `A* · rota em ${routeEnd}`;
           }
         }
-
-        const nextStatus = expandedCity && expandedCity !== routeTip
-          ? `A* · rota: ${routeTip} · expansão: ${expandedCity}`
-          : `A* · rota: ${routeTip}`;
-        if (statusEl.textContent !== nextStatus) statusEl.textContent = nextStatus;
       };
 
       let paintScheduled = false;
@@ -126,17 +148,17 @@
           paintAStarRoute();
         });
 
-        // O simulador original redesenha classes no clique. Reaplicamos no próximo
-        // frame para garantir que a camada didática seja a última a ser renderizada.
+        // Repete após o redraw síncrono do simulador original. Como o estilo
+        // original de astar-path foi neutralizado, não existe mais o flash para
+        // Sibiu -> Fagaras antes da nossa pintura estável.
         requestAnimationFrame(() => requestAnimationFrame(paintAStarRoute));
       };
 
       const observer = new MutationObserver(schedulePaint);
       observer.observe(stepEl, { childList: true, characterData: true, subtree: true });
-      observer.observe(expandedEl, { childList: true, characterData: true, subtree: true });
 
       section.addEventListener('click', (event) => {
-        const button = event.target.closest('[data-runner]');
+        const button = event.target.closest('[data-runner="astar"]');
         if (button) schedulePaint();
       });
 
