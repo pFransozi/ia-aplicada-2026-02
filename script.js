@@ -8,6 +8,10 @@
     window.location.pathname.endsWith('/aula-02-aprofundamento.html') ||
     window.location.pathname.endsWith('aula-02-aprofundamento.html');
 
+  const isAula05 = () =>
+    window.location.pathname.endsWith('/aula-05.html') ||
+    window.location.pathname.endsWith('aula-05.html');
+
   const findInquiry = (title) =>
     [...document.querySelectorAll('.inquiry')].find(
       (item) => item.querySelector('h3')?.textContent.trim() === title
@@ -509,6 +513,73 @@
     section.dataset.adjusted = 'true';
   };
 
+  const improveAula05AStarCodeComments = () => {
+    if (!isAula05()) return;
+
+    const code = document.querySelector('#astar pre.code-block code');
+    if (!code || code.dataset.didacticComments === 'true') return;
+
+    code.textContent = `def a_estrela(estado_inicial, objetivo_atingido, sucessores, heuristica):
+    fronteira = []
+    ordem = count()
+
+    # melhor_g guarda o menor custo g encontrado ATÉ AGORA para cada estado.
+    # Exemplo: Bucharest pode aparecer primeiro com g=450 e depois melhorar para g=418.
+    # Portanto, esse valor pode mudar durante a busca.
+    melhor_g = {estado_inicial: 0}
+
+    # No estado inicial, g=0. Logo, a prioridade inicial é 0 + h(inicial).
+    heappush(fronteira, (
+        heuristica(estado_inicial), next(ordem),
+        estado_inicial, [estado_inicial], 0
+    ))
+
+    while fronteira:
+        # Retiramos a entrada com menor f = g + h.
+        prioridade, _, estado, caminho, g_atual = heappop(fronteira)
+
+        # A mesma cidade pode aparecer mais de uma vez no heap.
+        # Se esta entrada possui g maior que melhor_g[estado], ela ficou obsoleta:
+        # já encontramos outro caminho mais barato para chegar ao mesmo estado.
+        if g_atual > melhor_g[estado]:
+            continue
+
+        # O objetivo só encerra a busca quando uma entrada válida é retirada da fronteira.
+        if objetivo_atingido(estado):
+            return caminho, g_atual
+
+        for sucessor, custo_acao in sucessores(estado):
+            # Calculamos quanto custa chegar ao sucessor pelo caminho atual.
+            novo_g = g_atual + custo_acao
+
+            # Aceitamos o sucessor quando:
+            # 1) ainda nunca chegamos a ele; ou
+            # 2) encontramos agora um caminho mais barato.
+            if sucessor not in melhor_g or novo_g < melhor_g[sucessor]:
+
+                # Registramos o novo melhor custo conhecido para chegar ao sucessor.
+                melhor_g[sucessor] = novo_g
+
+                novo_caminho = caminho + [sucessor]
+
+                # No A*, a prioridade combina custo conhecido e estimativa restante.
+                # f(n) = g(n) + h(n)
+                prioridade = novo_g + heuristica(sucessor)
+
+                # Inserimos a nova alternativa na fronteira.
+                # Se existir uma entrada antiga mais cara para o mesmo estado,
+                # ela pode permanecer no heap e será ignorada pelo teste de melhor_g acima.
+                heappush(fronteira, (
+                    prioridade, next(ordem),
+                    sucessor, novo_caminho, novo_g
+                ))
+
+    # Se a fronteira esvaziar, não existe caminho até o objetivo.
+    return None, None`;
+
+    code.dataset.didacticComments = 'true';
+  };
+
   const applyPageAdjustments = () => {
     if (isAula02()) {
       simplifyAiDecision();
@@ -524,6 +595,7 @@
     improveAula02AprofundamentoExpertSystems();
     improveAula02AprofundamentoLearning();
     improveAula02AprofundamentoAgents();
+    improveAula05AStarCodeComments();
   };
 
   applyPageAdjustments();
