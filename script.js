@@ -580,6 +580,46 @@
     code.dataset.didacticComments = 'true';
   };
 
+  const fixAula05MapVisualization = () => {
+    if (!isAula05()) return;
+
+    const section = document.querySelector('#simulador');
+    const map = section?.querySelector('.interactive-romania-map');
+    if (!section || !map || section.dataset.mapPathFix === 'true') return;
+
+    section.dataset.mapPathFix = 'true';
+
+    const intro = map.closest('.comparison-lab-card')?.querySelector('p');
+    if (intro) {
+      intro.textContent = 'Os números nas estradas indicam o custo real de cada trecho, em unidades de distância. Abaixo das cidades, h estima a distância restante até Bucharest. Durante a execução, o destaque indica o estado que está sendo expandido e os estados na fronteira. A linha do caminho da solução aparece somente quando o objetivo é alcançado.';
+    }
+
+    const normalizeMap = () => {
+      const statusText = section.querySelector('[data-active-map-status] strong')?.textContent?.trim() || '';
+      const astarActive = statusText.startsWith('A*');
+      const current = statusText.includes('·') ? statusText.split('·').slice(1).join('·').trim() : '';
+
+      if (!astarActive) return;
+
+      // Durante a busca, não desenhamos frame.path como se o algoritmo estivesse
+      // fisicamente percorrendo esse caminho. Fagaras pode ser expandida depois de
+      // Rimnicu Vilcea sem fazer parte da solução final.
+      if (current !== 'Bucharest') {
+        map.querySelectorAll('.route-edge.astar-path').forEach((edge) => {
+          edge.classList.remove('astar-path');
+        });
+      }
+    };
+
+    // Os listeners originais do simulador já foram registrados quando este script
+    // é executado. Estes listeners rodam depois deles e corrigem apenas a camada visual.
+    section.querySelectorAll('[data-runner="astar"]').forEach((button) => {
+      button.addEventListener('click', () => queueMicrotask(normalizeMap));
+    });
+
+    normalizeMap();
+  };
+
   const applyPageAdjustments = () => {
     if (isAula02()) {
       simplifyAiDecision();
@@ -596,6 +636,7 @@
     improveAula02AprofundamentoLearning();
     improveAula02AprofundamentoAgents();
     improveAula05AStarCodeComments();
+    fixAula05MapVisualization();
   };
 
   applyPageAdjustments();
