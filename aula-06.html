@@ -170,47 +170,53 @@ existe_falha_backend</code></pre>
         <div class="container">
           <div class="section-heading">
             <p class="eyebrow">Representação</p>
-            <h2>Como representar aquilo que o sistema sabe?</h2>
-            <p>Representar conhecimento é colocar informações sobre um domínio em uma forma que o programa consiga armazenar e usar para raciocinar.</p>
+            <h2>Como transformar conhecimento em algo que o sistema consiga usar?</h2>
+            <p>Um programa não entende uma situação como nós. Primeiro precisamos transformar o que sabemos sobre o problema em elementos explícitos que ele consiga armazenar e relacionar.</p>
           </div>
 
           <div class="concept-grid three">
             <article class="card">
               <p class="eyebrow">Fato</p>
-              <h3>Algo conhecido no caso atual</h3>
+              <h3>O que sabemos?</h3>
+              <p>Uma informação considerada verdadeira no caso que estamos analisando.</p>
               <pre class="code-block"><code>api_retorna_500
 banco_indisponivel</code></pre>
             </article>
 
             <article class="card">
               <p class="eyebrow">Relação</p>
-              <h3>Conecta elementos do domínio</h3>
+              <h3>Como as coisas se conectam?</h3>
+              <p>Uma ligação entre elementos do domínio.</p>
               <pre class="code-block"><code>depende_de(api, banco)</code></pre>
             </article>
 
             <article class="card">
               <p class="eyebrow">Regra</p>
-              <h3>Conhecimento que pode ser aplicado</h3>
+              <h3>O que vale de forma geral?</h3>
+              <p>Uma condição que permite produzir uma nova informação.</p>
               <pre class="code-block"><code>SE api_retorna_500
 ENTÃO existe_falha_backend</code></pre>
             </article>
           </div>
 
-          <div class="note-banner"><strong>Ideia principal:</strong> fatos descrevem o caso. Regras descrevem conhecimento que pode ser aplicado ao caso. Uma conclusão é simplesmente um novo fato produzido pela aplicação de uma regra.</div>
+          <div class="note-banner"><strong>Leia assim:</strong> os fatos descrevem o caso; as relações organizam os elementos do domínio; e as regras dizem o que pode ser concluído quando certas condições são satisfeitas.</div>
 
-          <div class="concept-grid">
-            <article class="card compact-card">
-              <h3>Regra embutida no código</h3>
-              <pre class="code-block"><code>if erro_500 and banco_indisponivel:
-    causa = "banco"</code></pre>
-            </article>
-            <article class="card compact-card">
-              <h3>Conhecimento explícito</h3>
-              <pre class="code-block"><code>SE erro_500 E banco_indisponivel
-ENTÃO causa_banco</code></pre>
-            </article>
-          </div>
-          <p>Em um sistema baseado em conhecimento, buscamos separar as regras do domínio do mecanismo que executa essas regras.</p>
+          <article class="card compact-card">
+            <p class="eyebrow">Um mesmo exemplo</p>
+            <h3>Da observação para uma representação</h3>
+            <pre class="code-block"><code>Observamos:
+"A API retorna erro 500 e o banco está indisponível."
+
+Representamos:
+FATOS
+api_retorna_500
+banco_indisponivel
+
+REGRA
+SE api_retorna_500 E banco_indisponivel
+ENTÃO suspeita_banco</code></pre>
+            <p>Ainda não estamos executando a regra. Nesta etapa, apenas organizamos o conhecimento para que o sistema possa usá-lo. A execução virá na inferência.</p>
+          </article>
         </div>
       </section>
 
