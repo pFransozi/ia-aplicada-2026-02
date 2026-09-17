@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#111;}.title{font-size:24px;font-weight:700;}.subtitle{font-size:15px;}.edge{stroke:#777;stroke-width:2;}.costbg{fill:white;stroke:#ddd;stroke-width:1;}.cost{font-size:13px;font-weight:600;text-anchor:middle;dominant-baseline:middle;}.node{fill:#e9ecef;stroke:#333;stroke-width:2;}.start{fill:#dbeafe;stroke:#1d4ed8;}.goal{fill:#dcfce7;stroke:#15803d;}.name{font-size:13px;font-weight:700;text-anchor:middle;}.heur{font-size:12px;text-anchor:middle;}</style>
+<text x="550.0" y="38" class="title" text-anchor="middle">Exercício A* 2 — Data center</text>
+<text x="550.0" y="66" class="subtitle" text-anchor="middle">Início: NOC · Objetivo: Sala Critica</text>
+<line x1="85.0" y1="405.3" x2="196.6" y2="478.3" class="edge"/>
+<line x1="85.0" y1="405.3" x2="224.5" y2="236.7" class="edge"/>
+<line x1="894.1" y1="528.9" x2="736.0" y2="551.3" class="edge"/>
+<line x1="745.3" y1="298.5" x2="810.4" y2="158.1" class="edge"/>
+<line x1="745.3" y1="298.5" x2="1015.0" y2="309.8" class="edge"/>
+<line x1="670.9" y1="630.0" x2="736.0" y2="551.3" class="edge"/>
+<line x1="196.6" y1="478.3" x2="550.0" y2="512.0" class="edge"/>
+<line x1="736.0" y1="551.3" x2="550.0" y2="512.0" class="edge"/>
+<line x1="810.4" y1="158.1" x2="475.6" y2="130.0" class="edge"/>
+<line x1="475.6" y1="130.0" x2="224.5" y2="236.7" class="edge"/>
+<line x1="745.3" y1="298.5" x2="224.5" y2="236.7" class="edge"/>
+<line x1="745.3" y1="298.5" x2="736.0" y2="551.3" class="edge"/>
+<line x1="894.1" y1="528.9" x2="475.6" y2="130.0" class="edge"/>
+<line x1="670.9" y1="630.0" x2="810.4" y2="158.1" class="edge"/>
+<line x1="670.9" y1="630.0" x2="196.6" y2="478.3" class="edge"/>
+<line x1="894.1" y1="528.9" x2="810.4" y2="158.1" class="edge"/>
+<line x1="85.0" y1="405.3" x2="894.1" y2="528.9" class="edge"/>
+<line x1="745.3" y1="298.5" x2="550.0" y2="512.0" class="edge"/>
+<rect x="123.8" y="431.8" width="34" height="20" rx="5" class="costbg"/>
+<text x="140.8" y="441.8" class="cost">37</text>
+<rect x="133.8" y="311.0" width="42" height="20" rx="5" class="costbg"/>
+<text x="154.8" y="321.0" class="cost">138</text>
+<rect x="798.0" y="530.1" width="34" height="20" rx="5" class="costbg"/>
+<text x="815.0" y="540.1" class="cost">28</text>
+<rect x="760.8" y="218.3" width="34" height="20" rx="5" class="costbg"/>
+<text x="777.8" y="228.3" class="cost">31</text>
+<rect x="863.1" y="294.2" width="34" height="20" rx="5" class="costbg"/>
+<text x="880.1" y="304.2" class="cost">58</text>
+<rect x="686.5" y="580.7" width="34" height="20" rx="5" class="costbg"/>
+<text x="703.5" y="590.7" class="cost">17</text>
+<rect x="356.3" y="485.2" width="34" height="20" rx="5" class="costbg"/>
+<text x="373.3" y="495.2" class="cost">43</text>
+<rect x="626.0" y="521.7" width="34" height="20" rx="5" class="costbg"/>
+<text x="643.0" y="531.7" class="cost">31</text>
+<rect x="626.0" y="134.0" width="34" height="20" rx="5" class="costbg"/>
+<text x="643.0" y="144.0" class="cost">54</text>
+<rect x="333.1" y="173.4" width="34" height="20" rx="5" class="costbg"/>
+<text x="350.1" y="183.4" class="cost">68</text>
+<rect x="467.9" y="257.6" width="34" height="20" rx="5" class="costbg"/>
+<text x="484.9" y="267.6" class="cost">97</text>
+<rect x="723.6" y="414.9" width="34" height="20" rx="5" class="costbg"/>
+<text x="740.6" y="424.9" class="cost">75</text>
+<rect x="663.8" y="319.4" width="42" height="20" rx="5" class="costbg"/>
+<text x="684.8" y="329.4" class="cost">114</text>
+<rect x="719.6" y="384.0" width="42" height="20" rx="5" class="costbg"/>
+<text x="740.6" y="394.0" class="cost">108</text>
+<rect x="416.8" y="544.2" width="34" height="20" rx="5" class="costbg"/>
+<text x="433.8" y="554.2" class="cost">98</text>
+<rect x="835.2" y="333.5" width="34" height="20" rx="5" class="costbg"/>
+<text x="852.2" y="343.5" class="cost">80</text>
+<rect x="468.5" y="457.1" width="42" height="20" rx="5" class="costbg"/>
+<text x="489.5" y="467.1" class="cost">189</text>
+<rect x="630.6" y="395.3" width="34" height="20" rx="5" class="costbg"/>
+<text x="647.6" y="405.3" class="cost">64</text>
+<circle cx="85.0" cy="405.3" r="31" class="node start"/>
+<text x="85.0" y="402.3" class="name">NOC</text>
+<text x="85.0" y="420.3" class="heur">h=101</text>
+<circle cx="894.1" cy="528.9" r="31" class="node"/>
+<text x="894.1" y="525.9" class="name">Corredor A</text>
+<text x="894.1" y="543.9" class="heur">h=41</text>
+<circle cx="745.3" cy="298.5" r="31" class="node"/>
+<text x="745.3" y="295.5" class="name">Corredor B</text>
+<text x="745.3" y="313.5" class="heur">h=29</text>
+<circle cx="670.9" cy="630.0" r="31" class="node"/>
+<text x="670.9" y="627.0" class="name">UPS</text>
+<text x="670.9" y="645.0" class="heur">h=67</text>
+<circle cx="196.6" cy="478.3" r="31" class="node"/>
+<text x="196.6" y="475.3" class="name">Recepcao</text>
+<text x="196.6" y="493.3" class="heur">h=92</text>
+<circle cx="736.0" cy="551.3" r="31" class="node"/>
+<text x="736.0" y="548.3" class="name">Rack 1</text>
+<text x="736.0" y="566.3" class="heur">h=52</text>
+<circle cx="550.0" cy="512.0" r="31" class="node"/>
+<text x="550.0" y="509.0" class="name">Rack 2</text>
+<text x="550.0" y="527.0" class="heur">h=61</text>
+<circle cx="810.4" cy="158.1" r="31" class="node"/>
+<text x="810.4" y="155.1" class="name">Climatizacao</text>
+<text x="810.4" y="173.1" class="heur">h=34</text>
+<circle cx="475.6" cy="130.0" r="31" class="node"/>
+<text x="475.6" y="127.0" class="name">Seguranca</text>
+<text x="475.6" y="145.0" class="heur">h=66</text>
+<circle cx="224.5" cy="236.7" r="31" class="node"/>
+<text x="224.5" y="233.7" class="name">Geradores</text>
+<text x="224.5" y="251.7" class="heur">h=85</text>
+<circle cx="1015.0" cy="309.8" r="31" class="node goal"/>
+<text x="1015.0" y="306.8" class="name">Sala Critica</text>
+<text x="1015.0" y="324.8" class="heur">h=0</text>
+<text x="25" y="680" class="subtitle">Azul: estado inicial · Verde: objetivo · Números nas arestas: custo · h: heurística</text>
+</svg>
