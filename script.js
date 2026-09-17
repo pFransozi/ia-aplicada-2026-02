@@ -1,670 +1,134 @@
 (() => {
-  // Mantém a referência esperada pela validação do GitHub Pages: -dark.png
-  const isAula02 = () =>
-    window.location.pathname.endsWith('/aula-02.html') ||
-    window.location.pathname.endsWith('aula-02.html');
-
-  const isAula02Aprofundamento = () =>
-    window.location.pathname.endsWith('/aula-02-aprofundamento.html') ||
-    window.location.pathname.endsWith('aula-02-aprofundamento.html');
-
-  const isAula05 = () =>
-    window.location.pathname.endsWith('/aula-05.html') ||
-    window.location.pathname.endsWith('aula-05.html');
-
-  const findInquiry = (title) =>
-    [...document.querySelectorAll('.inquiry')].find(
-      (item) => item.querySelector('h3')?.textContent.trim() === title
-    );
-
-  const simplifyAiDecision = () => {
-    const inquiry = findInquiry('Este problema realmente precisa de IA?');
-    if (!inquiry) return;
-
-    const body = inquiry.querySelector('.inquiry-body');
-    const content = body?.firstElementChild;
-    if (!body || !content) return;
-
-    body.classList.add('inquiry-body-single');
-    body.querySelector(':scope > .worksheet')?.remove();
-
-    const intro = content.querySelector(':scope > p');
-    if (intro) {
-      intro.textContent = 'Escolha dois cenários e compare uma solução de IA com uma alternativa mais simples. Ao comparar as opções, considere a complexidade do problema, a clareza das regras, a disponibilidade de dados, a necessidade de adaptação, o custo do erro, a explicabilidade, a privacidade, o impacto sobre pessoas e a possibilidade de validação.';
-    }
-
-    content.querySelectorAll('.teacher-note').forEach((note) => note.remove());
-  };
-
-  const simplifyContemporaryApplication = () => {
-    const inquiry = findInquiry('Mapeie uma aplicação contemporânea');
-    if (!inquiry) return;
-
-    const body = inquiry.querySelector('.inquiry-body');
-    const content = body?.firstElementChild;
-    if (!body || !content) return;
-
-    body.classList.add('inquiry-body-single');
-    body.querySelector(':scope > .worksheet')?.remove();
-
-    const intro = content.querySelector(':scope > p');
-    if (intro) {
-      intro.textContent = 'Escolha uma aplicação atual de IA em uma área de interesse do grupo. Na investigação, identifique a tendência tecnológica envolvida e analise seus benefícios, limitações, riscos e impactos, mobilizando H11 ao reconhecer tendências e H43/H45 ao analisar cenários e avaliar criticamente a aplicação.';
-    }
-
-    content.querySelectorAll('.teacher-note').forEach((note) => note.remove());
-  };
-
-  const removeKnowledgeExit = () => {
-    document.querySelector('#fechamento .knowledge-exit')?.remove();
-  };
-
-  const improveDarkAgentDiagram = () => {
-    if (document.getElementById('aula02-dark-agent-adjustments')) return;
-
-    const style = document.createElement('style');
-    style.id = 'aula02-dark-agent-adjustments';
-    style.textContent = `
-      body.theme-dark #agentes .agent-flow {
-        background: #111827;
-        border-color: #2d3a54;
-        box-shadow: 0 14px 34px rgba(0, 0, 0, .20);
-      }
-
-      body.theme-dark #agentes .agent-node {
-        background: #111a2b;
-        border-color: #33415e;
-        color: #f4f7ff;
-        box-shadow: none;
-      }
-
-      body.theme-dark #agentes .agent-node.interface {
-        background: #141f33;
-        border-color: #354665;
-      }
-
-      body.theme-dark #agentes .agent-core {
-        background: linear-gradient(145deg, #34466f, #4b4278);
-        border: 1px solid rgba(151, 165, 232, .20);
-        box-shadow: 0 14px 30px rgba(0, 0, 0, .28);
-        color: #f8faff;
-      }
-
-      body.theme-dark #agentes .agent-core-steps span {
-        background: #293755;
-        border-color: #46577d;
-        color: #f4f7ff;
-      }
-
-      body.theme-dark #agentes .agent-arrow {
-        color: #7f99e8;
-      }
-
-      body.theme-dark #agentes .feedback-line {
-        background: linear-gradient(90deg, #4f7fc4, #7087dc);
-        opacity: .82;
-      }
-
-      body.theme-dark #agentes .feedback-arrow {
-        color: #5f8fd2;
-      }
-
-      body.theme-dark #agentes .agent-loop {
-        background: #111a2b;
-        border: 1px solid #28364f;
-        color: #9eacc2;
-      }
-    `;
-    document.head.appendChild(style);
-  };
-
-  const improveLightMode = () => {
-    if (document.getElementById('aula02-light-mode-adjustments')) return;
-
-    const style = document.createElement('style');
-    style.id = 'aula02-light-mode-adjustments';
-    style.textContent = `
-      /* O modo claro deve permanecer claro também nos blocos de destaque. */
-      body:not(.theme-dark) #aquecimento .warmup {
-        background: linear-gradient(135deg, #f6f8ff 0%, #eef6fb 100%);
-        border: 1px solid #dce4f1;
-        box-shadow: 0 14px 32px rgba(35, 50, 78, .06);
-        color: var(--ink);
-      }
-
-      body:not(.theme-dark) #aquecimento .warmup p {
-        color: var(--muted);
-      }
-
-      body:not(.theme-dark) #aquecimento .warmup .eyebrow {
-        color: var(--blue) !important;
-      }
-
-      body:not(.theme-dark) #aquecimento .question-cloud div {
-        background: rgba(255, 255, 255, .86);
-        border-color: #dce4f1;
-        color: var(--ink);
-      }
-
-      body:not(.theme-dark) #aplicacoes.section-dark {
-        background: var(--soft);
-        color: var(--ink);
-      }
-
-      body:not(.theme-dark) #aplicacoes.section-dark p {
-        color: var(--muted);
-      }
-
-      body:not(.theme-dark) #aplicacoes.section-dark .eyebrow {
-        color: var(--blue);
-      }
-
-      body:not(.theme-dark) #aplicacoes .application-card {
-        background: #ffffff;
-        border: 1px solid var(--line);
-        box-shadow: 0 12px 28px rgba(35, 50, 78, .055);
-        color: var(--ink);
-      }
-
-      body:not(.theme-dark) #aplicacoes .application-card p {
-        color: var(--muted);
-      }
-
-      body:not(.theme-dark) #aplicacoes .application-card span {
-        color: var(--blue);
-      }
-
-      body:not(.theme-dark) #riscos .big-question {
-        background: linear-gradient(135deg, var(--blue-soft), var(--violet-soft));
-        border: 1px solid #cbd6ff;
-        box-shadow: 0 12px 28px rgba(49, 87, 213, .06);
-        color: var(--ink);
-      }
-
-      body:not(.theme-dark) .protocol article {
-        background: #ffffff;
-        border-color: var(--line);
-        color: var(--ink);
-      }
-
-      body:not(.theme-dark) .protocol h3 {
-        color: var(--ink);
-      }
-
-      body:not(.theme-dark) .protocol article::before {
-        color: var(--blue);
-      }
-
-      body:not(.theme-dark) .site-footer {
-        background: #ffffff;
-        border-top: 1px solid var(--line);
-        color: var(--ink);
-      }
-
-      body:not(.theme-dark) .site-footer p {
-        color: var(--muted);
-      }
-
-      body:not(.theme-dark) .site-footer a {
-        color: var(--blue);
-      }
-    `;
-    document.head.appendChild(style);
-  };
-
-  const improveAula02AprofundamentoHistory = () => {
-    if (!isAula02Aprofundamento()) return;
-
-    const heading = [...document.querySelectorAll('#fundamentos .study-prose h3')]
-      .find((item) => item.textContent.trim().startsWith('Computação, cérebro e comportamento'));
-    if (!heading) return;
-
-    const nextHeading = [...heading.parentElement.querySelectorAll('h3')]
-      .find((item) => item !== heading && item.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_PRECEDING && item.textContent.trim().startsWith('1956: Dartmouth'));
-
-    if (!nextHeading) return;
-
-    let current = heading.nextElementSibling;
-    while (current && current !== nextHeading) {
-      const next = current.nextElementSibling;
-      current.remove();
-      current = next;
-    }
-
-    heading.textContent = 'Computação, cérebro e comportamento: 1936–1950';
-
-    const paragraphs = [
-      'Nas décadas de 1930 e 1940, questões antigas sobre raciocínio, inteligência e mente começaram a ser reformuladas em termos computacionais. Em 1936, <strong>Alan Turing</strong> apresentou um modelo abstrato de computação que ajudou a estabelecer o que significa executar um procedimento de forma mecânica e quais são os limites desse processo. Com isso, a ideia de representar e executar processos de raciocínio em máquinas ganhou uma base matemática mais precisa.',
-      'Em 1943, <strong>Warren McCulloch e Walter Pitts</strong> aproximaram outra tradição desse novo universo computacional. Inspirados pelo funcionamento dos neurônios, pela lógica proposicional e pela teoria da computação, propuseram um modelo matemático de neurônio artificial. Redes formadas por essas unidades podiam implementar operações lógicas, mostrando que estruturas inspiradas no sistema nervoso também poderiam ser analisadas como sistemas de computação.',
-      'Poucos anos depois, Turing voltou diretamente ao problema da inteligência. Em <strong>1950</strong>, em <em>Computing Machinery and Intelligence</em>, argumentou que perguntar simplesmente se uma máquina “pensa” levava a dificuldades conceituais e propôs substituir essa questão por algo observável: <strong>como a máquina se comporta em uma interação?</strong> O chamado <em>jogo da imitação</em> deslocava, assim, parte da discussão sobre inteligência para critérios que poderiam ser testados empiricamente.',
-      'Esses trabalhos revelam algo importante sobre as origens da IA: <strong>suas diferentes linhas de pesquisa não surgiram completamente separadas</strong>. Lógica, computação, modelos do cérebro e estudo do comportamento já apareciam combinados. Nas décadas seguintes, algumas abordagens enfatizariam símbolos, regras e procedimentos explícitos, enquanto outras explorariam redes de unidades conectadas e aprendizagem. A relação entre essas perspectivas, ora concorrentes, ora complementares, acompanharia grande parte da história da IA.'
-    ];
-
-    paragraphs.forEach((html) => {
-      const paragraph = document.createElement('p');
-      paragraph.innerHTML = html;
-      nextHeading.before(paragraph);
-    });
-
-    nextHeading.textContent = '1956: Dartmouth e a consolidação da Inteligência Artificial';
-    const dartmouthParagraph = nextHeading.nextElementSibling;
-    if (dartmouthParagraph?.tagName === 'P') {
-      dartmouthParagraph.innerHTML = 'Em 1956, o <em>Dartmouth Summer Research Project on Artificial Intelligence</em> reuniu pesquisadores como <strong>John McCarthy, Marvin Minsky, Nathaniel Rochester e Claude Shannon</strong> em torno de um programa explícito para investigar máquinas inteligentes. O encontro ajudou a consolidar a expressão <em>artificial intelligence</em> e a dar identidade a uma comunidade de pesquisa.';
-
-      const synthesis = document.createElement('p');
-      synthesis.innerHTML = 'A proposta abrangia temas como linguagem, abstração, aprendizagem, redes neurais e raciocínio. Dartmouth não criou do zero a ideia de máquinas inteligentes; seu papel histórico foi organizar questões já em desenvolvimento em uma agenda comum. Nas décadas seguintes, representação simbólica, raciocínio e busca se tornariam linhas centrais da área.';
-      dartmouthParagraph.after(synthesis);
-    }
-  };
-
-  const improveAula02AprofundamentoSearchRepresentation = () => {
-    if (!isAula02Aprofundamento()) return;
-
-    const heading = [...document.querySelectorAll('#simbolica .study-prose h3')]
-      .find((item) => item.textContent.trim() === 'Representação, espaço de busca e heurística');
-    if (!heading || heading.dataset.adjusted === 'true') return;
-
-    const firstParagraph = heading.nextElementSibling;
-    if (!firstParagraph || firstParagraph.tagName !== 'P') return;
-
-    firstParagraph.innerHTML = 'Antes que um sistema possa procurar uma solução, o problema precisa ser <strong>representado computacionalmente</strong>. Isso exige decidir quais características da situação são relevantes e como serão descritas. Em problemas de busca, essa representação costuma identificar <strong>estados</strong>, um estado inicial, condições de objetivo e <strong>ações ou operadores</strong> capazes de transformar um estado em outro. Representar um problema é, portanto, escolher o que será considerado pelo processo de solução, e também o que ficará de fora.';
-
-    const secondParagraph = document.createElement('p');
-    secondParagraph.innerHTML = 'A aplicação sucessiva desses operadores produz diferentes configurações possíveis, formando um <strong>espaço de busca</strong>. Em problemas pequenos, pode ser possível explorar grande parte desse espaço; em problemas maiores, o número de alternativas pode crescer rapidamente. Nesse contexto, uma <strong>heurística</strong> fornece informação adicional para estimar quais estados ou caminhos parecem mais promissores, direcionando a busca sem exigir que todas as possibilidades sejam examinadas.';
-    firstParagraph.after(secondParagraph);
-
-    heading.dataset.adjusted = 'true';
-  };
-
-  const improveAula02AprofundamentoGeneralMethods = () => {
-    if (!isAula02Aprofundamento()) return;
-
-    const heading = [...document.querySelectorAll('#simbolica .study-prose h3')]
-      .find((item) => item.textContent.trim() === 'Por que métodos gerais não eram suficientes?');
-    if (!heading || heading.dataset.adjusted === 'true') return;
-
-    const nextHeading = [...heading.parentElement.querySelectorAll('h3')]
-      .find((item) => item !== heading && item.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_PRECEDING && item.textContent.trim() === 'Sistemas especialistas');
-    if (!nextHeading) return;
-
-    let current = heading.nextElementSibling;
-    while (current && current !== nextHeading) {
-      const next = current.nextElementSibling;
-      current.remove();
-      current = next;
-    }
-
-    const paragraphs = [
-      'Os primeiros programas de IA alimentaram a expectativa de que <strong>estratégias gerais de busca e raciocínio</strong> poderiam resolver muitos tipos diferentes de problemas. Essas estratégias funcionavam bem em situações pequenas e bem delimitadas, nas quais o número de estados e ações permanecia controlável.',
-      'A dificuldade aparecia quando essas técnicas eram aplicadas a tarefas maiores. À medida que cada estado pode gerar várias alternativas, o número de caminhos possíveis cresce rapidamente. Essa <strong>explosão combinatória</strong> faz com que uma estratégia capaz de encontrar uma solução em princípio possa exigir tempo ou memória impraticáveis para encontrá-la de fato.',
-      'A experiência mostrou então que <strong>a forma de orientar a busca importa tanto quanto o mecanismo geral utilizado</strong>. Heurísticas ajudam a priorizar alternativas promissoras, mas são aproximações e podem falhar. Em muitos problemas, obter bom desempenho também exige incorporar <strong>conhecimento específico do domínio</strong>, regras, restrições e relações capazes de eliminar alternativas inadequadas e direcionar o raciocínio.',
-      'Essa mudança de perspectiva abriu caminho para sistemas mais intensivos em conhecimento, como o <strong>DENDRAL</strong> e os sistemas especialistas, nos quais parte importante da capacidade de resolução vem não apenas do mecanismo de inferência, mas do conhecimento representado sobre o problema.'
-    ];
-
-    paragraphs.forEach((html) => {
-      const paragraph = document.createElement('p');
-      paragraph.innerHTML = html;
-      nextHeading.before(paragraph);
-    });
-
-    heading.dataset.adjusted = 'true';
-  };
-
-  const improveAula02AprofundamentoExpertSystems = () => {
-    if (!isAula02Aprofundamento()) return;
-
-    const heading = [...document.querySelectorAll('#simbolica .study-prose h3')]
-      .find((item) => item.textContent.trim() === 'Sistemas especialistas');
-    if (!heading || heading.dataset.adjusted === 'true') return;
-
-    const nextHeading = [...heading.parentElement.querySelectorAll('h3')]
-      .find((item) => item !== heading && item.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_PRECEDING && item.textContent.trim() === 'Limites da abordagem simbólica');
-    if (!nextHeading) return;
-
-    let current = heading.nextElementSibling;
-    while (current && current !== nextHeading) {
-      const next = current.nextElementSibling;
-      current.remove();
-      current = next;
-    }
-
-    const block = document.createElement('div');
-    block.innerHTML = `
-      <p>A ideia central dos <strong>sistemas especialistas</strong> é que o desempenho em problemas complexos depende não apenas de um mecanismo geral de raciocínio, mas também de <strong>conhecimento específico sobre o domínio</strong>. Especialistas humanos resolvem problemas porque combinam procedimentos de raciocínio com conceitos, relações, exceções e heurísticas acumuladas em sua área. Esses sistemas procuram representar parte desse conhecimento de forma que possa ser utilizada computacionalmente.</p>
-
-      <p>Nos sistemas clássicos baseados em regras, o conhecimento costuma ser expresso por regras do tipo <strong>IF–THEN</strong>. A arquitetura separa o conhecimento do mecanismo que o utiliza: a <strong>base de conhecimento</strong> armazena regras e relações do domínio, a <strong>memória de trabalho</strong> contém os fatos do caso em análise e o <strong>motor de inferência</strong> identifica quais regras podem ser aplicadas para produzir novas conclusões.</p>
-
-      <figure class="figure-light">
-        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-03.png?v=20260817-remaster2" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-03.png?v=20260817-remaster2" data-dark-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-03-dark.png?v=20260817-remaster2" alt="Arquitetura conceitual de um sistema especialista">
-        <figcaption>Arquitetura conceitual simplificada de um sistema especialista.</figcaption>
-      </figure>
-
-      <p>O processo de inferência pode seguir direções diferentes. No <strong>encadeamento para frente</strong>, o sistema parte dos fatos disponíveis e aplica regras para gerar novas conclusões. No <strong>encadeamento para trás</strong>, parte de uma hipótese ou objetivo e procura quais condições precisam ser confirmadas para sustentá-lo. A escolha depende da estrutura do problema e de como o conhecimento foi organizado.</p>
-
-      <p>Outra característica importante é a possibilidade de <strong>explicar o raciocínio</strong>. Em muitos sistemas, o usuário podia perguntar por que determinada informação estava sendo solicitada ou como uma conclusão havia sido obtida. Essa rastreabilidade era especialmente relevante em aplicações de diagnóstico e apoio à decisão.</p>
-
-      <p>Construir esses sistemas exigia um trabalho específico de <strong>engenharia do conhecimento</strong>. O conhecimento precisava ser obtido de especialistas, formalizado, transformado em regras, testado e revisado. Nesse processo, o especialista do domínio, o engenheiro do conhecimento e o usuário final desempenhavam papéis distintos. A aquisição e a manutenção desse conhecimento se tornaram algumas das maiores dificuldades da abordagem.</p>
-
-      <p>Considere um sistema de diagnóstico de falhas de software. A base pode conter uma regra como: se o servidor está acessível e o serviço não responde, há indício de falha no serviço. Os fatos do caso entram na memória de trabalho, o motor verifica quais regras são aplicáveis e novas conclusões podem alimentar inferências seguintes.</p>
-
-      <figure class="figure-light">
-        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.png?v=20260817-remaster2" data-light-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04.png?v=20260817-remaster2" data-dark-src="assets/aula-02-aprofundamento/aula-02-aprofundamento-04-dark.png?v=20260817-remaster2" alt="Fluxo do especialista à inferência em um sistema baseado em regras">
-        <figcaption>Nos sistemas especialistas clássicos, novos casos não atualizam automaticamente as regras.</figcaption>
-      </figure>
-
-      <p>Sistemas como <strong>DENDRAL</strong> e <strong>MYCIN</strong> mostraram que essa estratégia podia alcançar desempenho elevado em domínios bem delimitados. Ao mesmo tempo, evidenciaram uma característica fundamental: a competência tende a ser <strong>profunda, mas estreita</strong>. Fora do domínio previsto, ou diante de conhecimento incompleto e situações inesperadas, o desempenho pode degradar rapidamente.</p>
-    `;
-
-    [...block.children].forEach((element) => nextHeading.before(element));
-    heading.dataset.adjusted = 'true';
-  };
-
-  const improveAula02AprofundamentoLearning = () => {
-    if (!isAula02Aprofundamento()) return;
-
-    const section = document.querySelector('#aprendizado');
-    if (!section || section.dataset.adjusted === 'true') return;
-
-    const kicker = section.querySelector('.study-heading .study-kicker');
-    if (kicker) kicker.textContent = 'Representação, dados e aprendizagem';
-
-    const prose = section.querySelector('.study-prose');
-    if (!prose) return;
-
-    prose.innerHTML = `
-      <h3>A tradição conexionista</h3>
-      <p>Uma alternativa importante às representações simbólicas explícitas surgiu com os modelos <strong>conexionistas</strong>, também associados historicamente às redes neurais e ao processamento distribuído. Em vez de representar o conhecimento principalmente por símbolos e regras manipulados explicitamente, esses modelos utilizam unidades simples conectadas entre si, cujo comportamento depende dos valores associados às conexões.</p>
-      <p>Essa tradição aparece muito cedo na história da IA. O modelo de <strong>McCulloch e Pitts</strong>, de 1943, mostrou que unidades artificiais inspiradas em neurônios poderiam realizar operações lógicas. Posteriormente, o <strong>perceptron</strong> introduziu mecanismos de aprendizagem capazes de ajustar conexões a partir de exemplos. As limitações dos perceptrons de uma única camada reduziram o entusiasmo pela abordagem durante um período, mas redes multicamadas e métodos como <strong>backpropagation</strong> contribuíram para uma retomada importante a partir dos anos 1980.</p>
-      <p>Um ponto importante é que representação não desaparece. Ainda é necessário decidir como os dados serão codificados, quais entradas serão utilizadas e como o modelo será estruturado. O que muda é que parte das relações relevantes deixa de ser especificada diretamente como regras e passa a ser <strong>ajustada a partir da experiência de treinamento</strong>.</p>
-
-      <h3>Aprendizado de máquina: aprender a partir da experiência</h3>
-      <p><strong>Aprendizado de máquina</strong> não é sinônimo de redes neurais. Trata-se de uma área mais ampla da IA dedicada a métodos capazes de melhorar seu desempenho a partir de dados, exemplos, experiência ou feedback. Árvores de decisão, modelos lineares, métodos probabilísticos, redes neurais e diversas outras técnicas podem fazer parte desse repertório.</p>
-      <p>Em vez de especificar manualmente todo o comportamento desejado, o projetista define um problema, disponibiliza dados ou formas de feedback e utiliza um algoritmo para ajustar um <strong>modelo</strong>. Dependendo do problema, esse aprendizado pode ocorrer a partir de exemplos rotulados, da identificação de estruturas em dados sem rótulos ou das consequências das ações realizadas por um agente.</p>
-      <p>Isso não elimina as decisões de engenharia. Ainda é necessário definir o problema, selecionar e preparar dados, escolher representações e modelos, estabelecer critérios de avaliação e verificar se o comportamento aprendido <strong>generaliza para novos casos</strong>.</p>
-
-      <h3>Deep learning e aprendizagem de representações</h3>
-      <p><strong>Deep learning</strong> corresponde a uma família de métodos baseados em redes neurais com múltiplas camadas de processamento. Uma de suas características mais importantes é a possibilidade de aprender não apenas uma relação entre entradas e saídas, mas também <strong>representações intermediárias dos dados</strong>.</p>
-      <p>Em visão computacional, por exemplo, diferentes camadas podem aprender estruturas progressivamente mais abstratas, partindo de padrões locais simples e chegando a representações relacionadas a objetos e configurações mais complexas. Essa capacidade reduziu, em muitos domínios, a necessidade de definir manualmente todas as características utilizadas pelo modelo.</p>
-      <p>O crescimento do deep learning também dependeu da combinação de grandes volumes de dados, aumento da capacidade computacional, hardware especializado e avanços em arquiteturas e métodos de treinamento. Seu desempenho é particularmente relevante em dados de alta dimensionalidade, como imagens, áudio e linguagem, mas isso <strong>não significa que redes profundas sejam a melhor escolha para qualquer problema</strong>.</p>
-
-      <h3>De modelos generativos à IA generativa</h3>
-      <p>A ideia de um <strong>modelo generativo</strong> é anterior aos sistemas generativos atuais. Em termos gerais, um modelo generativo procura representar aspectos do processo ou da distribuição que poderia produzir os dados observados. Modelos probabilísticos clássicos já possuíam essa característica, muito antes da atual popularização da expressão “IA generativa”.</p>
-      <p>Com o desenvolvimento das redes neurais profundas surgiram novas arquiteturas capazes de aprender distribuições complexas e produzir novos exemplos. As <strong>Generative Adversarial Networks (GANs)</strong>, por exemplo, combinam uma rede geradora com uma rede discriminadora em um processo competitivo de treinamento.</p>
-      <p>Em aplicações contemporâneas, modelos generativos podem produzir texto, imagens, áudio, código e outras estruturas a partir de padrões aprendidos em grandes conjuntos de dados. A saída não deve ser interpretada simplesmente como recuperação de uma resposta armazenada, mas como a produção de uma nova saída condicionada pelo modelo e pela entrada recebida.</p>
-      <p>Essa capacidade também muda a forma de avaliar o sistema. Uma tarefa de classificação costuma ter uma resposta esperada mais claramente delimitada; uma saída generativa admite muitas respostas possíveis. Por isso, sua avaliação precisa considerar adequação ao objetivo, correção, consistência, segurança, testes e revisão humana.</p>
-    `;
-
-    const callouts = section.querySelectorAll('.study-stack .study-callout');
-    const firstCallout = callouts[0];
-    if (firstCallout) {
-      const title = firstCallout.querySelector('strong');
-      const text = firstCallout.querySelector('p');
-      if (title) title.textContent = 'Outra forma de construir conhecimento';
-      if (text) text.textContent = 'Além de perguntar “que conhecimento devemos representar explicitamente?”, podemos perguntar “que regularidades podem ser aprendidas a partir de dados ou experiência e como saber se elas generalizam para novos casos?”.';
-    }
-
-    section.dataset.adjusted = 'true';
-  };
-
-  const improveAula02AprofundamentoAgents = () => {
-    if (!isAula02Aprofundamento()) return;
-
-    const section = document.querySelector('#agentes');
-    if (!section || section.dataset.adjusted === 'true') return;
-
-    const heading = section.querySelector('.study-heading');
-    const title = heading?.querySelector('h2');
-    const intro = heading?.querySelector(':scope > p:last-child');
-    if (title) title.textContent = 'Agentes: perceber, decidir e agir';
-    if (intro) intro.textContent = 'A perspectiva de agentes permite analisar um sistema observando o ambiente em que ele opera, o que consegue perceber, que ações pode executar e segundo qual critério seu comportamento será avaliado.';
-
-    const firstFigure = section.querySelector(':scope > .container > .figure-light');
-    if (firstFigure && !firstFigure.previousElementSibling?.classList.contains('agents-framing')) {
-      const framing = document.createElement('div');
-      framing.className = 'study-prose agents-framing';
-      framing.innerHTML = `
-        <h3>Diferentes formas de produzir comportamento</h3>
-        <p>Um sistema pode produzir comportamento por procedimentos determinísticos, regras explícitas, mecanismos de busca, modelos aprendidos ou combinações dessas estratégias. A perspectiva de <strong>agentes</strong> oferece outra forma de analisar a solução: em vez de perguntar apenas qual técnica foi utilizada, observamos como o sistema percebe o ambiente, mantém informações relevantes, escolhe ações e é avaliado.</p>
-      `;
-      firstFigure.before(framing);
-    }
-
-    const prose = section.querySelector(':scope > .container > .study-prose:not(.agents-framing)');
-    if (!prose) return;
-
-    prose.innerHTML = `
-      <h3>Agentes e ambientes</h3>
-      <p>Um <strong>agente</strong> é uma entidade que pode ser analisada como percebendo um ambiente e atuando sobre ele. Em um robô, sensores podem incluir câmeras e sensores de distância, enquanto atuadores podem ser motores. Em software, percepções podem chegar por arquivos, mensagens, APIs, eventos ou entradas do usuário, e as ações podem envolver escrever dados, enviar mensagens, chamar serviços ou produzir recomendações.</p>
-      <p>A ideia de agente é uma <strong>abstração para estudar comportamento</strong>, não uma tecnologia específica. Um agente pode ser muito simples ou combinar representação, busca, planejamento, aprendizagem e outras técnicas de IA.</p>
-
-      <figure class="figure-light">
-        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-07.webp" alt="Ciclo básico de interação de um agente">
-        <figcaption>Ambiente, percepções, agente, ações e novo estado do ambiente formam um ciclo contínuo.</figcaption>
-      </figure>
-
-      <h3>Percepção, estado, decisão e desempenho</h3>
-      <p>Entre perceber e agir, diferentes arquiteturas podem utilizar informações diferentes. Um agente simples pode responder diretamente à percepção atual; outros mantêm um <strong>estado interno</strong> para representar aspectos do ambiente que não estão imediatamente observáveis. Arquiteturas mais elaboradas podem ainda representar <strong>objetivos</strong>, prever consequências ou comparar alternativas segundo uma função de <strong>utilidade</strong>.</p>
-      <p>Independentemente da arquitetura interna, é necessário definir externamente como o comportamento será avaliado. Essa <strong>medida de desempenho</strong> permite analisar se as ações produzidas pelo agente são adequadas ao ambiente e à tarefa.</p>
-
-      <figure class="figure-light">
-        <img src="assets/aula-02-aprofundamento/aula-02-aprofundamento-08.webp" alt="Estudo de caso de um aspirador robô como agente">
-        <figcaption>O aspirador robô ajuda a visualizar ambiente, percepções, estado, ações e critérios de desempenho.</figcaption>
-      </figure>
-
-      <h3>Racionalidade não significa perfeição</h3>
-      <p>Um agente racional não precisa conhecer o futuro nem produzir sempre o melhor resultado possível. Ele deve escolher a ação que, considerando as informações disponíveis, seu conhecimento, as ações que pode executar e a medida de desempenho definida, apresenta a melhor expectativa de resultado.</p>
-      <p>Uma decisão pode ser racional e ainda produzir um resultado ruim quando existe incerteza ou informação incompleta. Além disso, racionalidade perfeita frequentemente é inviável por limitações de tempo, memória e capacidade computacional.</p>
-
-      <h3>PEAS: especificando o ambiente de tarefa</h3>
-      <p>Uma forma clássica de descrever o problema de um agente é o modelo <strong>PEAS</strong>, formado por medida de desempenho, ambiente, atuadores e sensores. Em sistemas de software, sensores e atuadores não precisam ser dispositivos físicos: APIs, filas, arquivos e entradas de usuário podem funcionar como sensores, enquanto chamadas de API, gravações, notificações e comandos podem funcionar como atuadores.</p>
-      <div class="study-table-wrap">
-        <table class="study-table">
-          <thead><tr><th>Elemento</th><th>Pergunta de projeto</th><th>Exemplo: triagem de incidentes</th></tr></thead>
-          <tbody>
-            <tr><td>Medida de desempenho</td><td>Como saberemos se o agente funciona bem?</td><td>Tempo de resposta, encaminhamento correto e redução de retrabalho.</td></tr>
-            <tr><td>Ambiente</td><td>Em que contexto o sistema opera?</td><td>Fila de incidentes, serviços, usuários, políticas e estado da infraestrutura.</td></tr>
-            <tr><td>Atuadores</td><td>Por quais mecanismos o agente pode agir?</td><td>Classificar, priorizar, abrir tarefa, chamar serviço ou solicitar confirmação.</td></tr>
-            <tr><td>Sensores</td><td>Por quais mecanismos recebe informações?</td><td>Título, descrição, logs, métricas, mensagens e contexto do serviço.</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>Arquiteturas clássicas de agentes</h3>
-      <div class="study-table-wrap">
-        <table class="study-table">
-          <thead><tr><th>Arquitetura</th><th>Ideia central</th><th>Quando é útil</th></tr></thead>
-          <tbody>
-            <tr><td>Reativo simples</td><td>Decide diretamente com base na percepção atual por regras condição e ação.</td><td>Ambientes simples, bem observáveis e com respostas locais.</td></tr>
-            <tr><td>Reativo baseado em modelo</td><td>Mantém estado interno e um modelo para lidar com aspectos não observáveis diretamente.</td><td>Monitoramento, navegação e diagnóstico com informação incompleta.</td></tr>
-            <tr><td>Orientado a objetivos</td><td>Considera estados futuros e escolhe ações que possam conduzir a um objetivo.</td><td>Busca, planejamento de tarefas e rotas.</td></tr>
-            <tr><td>Orientado a utilidade</td><td>Compara alternativas segundo preferências, custos e benefícios.</td><td>Decisões com trade-offs, incerteza ou objetivos concorrentes.</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>Aprendizagem pode atravessar todas essas arquiteturas</h3>
-      <p><strong>Aprender não define uma arquitetura isolada de agente.</strong> Um agente baseado em modelo pode aprender seu modelo; um agente orientado a objetivos pode aprender informações relevantes para alcançar objetivos; e um agente orientado a utilidade pode aprender sobre resultados ou preferências. A aprendizagem é uma capacidade que pode modificar diferentes componentes do sistema para melhorar seu desempenho.</p>
-
-      <h3>Autonomia é uma propriedade gradual</h3>
-      <p>Autonomia não significa ausência de regras, limites ou intervenção humana. Ela indica em que medida o comportamento do agente pode depender de suas próprias percepções, estado e experiência, em vez de resultar exclusivamente de decisões previamente especificadas pelo projetista. Em sistemas reais, autonomia precisa ser compatível com permissões, supervisão e mecanismos de contenção.</p>
-
-      <h3>O ambiente condiciona a arquitetura</h3>
-      <p>Não existe uma arquitetura de agente ideal independentemente do ambiente. Características do ambiente determinam que informações precisam ser mantidas e que mecanismos de decisão são adequados.</p>
-      <div class="study-table-wrap">
-        <table class="study-table">
-          <thead><tr><th>Propriedade</th><th>Contraste</th><th>Impacto no projeto</th></tr></thead>
-          <tbody>
-            <tr><td>Observabilidade</td><td>Total ou parcial</td><td>Ambientes parcialmente observáveis podem exigir estado interno e inferência.</td></tr>
-            <tr><td>Agentes envolvidos</td><td>Agente único ou multiagente</td><td>Outros agentes podem cooperar, competir ou alterar o ambiente.</td></tr>
-            <tr><td>Previsibilidade</td><td>Determinístico ou não determinístico</td><td>Incerteza pode exigir comparação de riscos e resultados esperados.</td></tr>
-            <tr><td>Dependência temporal</td><td>Episódico ou sequencial</td><td>Decisões sequenciais precisam considerar consequências futuras.</td></tr>
-            <tr><td>Mudança durante a decisão</td><td>Estático ou dinâmico</td><td>Ambientes dinâmicos podem exigir atualização contínua e replanejamento.</td></tr>
-            <tr><td>Representação de estados e ações</td><td>Discreto ou contínuo</td><td>Afeta modelos, algoritmos e formas de controle.</td></tr>
-            <tr><td>Conhecimento do ambiente</td><td>Conhecido ou desconhecido</td><td>Ambientes desconhecidos podem exigir exploração e aprendizagem.</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>LLM não é sinônimo de agente</h3>
-      <p>Um modelo de linguagem pode participar do mecanismo de decisão de um agente, mas <strong>o agente é o sistema completo</strong>. Para analisá-lo precisamos identificar ambiente, entradas, estado, objetivos ou critérios de desempenho, ações disponíveis e mecanismos de controle.</p>
-      <p>Em sistemas atuais, isso pode incluir um LLM, memória, bancos de dados, mecanismos de busca, APIs, ferramentas, regras de autorização e componentes tradicionais de software. O modelo é um componente possível da arquitetura, não a definição de agente.</p>
-    `;
-
-    section.dataset.adjusted = 'true';
-  };
-
-  const improveAula05AStarCodeComments = () => {
-    if (!isAula05()) return;
-
-    const code = document.querySelector('#astar pre.code-block code');
-    if (!code || code.dataset.didacticComments === 'true') return;
-
-    code.textContent = `def a_estrela(estado_inicial, objetivo_atingido, sucessores, heuristica):
-    fronteira = []
-    ordem = count()
-
-    # melhor_g guarda o menor custo g encontrado ATÉ AGORA para cada estado.
-    # Exemplo: Bucharest pode aparecer primeiro com g=450 e depois melhorar para g=418.
-    # Portanto, esse valor pode mudar durante a busca.
-    melhor_g = {estado_inicial: 0}
-
-    # No estado inicial, g=0. Logo, a prioridade inicial é 0 + h(inicial).
-    heappush(fronteira, (
-        heuristica(estado_inicial), next(ordem),
-        estado_inicial, [estado_inicial], 0
-    ))
-
-    while fronteira:
-        # Retiramos a entrada com menor f = g + h.
-        prioridade, _, estado, caminho, g_atual = heappop(fronteira)
-
-        # A mesma cidade pode aparecer mais de uma vez no heap.
-        # Se esta entrada possui g maior que melhor_g[estado], ela ficou obsoleta:
-        # já encontramos outro caminho mais barato para chegar ao mesmo estado.
-        if g_atual > melhor_g[estado]:
-            continue
-
-        # O objetivo só encerra a busca quando uma entrada válida é retirada da fronteira.
-        if objetivo_atingido(estado):
-            return caminho, g_atual
-
-        for sucessor, custo_acao in sucessores(estado):
-            # Calculamos quanto custa chegar ao sucessor pelo caminho atual.
-            novo_g = g_atual + custo_acao
-
-            # Aceitamos o sucessor quando:
-            # 1) ainda nunca chegamos a ele; ou
-            # 2) encontramos agora um caminho mais barato.
-            if sucessor not in melhor_g or novo_g < melhor_g[sucessor]:
-
-                # Registramos o novo melhor custo conhecido para chegar ao sucessor.
-                melhor_g[sucessor] = novo_g
-
-                novo_caminho = caminho + [sucessor]
-
-                # No A*, a prioridade combina custo conhecido e estimativa restante.
-                # f(n) = g(n) + h(n)
-                prioridade = novo_g + heuristica(sucessor)
-
-                # Inserimos a nova alternativa na fronteira.
-                # Se existir uma entrada antiga mais cara para o mesmo estado,
-                # ela pode permanecer no heap e será ignorada pelo teste de melhor_g acima.
-                heappush(fronteira, (
-                    prioridade, next(ordem),
-                    sucessor, novo_caminho, novo_g
-                ))
-
-    # Se a fronteira esvaziar, não existe caminho até o objetivo.
-    return None, None`;
-
-    code.dataset.didacticComments = 'true';
-  };
-
-  const fixAula05MapVisualization = () => {
-    if (!isAula05()) return;
-
-    const section = document.querySelector('#simulador');
-    const map = section?.querySelector('.interactive-romania-map');
-    if (!section || !map || section.dataset.mapPathFix === 'true') return;
-
-    section.dataset.mapPathFix = 'true';
-
-    const intro = map.closest('.comparison-lab-card')?.querySelector('p');
-    if (intro) {
-      intro.textContent = 'Os números nas estradas indicam o custo real de cada trecho, em unidades de distância. Abaixo das cidades, h estima a distância restante até Bucharest. No A*, o nó destacado mostra o estado expandido naquele passo. A linha azul mantém a rota principal da solução do exemplo, para não confundir uma expansão alternativa, como Fagaras, com um deslocamento pelo grafo.';
-    }
-
-    const routeByStep = {
-      0: ['Arad'],
-      1: ['Arad'],
-      2: ['Arad', 'Sibiu'],
-      3: ['Arad', 'Sibiu', 'Rimnicu Vilcea'],
-      4: ['Arad', 'Sibiu', 'Rimnicu Vilcea'],
-      5: ['Arad', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti'],
-      6: ['Arad', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti', 'Bucharest']
-    };
-
-    const routeEdgeKey = (a, b) => [a, b].sort().join('-');
-
-    const normalizeMap = () => {
-      const statusText = section.querySelector('[data-active-map-status] strong')?.textContent?.trim() || '';
-      const astarActive = statusText.startsWith('A*');
-      if (!astarActive) return;
-
-      const step = Number(section.querySelector('[data-astar-step]')?.textContent || 0);
-      const route = routeByStep[step] || ['Arad'];
-
-      map.querySelectorAll('.route-edge.astar-path').forEach((edge) => {
-        edge.classList.remove('astar-path');
-      });
-      map.querySelectorAll('.route-node.astar-route-node').forEach((node) => {
-        node.classList.remove('astar-route-node');
-      });
-
-      route.forEach((city) => {
-        map.querySelector(`[data-city="${city}"]`)?.classList.add('astar-route-node');
-      });
-
-      for (let i = 0; i < route.length - 1; i += 1) {
-        map.querySelector(`[data-edge="${routeEdgeKey(route[i], route[i + 1])}"]`)?.classList.add('astar-path');
-      }
-    };
-
-    section.querySelectorAll('[data-runner="astar"]').forEach((button) => {
-      button.addEventListener('click', () => queueMicrotask(normalizeMap));
-    });
-
-    normalizeMap();
-  };
-
-  const applyPageAdjustments = () => {
-    if (isAula02()) {
-      simplifyAiDecision();
-      simplifyContemporaryApplication();
-      removeKnowledgeExit();
-      improveDarkAgentDiagram();
-      improveLightMode();
-    }
-
-    improveAula02AprofundamentoHistory();
-    improveAula02AprofundamentoSearchRepresentation();
-    improveAula02AprofundamentoGeneralMethods();
-    improveAula02AprofundamentoExpertSystems();
-    improveAula02AprofundamentoLearning();
-    improveAula02AprofundamentoAgents();
-    improveAula05AStarCodeComments();
-    fixAula05MapVisualization();
-  };
-
-  applyPageAdjustments();
-  document.addEventListener('DOMContentLoaded', applyPageAdjustments);
-
   const loaderScript = document.currentScript;
   const baseScript = document.createElement('script');
   baseScript.src = loaderScript?.src
-    ? new URL('script-base.js?v=20260817-remaster2', loaderScript.src).href
-    : 'script-base.js?v=20260817-remaster2';
+    ? new URL('script-custom-base.js?v=20260917-mapfix2', loaderScript.src).href
+    : 'script-custom-base.js?v=20260917-mapfix2';
   baseScript.async = false;
-  baseScript.addEventListener('load', applyPageAdjustments);
+
+  const installAula05MapFix = () => {
+    const isAula05 =
+      window.location.pathname.endsWith('/aula-05.html') ||
+      window.location.pathname.endsWith('aula-05.html');
+
+    if (!isAula05) return;
+
+    const setup = () => {
+      const section = document.querySelector('#simulador');
+      const map = section?.querySelector('.interactive-romania-map');
+      const stepEl = section?.querySelector('[data-astar-step]');
+      const statusEl = section?.querySelector('[data-active-map-status] strong');
+
+      if (!section || !map || !stepEl || !statusEl) {
+        window.setTimeout(setup, 0);
+        return;
+      }
+
+      if (section.dataset.mapFixV3 === 'true') return;
+      section.dataset.mapFixV3 = 'true';
+
+      const intro = map.closest('.comparison-lab-card')?.querySelector('p');
+      if (intro) {
+        intro.textContent = 'Os números nas estradas indicam o custo real de cada trecho, em unidades de distância. Abaixo das cidades, h estima a distância restante até Bucharest. No A*, a linha azul acompanha progressivamente a rota principal da solução. Uma expansão alternativa, como Fagaras, é destacada separadamente e não substitui a rota que já estava sendo construída.';
+      }
+
+      const routeByStep = {
+        0: ['Arad'],
+        1: ['Arad'],
+        2: ['Arad', 'Sibiu'],
+        3: ['Arad', 'Sibiu', 'Rimnicu Vilcea'],
+        4: ['Arad', 'Sibiu', 'Rimnicu Vilcea'],
+        5: ['Arad', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti'],
+        6: ['Arad', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti', 'Bucharest']
+      };
+
+      const edgeKey = (a, b) => [a, b].sort().join('-');
+
+      const clearCustomVisuals = () => {
+        map.querySelectorAll('.route-edge').forEach((edge) => {
+          edge.style.removeProperty('stroke');
+          edge.style.removeProperty('stroke-width');
+          edge.style.removeProperty('opacity');
+          edge.style.removeProperty('stroke-dasharray');
+          edge.style.removeProperty('stroke-linecap');
+        });
+
+        map.querySelectorAll('.route-node').forEach((node) => {
+          node.style.removeProperty('border-color');
+          node.style.removeProperty('background');
+          node.style.removeProperty('box-shadow');
+        });
+      };
+
+      const paintAStarRoute = () => {
+        clearCustomVisuals();
+
+        const statusText = statusEl.textContent?.trim() || '';
+        if (!statusText.startsWith('A*')) return;
+
+        const step = Number(stepEl.textContent || 0);
+        const route = routeByStep[step] || ['Arad'];
+        const routeSet = new Set(route);
+
+        for (let i = 0; i < route.length - 1; i += 1) {
+          const edge = map.querySelector(`[data-edge="${edgeKey(route[i], route[i + 1])}"]`);
+          if (!edge) continue;
+
+          edge.style.setProperty('stroke', 'var(--blue)', 'important');
+          edge.style.setProperty('stroke-width', '4', 'important');
+          edge.style.setProperty('opacity', '1', 'important');
+          edge.style.setProperty('stroke-dasharray', 'none', 'important');
+          edge.style.setProperty('stroke-linecap', 'round', 'important');
+        }
+
+        const currentCity = statusText.includes('·')
+          ? statusText.split('·').slice(1).join('·').trim()
+          : '';
+
+        // Quando o A* expande uma alternativa que não pertence à rota principal
+        // que estamos acompanhando visualmente, destacamos esse estado com outra
+        // cor. Assim, Fagaras é mostrada como expansão, não como "volta" da rota.
+        if (currentCity && !routeSet.has(currentCity)) {
+          const currentNode = map.querySelector(`[data-city="${currentCity}"]`);
+          if (currentNode) {
+            currentNode.style.setProperty('border-color', 'var(--amber)', 'important');
+            currentNode.style.setProperty('background', 'var(--amber-soft)', 'important');
+            currentNode.style.setProperty('box-shadow', '0 0 0 2px var(--amber)', 'important');
+          }
+        }
+      };
+
+      let paintScheduled = false;
+      const schedulePaint = () => {
+        if (paintScheduled) return;
+        paintScheduled = true;
+
+        queueMicrotask(() => {
+          paintScheduled = false;
+          paintAStarRoute();
+        });
+
+        // O simulador original também redesenha o mapa no clique. Executamos de
+        // novo no próximo frame para garantir que a rota progressiva seja a última
+        // camada visual aplicada.
+        requestAnimationFrame(() => requestAnimationFrame(paintAStarRoute));
+      };
+
+      const observer = new MutationObserver(schedulePaint);
+      observer.observe(stepEl, { childList: true, characterData: true, subtree: true });
+      observer.observe(statusEl, { childList: true, characterData: true, subtree: true });
+
+      section.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-runner]');
+        if (button) schedulePaint();
+      });
+
+      schedulePaint();
+    };
+
+    setup();
+  };
+
+  baseScript.addEventListener('load', installAula05MapFix);
   document.head.appendChild(baseScript);
 })();
