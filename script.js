@@ -591,28 +591,45 @@
 
     const intro = map.closest('.comparison-lab-card')?.querySelector('p');
     if (intro) {
-      intro.textContent = 'Os números nas estradas indicam o custo real de cada trecho, em unidades de distância. Abaixo das cidades, h estima a distância restante até Bucharest. Durante a execução, o destaque indica o estado que está sendo expandido e os estados na fronteira. A linha do caminho da solução aparece somente quando o objetivo é alcançado.';
+      intro.textContent = 'Os números nas estradas indicam o custo real de cada trecho, em unidades de distância. Abaixo das cidades, h estima a distância restante até Bucharest. No A*, o nó destacado mostra o estado expandido naquele passo. A linha azul mantém a rota principal da solução do exemplo, para não confundir uma expansão alternativa, como Fagaras, com um deslocamento pelo grafo.';
     }
+
+    const routeByStep = {
+      0: ['Arad'],
+      1: ['Arad'],
+      2: ['Arad', 'Sibiu'],
+      3: ['Arad', 'Sibiu', 'Rimnicu Vilcea'],
+      4: ['Arad', 'Sibiu', 'Rimnicu Vilcea'],
+      5: ['Arad', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti'],
+      6: ['Arad', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti', 'Bucharest']
+    };
+
+    const routeEdgeKey = (a, b) => [a, b].sort().join('-');
 
     const normalizeMap = () => {
       const statusText = section.querySelector('[data-active-map-status] strong')?.textContent?.trim() || '';
       const astarActive = statusText.startsWith('A*');
-      const current = statusText.includes('·') ? statusText.split('·').slice(1).join('·').trim() : '';
-
       if (!astarActive) return;
 
-      // Durante a busca, não desenhamos frame.path como se o algoritmo estivesse
-      // fisicamente percorrendo esse caminho. Fagaras pode ser expandida depois de
-      // Rimnicu Vilcea sem fazer parte da solução final.
-      if (current !== 'Bucharest') {
-        map.querySelectorAll('.route-edge.astar-path').forEach((edge) => {
-          edge.classList.remove('astar-path');
-        });
+      const step = Number(section.querySelector('[data-astar-step]')?.textContent || 0);
+      const route = routeByStep[step] || ['Arad'];
+
+      map.querySelectorAll('.route-edge.astar-path').forEach((edge) => {
+        edge.classList.remove('astar-path');
+      });
+      map.querySelectorAll('.route-node.astar-route-node').forEach((node) => {
+        node.classList.remove('astar-route-node');
+      });
+
+      route.forEach((city) => {
+        map.querySelector(`[data-city="${city}"]`)?.classList.add('astar-route-node');
+      });
+
+      for (let i = 0; i < route.length - 1; i += 1) {
+        map.querySelector(`[data-edge="${routeEdgeKey(route[i], route[i + 1])}"]`)?.classList.add('astar-path');
       }
     };
 
-    // Os listeners originais do simulador já foram registrados quando este script
-    // é executado. Estes listeners rodam depois deles e corrigem apenas a camada visual.
     section.querySelectorAll('[data-runner="astar"]').forEach((button) => {
       button.addEventListener('click', () => queueMicrotask(normalizeMap));
     });
