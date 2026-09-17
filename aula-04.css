@@ -256,6 +256,47 @@ body.theme-dark .sim-log { background: #101725; }
 body.theme-dark .comparison-table th { background: #111a2b; }
 body.theme-dark .note-banner.warning { background: var(--amber-soft); }
 
+/* Aula 05: mapa e controles lado a lado para acompanhar a execução sem perder o contexto visual. */
+body.lesson-five .comparison-lab {
+  grid-template-columns: minmax(420px, 1.05fr) minmax(380px, .95fr);
+  align-items: start;
+}
+body.lesson-five .comparison-lab > .comparison-lab-card {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  position: sticky;
+  top: 88px;
+  align-self: start;
+  max-height: calc(100vh - 104px);
+  overflow: auto;
+}
+body.lesson-five .comparison-lab > .map-status-strip {
+  grid-column: 2;
+  grid-row: 1;
+}
+body.lesson-five .comparison-lab > .comparison-panels {
+  grid-column: 2;
+  grid-row: 2;
+}
+body.lesson-five .comparison-lab .interactive-romania-map {
+  min-width: 0;
+  height: 430px;
+}
+
+@media (max-width: 1100px) {
+  body.lesson-five .comparison-lab { grid-template-columns: 1fr; }
+  body.lesson-five .comparison-lab > .comparison-lab-card,
+  body.lesson-five .comparison-lab > .map-status-strip,
+  body.lesson-five .comparison-lab > .comparison-panels {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  body.lesson-five .comparison-lab > .comparison-lab-card {
+    position: static;
+    max-height: none;
+  }
+}
+
 @media (max-width: 1000px) {
   .hero-grid, .overview-grid, .warmup, .algorithm-layout, .algorithm-layout.reverse, .search-simulator, .closing-grid { grid-template-columns: 1fr; }
   .journey { grid-template-columns: repeat(3, 1fr); }
