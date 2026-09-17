@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#111;}.title{font-size:24px;font-weight:700;}.subtitle{font-size:15px;}.edge{stroke:#777;stroke-width:2;}.costbg{fill:white;stroke:#ddd;stroke-width:1;}.cost{font-size:13px;font-weight:600;text-anchor:middle;dominant-baseline:middle;}.node{fill:#e9ecef;stroke:#333;stroke-width:2;}.start{fill:#dbeafe;stroke:#1d4ed8;}.goal{fill:#dcfce7;stroke:#15803d;}.name{font-size:13px;font-weight:700;text-anchor:middle;}.heur{font-size:12px;text-anchor:middle;}</style>
+<text x="550.0" y="38" class="title" text-anchor="middle">Exercício A* 1 — Drone de inspeção</text>
+<text x="550.0" y="66" class="subtitle" text-anchor="middle">Início: Hangar · Objetivo: Torre</text>
+<line x1="85.0" y1="448.2" x2="205.9" y2="425.5" class="edge"/>
+<line x1="661.6" y1="630.0" x2="577.9" y2="459.5" class="edge"/>
+<line x1="661.6" y1="630.0" x2="1015.0" y2="505.0" class="edge"/>
+<line x1="577.9" y1="459.5" x2="605.8" y2="442.5" class="edge"/>
+<line x1="577.9" y1="459.5" x2="271.0" y2="544.8" class="edge"/>
+<line x1="224.5" y1="380.0" x2="205.9" y2="425.5" class="edge"/>
+<line x1="224.5" y1="380.0" x2="494.2" y2="198.2" class="edge"/>
+<line x1="205.9" y1="425.5" x2="271.0" y2="544.8" class="edge"/>
+<line x1="233.8" y1="618.6" x2="271.0" y2="544.8" class="edge"/>
+<line x1="494.2" y1="198.2" x2="643.0" y2="130.0" class="edge"/>
+<line x1="605.8" y1="442.5" x2="1015.0" y2="505.0" class="edge"/>
+<line x1="224.5" y1="380.0" x2="271.0" y2="544.8" class="edge"/>
+<line x1="233.8" y1="618.6" x2="494.2" y2="198.2" class="edge"/>
+<line x1="577.9" y1="459.5" x2="224.5" y2="380.0" class="edge"/>
+<line x1="577.9" y1="459.5" x2="1015.0" y2="505.0" class="edge"/>
+<line x1="85.0" y1="448.2" x2="494.2" y2="198.2" class="edge"/>
+<line x1="224.5" y1="380.0" x2="233.8" y2="618.6" class="edge"/>
+<line x1="661.6" y1="630.0" x2="494.2" y2="198.2" class="edge"/>
+<rect x="128.4" y="426.8" width="34" height="20" rx="5" class="costbg"/>
+<text x="145.4" y="436.8" class="cost">17</text>
+<rect x="602.8" y="534.8" width="34" height="20" rx="5" class="costbg"/>
+<text x="619.8" y="544.8" class="cost">62</text>
+<rect x="821.3" y="557.5" width="34" height="20" rx="5" class="costbg"/>
+<text x="838.3" y="567.5" class="cost">76</text>
+<rect x="578.8" y="441.0" width="26" height="20" rx="5" class="costbg"/>
+<text x="591.8" y="451.0" class="cost">7</text>
+<rect x="407.4" y="492.2" width="34" height="20" rx="5" class="costbg"/>
+<text x="424.4" y="502.2" class="cost">83</text>
+<rect x="198.2" y="392.7" width="34" height="20" rx="5" class="costbg"/>
+<text x="215.2" y="402.7" class="cost">14</text>
+<rect x="342.4" y="279.1" width="34" height="20" rx="5" class="costbg"/>
+<text x="359.4" y="289.1" class="cost">62</text>
+<rect x="221.4" y="475.1" width="34" height="20" rx="5" class="costbg"/>
+<text x="238.4" y="485.1" class="cost">35</text>
+<rect x="235.4" y="571.7" width="34" height="20" rx="5" class="costbg"/>
+<text x="252.4" y="581.7" class="cost">28</text>
+<rect x="551.6" y="154.1" width="34" height="20" rx="5" class="costbg"/>
+<text x="568.6" y="164.1" class="cost">27</text>
+<rect x="793.4" y="463.8" width="34" height="20" rx="5" class="costbg"/>
+<text x="810.4" y="473.8" class="cost">75</text>
+<rect x="230.8" y="452.4" width="34" height="20" rx="5" class="costbg"/>
+<text x="247.8" y="462.4" class="cost">55</text>
+<rect x="343.0" y="398.4" width="42" height="20" rx="5" class="costbg"/>
+<text x="364.0" y="408.4" class="cost">396</text>
+<rect x="380.2" y="409.8" width="42" height="20" rx="5" class="costbg"/>
+<text x="401.2" y="419.8" class="cost">187</text>
+<rect x="779.5" y="472.3" width="34" height="20" rx="5" class="costbg"/>
+<text x="796.5" y="482.3" class="cost">53</text>
+<rect x="268.6" y="313.2" width="42" height="20" rx="5" class="costbg"/>
+<text x="289.6" y="323.2" class="cost">119</text>
+<rect x="212.2" y="489.3" width="34" height="20" rx="5" class="costbg"/>
+<text x="229.2" y="499.3" class="cost">86</text>
+<rect x="556.9" y="404.1" width="42" height="20" rx="5" class="costbg"/>
+<text x="577.9" y="414.1" class="cost">144</text>
+<circle cx="85.0" cy="448.2" r="31" class="node start"/>
+<text x="85.0" y="445.2" class="name">Hangar</text>
+<text x="85.0" y="463.2" class="heur">h=100</text>
+<circle cx="661.6" cy="630.0" r="31" class="node"/>
+<text x="661.6" y="627.0" class="name">Reservatorio</text>
+<text x="661.6" y="645.0" class="heur">h=43</text>
+<circle cx="577.9" cy="459.5" r="31" class="node"/>
+<text x="577.9" y="456.5" class="name">Galpao</text>
+<text x="577.9" y="474.5" class="heur">h=47</text>
+<circle cx="224.5" cy="380.0" r="31" class="node"/>
+<text x="224.5" y="377.0" class="name">Chamine</text>
+<text x="224.5" y="395.0" class="heur">h=87</text>
+<circle cx="205.9" cy="425.5" r="31" class="node"/>
+<text x="205.9" y="422.5" class="name">Patio</text>
+<text x="205.9" y="440.5" class="heur">h=88</text>
+<circle cx="233.8" cy="618.6" r="31" class="node"/>
+<text x="233.8" y="615.6" class="name">Oficina</text>
+<text x="233.8" y="633.6" class="heur">h=86</text>
+<circle cx="494.2" cy="198.2" r="31" class="node"/>
+<text x="494.2" y="195.2" class="name">Silos</text>
+<text x="494.2" y="213.2" class="heur">h=77</text>
+<circle cx="271.0" cy="544.8" r="31" class="node"/>
+<text x="271.0" y="541.8" class="name">Linha 1</text>
+<text x="271.0" y="559.8" class="heur">h=80</text>
+<circle cx="643.0" cy="130.0" r="31" class="node"/>
+<text x="643.0" y="127.0" class="name">Linha 2</text>
+<text x="643.0" y="145.0" class="heur">h=77</text>
+<circle cx="605.8" cy="442.5" r="31" class="node"/>
+<text x="605.8" y="439.5" class="name">Antena</text>
+<text x="605.8" y="457.5" class="heur">h=45</text>
+<circle cx="1015.0" cy="505.0" r="31" class="node goal"/>
+<text x="1015.0" y="502.0" class="name">Torre</text>
+<text x="1015.0" y="520.0" class="heur">h=0</text>
+<text x="25" y="680" class="subtitle">Azul: estado inicial · Verde: objetivo · Números nas arestas: custo · h: heurística</text>
+</svg>
