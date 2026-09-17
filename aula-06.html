@@ -68,6 +68,7 @@
         <a href="index.html">Página principal</a>
         <a href="curso.html">Visão geral</a>
         <a href="#busca-conhecimento">Busca → conhecimento</a>
+        <a href="#visao-tecnica">Visão da técnica</a>
         <a href="#representar">Fatos e regras</a>
         <a href="#inferencia">Inferência</a>
         <a href="#pratica">Prática</a>
@@ -113,6 +114,7 @@
               <h3>Conteúdo central</h3>
               <div class="topic-list">
                 <div>Da busca ao raciocínio baseado em conhecimento</div>
+                <div>IA simbólica e sistemas baseados em conhecimento</div>
                 <div>Fatos, relações e regras</div>
                 <div>Base de conhecimento e inferência</div>
                 <div>Encadeamento para frente</div>
@@ -166,6 +168,71 @@ existe_falha_backend</code></pre>
         </div>
       </section>
 
+      <section class="section" id="visao-tecnica">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Visão geral da técnica</p>
+            <h2>Onde essa abordagem se encaixa na IA?</h2>
+            <p>Estamos estudando uma abordagem da <strong>IA simbólica</strong>. Nela, o conhecimento é representado explicitamente por símbolos, relações e regras que o sistema consegue manipular.</p>
+          </div>
+
+          <div class="concept-grid">
+            <article class="card compact-card">
+              <p class="eyebrow">Categoria</p>
+              <h3>Da IA até a técnica desta aula</h3>
+              <pre class="code-block"><code>INTELIGÊNCIA ARTIFICIAL
+        │
+        └── IA simbólica
+              │
+              └── Sistemas baseados em conhecimento
+                     │
+                     └── Sistemas baseados em regras
+                            fatos + regras + inferência</code></pre>
+              <p>Nesta aula, nosso foco está nos <strong>sistemas baseados em regras</strong>: uma forma simples de tornar o conhecimento explícito e utilizá-lo para raciocinar.</p>
+            </article>
+
+            <article class="card compact-card">
+              <p class="eyebrow">Componentes</p>
+              <h3>Duas partes trabalham juntas</h3>
+              <p><strong>Representação:</strong> transforma uma situação do mundo real em fatos, relações e regras.</p>
+              <p><strong>Inferência:</strong> usa essa representação para aplicar regras e produzir novas conclusões.</p>
+              <div class="note-banner"><strong>Em resumo:</strong> primeiro descrevemos o problema de uma forma que o sistema consiga usar; depois fazemos o sistema raciocinar sobre essa descrição.</div>
+            </article>
+          </div>
+
+          <div class="knowledge-architecture" aria-label="Fluxo geral da abordagem baseada em conhecimento">
+            <div><strong>Mundo real</strong><br><small>situação-problema</small></div>
+            <div class="arrow">→</div>
+            <div><strong>Representação</strong><br><small>fatos, relações e regras</small></div>
+            <div class="arrow">→</div>
+            <div><strong>Inferência</strong><br><small>aplica regras e produz conclusões</small></div>
+          </div>
+
+          <article class="card compact-card">
+            <p class="eyebrow">Exemplo rápido</p>
+            <pre class="code-block"><code>Mundo real:
+"A API retorna erro 500 e depende do banco."
+
+        ↓ representar
+
+FATO
+api_retorna_500
+
+RELAÇÃO
+depende_de(api, banco)
+
+REGRA
+SE api_retorna_500
+ENTÃO existe_falha_backend
+
+        ↓ inferir
+
+CONCLUSÃO
+existe_falha_backend</code></pre>
+          </article>
+        </div>
+      </section>
+
       <section class="section section-soft" id="representar">
         <div class="container">
           <div class="section-heading">
@@ -176,32 +243,23 @@ existe_falha_backend</code></pre>
 
           <article class="card compact-card">
             <p class="eyebrow">Situação do mundo real</p>
-            <h3>Uma API de vendas começou a retornar erro 500</h3>
-            <p>Ao investigar o incidente, a equipe verifica que o banco de dados está indisponível e sabe que a API depende desse banco. Queremos transformar essas informações em uma representação que o sistema consiga utilizar.</p>
-            <pre class="code-block"><code>Situação observada
-"A API retorna erro 500, o banco está indisponível
- e a API depende do banco."
-
-↓ modelagem
-
-FATOS
-api_retorna_500
+            <h3>Uma API de vendas começou a falhar</h3>
+            <p>A equipe observa que a API está retornando erro 500. Ela também sabe que a API depende do banco de dados e que o banco está indisponível.</p>
+            <p>Para que um sistema consiga raciocinar sobre esse cenário, precisamos <strong>modelar</strong> essas informações.</p>
+            <pre class="code-block"><code>api_retorna_500
 banco_indisponivel
-
-RELAÇÃO
 depende_de(api, banco)
 
-REGRA
 SE api_retorna_500 E banco_indisponivel
 ENTÃO suspeita_banco</code></pre>
-            <p>Essa modelagem será a base para identificar três elementos: <strong>fato</strong>, <strong>relação</strong> e <strong>regra</strong>.</p>
+            <p>Essa modelagem será nossa referência para entender os três componentes abaixo.</p>
           </article>
 
           <div class="concept-grid three">
             <article class="card">
               <p class="eyebrow">Fato</p>
               <h3>O que sabemos?</h3>
-              <p><strong>Descreve o caso.</strong> No exemplo, são informações observadas durante o incidente.</p>
+              <p><strong>Descreve o caso:</strong> uma informação considerada verdadeira no caso que estamos analisando.</p>
               <pre class="code-block"><code>api_retorna_500
 banco_indisponivel</code></pre>
             </article>
@@ -209,7 +267,7 @@ banco_indisponivel</code></pre>
             <article class="card">
               <p class="eyebrow">Relação</p>
               <h3>Como as coisas se conectam?</h3>
-              <p><strong>Organiza os elementos do domínio.</strong> No exemplo, registra uma dependência conhecida.</p>
+              <p><strong>Organiza os elementos do domínio:</strong> mostra como eles se relacionam.</p>
               <pre class="code-block"><code>depende_de(api, banco)</code></pre>
             </article>
 
@@ -217,12 +275,13 @@ banco_indisponivel</code></pre>
               <p class="eyebrow">Regra</p>
               <h3>O que pode ser concluído?</h3>
               <p><strong>Diz o que pode ser concluído</strong> quando certas condições são satisfeitas.</p>
-              <pre class="code-block"><code>SE api_retorna_500 E banco_indisponivel
+              <pre class="code-block"><code>SE api_retorna_500
+E banco_indisponivel
 ENTÃO suspeita_banco</code></pre>
             </article>
           </div>
 
-          <div class="note-banner"><strong>Importante:</strong> até aqui estamos apenas representando o conhecimento. Verificar se a regra pode ser aplicada e produzir <code>suspeita_banco</code> é tarefa da inferência.</div>
+          <div class="note-banner"><strong>Nesta etapa, estamos apenas representando.</strong> Ainda não executamos a regra nem produzimos a conclusão. Isso acontece no próximo componente da técnica: a inferência.</div>
         </div>
       </section>
 
@@ -432,6 +491,7 @@ ENTÃO gripe ?</code></pre>
       <nav>
         <a href="#visao">Visão da aula</a>
         <a href="#busca-conhecimento">Busca → conhecimento</a>
+        <a href="#visao-tecnica">Visão da técnica</a>
         <a href="#representar">Fatos e regras</a>
         <a href="#inferencia">Inferência</a>
         <a href="#pratica">Prática guiada</a>
