@@ -178,7 +178,7 @@ existe_falha_backend</code></pre>
             <article class="card">
               <p class="eyebrow">Fato</p>
               <h3>O que sabemos?</h3>
-              <p>Uma informação considerada verdadeira no caso que estamos analisando.</p>
+              <p><strong>Descreve o caso:</strong> uma informação considerada verdadeira no caso que estamos analisando.</p>
               <pre class="code-block"><code>api_retorna_500
 banco_indisponivel</code></pre>
             </article>
@@ -186,20 +186,18 @@ banco_indisponivel</code></pre>
             <article class="card">
               <p class="eyebrow">Relação</p>
               <h3>Como as coisas se conectam?</h3>
-              <p>Uma ligação entre elementos do domínio.</p>
+              <p><strong>Organiza os elementos do domínio:</strong> mostra como eles se relacionam.</p>
               <pre class="code-block"><code>depende_de(api, banco)</code></pre>
             </article>
 
             <article class="card">
               <p class="eyebrow">Regra</p>
-              <h3>O que vale de forma geral?</h3>
-              <p>Uma condição que permite produzir uma nova informação.</p>
+              <h3>O que pode ser concluído?</h3>
+              <p><strong>Diz o que pode ser concluído</strong> quando certas condições são satisfeitas.</p>
               <pre class="code-block"><code>SE api_retorna_500
 ENTÃO existe_falha_backend</code></pre>
             </article>
           </div>
-
-          <div class="note-banner"><strong>Leia assim:</strong> os fatos descrevem o caso; as relações organizam os elementos do domínio; e as regras dizem o que pode ser concluído quando certas condições são satisfeitas.</div>
 
           <article class="card compact-card">
             <p class="eyebrow">Um mesmo exemplo</p>
