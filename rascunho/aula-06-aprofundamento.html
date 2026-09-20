@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Material de aprofundamento da Aula 06 de Inteligência Artificial Aplicada: representação do conhecimento, bases de conhecimento, sistemas de produção, inferência, encadeamento para frente e para trás, conflitos, lacunas e limites de regras determinísticas.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Aula 06 | Material de aprofundamento | Inteligência Artificial Aplicada</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script defer src="../script.js"></script>
+  <style>
+    .study-page { background: var(--bg); color: var(--text); }
+    .study-page .site-header { background: color-mix(in srgb, var(--bg) 92%, transparent); }
+    .study-hero { padding: 6rem 0 5rem; background: radial-gradient(circle at 88% 18%, rgba(124,103,232,.15), transparent 27rem), radial-gradient(circle at 8% 78%, rgba(49,94,251,.11), transparent 24rem), var(--bg); }
+    .study-hero-grid { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr); gap:3.5rem; align-items:end; }
+    .study-hero h1 { margin:0; max-width:980px; font-size:clamp(3rem,6.5vw,6rem); line-height:.96; letter-spacing:-.055em; }
+    .study-lead { max-width:900px; margin:1.5rem 0 0; color:var(--muted); font-size:clamp(1.15rem,2vw,1.42rem); }
+    .study-card { padding:1.5rem; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow); }
+    .study-card strong { display:block; margin-bottom:.55rem; color:var(--primary); }
+    .study-card p:last-child { margin-bottom:0; }
+    .study-actions { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.7rem; }
+    .study-meta { display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1.3rem; }
+    .study-meta span { padding:.35rem .7rem; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:var(--surface); font-size:.84rem; }
+    .study-toc-shell { position:sticky; top:76px; z-index:60; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:color-mix(in srgb,var(--bg) 94%,transparent); backdrop-filter:blur(14px); }
+    .study-toc { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:.5rem; padding:.85rem 0; }
+    .study-toc a { padding:.72rem .7rem; border:1px solid var(--line); border-radius:12px; text-decoration:none; text-align:center; color:var(--muted); background:var(--surface); font-size:.78rem; font-weight:800; line-height:1.2; }
+    .study-toc a:hover { color:var(--primary); border-color:var(--primary); }
+    .study-section { padding:5.5rem 0; scroll-margin-top:155px; }
+    .study-section.alt { background:var(--surface-soft); }
+    .study-heading { max-width:950px; margin-bottom:2.2rem; }
+    .study-heading h2 { margin:0; font-size:clamp(2.15rem,4vw,3.6rem); line-height:1.04; letter-spacing:-.045em; }
+    .study-heading > p:last-child { margin:1rem 0 0; color:var(--muted); font-size:1.05rem; }
+    .study-kicker { margin:0 0 .65rem; color:var(--primary); font-size:.76rem; font-weight:850; letter-spacing:.11em; text-transform:uppercase; }
+    .study-prose { max-width:1060px; min-width:0; }
+    .study-prose h3 { margin:2.4rem 0 .8rem; font-size:1.55rem; }
+    .study-prose h3:first-child { margin-top:0; }
+    .study-prose h4 { margin:1.65rem 0 .55rem; font-size:1.08rem; }
+    .study-prose p, .study-prose li { color:var(--muted); }
+    .study-prose p { margin:0 0 1.05rem; }
+    .study-prose ul { padding-left:1.25rem; }
+    .study-grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr); gap:2rem; align-items:start; }
+    .study-stack { display:grid; gap:1rem; }
+    .study-callout { padding:1.15rem 1.25rem; border-left:4px solid var(--primary); border-radius:0 16px 16px 0; background:color-mix(in srgb,var(--primary) 9%,var(--surface)); }
+    .study-callout strong { display:block; margin-bottom:.35rem; color:var(--primary); }
+    .study-callout p { margin:0; color:var(--muted); }
+    .study-callout.violet { border-left-color:var(--secondary); background:color-mix(in srgb,var(--secondary) 10%,var(--surface)); }
+    .study-callout.violet strong { color:var(--secondary); }
+    .study-callout.teal { border-left-color:var(--accent); background:color-mix(in srgb,var(--accent) 10%,var(--surface)); }
+    .study-callout.teal strong { color:var(--accent); }
+    .callout-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin:1.8rem 0; }
+    .mini-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; margin:1.5rem 0; }
+    .mini-grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .mini-grid.four { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .mini-card { padding:1.2rem; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+    .mini-card h4 { margin:0 0 .45rem; }
+    .mini-card p { margin:0; color:var(--muted); }
+    .code-block { margin:1.35rem 0; padding:1.25rem; overflow-x:auto; border:1px solid #293653; border-radius:18px; background:#0b1220; color:#dbe6f7; line-height:1.58; }
+    .code-block code { font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace; font-size:.88rem; }
+    .study-table-wrap { margin:1.5rem 0; overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+    .study-table { width:100%; border-collapse:collapse; min-width:760px; }
+    .study-table th,.study-table td { padding:.9rem; border-bottom:1px solid var(--line); vertical-align:top; text-align:left; }
+    .study-table th { background:color-mix(in srgb,var(--primary) 10%,var(--surface)); color:var(--text); font-size:.82rem; }
+    .study-table td { color:var(--muted); font-size:.9rem; }
+    .study-table tr:last-child td { border-bottom:0; }
+    .architecture { display:grid; grid-template-columns:1fr auto 1.15fr auto 1fr; gap:.75rem; align-items:center; margin:1.7rem 0; }
+    .architecture > div:not(.arrow) { min-height:130px; padding:1.15rem; border:1px solid var(--line); border-radius:18px; background:var(--surface); display:flex; flex-direction:column; justify-content:center; }
+    .architecture strong { display:block; margin-bottom:.35rem; color:var(--primary); }
+    .architecture span { color:var(--muted); font-size:.9rem; }
+    .architecture .arrow { color:var(--primary); font-size:1.5rem; font-weight:900; }
+    .trace { display:grid; gap:.75rem; margin:1.5rem 0; }
+    .trace-step { display:grid; grid-template-columns:68px 1fr; gap:1rem; align-items:start; padding:1rem 1.1rem; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+    .trace-step b { display:grid; place-items:center; width:44px; height:44px; border-radius:12px; background:color-mix(in srgb,var(--primary) 12%,var(--surface)); color:var(--primary); }
+    .trace-step strong { display:block; margin-bottom:.3rem; color:var(--text); }
+    .trace-step p { margin:0; color:var(--muted); }
+    .logic-levels { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; margin:1.5rem 0; }
+    .logic-level { padding:1.25rem; border:1px solid var(--line); border-radius:18px; background:var(--surface); }
+    .logic-level strong { display:block; margin-bottom:.55rem; color:var(--primary); }
+    .logic-level code { display:block; margin:.65rem 0; padding:.7rem; border-radius:10px; background:var(--surface-soft); color:var(--text); }
+    .compare-flow { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1.5rem 0; }
+    .compare-flow article { padding:1.25rem; border:1px solid var(--line); border-radius:18px; background:var(--surface); }
+    .compare-flow strong { display:block; margin-bottom:.45rem; color:var(--primary); }
+    .compare-flow p { margin:0; color:var(--muted); }
+    .reference-list { display:grid; gap:1rem; margin-top:1.5rem; }
+    .reference-item { padding:1.2rem; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+    .reference-item strong { display:block; margin-bottom:.35rem; color:var(--text); }
+    .reference-item p { margin:0; color:var(--muted); }
+    .study-page .site-footer { border-top:1px solid var(--line); }
+    @media (max-width:980px) {
+      .study-hero-grid,.study-grid { grid-template-columns:1fr; }
+      .study-toc { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      .mini-grid.three,.mini-grid.four,.callout-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .architecture { grid-template-columns:1fr; }
+      .architecture .arrow { transform:rotate(90deg); text-align:center; }
+    }
+    @media (max-width:680px) {
+      .study-hero { padding:4.2rem 0 3.5rem; }
+      .study-toc-shell { position:static; }
+      .study-toc { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .study-section { padding:4rem 0; scroll-margin-top:90px; }
+      .mini-grid,.mini-grid.three,.mini-grid.four,.callout-grid,.compare-flow,.logic-levels { grid-template-columns:1fr; }
+      .trace-step { grid-template-columns:1fr; }
+      .study-nav .nav-label { display:none; }
+    }
+  </style>
+  <script src="https://pfransozi.github.io/assets/js/ensino.js?v=9"></script>
+  <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=13">
+</head>
+<body class="teaching-page teaching-lesson study-page">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="site-header" id="inicio">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html" aria-label="IA Aplicada, página principal">
+        <span class="brand-mark" aria-hidden="true">IA</span>
+        <span><strong>IA Aplicada</strong><small>Engenharia de Software</small></span>
+      </a>
+      <nav class="main-nav study-nav" aria-label="Navegação principal">
+        <a href="../aula-06.html">Aula 06</a>
+        <a class="nav-highlight" href="aula-06-aprofundamento.html">Aprofundamento</a>
+        <a href="../index.html">Portal</a>
+        <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-text nav-label">Modo noturno</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="lesson-shell lesson-page-grid"><main id="conteudo">
+    <section class="study-hero">
+      <div class="container study-hero-grid">
+        <div>
+          <p class="eyebrow">Aula 06 · material de aprofundamento</p>
+          <h1>Representação do conhecimento: do símbolo à inferência</h1>
+          <p class="study-lead">Este material aprofunda como um sistema transforma conhecimento de um domínio em estruturas explícitas, aplica regras, produz conclusões e lida com conflitos, lacunas e limites do raciocínio determinístico.</p>
+          <div class="study-meta"><span>Engenharia de Software</span><span>Leitura ampliada</span><span>Sem atividade</span></div>
+          <div class="study-actions">
+            <a class="button button-primary" href="#representar">Começar a leitura</a>
+            <a class="button button-secondary" href="../aula-06.html">Voltar à aula principal</a>
+          </div>
+        </div>
+        <aside class="study-card"><strong>Como usar este material</strong><p>O aprofundamento retoma os conceitos da Aula 06 e desenvolve suas implicações conceituais e arquiteturais. A proposta é compreender melhor o que significa representar conhecimento e raciocinar sobre ele, sem introduzir atividades ou entregas.</p></aside>
+      </div>
+    </section>
+
+    <div class="study-toc-shell" aria-label="Sumário do aprofundamento"><div class="container study-toc">
+      <a href="#representar">Representar</a><a href="#qualidade">Qualidade</a><a href="#arquitetura">Arquitetura</a><a href="#inferencia">Inferência</a><a href="#encadeamento">Encadeamento</a><a href="#lacunas">Conflitos e lacunas</a><a href="#limites">Limites</a>
+    </div></div>
+
+    <section class="study-section" id="representar"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte I · O conhecimento precisa ganhar uma forma computável</p><h2>O sistema não manipula o mundo: manipula uma representação do mundo</h2><p>Representar conhecimento é escolher símbolos, relações e estruturas capazes de preservar aspectos relevantes de um domínio para que um programa possa consultar, combinar e transformar essa informação.</p></div>
+      <div class="study-prose">
+        <h3>Representar é selecionar o que importa</h3>
+        <p>Quando escrevemos <code>banco_indisponivel</code>, não colocamos um banco de dados dentro do programa. Criamos um símbolo que representa uma afirmação sobre o domínio. A partir desse momento, o mecanismo de raciocínio trabalha com o símbolo e com as relações definidas entre símbolos.</p>
+        <p>Essa escolha é inevitavelmente uma simplificação. Um incidente real envolve servidores, processos, conexões, filas, tempos de resposta e muitas outras propriedades. A representação inclui apenas aquilo que julgamos necessário para a tarefa do sistema.</p>
+        <div class="study-callout"><strong>Consequência importante</strong><p>Uma inferência pode ser perfeitamente correta em relação à representação e ainda assim ser pouco útil se a representação omitir aspectos importantes do problema real.</p></div>
+
+        <h3>Conhecimento declarativo e conhecimento procedural</h3>
+        <p>Uma distinção clássica separa o conhecimento <strong>declarativo</strong> — aquilo que o sistema sabe sobre o domínio — do conhecimento <strong>procedural</strong> — como uma tarefa é executada. Na abordagem declarativa, fatos e relações ficam explícitos e relativamente separados do código que realiza a inferência.</p>
+      </div>
+
+      <div class="compare-flow">
+        <article><strong>Procedural</strong><pre class="code-block"><code>if erro_500 and banco_indisponivel:
+    causa = "banco"</code></pre><p>A regra do domínio está incorporada ao fluxo do programa. Mudar o conhecimento frequentemente exige alterar o próprio código.</p></article>
+        <article><strong>Declarativo</strong><pre class="code-block"><code>FATO: erro_500
+FATO: banco_indisponivel
+
+REGRA:
+SE erro_500 E banco_indisponivel
+ENTÃO causa_banco</code></pre><p>O conhecimento fica explícito. O mesmo mecanismo de inferência pode operar sobre diferentes conjuntos de fatos e regras.</p></article>
+      </div>
+
+      <div class="study-prose">
+        <h3>Nem todo fato tem o mesmo nível de estrutura</h3>
+        <p>Na aula principal aparecem dois formatos diferentes. Um símbolo como <code>api_retorna_500</code> pode ser tratado como uma proposição atômica. Já <code>depende_de(api, banco)</code> expressa uma relação entre objetos. Essa diferença parece pequena, mas altera bastante a capacidade de generalização da linguagem de representação.</p>
+      </div>
+      <div class="logic-levels">
+        <div class="logic-level"><strong>Representação proposicional</strong><code>api_retorna_500</code><p>O símbolo é tratado como uma unidade. É simples de manipular, mas sua estrutura interna não pode ser explorada diretamente pelo mecanismo lógico.</p></div>
+        <div class="logic-level"><strong>Representação estruturada</strong><code>depende_de(api, banco)</code><p>Podemos explicitar objetos e relações. Com variáveis e quantificadores, linguagens mais expressivas conseguem representar regras gerais sobre classes inteiras de objetos.</p></div>
+      </div>
+      <div class="study-prose"><p>Essa passagem de símbolos atômicos para representações estruturadas é uma das razões pelas quais a lógica de primeira ordem é mais expressiva do que a lógica proposicional. Neste aprofundamento, a ideia relevante é apenas esta: <strong>quanto mais estrutura a linguagem consegue representar, mais conhecimento geral pode ser reutilizado</strong>.</p></div>
+    </div></section>
+
+    <section class="study-section alt" id="qualidade"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte II · Uma representação pode ser correta e ainda ser ruim</p><h2>O que esperamos de uma boa representação do conhecimento?</h2><p>Não existe uma única representação ideal para todos os domínios. Diferentes formas de representar conhecimento oferecem diferentes compromissos de expressão, raciocínio, eficiência e explicação.</p></div>
+
+      <div class="mini-grid four">
+        <article class="mini-card"><h4>Expressividade</h4><p>Quais tipos de fatos, relações e generalizações a linguagem consegue representar?</p></article>
+        <article class="mini-card"><h4>Efetividade</h4><p>A representação permite derivar conhecimento novo de forma adequada ao problema?</p></article>
+        <article class="mini-card"><h4>Eficiência</h4><p>O sistema consegue consultar e inferir sem um custo computacional desproporcional?</p></article>
+        <article class="mini-card"><h4>Explicitude</h4><p>É possível entender por que uma conclusão foi produzida e justificar a cadeia de raciocínio?</p></article>
+      </div>
+
+      <div class="study-prose">
+        <h3>Mais expressividade também pode significar mais custo</h3>
+        <p>Uma linguagem capaz de representar relações ricas, exceções e quantificações gerais pode descrever o domínio de forma compacta e reutilizável. Ao mesmo tempo, quanto maior a liberdade de expressão, mais difícil pode se tornar o problema de inferência.</p>
+        <p>Essa relação aparece repetidamente em IA: queremos uma representação suficientemente rica para o domínio, mas suficientemente controlada para que o raciocínio seja computacionalmente viável.</p>
+
+        <h3>A granularidade também é uma decisão de modelagem</h3>
+        <p>Podemos representar apenas <code>servico_indisponivel</code> ou decompor a situação em <code>processo_parado</code>, <code>porta_fechada</code>, <code>dependencia_indisponivel</code> e outros fatos. Uma representação mais detalhada pode permitir diagnósticos melhores, mas aumenta a quantidade de conhecimento que precisa ser mantida.</p>
+        <div class="study-callout violet"><strong>Engenharia do conhecimento</strong><p>Construir uma base de conhecimento não é apenas transcrever frases. É decidir quais conceitos existem, como se relacionam, em que nível de detalhe devem aparecer e quais inferências o sistema precisa ser capaz de realizar.</p></div>
+      </div>
+    </div></section>
+
+    <section class="study-section" id="arquitetura"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte III · Separar conhecimento de controle</p><h2>Base de conhecimento, memória de trabalho e mecanismo de inferência</h2><p>Arquiteturas baseadas em conhecimento tornam explícita a separação entre aquilo que o sistema sabe e o procedimento que decide quais regras aplicar.</p></div>
+
+      <div class="architecture">
+        <div><strong>Dados do caso</strong><span>Observações atuais: erros, estados de sensores, sintomas, respostas de serviços.</span></div>
+        <div class="arrow">→</div>
+        <div><strong>Mecanismo de inferência</strong><span>Compara fatos e condições, seleciona regras aplicáveis, produz novas conclusões e repete o processo quando necessário.</span></div>
+        <div class="arrow">↔</div>
+        <div><strong>Base de conhecimento</strong><span>Conhecimento relativamente estável do domínio: fatos gerais, relações e regras.</span></div>
+      </div>
+
+      <div class="study-prose">
+        <h3>Conhecimento geral e fatos do caso não são a mesma coisa</h3>
+        <p>Considere a regra <code>SE banco_indisponivel E sistema_depende_do_banco ENTÃO sistema_pode_falhar</code>. Ela descreve uma regularidade geral do domínio. Já <code>banco_indisponivel</code> e <code>depende_de(api,banco)</code> podem descrever a situação observada agora.</p>
+        <p>Separar esses dois níveis permite reaplicar o mesmo conhecimento a diferentes incidentes. O caso muda; a regra geral pode permanecer.</p>
+
+        <h3>Sistemas de produção</h3>
+        <p>Uma arquitetura clássica organiza o raciocínio em três partes: uma memória de trabalho contendo fatos atuais, um conjunto de regras de produção no formato condição–ação ou condição–conclusão e um interpretador que verifica quais regras podem ser disparadas.</p>
+      </div>
+
+      <div class="mini-grid three">
+        <article class="mini-card"><h4>Memória de trabalho</h4><p>Contém os fatos que descrevem a situação atual e as conclusões que foram adicionadas durante a execução.</p></article>
+        <article class="mini-card"><h4>Regras de produção</h4><p>Definem padrões: quando certas condições aparecem, uma conclusão ou ação torna-se aplicável.</p></article>
+        <article class="mini-card"><h4>Interpretador</h4><p>Faz o casamento entre fatos e regras, resolve conflitos quando várias regras são aplicáveis e executa a regra selecionada.</p></article>
+      </div>
+
+      <div class="study-prose">
+        <h3>TELL e ASK como visão conceitual</h3>
+        <p>Em uma arquitetura de agente baseado em conhecimento, podemos imaginar duas operações básicas. <strong>TELL</strong> adiciona informação à base; <strong>ASK</strong> consulta o que pode ser sustentado a partir do conhecimento disponível. A inferência aparece justamente entre aquilo que foi informado e aquilo que pode ser respondido.</p>
+        <pre class="code-block"><code>TELL: api_retorna_500
+TELL: banco_indisponivel
+
+ASK: causa_provavel_banco?
+
+Resposta:
+sim, porque
+api_retorna_500
+→ existe_falha_backend
++ banco_indisponivel
+→ causa_provavel_banco</code></pre>
+      </div>
+    </div></section>
+
+    <section class="study-section alt" id="inferencia"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte IV · Conhecimento armazenado não basta</p><h2>Inferir é produzir uma conclusão sustentada pelo que já está representado</h2><p>O mecanismo de inferência transforma uma base estática em um sistema capaz de derivar informação nova.</p></div>
+
+      <div class="study-prose">
+        <h3>Uma cadeia de inferência</h3>
+        <p>Considere dois fatos e duas regras:</p>
+        <pre class="code-block"><code>Fatos:
+A
+B
+
+Regras:
+R1: SE A E B → C
+R2: SE C → D</code></pre>
+      </div>
+
+      <div class="trace">
+        <div class="trace-step"><b>1</b><div><strong>Conhecimento inicial</strong><p>A memória contém A e B. Ainda não existe C nem D.</p></div></div>
+        <div class="trace-step"><b>2</b><div><strong>Aplicação de R1</strong><p>Como A e B são verdadeiros no caso, R1 é aplicável. C é adicionado ao conjunto de fatos conhecidos.</p></div></div>
+        <div class="trace-step"><b>3</b><div><strong>Nova regra torna-se aplicável</strong><p>Agora C está disponível. Isso satisfaz a condição de R2 e permite concluir D.</p></div></div>
+        <div class="trace-step"><b>4</b><div><strong>Ponto fixo</strong><p>Se nenhuma regra puder acrescentar informação nova, o encadeamento para frente atingiu um estado estável e pode parar.</p></div></div>
+      </div>
+
+      <div class="study-prose">
+        <h3>Por que evitar adicionar o mesmo fato repetidamente?</h3>
+        <p>Se a conclusão já estiver na memória, adicioná-la novamente não aumenta o conhecimento. Além de desperdiçar trabalho, regras cíclicas como <code>A → B</code> e <code>B → A</code> poderiam manter o sistema ocupado indefinidamente se não houver controle de duplicação.</p>
+
+        <h3>Inferência correta não deve “inventar” conclusões</h3>
+        <p>Em sistemas lógicos, desejamos que a conclusão seja sustentada pela base de conhecimento. Intuitivamente, se as premissas e regras aceitas forem verdadeiras, o mecanismo não deve produzir arbitrariamente algo que não decorra delas. Essa propriedade é a base da ideia de inferência válida.</p>
+
+        <h3>A explicação pode ser tratada como proveniência</h3>
+        <p>Quando a conclusão <code>verificar_conexao_banco</code> aparece, um sistema útil pode registrar não apenas o resultado, mas também quais fatos e regras participaram da derivação. Isso cria uma trilha de justificativa.</p>
+        <pre class="code-block"><code>verificar_conexao_banco
+porque R4 usou causa_provavel_banco
+
+causa_provavel_banco
+porque R2 usou:
+- existe_falha_backend
+- banco_indisponivel
+
+existe_falha_backend
+porque R1 usou:
+- api_retorna_500</code></pre>
+        <div class="study-callout teal"><strong>Explicabilidade estrutural</strong><p>Em sistemas baseados em regras, a explicação pode emergir diretamente da sequência de regras disparadas. Isso não garante que o conhecimento esteja correto, mas torna o caminho de raciocínio auditável.</p></div>
+      </div>
+    </div></section>
+
+    <section class="study-section" id="encadeamento"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte V · Duas direções para o raciocínio</p><h2>Encadeamento para frente é orientado pelos dados; encadeamento para trás é orientado pelo objetivo</h2><p>As duas estratégias podem usar o mesmo conjunto de regras. O que muda é a direção em que o mecanismo procura uma prova.</p></div>
+
+      <div class="study-table-wrap"><table class="study-table">
+        <thead><tr><th>Aspecto</th><th>Encadeamento para frente</th><th>Encadeamento para trás</th></tr></thead>
+        <tbody>
+          <tr><td>Ponto de partida</td><td>Fatos atualmente conhecidos.</td><td>Consulta ou hipótese que queremos demonstrar.</td></tr>
+          <tr><td>Pergunta</td><td>“O que posso concluir a partir daqui?”</td><td>“O que precisa ser verdadeiro para sustentar esta conclusão?”</td></tr>
+          <tr><td>Direção</td><td>Dados → consequências.</td><td>Objetivo → subobjetivos → fatos.</td></tr>
+          <tr><td>Vantagem típica</td><td>Útil quando novos dados chegam e queremos propagar todas as consequências relevantes.</td><td>Útil quando existe uma pergunta específica e queremos explorar somente o conhecimento potencialmente relevante.</td></tr>
+          <tr><td>Risco típico</td><td>Pode gerar muitas conclusões corretas, mas irrelevantes para a pergunta atual.</td><td>Pode repetir subproblemas ou entrar em ciclos se a estratégia de prova não controlar recorrências.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="study-grid">
+        <div class="study-prose">
+          <h3>Encadeamento para frente: raciocínio orientado pelos dados</h3>
+          <p>Começamos com <code>erro_500</code> e <code>banco_indisponivel</code>. A primeira regra produz <code>falha_backend</code>; essa nova conclusão ativa outra regra; e assim por diante. O processo é natural quando queremos reagir a fatos que chegam continuamente.</p>
+          <pre class="code-block"><code>erro_500
+→ falha_backend
+
+falha_backend + banco_indisponivel
+→ suspeita_banco
+
+suspeita_banco
+→ verificar_conexao_banco</code></pre>
+        </div>
+        <aside class="study-stack">
+          <div class="study-callout"><strong>Ponto forte</strong><p>Novos dados podem iniciar automaticamente uma cadeia de consequências sem que uma consulta específica exista previamente.</p></div>
+          <div class="study-callout violet"><strong>Custo</strong><p>Se a base tiver muitas regras, o sistema pode produzir informação que nunca será usada.</p></div>
+        </aside>
+      </div>
+
+      <div class="study-grid" style="margin-top:2rem">
+        <div class="study-prose">
+          <h3>Encadeamento para trás: raciocínio orientado pelo objetivo</h3>
+          <p>Começamos com a pergunta <code>suspeita_banco?</code>. Procuramos uma regra cuja conclusão seja exatamente essa hipótese. Depois transformamos as condições dessa regra em novas perguntas.</p>
+          <pre class="code-block"><code>Objetivo:
+suspeita_banco?
+
+Precisa provar:
+falha_backend?
+banco_indisponivel?
+
+Para provar falha_backend:
+erro_500?
+
+Como erro_500 e banco_indisponivel
+são fatos, o objetivo é sustentado.</code></pre>
+        </div>
+        <aside class="study-stack">
+          <div class="study-callout teal"><strong>Ponto forte</strong><p>A busca pela prova tende a tocar apenas regras relacionadas à consulta.</p></div>
+          <div class="study-callout"><strong>Estrutura AND/OR</strong><p>Uma hipótese pode ser sustentada por uma entre várias regras possíveis (OR), enquanto uma regra pode exigir várias premissas simultaneamente (AND).</p></div>
+        </aside>
+      </div>
+
+      <div class="study-prose">
+        <h3>Nenhuma estratégia é universalmente superior</h3>
+        <p>Encadeamento para frente e para trás resolvem problemas diferentes de controle. Em sistemas reais, técnicas híbridas são comuns: informação pode ser propagada para frente, enquanto consultas específicas orientam partes da inferência para trás.</p>
+      </div>
+    </div></section>
+
+    <section class="study-section alt" id="lacunas"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte VI · O conhecimento pode estar incompleto ou inconsistente</p><h2>Não saber, contradizer e competir são problemas diferentes</h2><p>Uma base de regras precisa tratar explicitamente o que acontece quando falta informação ou quando mais de uma regra se torna aplicável.</p></div>
+
+      <div class="mini-grid three">
+        <article class="mini-card"><h4>Lacuna</h4><p>Falta conhecimento suficiente para concluir. Ex.: sabemos <code>falha_backend</code>, mas nada sabemos sobre o estado do banco.</p></article>
+        <article class="mini-card"><h4>Inconsistência</h4><p>Informações incompatíveis aparecem ao mesmo tempo. Ex.: a base contém <code>banco_disponivel</code> e <code>banco_indisponivel</code>.</p></article>
+        <article class="mini-card"><h4>Conflito de regras</h4><p>Duas regras aplicáveis recomendam conclusões ou ações incompatíveis. O sistema precisa de uma política de seleção.</p></article>
+      </div>
+
+      <div class="study-prose">
+        <h3>Mundo aberto: ausência de informação não é negação</h3>
+        <p>Na leitura adotada na Aula 06, se <code>banco_indisponivel</code> não está presente, não podemos concluir automaticamente <code>banco_disponivel</code>. A ausência do fato significa apenas que a base ainda não sustenta nenhuma das duas afirmações.</p>
+        <div class="study-callout"><strong>Não saber ≠ saber que é falso</strong><p>Essa distinção é essencial em domínios incompletos: monitoramento, diagnóstico, investigação e integração de dados frequentemente trabalham com informação ausente.</p></div>
+
+        <h3>Hipótese de mundo fechado</h3>
+        <p>Alguns sistemas adotam uma convenção diferente: aquilo que não pode ser provado é tratado como falso. Essa hipótese é útil em bancos de dados e em certas linguagens de programação lógica, mas não deve ser aplicada automaticamente a qualquer domínio.</p>
+      </div>
+
+      <div class="study-table-wrap"><table class="study-table">
+        <thead><tr><th>Interpretação</th><th>Se <code>banco_indisponivel</code> não aparece</th><th>Uso típico</th></tr></thead>
+        <tbody>
+          <tr><td>Mundo aberto</td><td>O estado do banco é desconhecido.</td><td>Domínios incompletos, integração de conhecimento, cenários nos quais novos fatos podem surgir.</td></tr>
+          <tr><td>Mundo fechado</td><td>Assume-se que o banco não está indisponível, porque isso não foi provado.</td><td>Situações em que a base é tratada como enumeração completa dos fatos relevantes.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="study-prose">
+        <h3>Quando várias regras podem disparar</h3>
+        <p>Em um sistema de produção, várias regras podem ter suas condições satisfeitas ao mesmo tempo. O conjunto dessas regras forma um conflito de seleção. Estratégias comuns incluem prioridade explícita, preferência pela regra mais específica ou critérios ligados ao contexto mais recente.</p>
+        <p>Essas políticas não pertencem ao conhecimento do domínio no mesmo sentido que as regras. Elas fazem parte do <strong>controle da inferência</strong>: determinam qual conhecimento será aplicado primeiro.</p>
+        <pre class="code-block"><code>R1:
+SE temperatura_alta
+ENTÃO ligar_ventilacao
+
+R2:
+SE sensor_manutencao
+ENTÃO nao_ligar_ventilacao
+
+Se as duas condições forem verdadeiras,
+o sistema precisa de uma política de conflito.</code></pre>
+      </div>
+    </div></section>
+
+    <section class="study-section" id="limites"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Parte VII · Onde as regras determinísticas deixam de ser suficientes</p><h2>Conhecimento explícito facilita o raciocínio, mas não elimina incerteza, ambiguidade ou manutenção</h2><p>Sistemas baseados em regras são particularmente úteis quando relações do domínio podem ser descritas de modo relativamente estável e auditável. Seus limites aparecem quando essa condição deixa de valer.</p></div>
+
+      <div class="mini-grid four">
+        <article class="mini-card"><h4>Aquisição do conhecimento</h4><p>Especialistas nem sempre conseguem explicitar tudo o que sabem. Transformar experiência em regras consistentes é trabalhoso.</p></article>
+        <article class="mini-card"><h4>Manutenção</h4><p>Novas regras podem interagir com regras antigas. Uma base grande exige revisão, testes e governança.</p></article>
+        <article class="mini-card"><h4>Fragilidade</h4><p>Fora das situações previstas, uma base determinística pode não saber como reagir ou produzir conclusões excessivamente rígidas.</p></article>
+        <article class="mini-card"><h4>Incerteza</h4><p>Muitas evidências não determinam uma causa; apenas tornam algumas hipóteses mais ou menos plausíveis.</p></article>
+      </div>
+
+      <div class="study-prose">
+        <h3>Uma regra pode ser forte demais para o mundo real</h3>
+        <pre class="code-block"><code>SE febre E tosse
+ENTÃO gripe</code></pre>
+        <p>Essa regra é fácil de interpretar, mas transforma duas evidências em uma conclusão categórica. Na prática, febre e tosse podem ocorrer em várias condições. O problema deixa de ser apenas “a condição foi satisfeita?” e passa a ser “quanto essas evidências alteram nossa confiança na hipótese?”.</p>
+
+        <h3>Da verdade categórica para graus de crença</h3>
+        <p>Esse é o ponto de transição para a próxima aula. O raciocínio probabilístico não substitui toda representação simbólica, mas oferece ferramentas para situações nas quais a informação é incompleta, ruidosa ou apenas parcialmente indicativa.</p>
+        <div class="study-callout violet"><strong>Ponte para a Aula 07</strong><p>Na representação determinística, uma regra satisfeita produz uma conclusão. No raciocínio probabilístico, uma evidência pode apenas aumentar ou diminuir a probabilidade de uma hipótese.</p></div>
+
+        <h3>Síntese conceitual</h3>
+      </div>
+
+      <div class="callout-grid">
+        <div class="study-callout"><strong>Representação</strong><p>Transforma conhecimento do domínio em símbolos, relações e regras manipuláveis pelo sistema.</p></div>
+        <div class="study-callout violet"><strong>Inferência</strong><p>Combina o conhecimento disponível para derivar conclusões que não estavam explicitamente armazenadas.</p></div>
+        <div class="study-callout teal"><strong>Controle</strong><p>Define em que direção e em que ordem o mecanismo procura consequências ou provas.</p></div>
+      </div>
+
+      <div class="study-prose">
+        <p>A arquitetura baseada em conhecimento torna explícita uma ideia central da IA simbólica: <strong>comportamento inteligente pode emergir não apenas de um algoritmo de busca, mas da combinação entre uma representação adequada e procedimentos de inferência capazes de operar sobre ela</strong>.</p>
+      </div>
+    </div></section>
+
+    <section class="study-section alt" id="referencias"><div class="container">
+      <div class="study-heading"><p class="study-kicker">Base teórica</p><h2>Referências utilizadas</h2><p>O aprofundamento foi construído a partir das referências já adotadas no componente curricular e dos materiais de IA disponibilizados para a disciplina.</p></div>
+      <div class="reference-list">
+        <div class="reference-item"><strong>RUSSELL, Stuart; NORVIG, Peter. Artificial Intelligence: A Modern Approach. 4. ed.</strong><p>Capítulos sobre agentes baseados em conhecimento, lógica, inferência proposicional e de primeira ordem, encadeamento para frente e para trás, sistemas de produção e limitações de diferentes estratégias de inferência.</p></div>
+        <div class="reference-item"><strong>LUGER, George F. Artificial Intelligence: Structures and Strategies for Complex Problem Solving. 6. ed.</strong><p>Seções sobre representação e busca, sistemas de produção, arquiteturas para resolução de problemas, sistemas especialistas e raciocínio simbólico.</p></div>
+        <div class="reference-item"><strong>FINLAY, Janet; DIX, Alan. An Introduction to Artificial Intelligence.</strong><p>Capítulo sobre conhecimento em IA: conhecimento declarativo e procedural, representação, granularidade e critérios para avaliar esquemas de representação.</p></div>
+      </div>
+    </div></section>
+  </main>
+
+  <aside class="toc" aria-label="Índice desta aula">
+    <div class="toc-head"><span class="toc-label">Neste aprofundamento</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div>
+    <nav><a href="#representar">Representar conhecimento</a><a href="#qualidade">Qualidade da representação</a><a href="#arquitetura">Arquitetura</a><a href="#inferencia">Inferência</a><a href="#encadeamento">Encadeamento</a><a href="#lacunas">Conflitos e lacunas</a><a href="#limites">Limites</a><a href="#referencias">Referências</a></nav>
+  </aside>
+  </div>
+
+  <footer class="site-footer"><div class="container">Inteligência Artificial Aplicada · Aula 06 · Material de aprofundamento · Engenharia de Software · 2026/2</div></footer>
+</body>
+</html>
