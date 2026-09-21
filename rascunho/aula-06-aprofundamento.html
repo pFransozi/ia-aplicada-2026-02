@@ -409,45 +409,86 @@ são fatos, o objetivo é sustentado.</code></pre>
     </div></section>
 
     <section class="study-section alt" id="lacunas"><div class="container">
-      <div class="study-heading"><p class="study-kicker">Parte VI · O conhecimento pode estar incompleto ou inconsistente</p><h2>Não saber, contradizer e competir são problemas diferentes</h2><p>Uma base de regras precisa tratar explicitamente o que acontece quando falta informação ou quando mais de uma regra se torna aplicável.</p></div>
+      <div class="study-heading"><p class="study-kicker">Parte VI · O conhecimento pode estar incompleto ou inconsistente</p><h2>O que acontece quando a base de conhecimento não oferece uma resposta clara?</h2><p>Até aqui, trabalhamos com exemplos em que os fatos necessários estavam disponíveis e as regras levavam a uma conclusão. Em situações reais, isso nem sempre acontece. Pode faltar informação, podem existir informações incompatíveis ou várias regras podem ser aplicáveis ao mesmo tempo.</p></div>
 
-      <div class="mini-grid three">
-        <article class="mini-card"><h4>Lacuna</h4><p>Falta conhecimento suficiente para concluir. Ex.: sabemos <code>falha_backend</code>, mas nada sabemos sobre o estado do banco.</p></article>
-        <article class="mini-card"><h4>Inconsistência</h4><p>Informações incompatíveis aparecem ao mesmo tempo. Ex.: a base contém <code>banco_disponivel</code> e <code>banco_indisponivel</code>.</p></article>
-        <article class="mini-card"><h4>Conflito de regras</h4><p>Duas regras aplicáveis recomendam conclusões ou ações incompatíveis. O sistema precisa de uma política de seleção.</p></article>
+      <div class="study-prose">
+        <h3>Primeiro caso: falta informação para concluir</h3>
+        <p>Retome o exemplo da API. Sabemos que existe uma falha no backend:</p>
+        <pre class="code-block"><code>existe_falha_backend</code></pre>
+        <p>E temos a seguinte regra:</p>
+        <pre class="code-block"><code>SE existe_falha_backend E banco_indisponivel
+ENTÃO causa_provavel_banco</code></pre>
+        <p>Para aplicar essa regra, o sistema precisa conhecer duas informações. A primeira está disponível, mas nada foi informado sobre <code>banco_indisponivel</code>.</p>
+        <p>Nesse caso, o sistema <strong>não pode concluir</strong> <code>causa_provavel_banco</code>. Mas também não pode concluir automaticamente que o banco está disponível. O que temos é simplesmente uma <strong>lacuna de conhecimento</strong>.</p>
+        <div class="study-callout"><strong>Ausência de informação não significa informação negativa</strong><p>Se a base não contém <code>banco_indisponivel</code>, isso pode significar apenas que ainda não sabemos o estado do banco.</p></div>
+
+        <h3>Não saber e saber que é falso são situações diferentes</h3>
+        <p>Considere estas duas situações:</p>
+      </div>
+
+      <div class="mini-grid">
+        <article class="mini-card"><h4>Situação 1: não sabemos</h4><p>A base não contém <code>banco_indisponivel</code> nem <code>banco_disponivel</code>. O sistema não possui informação suficiente para escolher entre as duas possibilidades.</p></article>
+        <article class="mini-card"><h4>Situação 2: sabemos que está disponível</h4><p>A base contém explicitamente <code>banco_disponivel</code>. Agora existe uma informação que contradiz a hipótese de indisponibilidade.</p></article>
       </div>
 
       <div class="study-prose">
-        <h3>Mundo aberto: ausência de informação não é negação</h3>
-        <p>Na leitura adotada na Aula 06, se <code>banco_indisponivel</code> não está presente, não podemos concluir automaticamente <code>banco_disponivel</code>. A ausência do fato significa apenas que a base ainda não sustenta nenhuma das duas afirmações.</p>
-        <div class="study-callout"><strong>Não saber ≠ saber que é falso</strong><p>Essa distinção é essencial em domínios incompletos: monitoramento, diagnóstico, investigação e integração de dados frequentemente trabalham com informação ausente.</p></div>
+        <p>Essa diferença parece simples, mas é importante em sistemas de diagnóstico e monitoramento. Um sensor pode não ter respondido ainda. Isso não significa que o valor medido seja falso; significa apenas que o sistema ainda não possui esse dado.</p>
 
-        <h3>Hipótese de mundo fechado</h3>
-        <p>Alguns sistemas adotam uma convenção diferente: aquilo que não pode ser provado é tratado como falso. Essa hipótese é útil em bancos de dados e em certas linguagens de programação lógica, mas não deve ser aplicada automaticamente a qualquer domínio.</p>
+        <h3>Mundo aberto: o que não está registrado pode continuar desconhecido</h3>
+        <p>Uma forma de interpretar a ausência de informação é assumir que a base de conhecimento pode estar incompleta. Nessa interpretação, se um fato não aparece, o sistema não o considera automaticamente falso.</p>
+        <p>Por exemplo, se <code>banco_indisponivel</code> não está presente, o sistema registra apenas que <strong>não consegue provar a indisponibilidade</strong>. Ele não conclui, por isso, que o banco esteja disponível.</p>
+        <div class="study-callout teal"><strong>Ideia central</strong><p>No chamado <strong>mundo aberto</strong>, aquilo que não sabemos permanece desconhecido até que alguma informação permita concluir algo.</p></div>
+
+        <h3>Mundo fechado: o que não pode ser provado é tratado como falso</h3>
+        <p>Outros sistemas trabalham com uma hipótese diferente. Quando a base é considerada uma lista completa dos fatos relevantes, aquilo que não aparece pode ser tratado como falso.</p>
+        <p>Imagine, por exemplo, uma lista de servidores atualmente bloqueados. Se essa lista é considerada completa e <code>servidor_A</code> não aparece nela, o sistema pode assumir que ele não está bloqueado.</p>
+        <p>Essa interpretação é útil em alguns contextos, mas depende de uma condição importante: precisamos confiar que a base contém tudo o que deveria conter naquele momento.</p>
       </div>
 
       <div class="study-table-wrap"><table class="study-table">
-        <thead><tr><th>Interpretação</th><th>Se <code>banco_indisponivel</code> não aparece</th><th>Uso típico</th></tr></thead>
+        <thead><tr><th>Interpretação</th><th>Se <code>banco_indisponivel</code> não aparece</th><th>Leitura do sistema</th></tr></thead>
         <tbody>
-          <tr><td>Mundo aberto</td><td>O estado do banco é desconhecido.</td><td>Domínios incompletos, integração de conhecimento, cenários nos quais novos fatos podem surgir.</td></tr>
-          <tr><td>Mundo fechado</td><td>Assume-se que o banco não está indisponível, porque isso não foi provado.</td><td>Situações em que a base é tratada como enumeração completa dos fatos relevantes.</td></tr>
+          <tr><td>Mundo aberto</td><td>Não há informação suficiente.</td><td>“Não sei se o banco está indisponível.”</td></tr>
+          <tr><td>Mundo fechado</td><td>O fato não foi provado.</td><td>“Vou tratar a indisponibilidade como falsa.”</td></tr>
         </tbody>
       </table></div>
 
       <div class="study-prose">
-        <h3>Quando várias regras podem disparar</h3>
-        <p>Em um sistema de produção, várias regras podem ter suas condições satisfeitas ao mesmo tempo. O conjunto dessas regras forma um conflito de seleção. Estratégias comuns incluem prioridade explícita, preferência pela regra mais específica ou critérios ligados ao contexto mais recente.</p>
-        <p>Essas políticas não pertencem ao conhecimento do domínio no mesmo sentido que as regras. Elas fazem parte do <strong>controle da inferência</strong>: determinam qual conhecimento será aplicado primeiro.</p>
-        <pre class="code-block"><code>R1:
+        <h3>Segundo caso: a base contém informações incompatíveis</h3>
+        <p>Agora imagine que, por causa de fontes diferentes, a base receba estes dois fatos:</p>
+        <pre class="code-block"><code>banco_disponivel
+banco_indisponivel</code></pre>
+        <p>Aqui o problema não é falta de informação. Temos informação demais, e ela é incompatível. Essa situação é uma <strong>inconsistência</strong>.</p>
+        <p>Um sistema precisa decidir como tratar esse tipo de situação. Ele pode rejeitar uma das fontes, solicitar nova verificação, usar regras de prioridade ou simplesmente registrar que existe um conflito que precisa ser resolvido. A estratégia depende do domínio e da arquitetura adotada.</p>
+
+        <h3>Terceiro caso: várias regras podem ser aplicadas ao mesmo tempo</h3>
+        <p>Também pode acontecer de os fatos disponíveis satisfazerem mais de uma regra. Observe:</p>
+        <pre class="code-block"><code>Fatos:
+temperatura_alta
+sensor_manutencao
+
+R1:
 SE temperatura_alta
 ENTÃO ligar_ventilacao
 
 R2:
 SE sensor_manutencao
-ENTÃO nao_ligar_ventilacao
+ENTÃO nao_ligar_ventilacao</code></pre>
+        <p>As duas regras estão prontas para disparar, mas suas conclusões apontam para ações incompatíveis. O problema agora não está nos fatos, mas em <strong>qual regra deve receber prioridade</strong>.</p>
+        <p>Essa situação é chamada de <strong>conflito entre regras aplicáveis</strong>. O mecanismo de inferência precisa de algum critério de controle para decidir o que fazer primeiro ou qual regra deve prevalecer.</p>
+      </div>
 
-Se as duas condições forem verdadeiras,
-o sistema precisa de uma política de conflito.</code></pre>
+      <div class="mini-grid three">
+        <article class="mini-card"><h4>Lacuna</h4><p>Falta informação para aplicar uma regra ou responder a uma pergunta.</p></article>
+        <article class="mini-card"><h4>Inconsistência</h4><p>A base contém informações incompatíveis sobre a mesma situação.</p></article>
+        <article class="mini-card"><h4>Conflito de regras</h4><p>Mais de uma regra pode ser aplicada, e suas conclusões ou ações exigem uma escolha.</p></article>
+      </div>
+
+      <div class="study-prose">
+        <h3>Conhecimento e controle são coisas diferentes</h3>
+        <p>As regras representam conhecimento sobre o domínio. Já a decisão sobre qual regra aplicar primeiro faz parte do <strong>controle da inferência</strong>.</p>
+        <p>Entre as possibilidades de controle estão atribuir prioridades às regras, preferir regras mais específicas ou considerar informações mais recentes. O importante é perceber que o sistema precisa de uma estratégia quando o conhecimento, sozinho, não determina uma única sequência de raciocínio.</p>
+        <div class="study-callout violet"><strong>Para guardar</strong><p>Uma base de conhecimento pode não ter informação suficiente, pode conter informação incompatível ou pode permitir mais de uma ação. Esses três casos são diferentes e exigem tratamentos diferentes.</p></div>
       </div>
     </div></section>
 
