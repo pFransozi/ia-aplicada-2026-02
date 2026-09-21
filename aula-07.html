@@ -78,12 +78,58 @@
 
     <section class="section" id="transicao"><div class="container">
       <div class="section-heading"><p class="eyebrow">Da Aula 06 para a Aula 07</p><h2>Do verdadeiro ou falso para graus de crença</h2></div>
-      <p>Na aula anterior, representamos conhecimento por fatos e regras. Uma regra como <code>SE banco_indisponivel ENTÃO api_pode_falhar</code> produz uma conclusão quando sua condição é satisfeita.</p>
-      <p>No mundo real, porém, muitas evidências não determinam uma conclusão. Elas apenas tornam uma hipótese <strong>mais ou menos plausível</strong>.</p>
-      <div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Raciocínio por regras</th><th>Raciocínio sob incerteza</th></tr></thead><tbody><tr><td>“A condição foi satisfeita?”</td><td>“Quanto esta evidência muda minha confiança?”</td></tr><tr><td>Conclusão categórica</td><td>Conclusão probabilística</td></tr><tr><td>Verdadeiro / falso</td><td>Graus de crença</td></tr><tr><td>Fatos + regras</td><td>Hipóteses + evidências + probabilidades</td></tr></tbody></table></div>
-      <article class="card guided-exercise"><h3>Problema disparador</h3><p>Uma API apresenta <strong>timeout</strong>. Isso prova que o banco de dados está indisponível?</p><p><strong>Não.</strong> O timeout é uma evidência compatível com várias causas. Precisamos distinguir a hipótese que queremos avaliar da evidência observada.</p></article>
-      <div class="prob-flow"><div><strong>Hipótese</strong><br>incidente no banco</div><div class="arrow">→</div><div><strong>Evidência</strong><br>timeout da API</div><div class="arrow">→</div><div><strong>Atualização</strong><br>nova confiança na hipótese</div></div>
-      <p class="note-banner">Os primeiros sistemas especialistas estritamente lógicos tiveram dificuldade em domínios do mundo real justamente porque muitas situações exigem tratamento explícito da incerteza.</p>
+
+      <p>Na aula anterior, trabalhamos com <strong>fatos e regras</strong>. Nesse tipo de raciocínio, verificamos se as condições de uma regra foram satisfeitas e, quando foram, produzimos uma conclusão.</p>
+
+      <div class="formula"><code>SE credencial_valida ENTÃO acesso_permitido</code></div>
+
+      <p>Esse modelo funciona bem quando conseguimos representar a situação de forma clara: a condição é satisfeita ou não é. Mas muitos problemas reais não são tão definidos.</p>
+
+      <h3>Agora pense em um diagnóstico</h3>
+      <p>Uma API apresentou <strong>timeout</strong>. O que podemos concluir?</p>
+
+      <div class="concept-grid">
+        <article class="card">
+          <h3>O que sabemos</h3>
+          <p>A API demorou além do limite esperado e a requisição terminou em <strong>timeout</strong>.</p>
+        </article>
+        <article class="card">
+          <h3>O que ainda não sabemos</h3>
+          <p>A causa pode ser o banco de dados, a rede, sobrecarga do servidor, outro serviço ou algum problema ainda não observado.</p>
+        </article>
+      </div>
+
+      <p>Perceba a diferença: o <strong>timeout é um fato observado</strong>, mas “o banco está indisponível” é apenas uma <strong>hipótese</strong>. A evidência não prova automaticamente a hipótese.</p>
+
+      <article class="card guided-exercise">
+        <h3>Então a pergunta muda</h3>
+        <p>No raciocínio por regras, perguntávamos principalmente:</p>
+        <p><strong>“A condição da regra foi satisfeita?”</strong></p>
+        <p>Quando existe incerteza, precisamos perguntar:</p>
+        <p><strong>“Depois de observar esta evidência, quão plausível ficou a hipótese?”</strong></p>
+      </article>
+
+      <div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Raciocínio por regras</th><th>Raciocínio sob incerteza</th></tr></thead><tbody>
+        <tr><td>Trabalha principalmente com fatos e regras.</td><td>Trabalha com hipóteses, evidências e probabilidades.</td></tr>
+        <tr><td>Pergunta se uma condição é satisfeita.</td><td>Pergunta quanto uma evidência altera a confiança em uma hipótese.</td></tr>
+        <tr><td>A conclusão tende a ser tratada como verdadeira ou falsa dentro do modelo.</td><td>A hipótese pode ser mais ou menos provável.</td></tr>
+        <tr><td>Ex.: “a regra pode ser aplicada?”</td><td>Ex.: “o timeout torna a falha do banco mais provável?”</td></tr>
+      </tbody></table></div>
+
+      <h3>O que significa “grau de crença”?</h3>
+      <p>Nesta aula, vamos usar a probabilidade para representar <strong>quanto o modelo sustenta uma hipótese com as informações disponíveis</strong>. Uma nova evidência pode aumentar, diminuir ou praticamente não alterar essa confiança.</p>
+
+      <div class="prob-flow">
+        <div><strong>Antes da evidência</strong><br>confiança inicial na hipótese</div>
+        <div class="arrow">→</div>
+        <div><strong>Observamos</strong><br>timeout da API</div>
+        <div class="arrow">→</div>
+        <div><strong>Depois da evidência</strong><br>confiança atualizada</div>
+      </div>
+
+      <div class="warning-card"><strong>Importante:</strong> probabilidade não transforma uma hipótese em fato. Ela nos ajuda a representar e atualizar a incerteza de maneira explícita.</div>
+
+      <p class="note-banner"><strong>Ideia central:</strong> quando uma evidência pode ter várias explicações, não basta perguntar se uma hipótese é verdadeira ou falsa. Precisamos avaliar <strong>quanto a evidência deve alterar nossa confiança nessa hipótese</strong>.</p>
     </div></section>
 
     <section class="section section-soft" id="probabilidade"><div class="container">
