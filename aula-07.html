@@ -83,7 +83,7 @@
       <div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Raciocínio por regras</th><th>Raciocínio sob incerteza</th></tr></thead><tbody><tr><td>“A condição foi satisfeita?”</td><td>“Quanto esta evidência muda minha confiança?”</td></tr><tr><td>Conclusão categórica</td><td>Conclusão probabilística</td></tr><tr><td>Verdadeiro / falso</td><td>Graus de crença</td></tr><tr><td>Fatos + regras</td><td>Hipóteses + evidências + probabilidades</td></tr></tbody></table></div>
       <article class="card guided-exercise"><h3>Problema disparador</h3><p>Uma API apresenta <strong>timeout</strong>. Isso prova que o banco de dados está indisponível?</p><p><strong>Não.</strong> O timeout é uma evidência compatível com várias causas. Precisamos distinguir a hipótese que queremos avaliar da evidência observada.</p></article>
       <div class="prob-flow"><div><strong>Hipótese</strong><br>incidente no banco</div><div class="arrow">→</div><div><strong>Evidência</strong><br>timeout da API</div><div class="arrow">→</div><div><strong>Atualização</strong><br>nova confiança na hipótese</div></div>
-      <p class="note-banner">Russell e Norvig destacam que os primeiros sistemas especialistas estritamente lógicos tiveram dificuldade em domínios do mundo real justamente porque muitas situações exigem tratamento explícito da incerteza.</p>
+      <p class="note-banner">Os primeiros sistemas especialistas estritamente lógicos tiveram dificuldade em domínios do mundo real justamente porque muitas situações exigem tratamento explícito da incerteza.</p>
     </div></section>
 
     <section class="section section-soft" id="probabilidade"><div class="container">
@@ -107,7 +107,7 @@
       <div class="section-heading"><p class="eyebrow">Causa e diagnóstico</p><h2>O que sabemos nem sempre está na direção da pergunta</h2></div>
       <p>Em muitos problemas, sabemos como uma causa produz um efeito, mas queremos raciocinar na direção contrária.</p>
       <div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Conhecimento disponível</th><th>Pergunta que queremos responder</th></tr></thead><tbody><tr><td><code>P(timeout | incidente)</code></td><td><code>P(incidente | timeout)</code></td></tr><tr><td>“Se o banco falhar, com que frequência há timeout?”</td><td>“Dado um timeout, qual a chance de o banco ter falhado?”</td></tr></tbody></table></div>
-      <p>Russell e Norvig usam exatamente essa distinção entre <strong>P(efeito|causa)</strong> e <strong>P(causa|efeito)</strong>: a primeira segue a direção causal; a segunda é a direção típica do diagnóstico.</p>
+      <p>Essa distinção entre <strong>P(efeito|causa)</strong> e <strong>P(causa|efeito)</strong> é fundamental: a primeira segue a direção causal; a segunda é a direção típica do diagnóstico.</p>
     </div></section>
 
     <section class="section section-soft" id="bayes"><div class="container">
@@ -146,7 +146,7 @@
       <p>Não. Duas evidências podem carregar informação repetida. Se tratarmos sinais fortemente relacionados como se fossem independentes, podemos contar a mesma informação duas vezes.</p>
       <div class="concept-grid"><article class="card"><h3>Independência</h3><p>Conhecer um evento não altera a probabilidade do outro.</p><div class="formula"><code>P(X,Y) = P(X)P(Y)</code></div></article><article class="card"><h3>Independência condicional</h3><p>Dois sinais são condicionalmente independentes dada uma hipótese <code>H</code> quando, depois de sabermos se <code>H</code> é verdadeira, conhecer um deles não acrescenta informação sobre o outro.</p><div class="formula"><code>P(X,Y | H) = P(X|H)P(Y|H)</code></div></article></div>
       <div class="warning-card"><strong>Condicionar em uma causa comum não garante independência.</strong> A independência condicional é uma propriedade do modelo que precisa fazer sentido no domínio. Se dois sinais ainda influenciarem um ao outro — ou compartilharem outra causa não representada — a fatoração acima não é válida.</div>
-      <p>Russell e Norvig mostram que a independência condicional é valiosa porque permite representar relações probabilísticas de forma mais eficiente. O ganho vem justamente de uma hipótese estrutural sobre o domínio, e não de uma regra automática de cálculo.</p>
+      <p>A independência condicional é valiosa porque permite representar relações probabilísticas de forma mais eficiente. O ganho vem justamente de uma hipótese estrutural sobre o domínio, e não de uma regra automática de cálculo.</p>
       <article class="card guided-exercise"><h3>Pense antes de multiplicar</h3><p>“Tempo de resposta alto” e “timeout” são duas evidências realmente independentes sobre uma falha? Ou uma pode ser consequência da outra?</p><p>Se forem altamente correlacionadas, combiná-las como evidências independentes pode exagerar a confiança.</p></article>
     </div></section>
 
@@ -177,7 +177,7 @@ print(f"Posterior: {posterior:.3f}")</code></pre>
     <section class="section section-soft" id="limites"><div class="container">
       <div class="section-heading"><p class="eyebrow">Leitura crítica</p><h2>Bayes atualiza crenças; não corrige um modelo ruim</h2></div>
       <div class="concept-grid"><article class="card"><h3>O prior importa</h3><p>Hipóteses muito raras podem continuar pouco prováveis mesmo diante de uma evidência relativamente forte.</p></article><article class="card"><h3>As probabilidades precisam vir de algum lugar</h3><p>Se <code>P(E|H)</code> ou <code>P(H)</code> forem estimativas ruins, o posterior também será.</p></article><article class="card"><h3>Independência é uma hipótese</h3><p>Evidências correlacionadas não devem ser combinadas mecanicamente como se fossem independentes.</p></article><article class="card"><h3>Probabilidade não é certeza</h3><p>Um posterior alto sustenta uma decisão; ele não transforma uma hipótese em fato.</p></article></div>
-      <p>O exemplo de meningite apresentado por Russell e Norvig é especialmente útil para essa leitura: mesmo uma evidência fortemente associada à doença pode produzir uma probabilidade posterior pequena quando a doença é muito rara. O prior não pode ser ignorado.</p>
+      <p>Um exemplo clássico desse efeito envolve uma doença rara: mesmo uma evidência fortemente associada à doença pode produzir uma probabilidade posterior pequena quando a doença é muito rara. O prior não pode ser ignorado.</p>
     </div></section>
 
     <section class="section" id="fechamento"><div class="container">
