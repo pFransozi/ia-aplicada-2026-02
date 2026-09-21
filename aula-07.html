@@ -69,9 +69,10 @@
       <div class="overview-grid">
         <article class="card topics-card"><h3>Conteúdo programático</h3><div class="topic-list"><div>Incerteza em sistemas de IA</div><div>Probabilidade conjunta e condicional</div><div>Evidência, hipótese e probabilidade a priori</div><div>Teorema de Bayes</div><div>Probabilidade posterior e atualização de crenças</div><div>Independência e independência condicional</div><div>Informação incompleta e limites da inferência</div></div><div class="note-banner"><strong>Objetivo da aula:</strong> interpretar evidências probabilísticas, aplicar Bayes em um caso simples e reconhecer hipóteses e limites do modelo.</div></article>
         <div class="competency-stack">
-          <article class="card competency"><h3>C2 — Aplicar procedimentos</h3><div class="skill"><strong>H6</strong><span>Aplicar raciocínio probabilístico na análise de situações com informação incompleta.</span></div></article>
-          <article class="card competency"><h3>C3 — Avaliar evidências</h3><div class="skill"><strong>H9/H10</strong><span>Identificar informações relevantes e analisar como hipóteses e evidências alteram uma decisão.</span></div></article>
-          <article class="card competency"><h3>C11 — Modelar e interpretar</h3><div class="skill"><strong>H38</strong><span>Implementar um cálculo simples de atualização e interpretar corretamente o resultado.</span></div></article>
+          <div class="note-banner"><strong>Relação com o PPC:</strong> os códigos abaixo são as competências e habilidades oficiais. O texto de cada cartão explica como esta aula contribui para desenvolvê-las.</div>
+          <article class="card competency"><h3>C2 / H6 — Construção de software</h3><div class="skill"><strong>Nesta aula</strong><span>Aplicamos um procedimento de raciocínio probabilístico para analisar situações em que o software precisa lidar com informação incompleta.</span></div></article>
+          <article class="card competency"><h3>C3 / H9 e H10 — Seleção e avaliação</h3><div class="skill"><strong>Nesta aula</strong><span>Identificamos quais evidências são relevantes para uma hipótese e avaliamos como diferentes probabilidades mudam uma decisão.</span></div></article>
+          <article class="card competency"><h3>C11 / H38 — Desenvolvimento de algoritmos</h3><div class="skill"><strong>Nesta aula</strong><span>Implementamos um cálculo simples de atualização bayesiana e interpretamos o resultado antes de transformá-lo em decisão.</span></div></article>
         </div>
       </div>
     </div></section>
@@ -94,10 +95,13 @@
       </div>
       <p>O símbolo <code>|</code> pode ser lido como <strong>“dado que”</strong>. Assim, <code>P(E|H)</code> significa “probabilidade da evidência E, dado que a hipótese H é verdadeira”.</p>
       <div class="warning-card"><strong>A ordem importa.</strong> <code>P(timeout | incidente)</code> não é a mesma coisa que <code>P(incidente | timeout)</code>. Essa inversão é uma das principais razões para usar o Teorema de Bayes.</div>
-      <h3>Probabilidade conjunta, sem aprofundar a álgebra</h3>
-      <p><code>P(H ∩ E)</code> representa a probabilidade de hipótese e evidência ocorrerem juntas. Pela regra do produto:</p>
+      <h3>Probabilidade conjunta: a ponte para Bayes</h3>
+      <p><code>P(H ∩ E)</code> representa a probabilidade de a hipótese <strong>e</strong> a evidência ocorrerem juntas. A mesma interseção pode ser escrita de duas formas:</p>
       <div class="formula"><code>P(H ∩ E) = P(E | H) × P(H)</code></div>
-      <p>Essa relação é a ponte para Bayes: podemos calcular a mesma ocorrência conjunta olhando a relação pelas duas direções.</p>
+      <div class="formula"><code>P(H ∩ E) = P(H | E) × P(E)</code></div>
+      <p>Como os dois lados descrevem o mesmo evento conjunto, podemos igualá-los:</p>
+      <div class="formula"><code>P(E | H) × P(H) = P(H | E) × P(E)</code></div>
+      <p>Isolando <code>P(H|E)</code>, chegamos ao Teorema de Bayes. Assim, a fórmula não aparece “do nada”: ela reorganiza duas maneiras de descrever a mesma ocorrência conjunta.</p>
     </div></section>
 
     <section class="section" id="condicional"><div class="container">
@@ -112,8 +116,10 @@
       <div class="formula"><strong>Bayes:</strong><br><code>P(H | E) = [P(E | H) × P(H)] / P(E)</code></div>
       <p>Para o uso em sala, é mais prático escrever o denominador explicitamente para uma hipótese binária:</p>
       <div class="formula"><code>P(H | E) = P(E|H)P(H) / [P(E|H)P(H) + P(E|¬H)P(¬H)]</code></div>
-      <p>Considere:</p>
-      <ul><li><code>P(H)=0,10</code>: 10% dos incidentes analisados envolvem indisponibilidade do banco;</li><li><code>P(E|H)=0,80</code>: quando o banco está indisponível, 80% dos casos apresentam timeout;</li><li><code>P(E|¬H)=0,20</code>: mesmo sem falha no banco, 20% dos casos apresentam timeout por outros motivos.</li></ul>
+      <p>Antes de substituir números, faça quatro perguntas:</p>
+      <ol><li><strong>Qual é a hipótese?</strong> Neste caso, <code>H</code> = “há incidente no banco”.</li><li><strong>Qual é a evidência?</strong> <code>E</code> = “a API apresentou timeout”.</li><li><strong>Se H for verdadeira, quão esperada é a evidência?</strong> Isso é <code>P(E|H)</code>.</li><li><strong>A evidência também acontece sem H?</strong> Isso é <code>P(E|¬H)</code> e evita tratar todo timeout como falha do banco.</li></ol>
+      <p>Agora considere:</p>
+      <ul><li><code>P(H)=0,10</code>: antes de observar o timeout, estimamos que 10% dos casos correspondem a incidente no banco;</li><li><code>P(E|H)=0,80</code>: quando há incidente no banco, 80% dos casos apresentam timeout;</li><li><code>P(E|¬H)=0,20</code>: mesmo sem incidente no banco, 20% dos casos apresentam timeout por outros motivos.</li></ul>
       <div class="formula"><code>P(H|E) = (0,80 × 0,10) / [(0,80 × 0,10) + (0,20 × 0,90)] ≈ 0,308</code></div>
       <p>Depois de observar o timeout, a confiança na hipótese de incidente no banco sobe de <strong>10%</strong> para aproximadamente <strong>30,8%</strong>.</p>
       <div class="warning-card"><strong>Importante:</strong> a evidência aumentou bastante a probabilidade, mas não tornou a hipótese certa. A maioria dos timeouts ainda pode ter outra causa.</div>
@@ -124,20 +130,24 @@
     </div></section>
 
     <section class="section" id="atualizacao"><div class="container">
-      <div class="section-heading"><p class="eyebrow">Nova evidência</p><h2>O posterior de hoje pode virar o prior da próxima atualização</h2></div>
-      <p>Suponha que, depois do timeout, surge uma segunda evidência: <strong>o pool de conexões está esgotado</strong>. A confiança anterior de 30,8% passa a ser o ponto de partida da nova atualização.</p>
-      <p>Para um exemplo didático, considere <code>P(pool_esgotado|H)=0,70</code> e <code>P(pool_esgotado|¬H)=0,10</code>.</p>
+      <div class="section-heading"><p class="eyebrow">Nova evidência</p><h2>O posterior pode ser o ponto de partida da próxima atualização</h2></div>
+      <p>Suponha que, depois de observar o <strong>timeout</strong>, surge uma segunda evidência: <strong>o pool de conexões está esgotado</strong>. Vamos chamar o timeout de <code>E₁</code> e o pool esgotado de <code>E₂</code>.</p>
+      <p>Depois de observar <code>E₁</code>, obtivemos <code>P(H|E₁)=0,308</code>. Esse valor resume o que sabemos sobre a hipótese naquele momento e pode servir como ponto de partida para incorporar <code>E₂</code>.</p>
+      <div class="warning-card"><strong>Mas há uma condição importante.</strong> Para usar apenas <code>P(E₂|H)</code> e <code>P(E₂|¬H)</code> na próxima conta, vamos assumir, neste exemplo didático, que a segunda evidência é <strong>condicionalmente independente</strong> da primeira quando sabemos se H é verdadeira ou falsa. Em outras palavras: depois de fixar o estado da hipótese, conhecer o timeout não muda a probabilidade que atribuímos ao pool esgotado.</div>
+      <p>Sem essa hipótese, precisaríamos conhecer probabilidades mais específicas, como <code>P(E₂|H,E₁)</code> e <code>P(E₂|¬H,E₁)</code>.</p>
+      <p>Para o exemplo, considere <code>P(E₂|H)=0,70</code> e <code>P(E₂|¬H)=0,10</code>.</p>
       <div class="formula"><code>novo posterior = (0,70 × 0,308) / [(0,70 × 0,308) + (0,10 × 0,692)] ≈ 0,757</code></div>
-      <p>Com as duas evidências, a confiança na hipótese chega a aproximadamente <strong>75,7%</strong>.</p>
-      <div class="prob-flow"><div><strong>Prior</strong><br>10%</div><div class="arrow">→ timeout →</div><div><strong>Posterior 1</strong><br>30,8%</div><div class="arrow">→ pool esgotado →</div><div><strong>Posterior 2</strong><br>75,7%</div></div>
-      <p class="note-banner">A ideia central não é decorar a fórmula: é compreender que <strong>evidência nova deve atualizar, e não apagar, o que já sabíamos</strong>.</p>
+      <p>Com essa hipótese simplificadora e as duas evidências, a confiança em H chega a aproximadamente <strong>75,7%</strong>.</p>
+      <div class="prob-flow"><div><strong>Prior inicial</strong><br>10%</div><div class="arrow">→ E₁: timeout →</div><div><strong>Posterior após E₁</strong><br>30,8%</div><div class="arrow">→ E₂: pool esgotado →</div><div><strong>Posterior após E₂</strong><br>75,7%</div></div>
+      <p class="note-banner"><strong>Ideia central:</strong> evidência nova deve atualizar o que já sabíamos. Porém, antes de combinar sinais, precisamos verificar se a forma de combinação adotada é coerente com as dependências existentes no domínio.</p>
     </div></section>
 
     <section class="section section-soft" id="independencia"><div class="container">
       <div class="section-heading"><p class="eyebrow">Uma hipótese importante</p><h2>Podemos combinar qualquer evidência?</h2></div>
       <p>Não. Duas evidências podem carregar informação repetida. Se tratarmos sinais fortemente relacionados como se fossem independentes, podemos contar a mesma informação duas vezes.</p>
-      <div class="concept-grid"><article class="card"><h3>Independência</h3><p>Conhecer um evento não altera a probabilidade do outro.</p><div class="formula"><code>P(X,Y) = P(X)P(Y)</code></div></article><article class="card"><h3>Independência condicional</h3><p>Dois sinais podem tornar-se independentes quando condicionamos em uma causa comum.</p><div class="formula"><code>P(X,Y | H) = P(X|H)P(Y|H)</code></div></article></div>
-      <p>Russell e Norvig mostram que a independência condicional permite representar relações probabilísticas de forma mais eficiente, mas ela precisa ser uma hipótese defensável sobre o domínio.</p>
+      <div class="concept-grid"><article class="card"><h3>Independência</h3><p>Conhecer um evento não altera a probabilidade do outro.</p><div class="formula"><code>P(X,Y) = P(X)P(Y)</code></div></article><article class="card"><h3>Independência condicional</h3><p>Dois sinais são condicionalmente independentes dada uma hipótese <code>H</code> quando, depois de sabermos se <code>H</code> é verdadeira, conhecer um deles não acrescenta informação sobre o outro.</p><div class="formula"><code>P(X,Y | H) = P(X|H)P(Y|H)</code></div></article></div>
+      <div class="warning-card"><strong>Condicionar em uma causa comum não garante independência.</strong> A independência condicional é uma propriedade do modelo que precisa fazer sentido no domínio. Se dois sinais ainda influenciarem um ao outro — ou compartilharem outra causa não representada — a fatoração acima não é válida.</div>
+      <p>Russell e Norvig mostram que a independência condicional é valiosa porque permite representar relações probabilísticas de forma mais eficiente. O ganho vem justamente de uma hipótese estrutural sobre o domínio, e não de uma regra automática de cálculo.</p>
       <article class="card guided-exercise"><h3>Pense antes de multiplicar</h3><p>“Tempo de resposta alto” e “timeout” são duas evidências realmente independentes sobre uma falha? Ou uma pode ser consequência da outra?</p><p>Se forem altamente correlacionadas, combiná-las como evidências independentes pode exagerar a confiança.</p></article>
     </div></section>
 
@@ -173,7 +183,7 @@ print(f"Posterior: {posterior:.3f}")</code></pre>
 
     <section class="section" id="fechamento"><div class="container">
       <div class="section-heading"><p class="eyebrow">Fechamento</p><h2>Checklist da aula</h2></div>
-      <ul class="checklist"><li>Consigo diferenciar uma regra determinística de uma relação probabilística.</li><li>Consigo interpretar <code>P(A|B)</code> como “probabilidade de A dado B”.</li><li>Não confundo <code>P(E|H)</code> com <code>P(H|E)</code>.</li><li>Consigo identificar prior, evidência, verossimilhança e posterior.</li><li>Consigo aplicar Bayes em um caso binário simples.</li><li>Entendo que o posterior pode ser atualizado quando novas evidências aparecem.</li><li>Reconheço por que independência e independência condicional importam.</li><li>Consigo apontar limitações da inferência quando dados ou hipóteses são inadequados.</li></ul>
+      <ul class="checklist"><li>Consigo diferenciar uma regra determinística de uma relação probabilística.</li><li>Consigo interpretar <code>P(A|B)</code> como “probabilidade de A dado B”.</li><li>Não confundo <code>P(E|H)</code> com <code>P(H|E)</code>.</li><li>Consigo identificar hipótese, evidência, prior, <code>P(E|H)</code>, <code>P(E|¬H)</code> e posterior.</li><li>Consigo explicar de onde vem a fórmula de Bayes a partir da probabilidade conjunta.</li><li>Consigo aplicar Bayes em um caso binário simples.</li><li>Entendo quando o posterior pode ser usado como ponto de partida para incorporar nova evidência.</li><li>Reconheço que independência condicional é uma hipótese sobre o domínio, não uma regra automática.</li><li>Consigo apontar limitações da inferência quando dados, probabilidades ou hipóteses são inadequados.</li></ul>
       <div class="note-banner"><strong>Ideia para levar:</strong> sistemas inteligentes raramente trabalham com informação perfeita. O desafio não é eliminar a incerteza, mas atualizá-la de forma coerente à medida que novas evidências aparecem.</div>
     </div></section>
 
