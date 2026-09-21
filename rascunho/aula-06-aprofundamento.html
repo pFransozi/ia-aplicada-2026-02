@@ -268,11 +268,48 @@ api_retorna_500
     </div></section>
 
     <section class="study-section alt" id="inferencia"><div class="container">
-      <div class="study-heading"><p class="study-kicker">Parte IV · Conhecimento armazenado não basta</p><h2>Inferir é produzir uma conclusão sustentada pelo que já está representado</h2><p>O mecanismo de inferência transforma uma base estática em um sistema capaz de derivar informação nova.</p></div>
+      <div class="study-heading"><p class="study-kicker">Parte IV · Conhecimento armazenado não basta</p><h2>Inferir é chegar a uma nova conclusão a partir do que o sistema já sabe</h2><p>Uma base de conhecimento pode armazenar muitos fatos e regras. O raciocínio começa quando o sistema combina essas informações para descobrir algo que não estava registrado de forma explícita.</p></div>
 
       <div class="study-prose">
-        <h3>Uma cadeia de inferência</h3>
-        <p>Considere dois fatos e duas regras:</p>
+        <h3>Primeiro, pense em uma situação concreta</h3>
+        <p>Imagine que estamos analisando uma API que começou a retornar erro 500. O sistema recebeu duas informações do ambiente:</p>
+        <pre class="code-block"><code>api_retorna_500
+banco_indisponivel</code></pre>
+        <p>Esses dois fatos, sozinhos, apenas descrevem o que foi observado. Para produzir uma interpretação, o sistema precisa relacioná-los ao conhecimento já registrado na base.</p>
+        <p>Suponha que a base contenha as seguintes regras:</p>
+        <pre class="code-block"><code>R1:
+SE api_retorna_500
+ENTÃO existe_falha_backend
+
+R2:
+SE existe_falha_backend E banco_indisponivel
+ENTÃO causa_provavel_banco
+
+R3:
+SE causa_provavel_banco
+ENTÃO verificar_conexao_banco</code></pre>
+        <p>Nenhum dos fatos iniciais dizia diretamente que deveríamos verificar a conexão com o banco. Essa conclusão aparece porque o mecanismo de inferência <strong>combina os fatos com as regras disponíveis</strong>.</p>
+      </div>
+
+      <div class="trace">
+        <div class="trace-step"><b>1</b><div><strong>O sistema parte dos fatos conhecidos</strong><p>A memória contém <code>api_retorna_500</code> e <code>banco_indisponivel</code>.</p></div></div>
+        <div class="trace-step"><b>2</b><div><strong>Uma regra encontra suas condições satisfeitas</strong><p>R1 pode ser aplicada porque <code>api_retorna_500</code> está presente. O sistema conclui <code>existe_falha_backend</code>.</p></div></div>
+        <div class="trace-step"><b>3</b><div><strong>A nova conclusão permite aplicar outra regra</strong><p>Agora temos <code>existe_falha_backend</code> e <code>banco_indisponivel</code>. As duas condições de R2 foram satisfeitas, então o sistema conclui <code>causa_provavel_banco</code>.</p></div></div>
+        <div class="trace-step"><b>4</b><div><strong>O raciocínio continua</strong><p>A conclusão anterior satisfaz R3. Com isso, surge uma nova informação: <code>verificar_conexao_banco</code>.</p></div></div>
+        <div class="trace-step"><b>5</b><div><strong>O processo termina quando não há novidade</strong><p>Se nenhuma outra regra conseguir acrescentar um fato novo, o sistema encerra essa sequência de inferências.</p></div></div>
+      </div>
+
+      <div class="study-prose">
+        <h3>O que foi realmente inferido?</h3>
+        <p>Os fatos <code>api_retorna_500</code> e <code>banco_indisponivel</code> já estavam disponíveis desde o início. Já <code>existe_falha_backend</code>, <code>causa_provavel_banco</code> e <code>verificar_conexao_banco</code> foram <strong>derivados</strong> durante o raciocínio.</p>
+        <div class="mini-grid">
+          <article class="mini-card"><h4>Conhecimento fornecido</h4><p>Informações que entram na base a partir de observações, sensores, usuários ou outros sistemas.</p></article>
+          <article class="mini-card"><h4>Conhecimento inferido</h4><p>Informações novas obtidas quando o mecanismo aplica regras sobre aquilo que já era conhecido.</p></article>
+        </div>
+        <p>Essa distinção é importante porque mostra que uma base de conhecimento não precisa armazenar explicitamente todas as conclusões possíveis. Parte delas pode ser produzida quando forem necessárias.</p>
+
+        <h3>O mesmo raciocínio em uma forma mais abstrata</h3>
+        <p>Depois de entender o exemplo concreto, podemos representar a mesma ideia de forma genérica:</p>
         <pre class="code-block"><code>Fatos:
 A
 B
@@ -280,26 +317,19 @@ B
 Regras:
 R1: SE A E B → C
 R2: SE C → D</code></pre>
-      </div>
+        <p>Se A e B são conhecidos, R1 permite concluir C. Depois que C passa a fazer parte do conhecimento disponível, R2 permite concluir D. Esse encadeamento mostra como uma conclusão pode se tornar a condição para uma nova etapa do raciocínio.</p>
 
-      <div class="trace">
-        <div class="trace-step"><b>1</b><div><strong>Conhecimento inicial</strong><p>A memória contém A e B. Ainda não existe C nem D.</p></div></div>
-        <div class="trace-step"><b>2</b><div><strong>Aplicação de R1</strong><p>Como A e B são verdadeiros no caso, R1 é aplicável. C é adicionado ao conjunto de fatos conhecidos.</p></div></div>
-        <div class="trace-step"><b>3</b><div><strong>Nova regra torna-se aplicável</strong><p>Agora C está disponível. Isso satisfaz a condição de R2 e permite concluir D.</p></div></div>
-        <div class="trace-step"><b>4</b><div><strong>Ponto fixo</strong><p>Se nenhuma regra puder acrescentar informação nova, o encadeamento para frente atingiu um estado estável e pode parar.</p></div></div>
-      </div>
+        <h3>Por que o sistema precisa controlar o que já foi concluído?</h3>
+        <p>Imagine que uma regra conclua novamente um fato que já está na memória. Adicionar a mesma informação repetidamente não produz conhecimento novo e ainda gera trabalho desnecessário.</p>
+        <p>Esse controle também é importante quando existem regras que formam ciclos. Por exemplo:</p>
+        <pre class="code-block"><code>R1: SE A → B
+R2: SE B → A</code></pre>
+        <p>Se o sistema não reconhecer que A e B já foram obtidos, poderia continuar aplicando as mesmas regras sem produzir nenhuma informação nova. Por isso, implementações de inferência costumam verificar se a conclusão já é conhecida antes de adicioná-la novamente.</p>
 
-      <div class="study-prose">
-        <h3>Por que evitar adicionar o mesmo fato repetidamente?</h3>
-        <p>Se a conclusão já estiver na memória, adicioná-la novamente não aumenta o conhecimento. Além de desperdiçar trabalho, regras cíclicas como <code>A → B</code> e <code>B → A</code> poderiam manter o sistema ocupado indefinidamente se não houver controle de duplicação.</p>
-
-        <h3>Inferência correta não deve “inventar” conclusões</h3>
-        <p>Em sistemas lógicos, desejamos que a conclusão seja sustentada pela base de conhecimento. Intuitivamente, se as premissas e regras aceitas forem verdadeiras, o mecanismo não deve produzir arbitrariamente algo que não decorra delas. Essa propriedade é a base da ideia de inferência válida.</p>
-
-        <h3>A explicação pode ser tratada como proveniência</h3>
-        <p>Quando a conclusão <code>verificar_conexao_banco</code> aparece, um sistema útil pode registrar não apenas o resultado, mas também quais fatos e regras participaram da derivação. Isso cria uma trilha de justificativa.</p>
+        <h3>Uma conclusão precisa ter uma justificativa</h3>
+        <p>O mecanismo de inferência não deve simplesmente apresentar <code>verificar_conexao_banco</code> como uma resposta isolada. Como a conclusão foi produzida por regras explícitas, também podemos registrar o caminho que levou até ela.</p>
         <pre class="code-block"><code>verificar_conexao_banco
-porque R4 usou causa_provavel_banco
+porque R3 usou causa_provavel_banco
 
 causa_provavel_banco
 porque R2 usou:
@@ -309,7 +339,8 @@ porque R2 usou:
 existe_falha_backend
 porque R1 usou:
 - api_retorna_500</code></pre>
-        <div class="study-callout teal"><strong>Explicabilidade estrutural</strong><p>Em sistemas baseados em regras, a explicação pode emergir diretamente da sequência de regras disparadas. Isso não garante que o conhecimento esteja correto, mas torna o caminho de raciocínio auditável.</p></div>
+        <p>Essa sequência permite responder não apenas <strong>o que o sistema concluiu</strong>, mas também <strong>por que chegou a essa conclusão</strong>.</p>
+        <div class="study-callout teal"><strong>Uma vantagem dos sistemas baseados em regras</strong><p>Como fatos e regras estão explícitos, o sistema pode manter uma trilha do raciocínio realizado. Isso facilita a análise da conclusão e ajuda a identificar qual informação ou regra participou do resultado.</p></div>
       </div>
     </div></section>
 
