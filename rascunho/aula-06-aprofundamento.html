@@ -194,12 +194,33 @@ ENTÃO causa_banco</code></pre><p>O conhecimento fica explícito. O mesmo mecani
 
       <div class="study-prose">
         <h3>Mais expressividade também pode significar mais custo</h3>
-        <p>Uma linguagem capaz de representar relações ricas, exceções e quantificações gerais pode descrever o domínio de forma compacta e reutilizável. Ao mesmo tempo, quanto maior a liberdade de expressão, mais difícil pode se tornar o problema de inferência.</p>
-        <p>Essa relação aparece repetidamente em IA: queremos uma representação suficientemente rica para o domínio, mas suficientemente controlada para que o raciocínio seja computacionalmente viável.</p>
+        <p><strong>Expressividade</strong> indica o quanto uma forma de representação consegue descrever sobre o domínio. Uma representação simples pode registrar apenas fatos isolados, como <code>api_indisponivel</code>. Uma representação mais expressiva pode registrar também relações, por exemplo <code>depende_de(api, banco)</code>, e permitir regras gerais sobre essas relações.</p>
+        <p>Essa capacidade é útil porque o sistema consegue representar situações diferentes usando a mesma estrutura. Se várias aplicações dependem de diferentes serviços, não precisamos criar uma regra totalmente separada para cada combinação. Podemos representar os elementos e suas relações e deixar o mecanismo de inferência trabalhar sobre elas.</p>
+        <div class="mini-grid">
+          <article class="mini-card"><h4>Representação mais simples</h4><p>Tem menos elementos e costuma ser mais fácil de armazenar e consultar, mas pode não conter informação suficiente para responder perguntas mais específicas.</p></article>
+          <article class="mini-card"><h4>Representação mais expressiva</h4><p>Consegue descrever mais relações e situações gerais, mas o mecanismo de inferência precisa considerar mais elementos e mais combinações possíveis.</p></article>
+        </div>
+        <p>Por isso, uma representação mais expressiva não é automaticamente melhor. O objetivo é representar <strong>informação suficiente para o tipo de raciocínio que o sistema precisa realizar</strong>. Se incluirmos complexidade que nunca será utilizada, aumentamos o trabalho do sistema e também a dificuldade de manter a base de conhecimento.</p>
 
         <h3>A granularidade também é uma decisão de modelagem</h3>
-        <p>Podemos representar apenas <code>servico_indisponivel</code> ou decompor a situação em <code>processo_parado</code>, <code>porta_fechada</code>, <code>dependencia_indisponivel</code> e outros fatos. Uma representação mais detalhada pode permitir diagnósticos melhores, mas aumenta a quantidade de conhecimento que precisa ser mantida.</p>
-        <div class="study-callout violet"><strong>Engenharia do conhecimento</strong><p>Construir uma base de conhecimento não é apenas transcrever frases. É decidir quais conceitos existem, como se relacionam, em que nível de detalhe devem aparecer e quais inferências o sistema precisa ser capaz de realizar.</p></div>
+        <p><strong>Granularidade</strong> é o nível de detalhe usado para descrever uma situação. O mesmo incidente pode ser representado de forma muito resumida ou dividido em fatos menores e mais específicos.</p>
+        <p>Imagine que uma API deixou de responder. Em uma representação mais geral, poderíamos registrar apenas:</p>
+        <pre class="code-block"><code>servico_indisponivel</code></pre>
+        <p>Essa informação pode ser suficiente se o sistema só precisa indicar que existe uma indisponibilidade. Porém, ela oferece pouca ajuda quando queremos investigar a causa do problema.</p>
+        <p>Se o objetivo for apoiar um diagnóstico, podemos representar a mesma situação com mais detalhes:</p>
+        <pre class="code-block"><code>processo_api_ativo
+conexao_banco_falhou
+banco_indisponivel
+api_depende_do_banco</code></pre>
+        <p>Agora o sistema dispõe de elementos que podem ser relacionados por regras e usados para produzir uma conclusão mais específica. O ganho de detalhe, porém, exige que essas informações sejam coletadas, atualizadas e mantidas corretamente.</p>
+        <div class="study-table-wrap"><table class="study-table">
+          <thead><tr><th>Nível de detalhe</th><th>O que representa</th><th>Consequência</th></tr></thead>
+          <tbody>
+            <tr><td>Mais geral</td><td><code>servico_indisponivel</code></td><td>É simples e suficiente para perguntas gerais, mas explica pouco sobre a causa.</td></tr>
+            <tr><td>Mais detalhado</td><td>Estado do processo, conexão, dependências e disponibilidade do banco.</td><td>Permite inferências mais específicas, mas exige mais fatos, regras e manutenção.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="study-callout violet"><strong>Engenharia do conhecimento</strong><p>Modelar uma base de conhecimento significa decidir quais aspectos do domínio precisam aparecer e em qual nível de detalhe. Essa decisão deve partir das perguntas que o sistema precisa responder. Não é necessário representar tudo sobre o mundo, apenas o que é relevante para o raciocínio esperado.</p></div>
       </div>
     </div></section>
 
