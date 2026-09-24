@@ -274,15 +274,6 @@
 
       <div class="warning-card"><strong>A ordem importa:</strong> <code>P(timeout|falha_banco)</code> e <code>P(falha_banco|timeout)</code> respondem a perguntas diferentes. O Teorema de Bayes permite passar do primeiro tipo de informação para o segundo.</div>
 
-      <h3>Quando existem apenas duas possibilidades</h3>
-      <p>Se estamos comparando uma hipótese <code>H</code> com sua negação <code>¬H</code>, podemos escrever <code>P(E)</code> de forma explícita:</p>
-
-      <div class="formula"><code>P(E) = P(E|H)P(H) + P(E|¬H)P(¬H)</code></div>
-
-      <p>Como <code>P(¬H) = 1 - P(H)</code>, a forma usada nos exemplos da aula fica:</p>
-
-      <div class="formula"><code>P(H|E) = P(E|H)P(H) / [P(E|H)P(H) + P(E|¬H)P(¬H)]</code></div>
-
       <p class="note-banner"><strong>Leitura da atualização:</strong> começamos com uma crença inicial sobre a hipótese, <code>P(H)</code>, observamos uma evidência e calculamos uma nova crença, <code>P(H|E)</code>. É essa atualização que o motor de inferência implementa.</p>
     </div>
   </section>
