@@ -127,7 +127,9 @@
 
       <p>Na Aula 06, representamos conhecimento por meio de <strong>fatos e regras</strong>. Um sistema simples poderia conter:</p>
 
-      <pre class="code-block"><code>if timeout and pool_esgotado:
+      <pre class="code-block"><code># Verifica se as duas condições da regra são verdadeiras.
+if timeout and pool_esgotado:
+    # Em um sistema determinístico, a regra produz diretamente a conclusão.
     conclusao = "falha_banco"</code></pre>
 
       <p>O código acima funciona quando aceitamos a regra como determinística: se as duas condições forem verdadeiras, a conclusão é produzida.</p>
@@ -181,21 +183,29 @@
 
       <p>Esses valores podem ser definidos a partir de dados históricos ou de conhecimento especializado. O programa não aprende necessariamente esses valores durante sua execução. Quando eles são fornecidos previamente, estamos construindo um <strong>sistema baseado em conhecimento com inferência probabilística</strong>.</p>
 
-      <pre class="code-block"><code>base_conhecimento = {
+      <pre class="code-block"><code># A base de conhecimento reúne as hipóteses consideradas pelo sistema.
+base_conhecimento = {
     "falha_banco": {
+        # Probabilidade inicial da hipótese antes de observar novas evidências.
         "prior": 0.10,
+
+        # P(timeout | falha_banco)
         "evidencias": {
             "timeout": 0.80
         }
     },
     "falha_rede": {
         "prior": 0.30,
+
+        # P(timeout | falha_rede)
         "evidencias": {
             "timeout": 0.60
         }
     },
     "sobrecarga_aplicacao": {
         "prior": 0.60,
+
+        # P(timeout | sobrecarga_aplicacao)
         "evidencias": {
             "timeout": 0.40
         }
@@ -434,7 +444,9 @@
 
       <p>Vamos transformar exatamente o exemplo anterior em código.</p>
 
-      <pre class="code-block"><code>base_conhecimento = {
+      <pre class="code-block"><code># Base de conhecimento probabilística.
+# Cada hipótese possui um prior e P(timeout | hipótese).
+base_conhecimento = {
     "falha_banco": {
         "prior": 0.10,
         "evidencias": {"timeout": 0.80}
@@ -451,40 +463,47 @@
 
 
 def inferir(base, evidencia):
-    # 1. Calcula um score para cada hipótese.
+    # Guarda um valor proporcional ao posterior de cada hipótese.
     scores = {}
 
+    # Analisa todas as hipóteses disponíveis na base.
     for hipotese, dados in base.items():
+        # P(H): probabilidade da hipótese antes da evidência.
         prior = dados["prior"]
+
+        # P(E|H): probabilidade da evidência se a hipótese for verdadeira.
         p_e_dado_h = dados["evidencias"][evidencia]
 
-        # Bayes antes da normalização:
-        # P(H) × P(E|H)
+        # Calcula P(H) × P(E|H).
+        # Ainda não é o posterior final, pois falta normalizar.
         scores[hipotese] = prior * p_e_dado_h
 
-    # 2. Soma os scores para obter o fator de normalização.
+    # Soma os scores. Neste exemplo, o total corresponde a P(E).
     total = sum(scores.values())
 
-    # 3. Converte os scores em probabilidades que somam 1.
+    # Normaliza os scores para que as probabilidades somem 1.
     posteriores = {
         hipotese: score / total
         for hipotese, score in scores.items()
     }
 
-    # 4. Seleciona a hipótese com maior probabilidade posterior.
+    # Escolhe a hipótese com maior probabilidade posterior.
     predicao = max(posteriores, key=posteriores.get)
 
     return posteriores, predicao
 
 
+# Evidência observada no caso atual: ocorreu timeout.
 posteriores, predicao = inferir(
     base_conhecimento,
     "timeout"
 )
 
+# Exibe a probabilidade posterior de cada hipótese.
 for hipotese, probabilidade in posteriores.items():
     print(f"{hipotese}: {probabilidade:.1%}")
 
+# Exibe a hipótese mais provável segundo o modelo.
 print("Predição:", predicao)</code></pre>
 
       <div class="output-block">falha_banco: 16.0%
@@ -550,11 +569,15 @@ Predição: sobrecarga_aplicacao</div>
 
       <h3>Agora o código recebe várias evidências</h3>
 
-      <pre class="code-block"><code>base_conhecimento = {
+      <pre class="code-block"><code># A base agora descreve duas evidências para cada hipótese.
+base_conhecimento = {
     "falha_banco": {
         "prior": 0.10,
         "evidencias": {
+            # P(timeout | falha_banco)
             "timeout": 0.80,
+
+            # P(pool_esgotado | falha_banco)
             "pool_esgotado": 0.90
         }
     },
@@ -576,36 +599,46 @@ Predição: sobrecarga_aplicacao</div>
 
 
 def inferir(base, evidencias_observadas):
+    # Guarda um score para cada hipótese.
     scores = {}
 
     for hipotese, dados in base.items():
+        # Começamos pela probabilidade inicial P(H).
         score = dados["prior"]
 
+        # Multiplicamos pelas probabilidades das evidências observadas.
+        # Aqui assumimos independência condicional entre elas dada a hipótese.
         for evidencia in evidencias_observadas:
             score *= dados["evidencias"][evidencia]
 
         scores[hipotese] = score
 
+    # Soma os scores para normalizar os resultados.
     total = sum(scores.values())
 
+    # Converte os scores em probabilidades posteriores que somam 1.
     posteriores = {
         hipotese: score / total
         for hipotese, score in scores.items()
     }
 
+    # Retorna como predição a hipótese com maior posterior.
     predicao = max(posteriores, key=posteriores.get)
 
     return posteriores, predicao
 
 
+# O caso atual apresenta duas evidências.
 posteriores, predicao = inferir(
     base_conhecimento,
     ["timeout", "pool_esgotado"]
 )
 
+# Mostra a distribuição posterior completa.
 for hipotese, probabilidade in posteriores.items():
     print(f"{hipotese}: {probabilidade:.1%}")
 
+# Mostra a hipótese selecionada pelo sistema.
 print("Predição:", predicao)</code></pre>
 
       <div class="output-block">falha_banco: 51.1%
@@ -691,23 +724,29 @@ Predição: falha_banco</div>
         <h3>Exercício 3 · Complete o motor de inferência</h3>
         <p>Complete os trechos indicados para que o programa calcule os posteriores e retorne a hipótese mais provável.</p>
         <pre class="code-block"><code>def inferir(base, evidencias_observadas):
+    # Dicionário que armazenará o score de cada hipótese.
     scores = {}
 
     for hipotese, dados in base.items():
+        # Comece o cálculo pela probabilidade inicial da hipótese.
         score = ______________________
 
         for evidencia in evidencias_observadas:
+            # Atualize o score usando a probabilidade da evidência dada a hipótese.
             score *= ________________________________
 
         scores[hipotese] = score
 
+    # Calcule o total necessário para normalizar os scores.
     total = ______________________
 
     posteriores = {
+        # Transforme cada score em uma probabilidade posterior.
         hipotese: ______________________
         for hipotese, score in scores.items()
     }
 
+    # Selecione a hipótese que possui o maior posterior.
     predicao = ________________________________
 
     return posteriores, predicao</code></pre>
