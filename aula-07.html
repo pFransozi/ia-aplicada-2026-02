@@ -73,7 +73,7 @@
       <a class="brand" href="index.html" aria-label="IA Aplicada - página principal"><span class="brand-mark" aria-hidden="true">IA</span><span><strong>IA Aplicada</strong><small>Aula 07</small></span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal"><span class="sr-only">Abrir menu</span><span></span><span></span><span></span></button>
       <nav id="menu-principal" class="main-nav" aria-label="Navegação da aula">
-        <a href="index.html">Página principal</a><a href="curso.html">Visão geral</a><a href="#transicao">Da Aula 06</a><a href="#arquitetura">Sistema</a><a href="#exemplo1">Exemplos</a><a href="#codigo">Código</a><a href="#exercicios">Exercícios</a><a href="#fechamento">Checklist</a>
+        <a href="index.html">Página principal</a><a href="curso.html">Visão geral</a><a href="#transicao">Da Aula 06</a><a href="#arquitetura">Sistema</a><a href="#bayes">Bayes</a><a href="#exemplo1">Exemplos</a><a href="#codigo">Código</a><a href="#exercicios">Exercícios</a><a href="#fechamento">Checklist</a>
         <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-text">Modo noturno</span></button>
       </nav>
     </div>
@@ -203,6 +203,87 @@
 }</code></pre>
 
       <div class="warning-card"><strong>Distinção importante:</strong> a base de conhecimento contém o que o sistema sabe sobre o domínio. O motor de inferência usa esse conhecimento para analisar um caso específico.</div>
+    </div>
+  </section>
+
+  <section class="section" id="bayes">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Fundamento probabilístico</p>
+        <h2>O que é o Teorema de Bayes?</h2>
+        <p>O Teorema de Bayes permite atualizar a probabilidade de uma hipótese depois que uma nova evidência é observada.</p>
+      </div>
+
+      <p>No contexto desta aula, queremos responder perguntas de diagnóstico. Por exemplo: <strong>depois de observar um timeout, qual é a probabilidade de existir uma falha no banco?</strong></p>
+
+      <div class="formula"><code>P(H|E) = [P(E|H) × P(H)] / P(E)</code></div>
+
+      <p>A fórmula relaciona quatro elementos. Antes de calcular, é importante saber exatamente o que cada símbolo representa.</p>
+
+      <div class="notation-grid">
+        <article class="card">
+          <h3><code>H</code> · Hipótese</h3>
+          <p>É a explicação que queremos avaliar.</p>
+          <p><strong>Exemplo:</strong> H = “há falha no banco”.</p>
+        </article>
+
+        <article class="card">
+          <h3><code>E</code> · Evidência</h3>
+          <p>É a informação observada no caso atual.</p>
+          <p><strong>Exemplo:</strong> E = “ocorreu timeout”.</p>
+        </article>
+
+        <article class="card">
+          <h3><code>P(H)</code> · Prior</h3>
+          <p>É a probabilidade da hipótese <strong>antes</strong> de observar a nova evidência.</p>
+          <p><strong>Exemplo:</strong> <code>P(H)=0,10</code> significa que, antes do timeout, atribuímos 10% de probabilidade à falha no banco.</p>
+        </article>
+
+        <article class="card">
+          <h3><code>P(E|H)</code> · Verossimilhança</h3>
+          <p>É a probabilidade de observar a evidência <strong>se a hipótese for verdadeira</strong>.</p>
+          <p><strong>Exemplo:</strong> <code>P(timeout|falha_banco)=0,80</code>.</p>
+        </article>
+
+        <article class="card">
+          <h3><code>P(E)</code> · Probabilidade da evidência</h3>
+          <p>É a probabilidade total de observar a evidência, considerando todas as formas pelas quais ela pode ocorrer.</p>
+          <p><strong>Exemplo:</strong> a chance total de ocorrer timeout, seja por falha no banco ou por outras causas.</p>
+        </article>
+
+        <article class="card">
+          <h3><code>P(H|E)</code> · Posterior</h3>
+          <p>É a probabilidade da hipótese <strong>depois</strong> de observar a evidência.</p>
+          <p><strong>Exemplo:</strong> a probabilidade de falha no banco depois que o timeout foi observado.</p>
+        </article>
+      </div>
+
+      <h3>O símbolo <code>|</code> significa “dado que”</h3>
+      <div class="concept-grid">
+        <article class="card">
+          <h3><code>P(E|H)</code></h3>
+          <p>Probabilidade da <strong>evidência</strong>, dado que a <strong>hipótese</strong> é verdadeira.</p>
+          <p><code>P(timeout | falha_banco)</code></p>
+        </article>
+        <article class="card">
+          <h3><code>P(H|E)</code></h3>
+          <p>Probabilidade da <strong>hipótese</strong>, dado que a <strong>evidência</strong> foi observada.</p>
+          <p><code>P(falha_banco | timeout)</code></p>
+        </article>
+      </div>
+
+      <div class="warning-card"><strong>A ordem importa:</strong> <code>P(timeout|falha_banco)</code> e <code>P(falha_banco|timeout)</code> respondem a perguntas diferentes. O Teorema de Bayes permite passar do primeiro tipo de informação para o segundo.</div>
+
+      <h3>Quando existem apenas duas possibilidades</h3>
+      <p>Se estamos comparando uma hipótese <code>H</code> com sua negação <code>¬H</code>, podemos escrever <code>P(E)</code> de forma explícita:</p>
+
+      <div class="formula"><code>P(E) = P(E|H)P(H) + P(E|¬H)P(¬H)</code></div>
+
+      <p>Como <code>P(¬H) = 1 - P(H)</code>, a forma usada nos exemplos da aula fica:</p>
+
+      <div class="formula"><code>P(H|E) = P(E|H)P(H) / [P(E|H)P(H) + P(E|¬H)P(¬H)]</code></div>
+
+      <p class="note-banner"><strong>Leitura da atualização:</strong> começamos com uma crença inicial sobre a hipótese, <code>P(H)</code>, observamos uma evidência e calculamos uma nova crença, <code>P(H|E)</code>. É essa atualização que o motor de inferência implementa.</p>
     </div>
   </section>
 
@@ -631,7 +712,7 @@ Predição: falha_banco</div>
   </section>
 </main>
 
-  <aside class="toc" aria-label="Índice desta aula"><div class="toc-head"><span class="toc-label">Nesta aula</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#transicao">Da regra à incerteza</a><a href="#arquitetura">Arquitetura</a><a href="#exemplo1">Exemplo 1</a><a href="#exemplo2">Exemplo 2</a><a href="#codigo">Código</a><a href="#exemplo3">Nova evidência</a><a href="#origem">Probabilidades</a><a href="#exercicios">Exercícios</a><a href="#limites">Limites</a><a href="#fechamento">Checklist</a></nav></aside>
+  <aside class="toc" aria-label="Índice desta aula"><div class="toc-head"><span class="toc-label">Nesta aula</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#transicao">Da regra à incerteza</a><a href="#arquitetura">Arquitetura</a><a href="#bayes">Bayes</a><a href="#exemplo1">Exemplo 1</a><a href="#exemplo2">Exemplo 2</a><a href="#codigo">Código</a><a href="#exemplo3">Nova evidência</a><a href="#origem">Probabilidades</a><a href="#exercicios">Exercícios</a><a href="#limites">Limites</a><a href="#fechamento">Checklist</a></nav></aside>
   </div>
 
   <footer><div class="container">Inteligência Artificial Aplicada · Aula 07 · Engenharia de Software · 2026/2</div></footer>
