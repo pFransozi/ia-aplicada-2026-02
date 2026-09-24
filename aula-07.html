@@ -315,38 +315,113 @@
       <div class="section-heading">
         <p class="eyebrow">Exemplo resolvido 2</p>
         <h2>Várias hipóteses competindo pela mesma evidência</h2>
+        <p>Agora o sistema precisa comparar diferentes explicações para o mesmo fato observado.</p>
       </div>
 
       <span class="example-label">Exemplo respondido</span>
-      <p>Agora o sistema não compara apenas “falha no banco” e “não falha no banco”. Ele possui três hipóteses mutuamente exclusivas e queremos descobrir qual delas explica melhor o timeout.</p>
+
+      <p>Foi observado um <strong>timeout</strong>. O sistema considera três causas possíveis:</p>
+
+      <ul>
+        <li><strong>H₁:</strong> falha no banco;</li>
+        <li><strong>H₂:</strong> falha de rede;</li>
+        <li><strong>H₃:</strong> sobrecarga da aplicação.</li>
+      </ul>
+
+      <p>Para simplificar o exemplo, vamos assumir que essas três hipóteses são <strong>mutuamente exclusivas</strong> e representam todas as causas consideradas pelo modelo. Assim, o sistema precisa distribuir sua crença entre essas três possibilidades.</p>
+
+      <h3>Passo 1 · Conhecimento inicial sobre as hipóteses</h3>
+      <p>Antes de observar o timeout, o sistema já possui uma probabilidade inicial para cada hipótese. Esse valor é o <strong>prior</strong>.</p>
 
       <div class="comparison-table-wrap">
         <table class="comparison-table result-table">
-          <thead><tr><th>Hipótese</th><th>Prior</th><th>P(timeout | H)</th><th>Prior × verossimilhança</th></tr></thead>
+          <thead><tr><th>Hipótese</th><th>Prior</th><th>Interpretação</th></tr></thead>
           <tbody>
-            <tr><td>Falha no banco</td><td>0,10</td><td>0,80</td><td>0,080</td></tr>
-            <tr><td>Falha de rede</td><td>0,30</td><td>0,60</td><td>0,180</td></tr>
-            <tr><td>Sobrecarga da aplicação</td><td>0,60</td><td>0,40</td><td>0,240</td></tr>
+            <tr><td>Falha no banco</td><td>0,10</td><td>Antes da evidência, 10% dos casos são atribuídos a falha no banco.</td></tr>
+            <tr><td>Falha de rede</td><td>0,30</td><td>Antes da evidência, 30% dos casos são atribuídos a falha de rede.</td></tr>
+            <tr><td>Sobrecarga da aplicação</td><td>0,60</td><td>Antes da evidência, 60% dos casos são atribuídos a sobrecarga.</td></tr>
           </tbody>
         </table>
       </div>
 
-      <p>A soma dos três valores é <code>0,50</code>. Normalizamos cada valor dividindo-o pelo total:</p>
+      <p>Os priors somam 1:</p>
+      <div class="formula"><code>0,10 + 0,30 + 0,60 = 1,00</code></div>
+
+      <h3>Passo 2 · Quão esperado é o timeout em cada hipótese?</h3>
+      <p>Agora usamos a probabilidade da evidência condicionada a cada hipótese. Em outras palavras: <strong>se esta hipótese for verdadeira, com que frequência esperamos observar timeout?</strong></p>
 
       <div class="comparison-table-wrap">
         <table class="comparison-table result-table">
-          <thead><tr><th>Hipótese</th><th>Posterior após observar timeout</th></tr></thead>
+          <thead><tr><th>Hipótese</th><th>P(timeout | H)</th><th>Leitura</th></tr></thead>
           <tbody>
-            <tr><td>Falha no banco</td><td><code>0,080 / 0,50 = 16%</code></td></tr>
-            <tr><td>Falha de rede</td><td><code>0,180 / 0,50 = 36%</code></td></tr>
-            <tr><td>Sobrecarga da aplicação</td><td><code>0,240 / 0,50 = 48%</code></td></tr>
+            <tr><td>Falha no banco</td><td>0,80</td><td>Se houver falha no banco, há 80% de chance de ocorrer timeout.</td></tr>
+            <tr><td>Falha de rede</td><td>0,60</td><td>Se houver falha de rede, há 60% de chance de ocorrer timeout.</td></tr>
+            <tr><td>Sobrecarga da aplicação</td><td>0,40</td><td>Se houver sobrecarga, há 40% de chance de ocorrer timeout.</td></tr>
           </tbody>
         </table>
       </div>
 
-      <p>Com apenas a evidência <strong>timeout</strong>, a hipótese mais provável é <strong>sobrecarga da aplicação</strong>, com 48%.</p>
+      <h3>Passo 3 · Combinar o prior com a evidência</h3>
+      <p>Para cada hipótese, multiplicamos o prior por <code>P(timeout|H)</code>. O resultado indica quanto aquela hipótese contribui para os casos em que observamos timeout.</p>
 
-      <div class="warning-card"><strong>Este é o ponto em que aparece a predição.</strong> O sistema calcula a probabilidade de todas as hipóteses e pode selecionar aquela com maior posterior. A saída “sobrecarga da aplicação” não é uma certeza; é a hipótese mais sustentada pelo modelo e pela evidência atual.</div>
+      <div class="worked-step">
+        <strong>Falha no banco</strong>
+        <div class="formula"><code>0,10 × 0,80 = 0,080</code></div>
+        <p>Embora timeout seja muito comum quando o banco falha, essa hipótese tinha um prior baixo.</p>
+      </div>
+
+      <div class="worked-step">
+        <strong>Falha de rede</strong>
+        <div class="formula"><code>0,30 × 0,60 = 0,180</code></div>
+        <p>A hipótese começa com um prior maior e o timeout também é relativamente provável nesse cenário.</p>
+      </div>
+
+      <div class="worked-step">
+        <strong>Sobrecarga da aplicação</strong>
+        <div class="formula"><code>0,60 × 0,40 = 0,240</code></div>
+        <p>O timeout é menos característico dessa hipótese, mas ela começa com o maior prior.</p>
+      </div>
+
+      <h3>Passo 4 · Calcular a probabilidade total do timeout</h3>
+      <p>Os valores <code>0,080</code>, <code>0,180</code> e <code>0,240</code> representam as três formas previstas pelo modelo de observar um timeout.</p>
+
+      <p>Por isso, somamos:</p>
+
+      <div class="formula"><code>P(timeout) = 0,080 + 0,180 + 0,240 = 0,50</code></div>
+
+      <p>O valor <code>0,50</code> não é arbitrário. Ele representa a <strong>probabilidade total da evidência</strong> dentro deste modelo.</p>
+
+      <h3>Passo 5 · Normalizar e obter os posteriores</h3>
+      <p>Até aqui, os valores não representam uma distribuição final sobre as hipóteses. Para obter as probabilidades depois de observar o timeout, dividimos cada valor por <code>P(timeout)=0,50</code>.</p>
+
+      <div class="comparison-table-wrap">
+        <table class="comparison-table result-table">
+          <thead><tr><th>Hipótese</th><th>Cálculo</th><th>Posterior</th></tr></thead>
+          <tbody>
+            <tr><td>Falha no banco</td><td><code>0,080 / 0,50</code></td><td><strong>16%</strong></td></tr>
+            <tr><td>Falha de rede</td><td><code>0,180 / 0,50</code></td><td><strong>36%</strong></td></tr>
+            <tr><td>Sobrecarga da aplicação</td><td><code>0,240 / 0,50</code></td><td><strong>48%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Agora os posteriores somam 100%:</p>
+      <div class="formula"><code>16% + 36% + 48% = 100%</code></div>
+
+      <h3>Passo 6 · Interpretar a predição</h3>
+      <p>Depois de observar o timeout, o sistema passa a atribuir:</p>
+
+      <ul>
+        <li><strong>16%</strong> para falha no banco;</li>
+        <li><strong>36%</strong> para falha de rede;</li>
+        <li><strong>48%</strong> para sobrecarga da aplicação.</li>
+      </ul>
+
+      <p>Como <strong>48%</strong> é o maior posterior, a predição do sistema é <strong>sobrecarga da aplicação</strong>.</p>
+
+      <div class="warning-card"><strong>Importante:</strong> 48% não significa certeza. Significa apenas que, entre as hipóteses representadas e considerando a evidência observada, sobrecarga da aplicação recebeu o maior suporte probabilístico.</div>
+
+      <p class="note-banner"><strong>O que Bayes fez aqui:</strong> combinou a frequência inicial de cada hipótese com o quanto a evidência é esperada em cada uma delas. Depois, os valores foram normalizados para formar uma nova distribuição de probabilidades.</p>
     </div>
   </section>
 
