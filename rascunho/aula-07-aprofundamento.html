@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Rascunho do aprofundamento da Aula 07: incerteza, probabilidade condicional, Bayes, atualização de crenças, independência condicional e interpretação de diagnósticos probabilísticos.">
   <meta name="theme-color" content="#0f172a">
-  <title>Aula 07 | Aprofundamento em revisão | IA Aplicada</title>
+  <title>Aula 07 | Raciocínio sob incerteza e inferência bayesiana | Aprofundamento em revisão</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="aula-07-aprofundamento.css">
   <script defer src="../script.js"></script>
@@ -21,7 +21,7 @@
       <a class="brand" href="../index.html" aria-label="IA Aplicada, página principal"><span class="brand-mark" aria-hidden="true">IA</span><span><strong>IA Aplicada</strong><small>Aula 07 · Aprofundamento</small></span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal"><span class="sr-only">Abrir menu</span><span></span><span></span><span></span></button>
       <nav id="menu-principal" class="main-nav" aria-label="Navegação principal">
-        <a href="../aula-07.html">Aula 07</a><a href="../index.html">Página principal</a><a href="#percurso">Percurso</a><a href="#referencias">Referências</a>
+        <a href="../aula-07.html">Aula 07</a><a href="../index.html">Página principal</a><a href="#percurso">Apresentação</a><a href="#referencias">Referências</a>
         <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-text">Modo noturno</span></button>
       </nav>
     </div>
@@ -33,26 +33,26 @@
           <div>
             <p class="study-status">Rascunho para revisão</p>
             <p class="eyebrow">Aula 07 · Material de aprofundamento</p>
-            <h1>Raciocinar quando as evidências não são conclusivas</h1>
-            <p class="hero-lead">Como representar a incerteza, atualizar hipóteses e interpretar o que um diagnóstico probabilístico realmente permite concluir.</p>
+            <h1>Raciocínio sob incerteza e inferência bayesiana</h1>
+            <p class="hero-lead">Fundamentos probabilísticos, atualização de hipóteses e interpretação de resultados em sistemas de diagnóstico.</p>
             <div class="hero-actions"><a class="button button-primary" href="#incerteza">Iniciar a leitura</a><a class="button button-secondary" href="../aula-07.html">Retornar à aula</a></div>
           </div>
-          <aside class="guiding-card"><span>Pergunta orientadora</span><blockquote>Se um mesmo sintoma pode ter várias causas, o que justifica considerar uma explicação mais provável do que outra?</blockquote></aside>
+          <aside class="guiding-card"><span>Objetivo do aprofundamento</span><blockquote>Analisar os fundamentos da inferência bayesiana e as condições de sua aplicação ao diagnóstico probabilístico.</blockquote></aside>
         </div>
       </section>
 
       <section class="section section-soft" id="percurso">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Percurso conceitual</p><h2>Da observação à interpretação do resultado</h2></div>
+          <div class="section-heading"><p class="eyebrow">Apresentação</p><h2>Organização do conteúdo</h2></div>
           <p>A aula principal apresentou um sistema que recebe evidências e calcula probabilidades para diferentes causas de uma falha. Este material retoma o mesmo contexto para examinar o significado das representações, a justificativa dos cálculos e os limites das conclusões.</p>
           <p>A leitura começa pela diferença entre um fato e o conhecimento que temos sobre ele. Em seguida, desenvolve probabilidade condicional e Bayes, explica como combinar novas evidências e distingue o diagnóstico calculado da decisão de agir.</p>
-          <div class="study-note"><p><strong>Exemplo que acompanha a leitura:</strong> um sistema investiga incidentes de software considerando falha no banco, falha de rede e sobrecarga da aplicação. Os números são didáticos, retomados da Aula 07; não são estatísticas medidas em um ambiente real.</p></div>
+          <div class="study-note"><p><strong>Contexto de aplicação:</strong> um sistema investiga incidentes de software considerando falha no banco, falha de rede e sobrecarga da aplicação. Os números são didáticos, retomados da Aula 07; não são estatísticas medidas em um ambiente real.</p></div>
         </div>
       </section>
 
       <section class="section" id="incerteza">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte I · Conhecimento e realidade</p><h2>Uma coisa é o que aconteceu; outra é o que sabemos</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte I · Fundamentos</p><h2>Representação da incerteza em sistemas de IA</h2></div>
           <p>Considere a afirmação “o banco de dados está indisponível”. Depois de definir o que conta como indisponibilidade e qual instante está sendo analisado, a afirmação pode ser verdadeira ou falsa. A equipe, entretanto, talvez não consiga determinar imediatamente qual dessas situações ocorreu.</p>
           <p>Um timeout informa que uma resposta não chegou dentro do prazo estabelecido. Ele não informa, por si só, qual componente provocou o atraso. Pode haver uma falha no banco, uma dificuldade de comunicação ou uma aplicação que recebeu mais trabalho do que consegue atender.</p>
           <p>A incerteza está na relação entre as informações disponíveis e a conclusão desejada. Podemos ter um registro confiável do timeout e, mesmo assim, permanecer incertos sobre sua causa.</p>
@@ -60,10 +60,10 @@
             <article class="study-card"><h3>Informação incompleta</h3><p>Alguns componentes não foram observados, o monitoramento cobre apenas parte do sistema ou os registros não mostram o estado relevante. Falta informação para distinguir as explicações.</p></article>
             <article class="study-card"><h3>Evidência não conclusiva</h3><p>A informação está disponível, mas é compatível com mais de uma hipótese. Mesmo um registro correto de timeout pode aparecer em incidentes de naturezas diferentes.</p></article>
           </div>
-          <h3>Probabilidade não é uma verdade pela metade</h3>
+          <h3>Probabilidade, grau de crença e valor de verdade</h3>
           <p>Atribuir 16% de probabilidade à falha no banco não significa que a afirmação seja “16% verdadeira” ou que o banco esteja “16% indisponível”. Significa que, dadas as evidências e o modelo utilizados, atribuímos esse grau de crença à hipótese de falha.</p>
           <p>A probabilidade representa a incerteza sobre uma proposição. Isso é diferente de graduar uma propriedade como “carga alta”, cujo significado depende de como a categoria é definida.</p>
-          <h3>As regras continuam úteis</h3>
+          <h3>Aplicabilidade e limites das regras determinísticas</h3>
           <p>Uma regra determinística continua adequada quando a relação expressa é válida no domínio modelado. O problema aparece quando uma relação apenas frequente é tratada como necessária. “Falhas no banco frequentemente produzem timeout” não autoriza concluir que “todo timeout foi causado pelo banco”.</p>
           <p>O raciocínio probabilístico não dispensa conhecimento do domínio. Ele exige que esse conhecimento expresse também as alternativas e o grau de suporte que cada evidência oferece a elas.</p>
           <p class="study-source">Referências conceituais: <a href="#ref-1">[1], cap. 12</a>; <a href="#ref-2">[2], cap. 9</a>.</p>
@@ -72,14 +72,14 @@
 
       <section class="section section-soft" id="modelo">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte II · O problema representado</p><h2>Hipóteses e evidências têm papéis diferentes</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte II · Modelagem probabilística</p><h2>Hipóteses, evidências e universo de referência</h2></div>
           <p>Uma <strong>hipótese</strong> é uma explicação que o sistema avalia. Uma <strong>evidência</strong> é uma informação disponível sobre o caso em análise. No diagnóstico, normalmente observamos os efeitos e procuramos avaliar as possíveis causas.</p>
           <p>Neste material, usaremos <strong>H</strong> para uma hipótese qualquer, <strong>T</strong> para “ocorreu timeout” e <strong>S</strong> para “o pool de conexões está esgotado”. O pool é o conjunto de conexões que a aplicação mantém para reutilização; estar esgotado significa que não há uma conexão disponível para atender uma nova solicitação naquele momento.</p>
           <p>As hipóteses são: <strong>B</strong>, falha no banco; <strong>R</strong>, falha de rede; e <strong>A</strong>, sobrecarga da aplicação. A letra identifica uma explicação, não uma probabilidade.</p>
-          <h3>Por que essas hipóteses somarão 100%?</h3>
+          <h3>Exclusividade e exaustividade das hipóteses</h3>
           <p>No exemplo, representamos a causa do incidente por uma variável que admite exatamente uma dessas três categorias. Assumimos que elas são <strong>mutuamente exclusivas</strong>: um caso não recebe duas categorias ao mesmo tempo. Também assumimos que são <strong>exaustivas dentro do modelo</strong>: todo caso representado pertence a alguma delas.</p>
           <p>Essas duas condições permitem distribuir toda a probabilidade entre B, R e A. Não se trata de uma afirmação de que falhas reais nunca ocorrem simultaneamente. Trata-se de uma simplificação explícita do problema.</p>
-          <div class="study-note"><p><strong>O modelo precisa corresponder à pergunta:</strong> quando falha no banco e falha de rede podem coexistir, suas probabilidades individuais não precisam somar 100%. Seria necessário representar as combinações ou usar variáveis separadas. Apenas normalizar três números não resolve essa diferença de modelagem.</p></div>
+          <div class="study-note"><p><strong>Adequação do modelo ao domínio:</strong> quando falha no banco e falha de rede podem coexistir, suas probabilidades individuais não precisam somar 100%. Seria necessário representar as combinações ou usar variáveis separadas. Apenas normalizar três números não resolve essa diferença de modelagem.</p></div>
           <p>Também é necessário definir o universo analisado. Aqui, os casos são incidentes encaminhados ao diagnóstico. Uma probabilidade estimada entre incidentes não é automaticamente a probabilidade de falha entre todas as requisições de uma aplicação, incluindo as que funcionaram normalmente.</p>
           <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.2 e 12.3</a>.</p>
         </div>
@@ -87,19 +87,19 @@
 
       <section class="section" id="probabilidades">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte III · Ler antes de calcular</p><h2>Que pergunta cada probabilidade responde?</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte III · Notação probabilística</p><h2>Probabilidade a priori, conjunta e condicional</h2></div>
           <p>O símbolo <strong>P</strong> indica probabilidade. A barra vertical <strong>|</strong> é lida como “dado que”. O que aparece depois da barra estabelece a informação que estamos tomando como conhecida.</p>
           <div class="study-grid">
-            <article class="study-card"><h3>P(H) · Prior</h3><p>É a probabilidade da hipótese antes de incorporar a nova evidência do caso. P(B) = 0,10 significa que o modelo começa atribuindo 10% à falha no banco.</p><p>“Antes” não significa ausência de conhecimento: o prior pode incorporar histórico e contexto já disponíveis.</p></article>
+            <article class="study-card"><h3>P(H) · Probabilidade a priori</h3><p>É a probabilidade da hipótese antes de incorporar a nova evidência do caso. P(B) = 0,10 significa que o modelo começa atribuindo 10% à falha no banco.</p><p>“Antes” não significa ausência de conhecimento: o prior pode incorporar histórico e contexto já disponíveis.</p></article>
             <article class="study-card"><h3>P(T|H) · Verossimilhança</h3><p>É a probabilidade de observar timeout quando a hipótese é verdadeira. P(T|B) = 0,80 significa que o timeout é esperado em 80% dos casos com falha no banco.</p><p>Ao comparar hipóteses para o mesmo timeout observado, esses valores expressam a compatibilidade da evidência com cada explicação.</p></article>
             <article class="study-card"><h3>P(H ∩ T) · Probabilidade conjunta</h3><p>É a probabilidade de a hipótese e o timeout ocorrerem no mesmo caso. O símbolo ∩ significa “e”.</p><p>P(B ∩ T) = 0,08 representa 8% de todos os casos do universo analisado, não 8% apenas dos casos com timeout.</p></article>
-            <article class="study-card"><h3>P(H|T) · Posterior</h3><p>É a probabilidade da hipótese depois de saber que ocorreu timeout. Agora a pergunta é: entre os casos compatíveis com essa evidência, qual parcela corresponde à hipótese?</p><p>É esse valor que queremos obter no diagnóstico.</p></article>
+            <article class="study-card"><h3>P(H|T) · Probabilidade a posteriori</h3><p>É a probabilidade da hipótese depois de saber que ocorreu timeout. Agora a pergunta é: entre os casos compatíveis com essa evidência, qual parcela corresponde à hipótese?</p><p>É esse valor que queremos obter no diagnóstico.</p></article>
           </div>
-          <h3>Inverter a condição muda o grupo de referência</h3>
+          <h3>Distinção entre P(T|B) e P(B|T)</h3>
           <p>Em P(T|B), consideramos somente os casos em que o banco falhou e perguntamos quantos apresentam timeout. Em P(B|T), consideramos somente os casos com timeout e perguntamos quantos envolvem falha no banco. São grupos diferentes.</p>
           <div class="study-math"><span class="math-line">P(T|B): entre as falhas no banco, quantas apresentam timeout?</span><span class="math-line">P(B|T): entre os timeouts, quantos correspondem a falha no banco?</span></div>
           <p>Por isso, uma evidência muito frequente em determinada hipótese não torna essa hipótese automaticamente a explicação mais provável. Ainda precisamos considerar quantos casos começam em cada hipótese e com que frequência as alternativas também produzem a evidência.</p>
-          <h3>A base usada no exemplo</h3>
+          <h3>Parâmetros do modelo de diagnóstico</h3>
           <p>Na tabela, a coluna de <strong>prior</strong> informa a probabilidade inicial da causa. A coluna <strong>P(T|H)</strong> informa a probabilidade de timeout caso aquela causa seja verdadeira. Os significados são diferentes, embora ambos sejam expressos por números entre 0 e 1.</p>
           <div class="study-table-wrap" role="region" aria-label="Base probabilística do exemplo" tabindex="0"><table class="study-table"><caption>Probabilidades didáticas retomadas do exemplo de três hipóteses da Aula 07.</caption><thead><tr><th scope="col">Hipótese</th><th scope="col">Prior P(H)</th><th scope="col">P(T|H)</th></tr></thead><tbody><tr><th scope="row">B · Falha no banco</th><td>0,10</td><td>0,80</td></tr><tr><th scope="row">R · Falha de rede</th><td>0,30</td><td>0,60</td></tr><tr><th scope="row">A · Sobrecarga da aplicação</th><td>0,60</td><td>0,40</td></tr></tbody></table></div>
           <p>Os priors somam 1 porque descrevem alternativas exclusivas e exaustivas. Já 0,80 + 0,60 + 0,40 não precisa somar 1: cada probabilidade de timeout foi calculada sob uma condição diferente. Para uma mesma hipótese, o que soma 1 é a probabilidade de timeout mais a de não ocorrer timeout.</p>
@@ -109,34 +109,34 @@
 
       <section class="section section-soft" id="bayes">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte IV · O significado de Bayes</p><h2>Atualizar é mudar o conjunto de casos que estamos considerando</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte IV · Inferência bayesiana</p><h2>Teorema de Bayes e normalização das probabilidades</h2></div>
           <p>Para visualizar as probabilidades, imagine 1.000 incidentes distribuídos exatamente segundo o modelo. Não estamos acrescentando novos dados: apenas traduzindo as proporções da tabela para contagens mais fáceis de acompanhar.</p>
           <div class="study-table-wrap" role="region" aria-label="Probabilidades representadas em mil incidentes" tabindex="0"><table class="study-table"><caption>Representação por frequências do modelo com três causas.</caption><thead><tr><th scope="col">Causa</th><th scope="col">Casos antes da evidência</th><th scope="col">Casos com timeout</th><th scope="col">Casos sem timeout</th></tr></thead><tbody><tr><th scope="row">Banco</th><td>100</td><td>80</td><td>20</td></tr><tr><th scope="row">Rede</th><td>300</td><td>180</td><td>120</td></tr><tr><th scope="row">Aplicação</th><td>600</td><td>240</td><td>360</td></tr><tr><th scope="row">Total</th><td>1.000</td><td>500</td><td>500</td></tr></tbody></table></div>
           <p>Antes de saber se ocorreu timeout, falha no banco corresponde a 100 de 1.000 casos: 10%. Depois de observar timeout, a comparação fica restrita aos 500 casos que apresentam essa evidência. Entre eles, 80 envolvem falha no banco: 80 ÷ 500 = 16%.</p>
           <p>Observe que 80 ÷ 100 = 80% responde a outra pergunta: a frequência de timeout entre as falhas no banco. A diferença entre 80% e 16% vem dos denominadores, isto é, dos grupos de referência.</p>
-          <h3>Da contagem para a fórmula</h3>
+          <h3>Dedução do Teorema de Bayes</h3>
           <p>A definição de probabilidade condicional estabelece que, quando P(T) &gt; 0, P(H|T) é a probabilidade conjunta de H e T dividida pela probabilidade de T. A regra do produto permite escrever a mesma probabilidade conjunta como P(T|H) × P(H).</p>
           <div class="study-math"><span class="math-line">P(H|T) = P(H ∩ T) ÷ P(T)</span><span class="math-line">P(H ∩ T) = P(T|H) × P(H)</span><span class="math-line"><strong>Logo: P(H|T) = [P(T|H) × P(H)] ÷ P(T)</strong></span></div>
           <p>Essa é a regra de Bayes. Ela não troca arbitrariamente a ordem das letras: relaciona duas formas de expressar a mesma ocorrência conjunta.</p>
-          <h3>De onde vem P(T)?</h3>
+          <h3>Lei da probabilidade total</h3>
           <p>O timeout pode ocorrer em cada uma das três causas representadas. Como as categorias não se sobrepõem e cobrem o universo do modelo, suas contribuições podem ser somadas. Essa é a aplicação da <strong>lei da probabilidade total</strong>.</p>
           <div class="study-math"><span class="math-line">P(T) = P(T|B)P(B) + P(T|R)P(R) + P(T|A)P(A)</span><span class="math-line">P(T) = 0,80 × 0,10 + 0,60 × 0,30 + 0,40 × 0,60</span><span class="math-line">P(T) = 0,08 + 0,18 + 0,24 = 0,50</span></div>
           <p>Dividir cada contribuição por 0,50 produz 16%, 36% e 48%. O total passa a ser 100% porque estamos distribuindo a probabilidade somente entre os casos que apresentam timeout.</p>
-          <div class="study-note"><p><strong>Normalizar não é corrigir números por conveniência.</strong> Neste modelo, os valores 0,08, 0,18 e 0,24 são probabilidades conjuntas. A divisão pela soma transforma essas contribuições em probabilidades condicionadas à evidência. Uma lista qualquer de pontuações, mesmo normalizada, não se torna automaticamente um diagnóstico probabilístico válido.</p></div>
+          <div class="study-note"><p><strong>Significado probabilístico da normalização.</strong> Neste modelo, os valores 0,08, 0,18 e 0,24 são probabilidades conjuntas. A divisão pela soma transforma essas contribuições em probabilidades condicionadas à evidência. Uma lista qualquer de pontuações, mesmo normalizada, não se torna automaticamente um diagnóstico probabilístico válido.</p></div>
           <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.3 e 12.5</a>.</p>
         </div>
       </section>
 
       <section class="section" id="forca">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte V · A força de uma evidência</p><h2>Uma hipótese pode ganhar apoio e continuar em segundo plano</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte V · Análise das evidências</p><h2>Influência do prior e da verossimilhança no posterior</h2></div>
           <p>A falha no banco passou de 10% para 16%. Portanto, o timeout aumentou sua probabilidade. Ainda assim, ela não se tornou a explicação mais provável. A sobrecarga da aplicação caiu de 60% para 48%, mas permaneceu em primeiro lugar.</p>
           <p>Não há contradição: <strong>aumentar a probabilidade</strong> e <strong>ter a maior probabilidade</strong> são coisas diferentes. O resultado depende tanto da evidência quanto do ponto de partida.</p>
-          <h3>A evidência precisa ser comparada entre alternativas</h3>
+          <h3>Comparação de verossimilhanças</h3>
           <p>O timeout é duas vezes mais provável sob falha no banco do que sob sobrecarga: 0,80 ÷ 0,40 = 2. Porém, antes da evidência, a sobrecarga era seis vezes mais provável: 0,60 ÷ 0,10 = 6. Depois da atualização, ela ainda é três vezes mais provável que a falha no banco: 0,48 ÷ 0,16 = 3.</p>
           <p>Essa comparação das verossimilhanças é uma forma de medir quanto a evidência favorece uma hipótese em relação a outra. Um sintoma comum em todas as alternativas pode acrescentar pouca informação, mesmo que seja frequente.</p>
           <div class="study-note"><p><strong>Evidência sem poder de discriminação:</strong> se um evento tivesse probabilidade 0,50 em cada uma das três hipóteses, multiplicaria todos os priors pelo mesmo fator. Após normalizar, a distribuição continuaria em 10%, 30% e 60%. Observar algo não garante que esse algo ajude a distinguir as explicações.</p></div>
-          <h3>Por que o exemplo binário da aula chega a 30,8%, e este a 16%?</h3>
+          <h3>Comparação entre os modelos binário e de três hipóteses</h3>
           <p>Os dois exemplos usam a mesma regra, mas não o mesmo modelo. No exemplo binário, a probabilidade de timeout <strong>sem falha no banco</strong> foi definida como 20%. No exemplo com três causas, “sem falha no banco” reúne rede e aplicação.</p>
           <p>Aqui, essas duas alternativas correspondem a 900 dos 1.000 casos, e 420 delas apresentam timeout. Assim, P(T|não B) = 420 ÷ 900 ≈ 46,7%, não 20%. A evidência é mais comum entre as alternativas, o que muda o posterior do banco.</p>
           <p>Os posteriores não são propriedades fixas do sintoma. Eles dependem das hipóteses, das probabilidades e do universo de referência utilizados em cada exemplo.</p>
@@ -146,19 +146,19 @@
 
       <section class="section section-soft" id="independencia">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte VI · Combinar informações</p><h2>Quando podemos multiplicar as probabilidades das evidências?</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte VI · Múltiplas evidências</p><h2>Independência condicional e combinação de evidências</h2></div>
           <p>Agora, além do timeout T, sabemos que o pool de conexões está esgotado S. A informação relevante passa a ser a ocorrência conjunta de T e S. Precisamos avaliar P(T ∩ S|H), e não apenas as duas probabilidades isoladamente.</p>
-          <h3>A expressão geral preserva o que já sabemos</h3>
+          <h3>Regra do produto para probabilidades condicionais</h3>
           <div class="study-math">P(T ∩ S|H) = P(T|H) × P(S|T, H)</div>
           <p>Primeiro consideramos a chance de timeout sob a hipótese. Depois consideramos a chance de pool esgotado sob essa mesma hipótese <strong>sabendo também que houve timeout</strong>. A vírgula em P(S|T, H) indica que as duas informações estão sendo tomadas como conhecidas.</p>
-          <h3>O que a independência condicional afirma</h3>
+          <h3>Definição de independência condicional</h3>
           <p>Assumir que T e S são condicionalmente independentes dada H significa que, uma vez fixada a hipótese, saber que ocorreu timeout não altera a probabilidade de pool esgotado. Nesse caso, podemos substituir P(S|T, H) por P(S|H).</p>
           <div class="study-math"><span class="math-line">Sob independência condicional: P(S|T, H) = P(S|H)</span><span class="math-line">Então: P(T ∩ S|H) = P(T|H) × P(S|H)</span></div>
           <p>A afirmação deve valer para cada hipótese utilizada. Ela não diz que timeout e pool esgotado nunca aparecem juntos, nem que são independentes quando a causa ainda é desconhecida. Diz que, dentro de cada condição H, uma evidência não acrescenta informação sobre a outra.</p>
-          <h3>Uma simplificação do exemplo, não uma garantia sobre sistemas reais</h3>
+          <h3>Condições de aplicação da independência condicional</h3>
           <p>Na Aula 07, a independência condicional permite manter uma tabela pequena e realizar o cálculo com clareza. Em uma aplicação real, o próprio esgotamento de conexões pode contribuir para a ocorrência de timeout. Nesse cenário, saber que houve timeout pode modificar a expectativa sobre o pool mesmo depois de fixar uma causa geral.</p>
           <p>Ter sensores diferentes, campos separados ou arquivos de log distintos não comprova independência. É preciso examinar o processo que gera os registros e, quando possível, verificar as relações nos dados.</p>
-          <div class="study-note"><p><strong>O que fazer conceitualmente quando há dependência:</strong> representar P(S|T, H), ou diretamente P(T ∩ S|H), em vez de substituir essa relação pelo produto das probabilidades isoladas. Bayes continua válido; a simplificação é que deixa de estar justificada.</p></div>
+          <div class="study-note"><p><strong>Representação de evidências dependentes:</strong> representar P(S|T, H), ou diretamente P(T ∩ S|H), em vez de substituir essa relação pelo produto das probabilidades isoladas. Bayes continua válido; a simplificação é que deixa de estar justificada.</p></div>
           <p>O modelo que considera as evidências mutuamente independentes dada a hipótese é conhecido como <strong>Naive Bayes</strong>. “Naive” se refere à suposição simplificadora. Para três ou mais evidências, verificar apenas independências entre pares não basta para justificar todo o produto.</p>
           <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.5.2 e 12.6</a>.</p>
         </div>
@@ -166,15 +166,15 @@
 
       <section class="section" id="atualizacao">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte VII · Uma nova evidência</p><h2>O posterior de uma etapa pode iniciar a etapa seguinte</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte VII · Atualização de crenças</p><h2>Atualização conjunta e sequencial das probabilidades</h2></div>
           <p>Mantendo explicitamente a suposição didática de independência condicional, acrescentamos as probabilidades de pool esgotado usadas na aula: 0,90 sob falha no banco, 0,05 sob falha de rede e 0,25 sob sobrecarga.</p>
           <p>Podemos atualizar de uma vez, partindo do prior original e incorporando T e S. Também podemos partir do posterior que já considera T e incorporar apenas a nova informação S. As duas formas devem chegar à mesma distribuição.</p>
           <div class="study-table-wrap" role="region" aria-label="Atualização conjunta e sequencial" tabindex="0"><table class="study-table"><caption>Dois caminhos equivalentes sob as suposições do exemplo.</caption><thead><tr><th scope="col">Hipótese</th><th scope="col">P(H) × P(T|H) × P(S|H)</th><th scope="col">P(H|T) × P(S|H)</th><th scope="col">Posterior final</th></tr></thead><tbody><tr><th scope="row">Banco</th><td>0,10 × 0,80 × 0,90 = 0,072</td><td>0,16 × 0,90 = 0,144</td><td>51,06%</td></tr><tr><th scope="row">Rede</th><td>0,30 × 0,60 × 0,05 = 0,009</td><td>0,36 × 0,05 = 0,018</td><td>6,38%</td></tr><tr><th scope="row">Aplicação</th><td>0,60 × 0,40 × 0,25 = 0,060</td><td>0,48 × 0,25 = 0,120</td><td>42,55%</td></tr><tr><th scope="row">Soma para normalizar</th><td>0,141</td><td>0,282</td><td>100% antes do arredondamento</td></tr></tbody></table></div>
           <p>Na atualização conjunta, a soma 0,141 representa P(T ∩ S). Na atualização sequencial, 0,282 representa P(S|T). Os valores intermediários diferem porque o segundo cálculo já parte do conjunto de casos com timeout. As razões finais são iguais: por exemplo, 0,072 ÷ 0,141 = 0,144 ÷ 0,282.</p>
           <p>O banco passa a ocupar o primeiro lugar, mas a aplicação ainda recebe cerca de 42,55%. A nova evidência mudou a comparação sem eliminar a incerteza. Os percentuais exibidos podem somar 99,99% ou 100,1% conforme o arredondamento; os valores não arredondados somam 100%.</p>
-          <h3>Atualização sequencial não exige independência</h3>
+          <h3>Atualização sequencial com evidências dependentes</h3>
           <p>No caso geral, o posterior após T é multiplicado por P(S|T, H) e depois normalizado. A independência permite apenas simplificar esse fator para P(S|H). Com um mesmo modelo conjunto e condicionais coerentes, a ordem de incorporação não altera o resultado final.</p>
-          <h3>Repetir o mesmo registro não produz uma nova evidência</h3>
+          <h3>Duplicação de evidências e efeitos sobre a inferência</h3>
           <p>Depois de incorporar um timeout, ler novamente a mesma linha de log não deve aumentar a crença em qualquer hipótese. É a mesma informação, não uma observação adicional. Matematicamente, T e T representam o próprio evento T.</p>
           <div class="study-math">P(H|T, T) = P(H|T)</div>
           <p>Multiplicar novamente por P(T|H) contaria o mesmo evento duas vezes. Usar tempo de resposta e um indicador de timeout derivado desse mesmo tempo como se fossem observações independentes pode gerar um problema semelhante.</p>
@@ -185,32 +185,32 @@
 
       <section class="section section-soft" id="ausencia">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte VIII · O que não foi observado</p><h2>Não saber não é o mesmo que saber que não ocorreu</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte VIII · Disponibilidade das evidências</p><h2>Evidência negativa e informação não observada</h2></div>
           <p>Suponha que o sistema recebeu o timeout, mas não recebeu informação sobre o pool. Há pelo menos três situações diferentes, e elas não devem ser representadas da mesma forma.</p>
           <div class="study-table-wrap" role="region" aria-label="Distinção entre evidência presente, ausente e desconhecida" tabindex="0"><table class="study-table"><caption>O tratamento abaixo usa a suposição de independência condicional do exemplo.</caption><thead><tr><th scope="col">Informação disponível</th><th scope="col">Significado</th><th scope="col">Fator para a nova atualização</th></tr></thead><tbody><tr><th scope="row">Pool esgotado</th><td>S foi observado.</td><td>P(S|H)</td></tr><tr><th scope="row">Pool não esgotado</th><td>O complemento de S foi observado.</td><td>P(não S|H) = 1 − P(S|H)</td></tr><tr><th scope="row">Estado do pool desconhecido</th><td>Não sabemos se S ocorreu.</td><td>Nenhum fator relativo ao estado do pool.</td></tr></tbody></table></div>
           <p>Quando não sabemos o estado, as possibilidades “esgotado” e “não esgotado” permanecem abertas. No modelo simplificado, somar as duas possibilidades produz 1; portanto, não altera a distribuição obtida com o timeout.</p>
           <p>Quando sabemos que o pool <strong>não</strong> está esgotado, existe informação nova. Sob falha no banco, essa observação tem probabilidade 1 − 0,90 = 0,10; sob falha de rede, 0,95; e sob sobrecarga, 0,75.</p>
           <div class="study-math"><span class="math-line">Banco: 0,16 × 0,10 = 0,016</span><span class="math-line">Rede: 0,36 × 0,95 = 0,342</span><span class="math-line">Aplicação: 0,48 × 0,75 = 0,360</span><span class="math-line">Após normalizar: banco ≈ 2,23%; rede ≈ 47,63%; aplicação ≈ 50,14%.</span></div>
           <p>A ausência confirmada do sintoma reduziu bastante a probabilidade de falha no banco. Já a falta de informação sobre ele teria mantido 16%, 36% e 48%.</p>
-          <div class="study-note"><p><strong>Uma ressalva sobre o monitoramento:</strong> “não apareceu no log” só pode ser interpretado como “não ocorreu” quando a coleta permite essa conclusão. Se a perda do registro for, ela própria, um sintoma de falha, o mecanismo de ausência deve ser representado como informação adicional.</p></div>
+          <div class="study-note"><p><strong>Limitações do monitoramento:</strong> “não apareceu no log” só pode ser interpretado como “não ocorreu” quando a coleta permite essa conclusão. Se a perda do registro for, ela própria, um sintoma de falha, o mecanismo de ausência deve ser representado como informação adicional.</p></div>
           <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.2 e 12.6</a>.</p>
         </div>
       </section>
 
       <section class="section" id="origem">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte IX · Qualidade do conhecimento</p><h2>Uma conta correta depende de probabilidades bem fundamentadas</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte IX · Estimação de probabilidades</p><h2>Fundamentação e qualidade da base probabilística</h2></div>
           <p>Bayes estabelece como relacionar probabilidades. Ele não determina, sozinho, quais valores devem entrar na base. Esses valores podem ser estimados a partir de registros, definidos com apoio de especialistas ou obtidos de um modelo do funcionamento do sistema.</p>
-          <h3>O denominador precisa corresponder à pergunta</h3>
+          <h3>Universo de referência na estimação de probabilidades</h3>
           <p>Para estimar P(T|B) por frequência, contamos os casos com timeout <strong>entre os incidentes em que a falha no banco foi confirmada</strong>. Para estimar P(B), contamos falhas no banco entre todos os incidentes do universo escolhido, antes de filtrar pela nova evidência T.</p>
           <p>Um histórico composto apenas de casos com timeout não fornece diretamente esse prior anterior ao timeout. Usá-lo como ponto de partida e depois incorporar o mesmo filtro como evidência pode contar a informação duas vezes.</p>
-          <h3>A mesma proporção pode ter sustentação diferente</h3>
+          <h3>Tamanho da amostra e precisão das estimativas</h3>
           <p>Observar timeout em 8 de 10 casos e em 800 de 1.000 casos produz a mesma proporção de 80%. Isso não significa que as estimativas tenham a mesma precisão. Mantidas condições comparáveis de coleta, amostras pequenas deixam maior incerteza sobre a proporção do processo.</p>
           <p>Além do tamanho, importa quais casos foram registrados. Mudanças de infraestrutura, de carga ou de monitoramento podem alterar as frequências relevantes. Um número não deve ser tratado como universal apenas porque foi armazenado na base.</p>
-          <h3>Zero observado não significa impossibilidade</h3>
+          <h3>Frequência observada nula e probabilidade zero</h3>
           <p>Não encontrar determinado sintoma em uma amostra finita não prova que ele nunca possa ocorrer. Atribuir probabilidade exatamente zero é uma escolha forte: no produto de Bayes, esse zero elimina a hipótese para aquela evidência.</p>
           <p>Do mesmo modo, uma hipótese com prior zero não recupera probabilidade por atualizações usuais com evidências de probabilidade positiva. Diferenciar impossibilidade real de falta de observações é parte da construção da base.</p>
-          <div class="study-note"><p><strong>Quando a soma dos produtos é zero:</strong> o modelo atribuiu probabilidade zero à evidência observada. O posterior pela fórmula usual fica indefinido, pois exigiria divisão por zero. A resposta adequada é reconhecer a incompatibilidade entre o caso e o modelo, não inventar uma distribuição uniforme ou apresentar uma certeza.</p></div>
+          <div class="study-note"><p><strong>Evidência com probabilidade zero no modelo:</strong> o modelo atribuiu probabilidade zero à evidência observada. O posterior pela fórmula usual fica indefinido, pois exigiria divisão por zero. A resposta adequada é reconhecer a incompatibilidade entre o caso e o modelo, não inventar uma distribuição uniforme ou apresentar uma certeza.</p></div>
           <p>Por fim, somar 100% apenas mostra que a distribuição foi normalizada. Não comprova que as hipóteses são suficientes, que as probabilidades foram bem estimadas ou que as suposições de independência descrevem o ambiente.</p>
           <p class="study-source">Referências conceituais: <a href="#ref-1">[1], seções 12.2, 12.5 e 12.6</a>; <a href="#ref-2">[2], raciocínio sob incerteza</a>.</p>
         </div>
@@ -218,17 +218,17 @@
 
       <section class="section section-soft" id="decisao">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Parte X · Do cálculo à ação</p><h2>A hipótese mais provável não determina sozinha o que fazer</h2></div>
+          <div class="section-heading"><p class="eyebrow">Parte X · Interpretação dos resultados</p><h2>Inferência probabilística e tomada de decisão</h2></div>
           <p>O resultado mais completo do motor de inferência é a distribuição de probabilidades. A escolha de uma única hipótese é uma etapa adicional. Ao retornar a categoria com maior posterior, o sistema adota uma regra de seleção; não transforma o resultado em uma conclusão certa.</p>
           <p>Com apenas o timeout, a aplicação tem 48%, mas as outras duas hipóteses, juntas, têm 52%. Portanto, ser a categoria individual mais provável não significa sequer superar todas as alternativas reunidas.</p>
-          <h3>Diagnosticar e decidir respondem a perguntas diferentes</h3>
+          <h3>Distinção entre diagnóstico e decisão</h3>
           <div class="study-grid">
             <article class="study-card"><h3>Inferência</h3><p>“Qual explicação é mais provável, considerando o modelo e as evidências?”</p><p>A resposta depende de hipóteses, probabilidades e observações.</p></article>
             <article class="study-card"><h3>Decisão</h3><p>“Qual ação é mais adequada diante dessa distribuição?”</p><p>A resposta depende também das consequências, dos custos e das alternativas de ação disponíveis.</p></article>
           </div>
           <p>Reiniciar um banco em produção e consultar uma métrica adicional não têm as mesmas consequências. Mesmo quando a falha no banco é a hipótese mais provável, uma intervenção custosa pode ser menos adequada do que continuar investigando. A probabilidade, isoladamente, não escolhe a ação.</p>
           <p>A teoria da decisão formaliza essa distinção combinando probabilidades com a utilidade, ou o custo, dos possíveis resultados. A ideia essencial aqui é que uma ação deve ser avaliada também pelo que pode acontecer quando a hipótese escolhida estiver errada.</p>
-          <h3>O que o sistema precisa preservar</h3>
+          <h3>Base de conhecimento, motor de inferência e saída</h3>
           <p>A base de conhecimento descreve as relações do domínio. As evidências descrevem o caso atual. O motor realiza a atualização. A saída deve manter as alternativas e permitir compreender quais informações foram usadas. Essa separação evita confundir uma tabela de probabilidades com o próprio mecanismo de inferência.</p>
           <p>Calcular um posterior para um caso também não significa, necessariamente, treinar um modelo. Na implementação da aula, as probabilidades já foram fornecidas; o programa as utiliza. Estimar ou revisar essas probabilidades a partir de dados seria uma tarefa adicional.</p>
           <div class="study-note"><p><strong>Interpretação adequada do diagnóstico:</strong> “Sob as hipóteses representadas e a suposição de independência condicional, timeout e pool esgotado levam o modelo a atribuir cerca de 51,06% à falha no banco e 42,55% à sobrecarga da aplicação.” Essa formulação comunica o resultado sem esconder sua proximidade com uma alternativa importante.</p></div>
@@ -238,17 +238,17 @@
 
       <section class="section" id="sintese">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Síntese</p><h2>O que muda quando a incerteza é representada explicitamente</h2></div>
+          <div class="section-heading"><p class="eyebrow">Considerações finais</p><h2>Síntese dos fundamentos do raciocínio probabilístico</h2></div>
           <p>A passagem da regra determinística ao diagnóstico probabilístico não consiste em acrescentar um percentual a uma conclusão já escolhida. Consiste em representar explicações alternativas e atualizar de maneira coerente o suporte atribuído a cada uma.</p>
           <p>O prior define o ponto de partida. A verossimilhança descreve o quanto a evidência é esperada sob cada hipótese. A probabilidade total da evidência fornece a referência comum para obter os posteriores. Nenhum desses elementos pode ser interpretado corretamente sem saber qual é o universo representado.</p>
           <p>Com várias observações, as dependências passam a fazer parte central do modelo. Informação desconhecida não deve ser confundida com evidência negativa, e o mesmo registro não deve ser contado novamente. A fórmula pode ser simples, mas as condições que justificam seu uso precisam estar claras.</p>
-          <div class="study-note"><p><strong>Ideia central:</strong> raciocinar sob incerteza é tornar explícito o que sabemos, o que ainda permanece possível e como uma nova informação modifica essa avaliação. O posterior organiza a incerteza; não a faz desaparecer.</p></div>
+          <div class="study-note"><p><strong>Síntese conceitual:</strong> raciocinar sob incerteza é tornar explícito o que sabemos, o que ainda permanece possível e como uma nova informação modifica essa avaliação. O posterior organiza a incerteza; não a faz desaparecer.</p></div>
         </div>
       </section>
 
       <section class="section section-soft" id="referencias">
         <div class="container">
-          <div class="section-heading"><p class="eyebrow">Referências</p><h2>Materiais de apoio à fundamentação</h2></div>
+          <div class="section-heading"><p class="eyebrow">Bibliografia</p><h2>Referências bibliográficas</h2></div>
           <div class="study-references">
             <article class="study-card" id="ref-1"><h3>[1] Artificial Intelligence: A Modern Approach</h3><p>RUSSELL, Stuart; NORVIG, Peter. 4. ed. Capítulo 12, <em>Quantifying Uncertainty</em>, especialmente as seções 12.1 a 12.6: incerteza, notação probabilística, distribuições conjuntas, independência, Bayes e modelos Naive Bayes.</p></article>
             <article class="study-card" id="ref-2"><h3>[2] Artificial Intelligence: Structures and Strategies for Complex Problem Solving</h3><p>LUGER, George F. Capítulo 9, <em>Reasoning in Uncertain Situations</em>: diagnóstico, hipóteses, informação incompleta e raciocínio em sistemas baseados em conhecimento.</p></article>
@@ -257,7 +257,7 @@
         </div>
       </section>
     </main>
-    <aside class="toc" aria-label="Índice do aprofundamento"><div class="toc-head"><span class="toc-label">Neste material</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#incerteza">1 · Conhecimento e incerteza</a><a href="#modelo">2 · Hipóteses e evidências</a><a href="#probabilidades">3 · Ler as probabilidades</a><a href="#bayes">4 · O significado de Bayes</a><a href="#forca">5 · A força da evidência</a><a href="#independencia">6 · Independência condicional</a><a href="#atualizacao">7 · Atualizar sem duplicar</a><a href="#ausencia">8 · Ausência e desconhecimento</a><a href="#origem">9 · Qualidade da base</a><a href="#decisao">10 · Diagnosticar e decidir</a><a href="#sintese">Síntese</a><a href="#referencias">Referências</a></nav></aside>
+    <aside class="toc" aria-label="Índice do aprofundamento"><div class="toc-head"><span class="toc-label">Neste material</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice" title="Recolher índice">›</button></div><nav><a href="#incerteza">1 · Representação da incerteza</a><a href="#modelo">2 · Hipóteses e evidências</a><a href="#probabilidades">3 · Notação probabilística</a><a href="#bayes">4 · Teorema de Bayes</a><a href="#forca">5 · Prior e verossimilhança</a><a href="#independencia">6 · Independência condicional</a><a href="#atualizacao">7 · Atualização sequencial</a><a href="#ausencia">8 · Tratamento das evidências</a><a href="#origem">9 · Estimação de probabilidades</a><a href="#decisao">10 · Inferência e decisão</a><a href="#sintese">Síntese</a><a href="#referencias">Referências</a></nav></aside>
   </div>
   <footer><div class="container">Inteligência Artificial Aplicada · Aula 07 · Aprofundamento em revisão · Engenharia de Software · 2026/2</div></footer>
 </body>
