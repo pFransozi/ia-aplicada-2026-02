@@ -1,0 +1,99 @@
+/* Componentes exclusivos do aprofundamento. Tema e estrutura vêm de ensino.css. */
+.lesson-seven-study .study-status {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--soft);
+  font-size: .85rem;
+}
+.lesson-seven-study .study-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.lesson-seven-study .study-grid > * { min-width: 0; }
+.lesson-seven-study .study-card {
+  padding: 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 10px);
+  background: var(--paper);
+}
+.lesson-seven-study .study-card h3,
+.lesson-seven-study .study-card h4 { margin-top: 0; }
+.lesson-seven-study .study-card p:last-child,
+.lesson-seven-study .study-note p:last-child { margin-bottom: 0; }
+.lesson-seven-study .study-note {
+  margin: 1.4rem 0;
+  padding: 1.1rem 1.25rem;
+  border-left: 3px solid var(--blue);
+  border-radius: 0 var(--radius, 10px) var(--radius, 10px) 0;
+  background: var(--soft);
+}
+/* O destaque permanece inline, sem separar palavras nem quebrar a leitura. */
+.lesson-seven-study p strong,
+.lesson-seven-study li strong,
+.lesson-seven-study td strong { display: inline; }
+.lesson-seven-study .study-math {
+  margin: 1.25rem 0;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 10px);
+  background: var(--soft);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.lesson-seven-study .study-math .math-line { display: block; }
+.lesson-seven-study .study-table-wrap {
+  max-width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 10px);
+  background: var(--paper);
+  -webkit-overflow-scrolling: touch;
+}
+.lesson-seven-study .study-table {
+  width: 100%;
+  min-width: 580px;
+  border-collapse: collapse;
+  font-size: .94rem;
+  font-variant-numeric: tabular-nums;
+}
+.lesson-seven-study .study-table caption {
+  padding: .8rem 1rem;
+  text-align: left;
+  color: var(--muted);
+  font-size: .88rem;
+}
+.lesson-seven-study .study-table th,
+.lesson-seven-study .study-table td {
+  padding: .8rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+.lesson-seven-study .study-table thead th { background: var(--soft); }
+.lesson-seven-study .study-table tbody th { font-weight: 500; }
+.lesson-seven-study .study-table tbody tr:last-child > * { border-bottom: 0; }
+.lesson-seven-study .study-source { margin-top: 1.5rem; font-size: .83rem; color: var(--muted); }
+.lesson-seven-study .study-source a { color: inherit; text-underline-offset: .18em; }
+.lesson-seven-study .study-references { display: grid; gap: 1rem; }
+.lesson-seven-study .study-references article { scroll-margin-top: 100px; }
+.lesson-seven-study :focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+@media (max-width: 760px) {
+  .lesson-seven-study .study-grid { grid-template-columns: minmax(0, 1fr); }
+  .lesson-seven-study .study-math { padding: .85rem; font-size: .94rem; }
+}
+@media print {
+  .lesson-seven-study .study-table-wrap { overflow: visible; }
+  .lesson-seven-study .study-table { min-width: 0; font-size: .85rem; }
+  .lesson-seven-study .study-card,
+  .lesson-seven-study .study-note,
+  .lesson-seven-study .study-math { break-inside: avoid; }
+}
