@@ -170,6 +170,11 @@ if timeout and pool_esgotado:
       <h3>O conhecimento agora contém números</h3>
       <p>Considere três causas possíveis para um timeout:</p>
 
+      <div class="warning-card">
+        <p><strong>Prior:</strong> é a probabilidade inicial de cada hipótese, antes de considerar a evidência <code>timeout</code>.</p>
+        <p><strong>P(timeout | hipótese):</strong> é a probabilidade de ocorrer um <code>timeout</code> se aquela hipótese for verdadeira. A barra <code>|</code> significa “dado que”: probabilidade de timeout, dado que a hipótese é verdadeira.</p>
+      </div>
+
       <div class="comparison-table-wrap">
         <table class="comparison-table result-table">
           <thead><tr><th>Hipótese</th><th>Prior</th><th>P(timeout | hipótese)</th></tr></thead>
