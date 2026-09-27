@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Rascunho da Aula 09: lógica fuzzy, pertinência, regras, inferência, agregação, centroide e estudo orientado com aplicação em Python.">
+  <title>Aula 09 · Lógica fuzzy · Rascunho</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../aula-04.css">
+  <script src="https://pfransozi.github.io/assets/js/ensino.js?v=9"></script>
+  <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=13">
+  <link rel="stylesheet" href="aulas-08-09.css">
+</head>
+<body class="teaching-page teaching-lesson lesson-page draft-lesson">
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<header class="site-header"><div class="container nav-wrap">
+  <a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 09 · Rascunho</small></span></a>
+  <nav class="main-nav" aria-label="Navegação principal"><a href="../index.html">Página principal</a><a href="../curso.html">Visão geral</a><a href="index.html">Rascunhos</a><button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button></nav>
+</div></header>
+<div class="lesson-shell lesson-page-grid">
+<main id="conteudo">
+<section class="hero" id="inicio"><div class="container hero-grid">
+  <div>
+    <div class="draft-banner"><strong>Rascunho em validação.</strong> Aula e proposta de atividade para revisão antes da publicação oficial.</div>
+    <p class="eyebrow">Aula 09 · Lógica fuzzy · Estudo orientado</p>
+    <h1>Das regras aos graus de pertinência</h1>
+    <p class="hero-lead">Representar conceitos como carga baixa, média e alta e combinar regras para produzir uma saída numérica explicável.</p>
+    <div class="hero-actions"><a class="button button-primary" href="#retomada">Começar o estudo</a><a class="button button-secondary" href="#aps">Ver a proposta de APS</a></div>
+  </div>
+  <aside class="guiding-card"><span>Pergunta orientadora</span><blockquote>Como um sistema pode trabalhar com conceitos graduais sem transformar tudo em um corte rígido entre verdadeiro e falso?</blockquote></aside>
+</div></section>
+
+<section class="section section-soft" id="objetivos"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Como estudar</p><h2>Compreender, acompanhar e depois modificar</h2></div>
+  <p>O estudo retoma os sistemas de regras da Aula 06 e distingue a lógica fuzzy do raciocínio probabilístico da Aula 07. Um único exemplo será acompanhado desde as entradas até a saída. A atividade ao final usa essa mesma estrutura, sem exigir que um sistema completo seja construído sem orientação.</p>
+  <ol class="draft-steps"><li><strong>Entender os conceitos</strong>Distinguir conjunto clássico, conjunto fuzzy e probabilidade.</li><li><strong>Refazer o exemplo</strong>Acompanhar pertinências, regras, agregação e saída.</li><li><strong>Testar e interpretar</strong>Executar o código e analisar uma alteração de modelagem.</li></ol>
+  <div class="draft-note"><p><strong>Ao final:</strong> identificar variáveis linguísticas; calcular graus de pertinência; interpretar a ativação de regras; explicar agregação e defuzzificação; testar e justificar o comportamento de um sistema fuzzy simples.</p></div>
+  <details class="draft-details"><summary>Competências e habilidades trabalhadas</summary><p><strong>C2 · H6 e C11 · H38:</strong> aplicar conceitos e desenvolver um sistema de regras. <strong>C3 · H9 e H10:</strong> identificar variáveis e comparar decisões de modelagem. <strong>C13 · H45:</strong> avaliar resultados e limitações com base nos testes. O conteúdo formativo correspondente é “Lógica fuzzy”. <a href="#ref-ppc">[3]</a></p></details>
+</div></section>
+
+<section class="section" id="retomada"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Retomada das aulas 06 e 07</p><h2>Uma condição precisa mudar de uma vez?</h2></div>
+  <p>Considere uma regra que chama de alta toda carga de CPU igual ou superior a 70%. Nesse modelo, 69,9% não pertence ao conjunto “carga alta”, enquanto 70% pertence. O corte é preciso, mas produz uma mudança abrupta de classificação.</p>
+  <p>A lógica fuzzy permite representar uma transição gradual. Uma mesma medida pode ter algum grau de pertinência ao conjunto “carga média” e algum grau ao conjunto “carga alta”. A medida continua sendo conhecida; o que foi modelado de forma gradual foi o significado dessas categorias. <a href="#ref-luger">[1]</a></p>
+  <div class="draft-table-wrap"><table class="draft-table"><thead><tr><th>Abordagem</th><th>Pergunta principal</th><th>O número representa</th></tr></thead><tbody>
+    <tr><td>Conjunto clássico</td><td>A medida atende ao critério definido?</td><td>Pertence ou não pertence: 1 ou 0.</td></tr>
+    <tr><td>Raciocínio probabilístico</td><td>Qual a probabilidade de uma hipótese, dadas as evidências?</td><td>Grau de crença sobre a hipótese.</td></tr>
+    <tr><td>Conjunto fuzzy</td><td>Em que grau a medida se enquadra no conceito definido?</td><td>Grau de pertinência entre 0 e 1.</td></tr>
+  </tbody></table></div>
+  <div class="draft-note"><p><strong>Pertinência não é probabilidade.</strong> Dizer que uma carga de CPU tem pertinência 0,5 ao conjunto “alta” não significa que há 50% de chance de a CPU estar com carga alta. Estamos avaliando uma medida conhecida segundo uma definição gradual. Essa distinção aparece nos materiais ao separar grau de verdade e grau de crença. <a href="#ref-aima">[2]</a></p></div>
+  <p>Também não é necessário aprender pesos de uma rede neural para construir este sistema. No exemplo, funções e regras serão explicitamente definidas, como conhecimento do domínio. <a href="#ref-luger">[1]</a></p>
+</div></section>
+
+<section class="section section-soft" id="problema"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Problema condutor</p><h2>Calcular a prioridade de atendimento a um serviço</h2></div>
+  <span class="draft-label">Modelo didático com dados e regras definidos para a aula</span>
+  <p>Uma equipe acompanha a carga de CPU e a ocupação da fila de requisições de um serviço. Deseja produzir um <strong>índice de prioridade de atendimento de 0 a 100 pontos</strong>. O índice será uma saída do modelo, não uma probabilidade de falha nem um diagnóstico conclusivo.</p>
+  <div class="draft-table-wrap"><table class="draft-table"><thead><tr><th>Variável</th><th>Valores considerados</th><th>Termos linguísticos</th></tr></thead><tbody>
+    <tr><td>Carga de CPU</td><td>0% a 100%</td><td>Baixa, média e alta.</td></tr>
+    <tr><td>Ocupação da fila</td><td>0% a 100% da capacidade definida.</td><td>Baixa, média e alta.</td></tr>
+    <tr><td>Prioridade de atendimento</td><td>0 a 100 pontos.</td><td>Baixa, média e alta.</td></tr>
+  </tbody></table></div>
+  <p>As etapas seguem o procedimento de inferência fuzzy por regras apresentado nos materiais: interpretar entradas por funções de pertinência, combinar condições, reunir as saídas das regras e obter um valor final por defuzzificação. O contexto do serviço, as faixas e as regras são adaptações didáticas. <a href="#ref-luger">[1]</a></p>
+  <div class="draft-note"><p><strong>Limite do exemplo:</strong> as faixas e regras não foram calibradas para um serviço real. Elas permitem estudar o mecanismo. Uma aplicação real exigiria validar essas escolhas e incluir outros fatores relevantes para o atendimento.</p></div>
+</div></section>
+
+<section class="section" id="pertinencia"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Representação</p><h2>Variáveis linguísticas e funções de pertinência</h2></div>
+  <p>Uma <strong>variável linguística</strong> pode ser descrita por termos, como “baixa”, “média” e “alta”. Cada termo corresponde a um conjunto fuzzy. O <strong>universo de discurso</strong> é o conjunto de valores que estamos considerando para a variável. <a href="#ref-luger">[1]</a></p>
+  <p>A função de pertinência associa cada valor a um número entre 0 e 1. Usaremos a notação <code>µ_alta(x)</code>, lida como “grau de pertinência de x ao conjunto alta”. O símbolo <code>µ</code> é a letra grega mi. Não representa uma probabilidade.</p>
+  <div class="draft-grid">
+    <article class="draft-card"><h3>Pertinência 0</h3><p>O valor não se enquadra naquele conjunto, segundo a função definida.</p></article>
+    <article class="draft-card"><h3>Pertinência 1</h3><p>O valor se enquadra plenamente naquele conjunto. Valores intermediários expressam graus intermediários.</p></article>
+  </div>
+  <h3>As funções adotadas no exemplo</h3>
+  <p>Para facilitar o acompanhamento, usaremos as mesmas formas numéricas para carga de CPU, ocupação da fila e prioridade. Essa igualdade entre formas é uma escolha deste exercício; cada variável poderia ter uma definição própria.</p>
+  <div class="draft-table-wrap"><table class="draft-table"><thead><tr><th>Conjunto</th><th>Definição no intervalo de 0 a 100</th><th>Como interpretar</th></tr></thead><tbody>
+    <tr><td>Baixa</td><td>1 até 20; <code>(50 − x) / 30</code> entre 20 e 50; 0 a partir de 50.</td><td>Possui um patamar inicial e diminui gradualmente até deixar de se aplicar.</td></tr>
+    <tr><td>Média</td><td>0 até 20; <code>(x − 20) / 30</code> até 50; <code>(80 − x) / 30</code> até 80; 0 depois de 80.</td><td>Forma triangular: cresce até um pico em 50 e depois diminui.</td></tr>
+    <tr><td>Alta</td><td>0 até 50; <code>(x − 50) / 30</code> entre 50 e 80; 1 a partir de 80.</td><td>Cresce gradualmente até atingir um patamar.</td></tr>
+  </tbody></table></div>
+  <p>Os denominadores são 30 porque as transições vão de 20 a 50 ou de 50 a 80. Por exemplo, para <code>x = 65</code>:</p>
+  <div class="draft-formula"><code>µ_média(65) = (80 − 65) / 30 = 0,5</code></div>
+  <div class="draft-formula"><code>µ_alta(65) = (65 − 50) / 30 = 0,5</code></div>
+  <p>A carga é exatamente 65%. Ela se enquadra parcialmente nos dois termos da modelagem. Não estamos afirmando que metade da CPU foi medida e a outra metade é desconhecida.</p>
+  <div class="draft-table-wrap"><table class="draft-table"><caption>Leitura das funções em alguns pontos.</caption><thead><tr><th>x</th><th>µ_baixa(x)</th><th>µ_média(x)</th><th>µ_alta(x)</th></tr></thead><tbody>
+    <tr><td>20</td><td>1</td><td>0</td><td>0</td></tr><tr><td>35</td><td>0,5</td><td>0,5</td><td>0</td></tr><tr><td>50</td><td>0</td><td>1</td><td>0</td></tr><tr><td>65</td><td>0</td><td>0,5</td><td>0,5</td></tr><tr><td>80</td><td>0</td><td>0</td><td>1</td></tr>
+  </tbody></table></div>
+  <div class="draft-note"><p><strong>Sem normalização probabilística:</strong> neste desenho, os graus dos três termos somam 1 em cada entrada. Isso decorre das funções escolhidas e não transforma os graus em probabilidades. Cada função descreve pertinência ao seu próprio conjunto; não fazemos a normalização de hipóteses usada na Aula 07.</p></div>
+</div></section>
+
+<section class="section section-soft" id="regras"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Base de conhecimento</p><h2>Como as regras expressam a decisão?</h2></div>
+  <p>Uma regra relaciona condições de entrada com um termo de saída. Por exemplo: <strong>SE a carga de CPU é alta E a ocupação da fila é média, ENTÃO a prioridade é alta.</strong></p>
+  <p>A tabela reúne as nove regras do modelo. A linha indica o termo da CPU; a coluna, o termo da fila; a célula indica o termo de prioridade. Essa forma de organizar regras se aproxima da matriz associativa fuzzy apresentada nos materiais. <a href="#ref-luger">[1]</a></p>
+  <div class="draft-table-wrap"><table class="draft-table"><caption>Base completa do exemplo: todas as combinações dos três termos de entrada.</caption><thead><tr><th>CPU / Fila</th><th>Fila baixa</th><th>Fila média</th><th>Fila alta</th></tr></thead><tbody>
+    <tr><th scope="row">CPU baixa</th><td>R1: baixa</td><td>R2: média</td><td>R3: alta</td></tr>
+    <tr><th scope="row">CPU média</th><td>R4: média</td><td>R5: média</td><td>R6: alta</td></tr>
+    <tr><th scope="row">CPU alta</th><td>R7: alta</td><td>R8: alta</td><td>R9: alta</td></tr>
+  </tbody></table></div>
+  <h3>O operador E será o mínimo</h3>
+  <p>Para uma regra com duas condições, usaremos o menor dos dois graus de pertinência como <strong>grau de ativação</strong>. Se uma condição vale 0,5 e a outra vale 0,8, a ativação é <code>min(0,5; 0,8) = 0,5</code>. Para condições ligadas por OU, a convenção apresentada nos materiais usa o máximo. Nesta base, todas as regras usam E. <a href="#ref-luger">[1]</a></p>
+  <div class="draft-formula"><code>ativação da regra = min(grau da condição da CPU, grau da condição da fila)</code></div>
+  <p>Esses são os operadores adotados para o procedimento desta aula. Não se trata de multiplicar probabilidades condicionais nem de supor independência entre CPU e fila.</p>
+  <div class="draft-note"><p><strong>Mais de uma regra pode participar.</strong> Não usamos um <code>if / elif</code> para escolher somente a primeira regra nem retornamos apenas a saída da regra mais forte. Avaliamos as regras, obtemos suas contribuições e as combinamos. Também não repetimos o encadeamento para frente da Aula 06: neste modelo, as regras relacionam diretamente entradas e saída. <a href="#ref-luger">[1]</a></p></div>
+</div></section>
+
+<section class="section" id="exemplo"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Exemplo resolvido</p><h2>CPU em 65% e fila em 40%</h2></div>
+  <ol class="draft-steps"><li><strong>Fuzzificar</strong>Calcular os graus das entradas.</li><li><strong>Inferir</strong>Calcular a ativação de cada regra.</li><li><strong>Agregar</strong>Reunir as contribuições na saída.</li><li><strong>Defuzzificar</strong>Produzir um valor numérico final.</li></ol>
+  <h3>Passo 1 · Fuzzificação</h3>
+  <p>Fuzzificar significa passar de uma medida para seus graus de pertinência aos termos definidos. Para CPU em 65%, já encontramos 0,5 em média e 0,5 em alta. Para fila em 40%:</p>
+  <div class="draft-formula"><code>µ_baixa(40) = (50 − 40) / 30 = 1/3 ≈ 0,333</code></div>
+  <div class="draft-formula"><code>µ_média(40) = (40 − 20) / 30 = 2/3 ≈ 0,667</code></div>
+  <div class="draft-table-wrap"><table class="draft-table"><thead><tr><th>Entrada</th><th>Baixa</th><th>Média</th><th>Alta</th></tr></thead><tbody><tr><td>CPU = 65</td><td>0</td><td>0,5</td><td>0,5</td></tr><tr><td>Fila = 40</td><td>1/3</td><td>2/3</td><td>0</td></tr></tbody></table></div>
+  <h3>Passo 2 · Ativação das regras</h3>
+  <p>Somente quatro regras têm as duas condições com graus maiores que zero:</p>
+  <div class="draft-table-wrap"><table class="draft-table"><thead><tr><th>Regra</th><th>Condições</th><th>Saída</th><th>Ativação</th></tr></thead><tbody>
+    <tr><td>R4</td><td>CPU média E fila baixa</td><td>Média</td><td><code>min(0,5; 1/3) = 1/3</code></td></tr>
+    <tr><td>R5</td><td>CPU média E fila média</td><td>Média</td><td><code>min(0,5; 2/3) = 0,5</code></td></tr>
+    <tr><td>R7</td><td>CPU alta E fila baixa</td><td>Alta</td><td><code>min(0,5; 1/3) = 1/3</code></td></tr>
+    <tr><td>R8</td><td>CPU alta E fila média</td><td>Alta</td><td><code>min(0,5; 2/3) = 0,5</code></td></tr>
+  </tbody></table></div>
+  <p>As demais regras têm pelo menos uma condição com grau zero e, portanto, ativação zero. Regras que apontam para o mesmo conjunto de saída serão reunidas pelo máximo, não somadas.</p>
+  <h3>Passo 3 · Recorte dos conjuntos de saída</h3>
+  <p>Uma ativação de 0,5 para “prioridade alta” ainda não é a resposta final. Ela determina a altura máxima da contribuição dessa regra. Para cada valor possível de prioridade <code>y</code>, recortamos a função de saída pelo mínimo entre a ativação e a pertinência original.</p>
+  <div class="draft-formula"><code>contribuição da regra em y = min(ativação, µ_do_conjunto_de_saída(y))</code></div>
+  <p>Como o maior grau das regras que apontam para média é 0,5, esse conjunto fica recortado em 0,5. O mesmo acontece com alta. A regra mais fraca que aponta para o mesmo conjunto não aumenta a altura acima desse máximo.</p>
+  <h3>Passo 4 · Agregação pelo máximo</h3>
+  <p>Agora reunimos todas as contribuições. Em cada valor <code>y</code>, mantemos o maior grau produzido pelas regras. Esse procedimento corresponde à união das regiões de saída do exemplo dos materiais. <a href="#ref-luger">[1]</a></p>
+  <div class="draft-formula"><code>µ_agregada(y) = max(contribuição de R1 em y, ..., contribuição de R9 em y)</code></div>
+  <p>Por exemplo, em <code>y = 60</code>, o conjunto média possui pertinência <code>2/3</code>, recortada para <code>0,5</code>. Alta possui pertinência <code>1/3</code>, que continua <code>1/3</code> após o recorte. O agregado é <code>max(0,5; 1/3) = 0,5</code>, não a soma dos dois valores.</p>
+  <div class="draft-note"><p><strong>Dois usos diferentes de mínimo:</strong> primeiro, calculamos quanto as condições ativam a regra. Depois, limitamos a contribuição do conjunto de saída por essa ativação. O máximo tem outro papel: reunir contribuições.</p></div>
+</div></section>
+
+<section class="section section-soft" id="defuzzificacao"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Da região de saída ao número</p><h2>Defuzzificação pelo centroide</h2></div>
+  <p>Depois da agregação, ainda temos graus associados a diferentes valores de prioridade. <strong>Defuzzificar</strong> é transformar essa distribuição em um valor de saída. Os materiais apresentam o centroide da união das regiões como uma forma de fazer isso. <a href="#ref-luger">[1]</a></p>
+  <p>Nesta implementação didática, usaremos um <strong>universo de saída discreto com onze pontos</strong>: <code>0, 10, 20, ..., 100</code>. A forma discreta permite mostrar todos os valores utilizados no cálculo, sem exigir integração. Essa discretização é uma escolha da implementação da aula.</p>
+  <div class="draft-table-wrap"><table class="draft-table"><caption>Distribuição agregada do caso CPU = 65 e fila = 40.</caption><thead><tr><th>Prioridade y</th><th>µ_agregada(y)</th><th>y × µ_agregada(y)</th></tr></thead><tbody>
+    <tr><td>0</td><td>0</td><td>0</td></tr><tr><td>10</td><td>0</td><td>0</td></tr><tr><td>20</td><td>0</td><td>0</td></tr><tr><td>30</td><td>1/3</td><td>10</td></tr><tr><td>40</td><td>0,5</td><td>20</td></tr><tr><td>50</td><td>0,5</td><td>25</td></tr><tr><td>60</td><td>0,5</td><td>30</td></tr><tr><td>70</td><td>0,5</td><td>35</td></tr><tr><td>80</td><td>0,5</td><td>40</td></tr><tr><td>90</td><td>0,5</td><td>45</td></tr><tr><td>100</td><td>0,5</td><td>50</td></tr>
+  </tbody></table></div>
+  <p>O centroide discreto é a média dos valores de saída ponderada pelos graus agregados:</p>
+  <div class="draft-formula"><code>prioridade = Σ[y × µ_agregada(y)] / Σ[µ_agregada(y)]</code></div>
+  <p>O símbolo <code>Σ</code> significa somar os termos para todos os pontos do universo. O numerador soma os produtos da última coluna. O denominador soma os graus da coluna central. Valores com grau zero não contribuem.</p>
+  <div class="draft-formula"><code>prioridade = 255 / (1/3 + 7 × 0,5) = 255 / (23/6) ≈ 66,52</code></div>
+  <p>O modelo retorna <strong>66,52 pontos de prioridade</strong>. Não retorna 66,52% de chance de falha, nem afirma que esse índice seja adequado a qualquer serviço. Os cálculos usam os valores sem arredondamento; o arredondamento é feito apenas na apresentação.</p>
+  <div class="draft-note"><p><strong>O resultado depende da representação.</strong> Mudar funções, regras ou os pontos do universo de saída pode modificar o número obtido. O centroide discreto deste exemplo não deve ser apresentado como o valor exato de uma integração contínua.</p></div>
+</div></section>
+
+<section class="section" id="codigo"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Implementação guiada</p><h2>Um sistema fuzzy em Python, sem bibliotecas adicionais</h2></div>
+  <p>Os três blocos formam um único programa. Execute-os na sequência. A função de pertinência, a base de regras e o motor de inferência ficam separados para permitir identificar o que muda quando o conhecimento do domínio é alterado.</p>
+  <div class="draft-actions"><button type="button" id="baixar-codigo">Baixar o exemplo completo (.py)</button></div>
+  <h3>Parte 1 · Calcular as pertinências</h3>
+  <p><code>min()</code> e <code>max()</code> implementam os patamares e os trechos lineares das funções. O programa rejeita entradas fora do intervalo definido, em vez de transformar silenciosamente uma medida inválida em uma medida válida.</p>
+  <pre class="code-block python-part"><code>from math import isfinite
+
+
+def pertinencias(x):
+    """Conjuntos definidos para valores entre zero e cem."""
+    x = float(x)
+    if not isfinite(x) or not 0 &lt;= x &lt;= 100:
+        raise ValueError("A entrada deve ser um número finito entre 0 e 100.")
+    # Baixa: patamar até 20; queda linear até 50.
+    baixa = max(0.0, min(1.0, (50 - x) / 30))
+    # Média: triângulo com base em 20 e 80 e pico em 50.
+    media = max(0.0, min((x - 20) / 30, (80 - x) / 30))
+    # Alta: subida entre 50 e 80; patamar a partir de 80.
+    alta = max(0.0, min(1.0, (x - 50) / 30))
+    return {"baixa": baixa, "media": media, "alta": alta}</code></pre>
+  <h3>Parte 2 · Base de regras e universo da saída</h3>
+  <p>A ordem das regras corresponde a R1 até R9. Cada tupla guarda os termos de CPU, fila e prioridade. O código usa <code>media</code> sem acento como identificador.</p>
+  <pre class="code-block python-part"><code># Cada tupla representa: (termo da CPU, termo da fila, termo da prioridade).
+REGRAS = [
+    ("baixa", "baixa", "baixa"),
+    ("baixa", "media", "media"),
+    ("baixa", "alta", "alta"),
+    ("media", "baixa", "media"),
+    ("media", "media", "media"),
+    ("media", "alta", "alta"),
+    ("alta", "baixa", "alta"),
+    ("alta", "media", "alta"),
+    ("alta", "alta", "alta"),
+]
+# Universo discreto da saída: onze pontos igualmente espaçados.
+UNIVERSO = tuple(range(0, 101, 10))</code></pre>
+  <h3>Parte 3 · Inferência, agregação, centroide e testes</h3>
+  <p>O primeiro laço percorre as regras. O segundo percorre os valores de prioridade. <code>agregado[y]</code> guarda a maior contribuição recebida por aquele valor. Ao final, calculamos o centroide e retornamos também os resultados intermediários, para que a decisão possa ser examinada.</p>
+  <pre class="code-block python-part"><code>def inferir(cpu, fila):
+    mu_cpu = pertinencias(cpu)
+    mu_fila = pertinencias(fila)
+    agregado = {y: 0.0 for y in UNIVERSO}
+    ativacoes = []
+
+    for termo_cpu, termo_fila, saida in REGRAS:
+        # E: a regra é ativada pelo menor grau entre suas condições.
+        grau = min(mu_cpu[termo_cpu], mu_fila[termo_fila])
+        ativacoes.append((termo_cpu, termo_fila, saida, grau))
+        for y in UNIVERSO:
+            mu_saida = pertinencias(y)[saida]
+            # Recorta o conjunto de saída na altura da ativação.
+            recorte = min(grau, mu_saida)
+            # Reúne as contribuições pelo máximo em cada ponto.
+            agregado[y] = max(agregado[y], recorte)
+
+    denominador = sum(agregado.values())
+    if denominador &lt;= 0:
+        raise ValueError("Nenhuma regra produziu saída; revise a base de regras.")
+    numerador = sum(y * grau for y, grau in agregado.items())
+    prioridade = numerador / denominador
+    return prioridade, mu_cpu, mu_fila, ativacoes, agregado
+
+
+resultado, mu_cpu, mu_fila, ativacoes, agregado = inferir(65, 40)
+print("CPU:", {k: round(v, 3) for k, v in mu_cpu.items()})
+print("Fila:", {k: round(v, 3) for k, v in mu_fila.items()})
+print("Regras ativadas:")
+for cpu, fila, saida, grau in ativacoes:
+    if grau &gt; 0:
+        print(f"CPU {cpu}; fila {fila} -&gt; {saida}: {grau:.3f}")
+print("Saída agregada:", {y: round(g, 3) for y, g in agregado.items()})
+print(f"Prioridade: {resultado:.2f} pontos em uma escala de 0 a 100")
+
+# Verificações de coerência do modelo didático.
+assert pertinencias(50) == {"baixa": 0.0, "media": 1.0, "alta": 0.0}
+assert abs(resultado - 66.52173913043478) &lt; 1e-9
+assert all(0 &lt;= grau &lt;= 1 for grau in agregado.values())
+assert 0 &lt;= resultado &lt;= 100</code></pre>
+  <div class="draft-output">Prioridade: 66.52 pontos em uma escala de 0 a 100</div>
+  <p>Os testes verificam propriedades do exemplo. O teste do valor 66,52 corresponde à <strong>base original</strong>. Se funções ou regras forem alteradas intencionalmente, esse teste deve permanecer associado à versão original; a nova versão precisa ser analisada conforme a mudança realizada.</p>
+  <div class="draft-note"><p><strong>Base incompleta:</strong> se todas as contribuições forem zero, não há centroide a calcular. O programa informa o problema em vez de dividir por zero ou retornar uma prioridade inventada. As nove regras originais cobrem as combinações de termos usadas aqui, mas uma alteração pode criar lacunas.</p></div>
+</div></section>
+
+<section class="section section-soft" id="explorar"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Exploração do exemplo</p><h2>Observar os cálculos antes de alterar o programa</h2></div>
+  <p>O simulador abaixo reproduz a base original e o mesmo universo discreto do Python. Ele serve para observar as etapas; as modificações solicitadas na atividade devem ser feitas e registradas no código.</p>
+  <div class="draft-card">
+    <div class="draft-controls"><label for="cpu">Carga de CPU (%)<input id="cpu" type="number" min="0" max="100" step="any" value="65"></label><label for="fila">Ocupação da fila (%)<input id="fila" type="number" min="0" max="100" step="any" value="40"></label></div>
+    <div class="draft-actions"><button id="calcular" type="button">Calcular com a base original</button></div>
+    <div class="draft-output" id="resultado-simulador" role="status" aria-live="polite">Informe as entradas e calcule para acompanhar as pertinências e a prioridade.</div>
+    <noscript><p>O simulador requer JavaScript. O exemplo completo em Python permanece disponível no texto acima.</p></noscript>
+  </div>
+</div></section>
+
+<section class="section" id="limites"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Interpretação</p><h2>O que o resultado permite afirmar?</h2></div>
+  <p>O sistema aplica as funções e regras que recebeu. Para as mesmas entradas, funções, regras e universo de saída, o cálculo retorna o mesmo resultado. Não há sorteio nem atualização automática da base por aprendizagem nesta implementação.</p>
+  <div class="draft-grid"><article class="draft-card"><h3>Saída numérica não é garantia</h3><p>O índice precisa ser avaliado frente ao problema. Um número com casas decimais não prova que as regras sejam adequadas.</p></article><article class="draft-card"><h3>Regras são conhecimento modelado</h3><p>As definições devem refletir o contexto. A atividade permite observar como uma mudança na base modifica o comportamento.</p></article><article class="draft-card"><h3>Cobertura importa</h3><p>É necessário testar valores centrais, transições e extremos. Uma base incompleta pode deixar entradas sem saída.</p></article><article class="draft-card"><h3>Não substituir conceitos</h3><p>Pertinência não é posterior de Bayes. A prioridade produzida também não é, por si só, uma classe aprendida a partir de dados.</p></article></div>
+  <p>O exemplo preserva o núcleo do procedimento de regras fuzzy dos materiais, mas não pretende substituir os testes de um sistema de controle ou de decisão real. <a href="#ref-luger">[1]</a></p>
+</div></section>
+
+<section class="section section-soft" id="aps"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Aplicação orientada</p><h2>Proposta de APS · Analisar e modificar um sistema fuzzy</h2><p>Atividades sem resolução. Utilize o exemplo fornecido como base e preserve uma cópia da versão original para as comparações.</p></div>
+  <article class="draft-exercise"><h3>Etapa 1 · Explicar o modelo</h3><ol><li>Identifique as entradas, a saída, seus universos e os termos linguísticos.</li><li>Explique a diferença entre grau de pertinência e probabilidade.</li><li>Indique no código onde ocorrem fuzzificação, ativação, recorte, agregação e defuzzificação.</li></ol></article>
+  <article class="draft-exercise"><h3>Etapa 2 · Acompanhar um novo caso</h3><p>Considere <strong>CPU = 35% e fila = 65%</strong>. Calcule as pertinências e identifique as regras ativadas antes de executar o programa. Monte uma tabela com regra, condições, consequência e grau de ativação. Depois use <code>inferir(35, 65)</code> para conferir as etapas e registrar a saída numérica.</p><p>Uma eventual divergência deve ser explicada e corrigida. Não substitua os cálculos pelo registro da execução.</p></article>
+  <article class="draft-exercise"><h3>Etapa 3 · Modificar uma regra</h3><p>Na versão modificada, altere apenas R7: <strong>SE CPU é alta E fila é baixa, ENTÃO prioridade é média</strong>. As demais regras e funções devem permanecer iguais. Essa é uma mudança hipotética para estudar os efeitos da base de conhecimento, não uma recomendação para um serviço real.</p><p>Compare as versões original e modificada nos casos <code>(20, 20)</code>, <code>(50, 50)</code>, <code>(80, 20)</code>, <code>(20, 80)</code> e <code>(65, 40)</code>. Para cada caso, registre prioridade original, prioridade modificada, diferença e regras que explicam a mudança ou sua ausência.</p><p>Não mantenha o teste numérico da base original como uma exigência para a saída modificada. Preserve-o para testar a versão original e explique a nova saída a partir das regras.</p></article>
+  <article class="draft-exercise"><h3>Etapa 4 · Testar limites e interpretar</h3><ol><li>Com a base original e fila fixa em 40%, teste CPU em <code>49,9%</code>, <code>50%</code> e <code>50,1%</code>. Descreva o que muda nas pertinências e na prioridade.</li><li>Teste valores extremos válidos, como <code>(0, 0)</code> e <code>(100, 100)</code>. Verifique se a saída permanece no intervalo definido.</li><li>Teste uma entrada inválida, como CPU em <code>101%</code>. Registre o comportamento e explique por que a validação é necessária.</li><li>Discuta uma limitação do uso de somente CPU e ocupação da fila para definir prioridade.</li></ol></article>
+  <h3>O que deve constar na entrega</h3>
+  <p>Um notebook ou arquivo Python com as versões identificadas; os cálculos do novo caso; as tabelas de comparação e de testes; uma conclusão sobre a alteração de R7 e as limitações do modelo. O código deve executar em ordem e manter comentários que expliquem as mudanças. Registre o uso de IA generativa, quando houver, e como os resultados foram verificados.</p>
+  <div class="draft-note"><p><strong>Verificação da aprendizagem:</strong> coerência entre conceitos e código, correção dos cálculos, preservação das condições de comparação, testes de limites e explicação das saídas. A atividade não se resume a apresentar o número retornado pelo programa.</p></div>
+</div></section>
+
+<section class="section" id="fechamento"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Síntese</p><h2>Da medida à saída, sem esconder as etapas</h2></div>
+  <p>Uma medida recebe graus de pertinência. Esses graus ativam regras. As contribuições das regras são recortadas e agregadas. A defuzzificação transforma o resultado agregado em uma saída numérica. Cada etapa depende de escolhas explícitas de modelagem.</p>
+  <ul class="checklist"><li>Distingo grau de pertinência de probabilidade.</li><li>Leio uma função de pertinência e calculo valores simples.</li><li>Explico por que várias regras podem participar da mesma saída.</li><li>Distingo ativação, recorte, agregação e centroide.</li><li>Justifico a mudança de uma saída a partir de uma alteração de regra.</li></ul>
+  <div class="draft-actions"><a href="../aula-06.html">Retomar sistemas de regras</a><a href="../aula-07.html">Retomar raciocínio sob incerteza</a><a href="aula-08.html">Rascunho da Aula 08</a></div>
+</div></section>
+
+<section class="section section-soft" id="referencias"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Materiais do projeto</p><h2>Referências utilizadas</h2></div>
+  <article class="draft-reference" id="ref-luger"><strong>[1] Artificial Intelligence: Structures and Strategies for Complex Problem Solving, 6ª edição.</strong><p>Seção 9.2.2, “Reasoning with Fuzzy Sets”, pp. 353–358: pertinência, regras, matriz associativa, operadores mínimo e máximo, agregação de consequentes e defuzzificação pelo centroide.</p></article>
+  <article class="draft-reference" id="ref-aima"><strong>[2] Artificial Intelligence: A Modern Approach, 4ª edição global.</strong><p>Seção 8.1, p. 273: distinção entre graus de verdade e graus de crença; conceitos com fronteiras graduais.</p></article>
+  <article class="draft-reference" id="ref-ppc"><strong>[3] Ementário de Engenharia de Software.</strong><p>Componente Inteligência Artificial Aplicada: conteúdo formativo de lógica fuzzy e competências do componente.</p></article>
+  <p class="draft-small">O contexto do serviço, as faixas, as nove regras, a discretização da saída, o código e as atividades são adaptações didáticas elaboradas para esta aula. O procedimento mantém a sequência dos materiais: pertinência, ativação, união das contribuições e centroide. As referências indicam páginas impressas dos PDFs do projeto.</p>
+</div></section>
+</main>
+<aside class="toc" aria-label="Índice da aula"><div class="toc-head"><span class="toc-label">Nesta aula</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice">›</button></div><nav><a href="#objetivos">Como estudar</a><a href="#retomada">Regras e probabilidade</a><a href="#problema">Problema</a><a href="#pertinencia">Pertinência</a><a href="#regras">Regras</a><a href="#exemplo">Exemplo resolvido</a><a href="#defuzzificacao">Centroide</a><a href="#codigo">Código</a><a href="#explorar">Simulador</a><a href="#limites">Limitações</a><a href="#aps">Proposta de APS</a><a href="#referencias">Referências</a></nav></aside>
+</div>
+<footer class="site-footer"><div class="container">Inteligência Artificial Aplicada · Aula 09 · Engenharia de Software · 2026/2 · Rascunho</div></footer>
+<script>
+(() => {
+  document.getElementById('baixar-codigo').addEventListener('click', () => {
+    const codigo = [...document.querySelectorAll('.python-part code')].map(bloco => bloco.textContent.trim()).join('\n\n\n') + '\n';
+    const url = URL.createObjectURL(new Blob([codigo], {type: 'text/x-python;charset=utf-8'}));
+    const link = document.createElement('a');
+    link.href = url; link.download = 'aula_09_logica_fuzzy.py';
+    document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+  const pertinencias = x => ({
+    baixa: Math.max(0, Math.min(1, (50 - x) / 30)),
+    media: Math.max(0, Math.min((x - 20) / 30, (80 - x) / 30)),
+    alta: Math.max(0, Math.min(1, (x - 50) / 30))
+  });
+  const regras = [
+    ['baixa','baixa','baixa'], ['baixa','media','media'], ['baixa','alta','alta'],
+    ['media','baixa','media'], ['media','media','media'], ['media','alta','alta'],
+    ['alta','baixa','alta'], ['alta','media','alta'], ['alta','alta','alta']
+  ];
+  document.getElementById('calcular').addEventListener('click', () => {
+    const cpu = document.getElementById('cpu').valueAsNumber;
+    const fila = document.getElementById('fila').valueAsNumber;
+    const destino = document.getElementById('resultado-simulador');
+    if (![cpu, fila].every(x => Number.isFinite(x) && x >= 0 && x <= 100)) {
+      destino.textContent = 'Informe dois números finitos entre 0 e 100.';
+      return;
+    }
+    const mc = pertinencias(cpu), mf = pertinencias(fila);
+    const universo = Array.from({length: 11}, (_, i) => i * 10);
+    const agregado = universo.map(() => 0);
+    const linhas = [];
+    const formato = valor => valor.toLocaleString('pt-BR', {maximumFractionDigits: 3});
+    linhas.push('CPU: ' + Object.entries(mc).map(([k,v]) => `${k} = ${formato(v)}`).join('; '));
+    linhas.push('Fila: ' + Object.entries(mf).map(([k,v]) => `${k} = ${formato(v)}`).join('; '));
+    regras.forEach(([c, f, s], i) => {
+      const grau = Math.min(mc[c], mf[f]);
+      if (grau > 0) linhas.push(`R${i + 1}: ${s}, ativação ${formato(grau)}`);
+      universo.forEach((y, j) => {
+        agregado[j] = Math.max(agregado[j], Math.min(grau, pertinencias(y)[s]));
+      });
+    });
+    const soma = agregado.reduce((a,b) => a + b, 0);
+    if (soma <= 0) { destino.textContent = 'Nenhuma regra produziu uma saída.'; return; }
+    const prioridade = universo.reduce((a,y,j) => a + y * agregado[j], 0) / soma;
+    linhas.push('Prioridade: ' + prioridade.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' pontos');
+    destino.textContent = linhas.join('\n');
+  });
+})();
+</script>
+</body>
+</html>
