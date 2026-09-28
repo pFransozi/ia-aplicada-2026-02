@@ -83,8 +83,42 @@
 .lesson-seven-study .study-table tbody tr:last-child > * { border-bottom: 0; }
 .lesson-seven-study .study-source { margin-top: 1.5rem; font-size: .83rem; color: var(--muted); }
 .lesson-seven-study .study-source a { color: inherit; text-underline-offset: .18em; }
-.lesson-seven-study .study-references { display: grid; gap: 1rem; }
-.lesson-seven-study .study-references article { scroll-margin-top: 100px; }
+/* A bibliografia usa a coluna de leitura, não o alinhamento dos cartões do hero. */
+body.teaching-page.teaching-lesson.lesson-seven-study #referencias .study-references {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: var(--ensino-intro-width, 960px);
+  min-width: 0;
+  margin-inline: auto;
+}
+body.teaching-page.teaching-lesson.lesson-seven-study #referencias .study-references > .study-card {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  justify-self: stretch;
+  align-self: start;
+  margin: 0;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 10px);
+  background: var(--paper);
+  text-align: left;
+  overflow-wrap: anywhere;
+  scroll-margin-top: 100px;
+}
+body.teaching-page.teaching-lesson.lesson-seven-study #referencias .study-card h3 {
+  margin: 0 0 .65rem;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+body.teaching-page.teaching-lesson.lesson-seven-study #referencias .study-card p {
+  margin: 0;
+}
+body.teaching-page.teaching-lesson.lesson-seven-study #referencias .study-card p + p {
+  margin-top: .65rem;
+}
 .lesson-seven-study :focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 @media (max-width: 760px) {
   .lesson-seven-study .study-grid { grid-template-columns: minmax(0, 1fr); }
