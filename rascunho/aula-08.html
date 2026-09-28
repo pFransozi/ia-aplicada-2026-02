@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../aula-04.css">
   <script src="https://pfransozi.github.io/assets/js/ensino.js?v=9"></script>
   <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=13">
-  <link rel="stylesheet" href="aulas-08-09.css">
+  <link rel="stylesheet" href="aulas-08-09.css?v=2">
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson">
 <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
@@ -24,39 +24,87 @@
   <div>
     <div class="draft-banner"><strong>Rascunho em validação.</strong> Este material ainda não integra a sequência oficial publicada.</div>
     <p class="eyebrow">Aula 08 · Computação evolucionária</p>
-    <h1>Algoritmos genéticos: buscar boas soluções por gerações</h1>
-    <p class="hero-lead">Representar alternativas, avaliar sua qualidade e combinar partes de soluções para explorar um problema de otimização.</p>
-    <div class="hero-actions"><a class="button button-primary" href="#problema">Conhecer o problema</a><a class="button button-secondary" href="#codigo">Ver o código</a></div>
+    <h1>Algoritmos genéticos: representação, operadores e otimização</h1>
+    <p class="hero-lead">Fundamentos da computação evolucionária, codificação de soluções, função de aptidão, operadores genéticos e avaliação de resultados em Python.</p>
+    <div class="hero-actions"><a class="button button-primary" href="#problema">Analisar o problema</a><a class="button button-secondary" href="#codigo">Consultar a implementação</a></div>
   </div>
-  <aside class="guiding-card"><span>Pergunta orientadora</span><blockquote>Como procurar uma boa combinação quando existem muitas alternativas e não queremos examinar todas elas?</blockquote></aside>
+  <aside class="guiding-card"><span>Pergunta orientadora</span><blockquote>Como representar e avaliar soluções candidatas e utilizar operadores genéticos para explorar um problema de otimização com restrições?</blockquote></aside>
 </div></section>
 
-<section class="section section-soft" id="objetivos"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Percurso da aula</p><h2>Da modelagem ao experimento</h2></div>
-  <div class="draft-grid">
-    <article class="draft-card"><h3>Representar</h3><p>Transformar uma solução candidata em um cromossomo, identificando genes, valores possíveis e restrições.</p></article>
-    <article class="draft-card"><h3>Avaliar</h3><p>Construir uma função de aptidão coerente com o objetivo do problema e reconhecer combinações inviáveis.</p></article>
-    <article class="draft-card"><h3>Implementar</h3><p>Acompanhar seleção, cruzamento, mutação e formação da próxima geração em Python.</p></article>
-    <article class="draft-card"><h3>Interpretar</h3><p>Comparar execuções e distinguir a melhor solução encontrada de uma solução comprovadamente ótima.</p></article>
+<section class="section section-soft" id="visao"><div class="container">
+  <span id="objetivos" class="section-anchor" aria-hidden="true"></span>
+  <div class="section-heading"><p class="eyebrow">Visão da aula</p><h2>Conteúdos e objetivos de aprendizagem</h2><p>A aula aborda a representação de soluções e o funcionamento de algoritmos genéticos em problemas de otimização. O estudo integra formulação da aptidão, operadores evolutivos, implementação em Python e análise experimental.</p></div>
+  <!-- Competências: redação do plano institucional. Aplicações: síntese das aulas 11 e 12 do plano preenchido. -->
+  <div class="overview-grid">
+    <article class="card topics-card">
+      <h3>Conteúdo programático</h3>
+      <div class="topic-list">
+        <div>Otimização e computação evolucionária</div>
+        <div>Indivíduos, cromossomos, genes e população</div>
+        <div>Função de aptidão e tratamento de restrições</div>
+        <div>Seleção, cruzamento e mutação</div>
+        <div>Elitismo, diversidade e critérios de parada</div>
+        <div>Implementação e comparação de configurações</div>
+      </div>
+      <h3>Objetivos de aprendizagem</h3>
+      <p>Ao final da aula, o estudante deverá ser capaz de:</p>
+      <ol class="learning-objectives">
+        <li>Representar soluções candidatas por cromossomos, identificando os valores possíveis de cada gene e as restrições do problema.</li>
+        <li>Definir uma função de aptidão coerente com o objetivo de otimização e com o tratamento de soluções inviáveis.</li>
+        <li>Implementar e testar seleção, cruzamento, mutação e formação de novas gerações.</li>
+        <li>Analisar os efeitos da mutação e do elitismo sobre a aptidão e a diversidade da população.</li>
+        <li>Comparar configurações por meio de experimentos controlados e justificar os resultados, distinguindo a melhor solução encontrada de um ótimo comprovado.</li>
+      </ol>
+      <h3>Organização do estudo</h3>
+      <p>Exposição conceitual, análise de uma geração com cálculos resolvidos, implementação guiada e experimento comparativo. O problema de seleção de melhorias de software é utilizado em todas as etapas.</p>
+      <p><strong>Recursos didáticos:</strong> material da aula, quadro e Python em notebook ou arquivo <code>.py</code>. A implementação utiliza apenas a biblioteca padrão.</p>
+      <p><strong>Verificação da aprendizagem:</strong> correção da representação e dos cálculos, testes dos operadores, registro de parâmetros e sementes e interpretação da tabela de resultados.</p>
+    </article>
+    <div class="competency-stack" aria-labelledby="competencias-titulo">
+      <h3 id="competencias-titulo">Competências e habilidades</h3>
+      <article class="card competency">
+        <h4>C2 · Compreender e aplicar processos, técnicas e procedimentos de construção, evolução e avaliação de software.</h4>
+        <div class="skill"><strong>H6</strong><span>Aplicar processos, técnicas e procedimentos para construção de softwares eficientes.</span></div>
+        <p class="competency-context"><strong>Aplicação na aula:</strong> aplicar o fluxo de construção de um algoritmo genético, da representação à formação de novas gerações.</p>
+      </article>
+      <article class="card competency">
+        <h4>C3 · Analisar e selecionar tecnologias adequadas para a construção de software.</h4>
+        <div class="skill"><strong>H10</strong><span>Avaliar diversas tecnologias disponíveis, sendo capaz de analisar os prós e contras de diferentes opções tecnológicas.</span></div>
+        <p class="competency-context"><strong>Aplicação na aula:</strong> comparar configurações e avaliar os efeitos dos parâmetros sobre os resultados da busca.</p>
+      </article>
+      <article class="card competency">
+        <h4>C6 · Integrar sistemas de software.</h4>
+        <div class="skill"><strong>H21</strong><span>Empregar as linguagens de programação, frameworks e ferramentas adequadas para os diversos contextos de integração de sistemas.</span></div>
+        <p class="competency-context"><strong>Aplicação na aula:</strong> empregar Python para integrar representação, avaliação e operadores evolutivos e executar experimentos controlados.</p>
+      </article>
+      <article class="card competency">
+        <h4>C11 · Conceber, aplicar e validar princípios, padrões e boas práticas no desenvolvimento de software.</h4>
+        <div class="skill"><strong>H38</strong><span>Desenvolver algoritmos e softwares utilizados em processos e produtos de engenharia.</span></div>
+        <p class="competency-context"><strong>Aplicação na aula:</strong> desenvolver, testar e corrigir os componentes de seleção, cruzamento, mutação e parada.</p>
+      </article>
+      <article class="card competency">
+        <h4>C13 · Identificar novas oportunidades de negócios e desenvolver soluções inovadoras.</h4>
+        <div class="skill"><strong>H45</strong><span>Avaliar ações fundamentadas em conhecimentos técnico-científicos visando o desenvolvimento de soluções da engenharia de software.</span></div>
+        <p class="competency-context"><strong>Aplicação na aula:</strong> interpretar resultados, diversidade e convergência com base em evidências, reconhecendo limitações do algoritmo.</p>
+      </article>
+    </div>
   </div>
-  <p>O material combina explicação, exemplo resolvido, implementação comentada e exercícios. A prática usa apenas a biblioteca padrão do Python e pode ser executada em um notebook ou em um arquivo <code>.py</code>.</p>
-  <details class="draft-details"><summary>Competências e habilidades trabalhadas</summary><p><strong>C2 · H6:</strong> aplicar procedimentos de construção de soluções. <strong>C6 · H21:</strong> empregar linguagem e ferramentas na implementação. <strong>C11 · H38:</strong> desenvolver e testar algoritmos. <strong>C3 · H10 e C13 · H45:</strong> comparar alternativas e justificar conclusões com resultados. O recorte desta aula desenvolve o conteúdo formativo “Algoritmos genéticos”. <a href="#ref-ppc">[4]</a></p></details>
 </div></section>
 
 <section class="section" id="retomada"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Ligação com as aulas de busca</p><h2>Agora procuramos uma combinação, não necessariamente um caminho</h2></div>
-  <p>Nas práticas de BFS, DFS e A*, representamos estados e ações para encontrar um caminho até um objetivo. Em um problema de otimização, podemos estar interessados na <strong>qualidade de uma configuração final</strong>: quais tarefas selecionar, como distribuir recursos ou que combinação respeita um limite e oferece maior benefício.</p>
+  <div class="section-heading"><p class="eyebrow">Ligação com as aulas de busca</p><h2>Busca em espaços de estados e otimização de configurações</h2></div>
+  <p>Nas práticas de BFS, DFS e A*, estados e ações foram utilizados para representar caminhos até um objetivo. Em um problema de otimização, o interesse pode estar na <strong>qualidade de uma configuração final</strong>: quais tarefas selecionar, como distribuir recursos ou que combinação respeita um limite e oferece maior benefício.</p>
   <p>Um algoritmo genético mantém uma <strong>população de soluções candidatas</strong>. Cada solução recebe uma avaliação. Algumas são selecionadas para gerar novas combinações, que também serão avaliadas. Esse ciclo se repete por gerações. Não há uma fronteira ordenada por <code>g + h</code> como no A* estudado. <a href="#ref-luger">[2]</a></p>
   <div class="draft-table-wrap"><table class="draft-table"><thead><tr><th>Nas buscas por caminhos estudadas</th><th>No algoritmo genético desta aula</th></tr></thead><tbody>
     <tr><td>Um estado representa uma situação do percurso.</td><td>Um indivíduo representa uma combinação completa de decisões.</td></tr>
     <tr><td>Ações conectam estados sucessivos.</td><td>Cruzamento e mutação produzem novas combinações.</td></tr>
     <tr><td>O caminho e seu custo podem fazer parte da resposta.</td><td>A resposta é a melhor combinação encontrada segundo a aptidão.</td></tr>
   </tbody></table></div>
-  <div class="draft-note"><p><strong>Classificação da abordagem:</strong> algoritmos genéticos pertencem à computação evolucionária. A inspiração é seleção e variação entre gerações, não uma rede de neurônios. O algoritmo continua dependendo de decisões humanas sobre representação, avaliação e operadores. <a href="#ref-hurbans">[1]</a></p></div>
+  <div class="draft-note"><p><strong>Classificação da abordagem:</strong> algoritmos genéticos pertencem à computação evolucionária. A abordagem utiliza seleção e variação entre gerações, distinguindo-se dos modelos conexionistas. Sua aplicação exige definir a representação, a função de avaliação e os operadores. <a href="#ref-hurbans">[1]</a></p></div>
 </div></section>
 
 <section class="section section-soft" id="problema"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Problema condutor</p><h2>Selecionar melhorias para uma versão de software</h2></div>
+  <div class="section-heading"><p class="eyebrow">Problema de aplicação</p><h2>Selecionar melhorias para uma versão de software</h2></div>
   <span class="draft-label">Exemplo didático adaptado do problema da mochila</span>
   <p>Uma equipe dispõe de <strong>8 unidades de esforço</strong> para uma versão. Existem seis melhorias possíveis. Cada melhoria só pode ser incluída uma vez. O objetivo é <strong>maximizar o benefício total sem ultrapassar o esforço disponível</strong>.</p>
   <div class="draft-table-wrap"><table class="draft-table"><caption>Dados sintéticos do exemplo. Esforços e benefícios foram definidos para esta atividade.</caption><thead><tr><th>ID</th><th>Melhoria</th><th>Esforço</th><th>Benefício</th></tr></thead><tbody>
@@ -67,16 +115,16 @@
     <tr><td>E</td><td>Ajustar logs</td><td>2</td><td>4</td></tr>
     <tr><td>F</td><td>Melhorar mensagens</td><td>1</td><td>2</td></tr>
   </tbody></table></div>
-  <p>Os conceitos vêm do tratamento do problema da mochila nos materiais: itens possuem valor e custo, e a combinação precisa respeitar uma capacidade. Aqui, itens se tornam melhorias, peso se torna esforço e valor se torna benefício. <a href="#ref-hurbans">[1]</a></p>
-  <div class="draft-note"><p><strong>Hipóteses do nosso modelo:</strong> esforços e benefícios são aditivos; não há dependências entre melhorias; uma tarefa não pode ser parcialmente selecionada. Essas são simplificações do exemplo, não propriedades gerais do planejamento de software.</p></div>
-  <h3>Por que não testar todas as combinações?</h3>
-  <p>Cada melhoria admite duas decisões: incluir ou não incluir. Com seis melhorias, há <code>2⁶ = 64</code> combinações. É perfeitamente possível enumerá-las, e faremos isso para conferir a resposta. Se fossem 30 melhorias binárias independentes, haveria <code>2³⁰ = 1.073.741.824</code> combinações.</p>
-  <p><strong>O exemplo pequeno serve para aprender e verificar o mecanismo.</strong> Não demonstra que um algoritmo genético seja a melhor escolha para seis itens. A adequação de uma técnica depende do problema e dos resultados da comparação. <a href="#ref-aima">[3]</a></p>
+  <p>O problema adapta a estrutura da mochila: cada item possui valor e custo, e a combinação deve respeitar uma capacidade. As melhorias correspondem aos itens; o esforço corresponde ao peso; e o benefício corresponde ao valor. <a href="#ref-hurbans">[1]</a></p>
+  <div class="draft-note"><p><strong>Hipóteses do modelo:</strong> esforços e benefícios são aditivos; não há dependências entre melhorias; uma tarefa não pode ser parcialmente selecionada. Essas são simplificações do exemplo, não propriedades gerais do planejamento de software.</p></div>
+  <h3>Dimensão do espaço de soluções</h3>
+  <p>Cada melhoria admite duas decisões: incluir ou não incluir. Com seis melhorias, há <code>2⁶ = 64</code> combinações. A enumeração das alternativas é viável neste exemplo e será utilizada para verificar a resposta. Se fossem 30 melhorias binárias independentes, haveria <code>2³⁰ = 1.073.741.824</code> combinações.</p>
+  <p>A dimensão reduzida do exemplo permite analisar e verificar o mecanismo. Seu uso não demonstra superioridade do algoritmo genético para um problema com seis itens. A adequação de uma técnica depende do problema e dos resultados da comparação. <a href="#ref-aima">[3]</a></p>
 </div></section>
 
 <section class="section" id="representacao"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Representação</p><h2>Como uma combinação vira um indivíduo?</h2></div>
-  <p>Fixamos a ordem <code>A, B, C, D, E, F</code>. Cada posição guarda <code>1</code> quando a melhoria é selecionada e <code>0</code> quando não é. O significado de uma posição não pode mudar durante o algoritmo.</p>
+  <div class="section-heading"><p class="eyebrow">Representação</p><h2>Codificação de soluções por cromossomos</h2></div>
+  <p>A ordem das posições é fixada como <code>A, B, C, D, E, F</code>. Cada posição armazena <code>1</code> quando a melhoria é selecionada e <code>0</code> quando não é. O significado de uma posição não pode mudar durante o algoritmo.</p>
   <pre class="code-block"><code>Melhoria:       A  B  C  D  E  F
 Cromossomo:    [1, 0, 1, 0, 0, 1]
 Selecionadas:  A, C e F
@@ -90,13 +138,13 @@ Benefício:     8 + 5 + 2 = 15</code></pre>
     <tr><td>População</td><td>Um conjunto de indivíduos mantidos pelo algoritmo.</td><td>Várias listas, cada uma com uma seleção.</td></tr>
     <tr><td>Geração</td><td>Uma etapa do processo de renovação da população.</td><td>A população inicial é a geração zero.</td></tr>
   </tbody></table></div>
-  <p>Essa terminologia e a codificação binária acompanham os materiais. A lista não é uma sequência de instruções nem uma rede neural: é a codificação das escolhas. <a href="#ref-hurbans">[1]</a></p>
-  <div class="draft-note"><p><strong>Representável não significa viável.</strong> <code>[1, 1, 1, 0, 0, 0]</code> tem seis genes válidos, mas exige <code>4 + 3 + 2 = 9</code> unidades. A representação está correta; a restrição do problema foi violada.</p></div>
+  <p>Na codificação binária, a lista representa as decisões de seleção dos itens. Não corresponde a uma sequência de instruções ou a uma rede neural. <a href="#ref-hurbans">[1]</a></p>
+  <div class="draft-note"><p><strong>Representação e viabilidade:</strong> <code>[1, 1, 1, 0, 0, 0]</code> tem seis genes válidos, mas exige <code>4 + 3 + 2 = 9</code> unidades. A representação está correta; a restrição do problema foi violada.</p></div>
 </div></section>
 
 <section class="section section-soft" id="aptidao"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Avaliação</p><h2>A função de aptidão define o que conta como bom</h2></div>
-  <p><strong>Aptidão</strong>, ou <em>fitness</em>, é o valor usado para comparar soluções candidatas. Neste problema queremos maximizar o benefício, mas somente dentro do limite de esforço. Usaremos a penalidade simples apresentada no exemplo da mochila dos materiais: uma solução que excede a capacidade recebe aptidão zero. <a href="#ref-hurbans">[1]</a></p>
+  <div class="section-heading"><p class="eyebrow">Avaliação</p><h2>Função de aptidão e tratamento de restrições</h2></div>
+  <p><strong>Aptidão</strong>, ou <em>fitness</em>, é o valor usado para comparar soluções candidatas. Neste problema, o objetivo é maximizar o benefício dentro do limite de esforço. Adota-se a penalidade utilizada no exemplo da mochila dos materiais: uma solução que excede a capacidade recebe aptidão zero. <a href="#ref-hurbans">[1]</a></p>
   <div class="draft-formula"><code>aptidão(x) = benefício(x), se esforço(x) ≤ 8; caso contrário, 0.</code></div>
   <p>O zero é uma <strong>decisão de modelagem desta função</strong>, não uma regra universal de algoritmos genéticos. Também não é uma probabilidade. A seleção usará esse valor para favorecer algumas soluções em relação às outras.</p>
   <div class="draft-table-wrap"><table class="draft-table"><caption>Uma população ilustrativa para acompanhar os operadores.</caption><thead><tr><th>Indivíduo</th><th>Cromossomo</th><th>Esforço</th><th>Benefício</th><th>Aptidão</th></tr></thead><tbody>
@@ -109,7 +157,7 @@ Benefício:     8 + 5 + 2 = 15</code></pre>
 </div></section>
 
 <section class="section" id="ciclo"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Ciclo evolutivo</p><h2>O que acontece em uma geração?</h2></div>
+  <div class="section-heading"><p class="eyebrow">Ciclo evolutivo</p><h2>Etapas do ciclo evolutivo</h2></div>
   <ol class="draft-steps">
     <li><strong>Criar a população</strong>Gerar representações de possíveis soluções.</li>
     <li><strong>Avaliar</strong>Calcular a aptidão de cada indivíduo.</li>
@@ -118,42 +166,42 @@ Benefício:     8 + 5 + 2 = 15</code></pre>
     <li><strong>Formar a próxima geração</strong>Definir quais indivíduos permanecem.</li>
     <li><strong>Verificar a parada</strong>Encerrar ou voltar à avaliação.</li>
   </ol>
-  <p>O ciclo não exige que cada filho seja melhor que seus pais. Filhos ruins podem surgir e serão avaliados. A busca combina <strong>variação</strong> com <strong>seleção orientada pela aptidão</strong>, em vez de garantir uma melhoria em cada operação. <a href="#ref-hurbans">[1]</a> <a href="#ref-luger">[2]</a></p>
+  <p>O ciclo pode produzir descendentes com aptidão inferior à dos pais. Cada novo indivíduo é submetido à função de avaliação. A busca combina <strong>variação</strong> e <strong>seleção orientada pela aptidão</strong>, sem assegurar melhoria em cada operação. <a href="#ref-hurbans">[1]</a> <a href="#ref-luger">[2]</a></p>
 </div></section>
 
 <section class="section section-soft" id="operadores"><div class="container">
   <div class="section-heading"><p class="eyebrow">Exemplo resolvido</p><h2>Seleção, cruzamento e mutação, passo a passo</h2></div>
   <h3>1 · Seleção por torneio</h3>
-  <p>Usaremos uma única estratégia: sortear três candidatos e selecionar o de maior aptidão dentro desse grupo. Depois repetimos o procedimento para escolher outro pai. Essa estratégia é denominada <strong>seleção por torneio</strong>. <a href="#ref-hurbans-torneio">[1, capítulo 5]</a></p>
+  <p>A estratégia adotada consiste em sortear três candidatos e selecionar o de maior aptidão no grupo. O procedimento é repetido para escolher o segundo progenitor. Essa estratégia é denominada <strong>seleção por torneio</strong>. <a href="#ref-hurbans-torneio">[1, capítulo 5]</a></p>
   <p>Se o grupo sorteado for <code>I₁, I₃, I₄</code>, as aptidões serão <code>15, 14, 0</code>, e I₁ será escolhido. Um novo torneio pode escolher I₂. Esses sorteios foram fixados apenas para explicar o exemplo; não são uma saída obrigatória do programa.</p>
   <p>O melhor indivíduo da população pode ficar fora de um torneio. Um indivíduo também pode vencer várias vezes. No código, um empate é resolvido pela primeira ocorrência no grupo sorteado.</p>
   <h3>2 · Cruzamento em um ponto</h3>
-  <p>Com I₁ e I₂ como pais, escolhemos um corte depois do terceiro gene. Combinamos o início de um com o final do outro. A posição de cada melhoria continua a mesma.</p>
+  <p>Com I₁ e I₂ como pais, o ponto de corte é definido após o terceiro gene. O início de um cromossomo é combinado com o final do outro. A posição de cada melhoria continua a mesma.</p>
   <pre class="code-block"><code>Pai:       101 | 001
 Mãe:       011 | 010
 
 Filho 1:   101 | 010  → A, C, E → esforço 8; benefício 17
 Filho 2:   011 | 001  → B, C, F → esforço 6; benefício 13</code></pre>
-  <p>O primeiro filho tem aptidão 17, superior à dos pais. O segundo tem aptidão 13, inferior. O cruzamento produziu alternativas; quem mede sua qualidade é a função de aptidão. O programa abaixo produz um filho por chamada e repete o processo até preencher a população. <a href="#ref-aima">[3]</a></p>
+  <p>O primeiro filho tem aptidão 17, superior à dos pais. O segundo tem aptidão 13, inferior. O cruzamento produz novas alternativas, cuja qualidade é determinada pela função de aptidão. O programa abaixo produz um filho por chamada e repete o processo até preencher a população. <a href="#ref-aima">[3]</a></p>
   <h3>3 · Mutação</h3>
-  <p>A mutação altera genes por sorteio. No nosso código, cada gene tem uma probabilidade de ser invertido: <code>0 → 1</code> ou <code>1 → 0</code>. Ela permite introduzir valores que não apareceriam apenas pela recombinação das partes disponíveis. <a href="#ref-aima">[3]</a></p>
+  <p>A mutação altera genes por sorteio. Na implementação, cada gene tem uma probabilidade de ser invertido: <code>0 → 1</code> ou <code>1 → 0</code>. Ela permite introduzir valores que não apareceriam apenas pela recombinação das partes disponíveis. <a href="#ref-aima">[3]</a></p>
   <pre class="code-block"><code>Antes:     011001  → esforço 6; benefício 13
 Mutação:   inverter o primeiro gene
 Depois:    111001  → esforço 10; benefício 21; aptidão 0</code></pre>
-  <p>Nesse caso, a mutação tornou a solução inviável. Isso não é um erro do operador. <strong>Mutação cria variação, não melhoria garantida.</strong> O tratamento de inviabilidade continua sendo responsabilidade do modelo de avaliação.</p>
-  <div class="draft-note"><p><strong>Como ler a taxa:</strong> <code>taxa = 0.10</code> significa 10% de chance de inversão para cada gene. Não significa que exatamente 10% dos genes mudarão, nem que haverá obrigatoriamente uma mutação por indivíduo.</p></div>
+  <p>Nesse caso, a mutação tornou a solução inviável. Esse resultado é compatível com um operador que introduz variações sem garantir aumento da aptidão. A inviabilidade é tratada pela função de avaliação.</p>
+  <div class="draft-note"><p><strong>Interpretação da taxa de mutação:</strong> <code>taxa = 0.10</code> significa 10% de chance de inversão para cada gene. Não significa que exatamente 10% dos genes mudarão, nem que haverá obrigatoriamente uma mutação por indivíduo.</p></div>
   <h3>4 · Elitismo e próxima geração</h3>
-  <p>Preservaremos uma cópia do melhor indivíduo e preencheremos as demais posições com novos filhos. Essa preservação é chamada <strong>elitismo</strong>. Com a mesma função de avaliação e sem mutar a cópia preservada, a melhor aptidão disponível não diminui. Isso <strong>não garante que a média da população aumente</strong>. <a href="#ref-aima">[3]</a></p>
+  <p>A implementação preserva uma cópia do melhor indivíduo e preenche as demais posições com novos descendentes. Essa preservação é chamada <strong>elitismo</strong>. Com a mesma função de avaliação e sem mutar a cópia preservada, a melhor aptidão disponível não diminui. Isso <strong>não garante que a média da população aumente</strong>. <a href="#ref-aima">[3]</a></p>
   <h3>5 · Critério de parada</h3>
   <p>O código executará um número fixo de gerações. Outros critérios apresentados nos materiais incluem atingir uma aptidão desejada e observar estagnação. Parar porque não houve melhoria recente não prova que a solução seja ótima. <a href="#ref-hurbans">[1]</a></p>
 </div></section>
 
 <section class="section" id="codigo"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Implementação guiada</p><h2>Um algoritmo genético pequeno em Python</h2></div>
-  <p>Os três blocos abaixo formam <strong>um único programa</strong>. Execute-os na ordem, no mesmo notebook. O botão reúne os blocos em um arquivo Python. A implementação e os dados foram preparados para esta aula a partir dos procedimentos dos materiais, não copiados de uma aplicação de produção.</p>
+  <div class="section-heading"><p class="eyebrow">Implementação guiada</p><h2>Implementação de um algoritmo genético em Python</h2></div>
+  <p>Os três blocos abaixo formam <strong>um único programa</strong>. Execute-os na ordem, no mesmo notebook. O botão reúne os blocos em um arquivo Python. A implementação e os dados constituem uma adaptação didática dos procedimentos apresentados nos materiais.</p>
   <div class="draft-actions"><button type="button" id="baixar-codigo">Baixar o exemplo completo (.py)</button><span class="draft-small">Sem instalação de bibliotecas adicionais.</span></div>
   <h3>Parte 1 · Dados, validade e aptidão</h3>
-  <p><code>medir()</code> calcula esforço e benefício. <code>aptidao()</code> aplica o limite. Separar as duas funções permite enxergar a diferença entre um benefício alto e uma solução realmente utilizável.</p>
+  <p><code>medir()</code> calcula esforço e benefício. <code>aptidao()</code> aplica o limite. A separação das funções distingue o benefício calculado da viabilidade da solução.</p>
   <pre class="code-block python-part"><code>from random import Random
 
 # Cada posição do cromossomo corresponde a uma melhoria.
@@ -253,8 +301,8 @@ assert all(a[1] &lt;= b[1] for a, b in zip(historico, historico[1:]))</code></pr
 </div></section>
 
 <section class="section section-soft" id="resultados"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Interpretar e conferir</p><h2>O que a execução realmente demonstra?</h2></div>
-  <p>Na execução de referência do programa acima, a semente 7 retornou <code>[0, 1, 1, 0, 1, 1]</code>: melhorias B, C, E e F, esforço 8 e benefício 17. A tabela mostra alguns registros do histórico calculado, não uma promessa sobre qualquer configuração.</p>
+  <div class="section-heading"><p class="eyebrow">Interpretar e conferir</p><h2>Resultados da execução e verificação de otimalidade</h2></div>
+  <p>Na execução de referência do programa acima, a semente 7 retornou <code>[0, 1, 1, 0, 1, 1]</code>: melhorias B, C, E e F, esforço 8 e benefício 17. A tabela apresenta registros do histórico dessa execução; outras configurações e sementes podem produzir resultados diferentes.</p>
   <div class="draft-table-wrap"><table class="draft-table"><thead><tr><th>Geração</th><th>Melhor aptidão</th><th>Média</th><th>Cromossomos distintos</th></tr></thead><tbody>
     <tr><td>0</td><td>15</td><td>8,17</td><td>11</td></tr><tr><td>1</td><td>15</td><td>8,42</td><td>11</td></tr><tr><td>2</td><td>17</td><td>10,08</td><td>10</td></tr><tr><td>3</td><td>17</td><td>8,42</td><td>12</td></tr><tr><td>20</td><td>17</td><td>13,00</td><td>6</td></tr>
   </tbody></table></div>
@@ -271,18 +319,18 @@ print("Combinações examinadas:", len(combinacoes))
 print("Ótimo do modelo:", otimo)
 print("Soluções ótimas:", solucoes_otimas)</code></pre>
   <p>A enumeração deste modelo encontra benefício máximo 17, alcançado por <code>101010</code> e <code>011011</code>. Assim, a execução de referência alcançou um ótimo <strong>neste exemplo</strong>. A comprovação vem da enumeração das alternativas, não do fato de o algoritmo genético ter parado.</p>
-  <div class="draft-note"><p><strong>Uma comparação justa:</strong> não conclua que o algoritmo genético foi mais barato só porque usou 20 gerações. Cada geração avalia e compara vários indivíduos; o código didático recalcula algumas aptidões. Também devem ser considerados número de avaliações, tempo e qualidade da resposta.</p></div>
+  <div class="draft-note"><p><strong>Comparação do custo computacional:</strong> o número de gerações, isoladamente, não determina se o algoritmo genético exige menos processamento que a enumeração. Cada geração avalia e compara vários indivíduos; o código didático recalcula algumas aptidões. Também devem ser considerados número de avaliações, tempo e qualidade da resposta.</p></div>
 </div></section>
 
 <section class="section" id="limites"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Leitura crítica</p><h2>O que pode dar errado?</h2></div>
+  <div class="section-heading"><p class="eyebrow">Leitura crítica</p><h2>Limitações de representação, avaliação e convergência</h2></div>
   <div class="draft-grid">
-    <article class="draft-card"><h3>Avaliar o objetivo errado</h3><p>Uma aptidão mal definida pode favorecer soluções inadequadas. O algoritmo otimiza a avaliação que recebe, não uma intenção que ficou apenas na descrição do problema.</p></article>
-    <article class="draft-card"><h3>Perder variedade cedo demais</h3><p>Favorecer repetidamente indivíduos muito semelhantes pode concentrar a busca em uma região. Diversidade, seleção e mutação precisam ser observadas em conjunto.</p></article>
-    <article class="draft-card"><h3>Usar operadores incompatíveis</h3><p>O cruzamento binário funciona para as decisões independentes deste exemplo. Uma sequência de cidades ou tarefas com precedência exige preservar outras restrições.</p></article>
-    <article class="draft-card"><h3>Confundir estagnação com ótimo</h3><p>Não encontrar melhoria não equivale a demonstrar que ela não existe. A resposta deve ser descrita como a melhor encontrada, salvo quando houver uma verificação adicional.</p></article>
+    <article class="draft-card"><h3>Inadequação da função de aptidão</h3><p>Uma aptidão mal definida pode favorecer soluções inadequadas. Objetivos não incorporados à função de avaliação não orientam a seleção dos indivíduos.</p></article>
+    <article class="draft-card"><h3>Redução prematura da diversidade</h3><p>Favorecer repetidamente indivíduos muito semelhantes pode concentrar a busca em uma região. Diversidade, seleção e mutação precisam ser observadas em conjunto.</p></article>
+    <article class="draft-card"><h3>Compatibilidade entre representação e operadores</h3><p>O cruzamento binário funciona para as decisões independentes deste exemplo. Uma sequência de cidades ou tarefas com precedência exige preservar outras restrições.</p></article>
+    <article class="draft-card"><h3>Distinção entre estagnação e otimalidade</h3><p>Não encontrar melhoria não equivale a demonstrar que ela não existe. A resposta deve ser descrita como a melhor encontrada, salvo quando houver uma verificação adicional.</p></article>
   </div>
-  <p>Essas limitações acompanham a discussão dos materiais sobre representação, avaliação, diversidade e critérios de parada. <a href="#ref-hurbans">[1]</a> <a href="#ref-luger">[2]</a> <a href="#ref-aima">[3]</a></p>
+  <p>A análise dessas limitações considera representação, função de avaliação, diversidade e critérios de parada. <a href="#ref-hurbans">[1]</a> <a href="#ref-luger">[2]</a> <a href="#ref-aima">[3]</a></p>
 </div></section>
 
 <section class="section section-soft" id="exercicios"><div class="container">
@@ -290,14 +338,14 @@ print("Soluções ótimas:", solucoes_otimas)</code></pre>
   <article class="draft-exercise"><h3>1 · Representação e avaliação</h3><p>Para o cromossomo <code>010101</code>, identifique as melhorias selecionadas, calcule esforço e benefício e determine a aptidão. Explique a diferença entre benefício bruto e aptidão nesse caso.</p></article>
   <article class="draft-exercise"><h3>2 · Rastrear os operadores</h3><p>Considere os pais <code>101001</code> e <code>011010</code>. Faça o cruzamento após o segundo gene, produzindo os dois filhos. Inverta o último gene do primeiro filho. Registre cada cromossomo intermediário, seu esforço e sua aptidão.</p></article>
   <article class="draft-exercise"><h3>3 · Experimento controlado</h3><p>Compare taxas de mutação <code>0.00</code> e <code>0.10</code>, mantendo população 12 e 20 gerações. Execute cada configuração com as sementes <code>0, 1, 2, 3 e 4</code>. Use <code>executar(semente=..., taxa=...)</code> e registre, para cada execução, a melhor aptidão final, o esforço, a primeira geração que atingiu esse valor e o número final de cromossomos distintos.</p><p>Apresente uma tabela comparativa e uma conclusão restrita aos resultados observados. A ausência de mutação impediu necessariamente uma boa resposta? Uma execução isolada seria suficiente para escolher a configuração?</p></article>
-  <article class="draft-exercise"><h3>4 · Alterar o problema, não apenas o código</h3><p>Altere o limite para 6. Reexecute o algoritmo e a conferência exaustiva. Explique por que a solução ótima do limite anterior não precisa continuar válida. Depois descreva o que precisaria mudar na avaliação se a melhoria C só pudesse ser selecionada quando B também estivesse presente. Não é necessário implementar essa dependência.</p></article>
+  <article class="draft-exercise"><h3>4 · Alteração das restrições do problema</h3><p>Altere o limite para 6. Reexecute o algoritmo e a conferência exaustiva. Explique por que a solução ótima do limite anterior não precisa continuar válida. Depois descreva o que precisaria mudar na avaliação se a melhoria C só pudesse ser selecionada quando B também estivesse presente. Não é necessário implementar essa dependência.</p></article>
   <p><strong>Registro da prática:</strong> código ou notebook, resultados dos testes, tabela dos experimentos e justificativas. Registre os parâmetros e as sementes. Quando houver apoio de IA generativa, descreva o uso e as verificações realizadas.</p>
 </div></section>
 
 <section class="section" id="fechamento"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Síntese</p><h2>Representar, avaliar, variar e selecionar</h2></div>
-  <p>Uma boa solução começa por uma representação que faça sentido e por uma função de aptidão coerente. O algoritmo genético usa essas definições para explorar alternativas por gerações. Seu resultado precisa ser testado e interpretado, não apenas exibido.</p>
-  <ul class="checklist"><li>Identifico o que cada gene representa.</li><li>Distingo uma solução inviável de uma solução de baixo benefício.</li><li>Explico o papel de seleção, cruzamento e mutação.</li><li>Reconheço o que o elitismo preserva e o que ele não garante.</li><li>Não confundo a melhor solução encontrada com um ótimo comprovado.</li></ul>
+  <div class="section-heading"><p class="eyebrow">Síntese</p><h2>Síntese dos conceitos e verificação da aprendizagem</h2></div>
+  <p>A aplicação de um algoritmo genético exige definir a representação, a função de aptidão, os operadores e o critério de parada. A análise experimental relaciona essas escolhas à qualidade das soluções encontradas e às limitações da busca.</p>
+  <ul class="checklist"><li>Identificar o significado de cada gene na representação.</li><li>Distinguir uma solução inviável de uma solução viável com baixo benefício.</li><li>Explicar o papel da seleção, do cruzamento e da mutação.</li><li>Analisar o efeito do elitismo sobre a melhor aptidão e a média da população.</li><li>Distinguir a melhor solução encontrada de um ótimo comprovado.</li></ul>
   <div class="draft-actions"><a href="../aula-05.html">Retomar busca informada</a><a href="aula-09.html">Rascunho da Aula 09 · Lógica fuzzy</a></div>
 </div></section>
 
@@ -308,10 +356,11 @@ print("Soluções ótimas:", solucoes_otimas)</code></pre>
   <article class="draft-reference" id="ref-luger"><strong>[2] Artificial Intelligence: Structures and Strategies for Complex Problem Solving, 6ª edição.</strong><p>Seção 12.1, “The Genetic Algorithm”, pp. 509–519: operadores, relação com busca e cuidados com representação e avaliação.</p></article>
   <article class="draft-reference" id="ref-aima"><strong>[3] Artificial Intelligence: A Modern Approach, 4ª edição global.</strong><p>Seção 4.1, pp. 133–137: algoritmos evolucionários, recombinação, mutação, elitismo e pseudocódigo.</p></article>
   <article class="draft-reference" id="ref-ppc"><strong>[4] Ementário de Engenharia de Software.</strong><p>Componente Inteligência Artificial Aplicada: conteúdo formativo de algoritmos genéticos e competências do componente.</p></article>
+  <article class="draft-reference" id="ref-plano"><strong>[5] Plano de Aula e Ensino · Inteligência Artificial Aplicada · 2026/2.</strong><p>Objetivos de aprendizagem e desenvolvimento de competências do bloco de algoritmos genéticos, previsto nas aulas 11 e 12 do plano original. A numeração deste material corresponde à sequência reorganizada da disciplina.</p></article>
   <p class="draft-small">A seleção de melhorias, seus valores, o código e os exercícios são adaptações didáticas elaboradas para esta aula. As referências indicam páginas impressas dos materiais disponíveis no projeto. Não são usadas medições reais de produtividade.</p>
 </div></section>
 </main>
-<aside class="toc" aria-label="Índice da aula"><div class="toc-head"><span class="toc-label">Nesta aula</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice">›</button></div><nav><a href="#objetivos">Objetivos</a><a href="#retomada">Da busca à otimização</a><a href="#problema">Problema</a><a href="#representacao">Representação</a><a href="#aptidao">Aptidão</a><a href="#ciclo">Ciclo evolutivo</a><a href="#operadores">Operadores</a><a href="#codigo">Código</a><a href="#resultados">Resultados</a><a href="#limites">Limitações</a><a href="#exercicios">Exercícios</a><a href="#referencias">Referências</a></nav></aside>
+<aside class="toc" aria-label="Índice da aula"><div class="toc-head"><span class="toc-label">Nesta aula</span><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="Recolher índice">›</button></div><nav><a href="#visao">Visão da aula</a><a href="#competencias-titulo">Competências e habilidades</a><a href="#retomada">Da busca à otimização</a><a href="#problema">Problema</a><a href="#representacao">Representação</a><a href="#aptidao">Aptidão</a><a href="#ciclo">Ciclo evolutivo</a><a href="#operadores">Operadores</a><a href="#codigo">Código</a><a href="#resultados">Resultados</a><a href="#limites">Limitações</a><a href="#exercicios">Exercícios</a><a href="#fechamento">Síntese</a><a href="#referencias">Referências</a></nav></aside>
 </div>
 <footer class="site-footer"><div class="container">Inteligência Artificial Aplicada · Aula 08 · Engenharia de Software · 2026/2 · Rascunho</div></footer>
 <script>
