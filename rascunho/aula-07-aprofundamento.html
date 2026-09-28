@@ -66,7 +66,6 @@
           <h3>Aplicabilidade e limites das regras determinísticas</h3>
           <p>Uma regra determinística continua adequada quando a relação expressa é válida no domínio modelado. O problema aparece quando uma relação apenas frequente é tratada como necessária. “Falhas no banco frequentemente produzem timeout” não autoriza concluir que “todo timeout foi causado pelo banco”.</p>
           <p>O raciocínio probabilístico não dispensa conhecimento do domínio. Ele exige que esse conhecimento expresse também as alternativas e o grau de suporte que cada evidência oferece a elas.</p>
-          <p class="study-source">Referências conceituais: <a href="#ref-1">[1], cap. 12</a>; <a href="#ref-2">[2], cap. 9</a>.</p>
         </div>
       </section>
 
@@ -81,7 +80,6 @@
           <p>Essas duas condições permitem distribuir toda a probabilidade entre B, R e A. Não se trata de uma afirmação de que falhas reais nunca ocorrem simultaneamente. Trata-se de uma simplificação explícita do problema.</p>
           <div class="study-note"><p><strong>Adequação do modelo ao domínio:</strong> quando falha no banco e falha de rede podem coexistir, suas probabilidades individuais não precisam somar 100%. Seria necessário representar as combinações ou usar variáveis separadas. Apenas normalizar três números não resolve essa diferença de modelagem.</p></div>
           <p>Também é necessário definir o universo analisado. Aqui, os casos são incidentes encaminhados ao diagnóstico. Uma probabilidade estimada entre incidentes não é automaticamente a probabilidade de falha entre todas as requisições de uma aplicação, incluindo as que funcionaram normalmente.</p>
-          <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.2 e 12.3</a>.</p>
         </div>
       </section>
 
@@ -103,7 +101,7 @@
           <p>Na tabela, a coluna de <strong>prior</strong> informa a probabilidade inicial da causa. A coluna <strong>P(T|H)</strong> informa a probabilidade de timeout caso aquela causa seja verdadeira. Os significados são diferentes, embora ambos sejam expressos por números entre 0 e 1.</p>
           <div class="study-table-wrap" role="region" aria-label="Base probabilística do exemplo" tabindex="0"><table class="study-table"><caption>Probabilidades didáticas retomadas do exemplo de três hipóteses da Aula 07.</caption><thead><tr><th scope="col">Hipótese</th><th scope="col">Prior P(H)</th><th scope="col">P(T|H)</th></tr></thead><tbody><tr><th scope="row">B · Falha no banco</th><td>0,10</td><td>0,80</td></tr><tr><th scope="row">R · Falha de rede</th><td>0,30</td><td>0,60</td></tr><tr><th scope="row">A · Sobrecarga da aplicação</th><td>0,60</td><td>0,40</td></tr></tbody></table></div>
           <p>Os priors somam 1 porque descrevem alternativas exclusivas e exaustivas. Já 0,80 + 0,60 + 0,40 não precisa somar 1: cada probabilidade de timeout foi calculada sob uma condição diferente. Para uma mesma hipótese, o que soma 1 é a probabilidade de timeout mais a de não ocorrer timeout.</p>
-          <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.2 e 12.5</a>. Base numérica: <a href="../aula-07.html#exemplo2">Aula 07, exemplo 2</a>.</p>
+          <p class="study-source">Base numérica: <a href="../aula-07.html#exemplo2">Aula 07, exemplo 2</a>.</p>
         </div>
       </section>
 
@@ -123,7 +121,6 @@
           <div class="study-math"><span class="math-line">P(T) = P(T|B)P(B) + P(T|R)P(R) + P(T|A)P(A)</span><span class="math-line">P(T) = 0,80 × 0,10 + 0,60 × 0,30 + 0,40 × 0,60</span><span class="math-line">P(T) = 0,08 + 0,18 + 0,24 = 0,50</span></div>
           <p>Dividir cada contribuição por 0,50 produz 16%, 36% e 48%. O total passa a ser 100% porque estamos distribuindo a probabilidade somente entre os casos que apresentam timeout.</p>
           <div class="study-note"><p><strong>Significado probabilístico da normalização.</strong> Neste modelo, os valores 0,08, 0,18 e 0,24 são probabilidades conjuntas. A divisão pela soma transforma essas contribuições em probabilidades condicionadas à evidência. Uma lista qualquer de pontuações, mesmo normalizada, não se torna automaticamente um diagnóstico probabilístico válido.</p></div>
-          <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.3 e 12.5</a>.</p>
         </div>
       </section>
 
@@ -140,7 +137,7 @@
           <p>Os dois exemplos usam a mesma regra, mas não o mesmo modelo. No exemplo binário, a probabilidade de timeout <strong>sem falha no banco</strong> foi definida como 20%. No exemplo com três causas, “sem falha no banco” reúne rede e aplicação.</p>
           <p>Aqui, essas duas alternativas correspondem a 900 dos 1.000 casos, e 420 delas apresentam timeout. Assim, P(T|não B) = 420 ÷ 900 ≈ 46,7%, não 20%. A evidência é mais comum entre as alternativas, o que muda o posterior do banco.</p>
           <p>Os posteriores não são propriedades fixas do sintoma. Eles dependem das hipóteses, das probabilidades e do universo de referência utilizados em cada exemplo.</p>
-          <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seção 12.5</a>. Comparação entre os <a href="../aula-07.html#exemplo1">exemplos 1</a> e <a href="../aula-07.html#exemplo2">2 da Aula 07</a>.</p>
+          <p class="study-source">Comparação entre os <a href="../aula-07.html#exemplo1">exemplos 1</a> e <a href="../aula-07.html#exemplo2">2 da Aula 07</a>.</p>
         </div>
       </section>
 
@@ -160,7 +157,6 @@
           <p>Ter sensores diferentes, campos separados ou arquivos de log distintos não comprova independência. É preciso examinar o processo que gera os registros e, quando possível, verificar as relações nos dados.</p>
           <div class="study-note"><p><strong>Representação de evidências dependentes:</strong> representar P(S|T, H), ou diretamente P(T ∩ S|H), em vez de substituir essa relação pelo produto das probabilidades isoladas. Bayes continua válido; a simplificação é que deixa de estar justificada.</p></div>
           <p>O modelo que considera as evidências mutuamente independentes dada a hipótese é conhecido como <strong>Naive Bayes</strong>. “Naive” se refere à suposição simplificadora. Para três ou mais evidências, verificar apenas independências entre pares não basta para justificar todo o produto.</p>
-          <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.5.2 e 12.6</a>.</p>
         </div>
       </section>
 
@@ -179,7 +175,7 @@
           <div class="study-math">P(H|T, T) = P(H|T)</div>
           <p>Multiplicar novamente por P(T|H) contaria o mesmo evento duas vezes. Usar tempo de resposta e um indicador de timeout derivado desse mesmo tempo como se fossem observações independentes pode gerar um problema semelhante.</p>
           <p>Dois timeouts ocorridos em momentos diferentes podem fornecer informação adicional, mas isso exige representar duas observações e sua possível dependência. A simples repetição do nome de uma evidência não realiza essa modelagem.</p>
-          <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.2, 12.5 e 12.6</a>. Base numérica: <a href="../aula-07.html#exemplo3">Aula 07, exemplo 3</a>.</p>
+          <p class="study-source">Base numérica: <a href="../aula-07.html#exemplo3">Aula 07, exemplo 3</a>.</p>
         </div>
       </section>
 
@@ -193,7 +189,6 @@
           <div class="study-math"><span class="math-line">Banco: 0,16 × 0,10 = 0,016</span><span class="math-line">Rede: 0,36 × 0,95 = 0,342</span><span class="math-line">Aplicação: 0,48 × 0,75 = 0,360</span><span class="math-line">Após normalizar: banco ≈ 2,23%; rede ≈ 47,63%; aplicação ≈ 50,14%.</span></div>
           <p>A ausência confirmada do sintoma reduziu bastante a probabilidade de falha no banco. Já a falta de informação sobre ele teria mantido 16%, 36% e 48%.</p>
           <div class="study-note"><p><strong>Limitações do monitoramento:</strong> “não apareceu no log” só pode ser interpretado como “não ocorreu” quando a coleta permite essa conclusão. Se a perda do registro for, ela própria, um sintoma de falha, o mecanismo de ausência deve ser representado como informação adicional.</p></div>
-          <p class="study-source">Referência conceitual: <a href="#ref-1">[1], seções 12.2 e 12.6</a>.</p>
         </div>
       </section>
 
@@ -212,7 +207,6 @@
           <p>Do mesmo modo, uma hipótese com prior zero não recupera probabilidade por atualizações usuais com evidências de probabilidade positiva. Diferenciar impossibilidade real de falta de observações é parte da construção da base.</p>
           <div class="study-note"><p><strong>Evidência com probabilidade zero no modelo:</strong> o modelo atribuiu probabilidade zero à evidência observada. O posterior pela fórmula usual fica indefinido, pois exigiria divisão por zero. A resposta adequada é reconhecer a incompatibilidade entre o caso e o modelo, não inventar uma distribuição uniforme ou apresentar uma certeza.</p></div>
           <p>Por fim, somar 100% apenas mostra que a distribuição foi normalizada. Não comprova que as hipóteses são suficientes, que as probabilidades foram bem estimadas ou que as suposições de independência descrevem o ambiente.</p>
-          <p class="study-source">Referências conceituais: <a href="#ref-1">[1], seções 12.2, 12.5 e 12.6</a>; <a href="#ref-2">[2], raciocínio sob incerteza</a>.</p>
         </div>
       </section>
 
@@ -232,7 +226,6 @@
           <p>A base de conhecimento descreve as relações do domínio. As evidências descrevem o caso atual. O motor realiza a atualização. A saída deve manter as alternativas e permitir compreender quais informações foram usadas. Essa separação evita confundir uma tabela de probabilidades com o próprio mecanismo de inferência.</p>
           <p>Calcular um posterior para um caso também não significa, necessariamente, treinar um modelo. Na implementação da aula, as probabilidades já foram fornecidas; o programa as utiliza. Estimar ou revisar essas probabilidades a partir de dados seria uma tarefa adicional.</p>
           <div class="study-note"><p><strong>Interpretação adequada do diagnóstico:</strong> “Sob as hipóteses representadas e a suposição de independência condicional, timeout e pool esgotado levam o modelo a atribuir cerca de 51,06% à falha no banco e 42,55% à sobrecarga da aplicação.” Essa formulação comunica o resultado sem esconder sua proximidade com uma alternativa importante.</p></div>
-          <p class="study-source">Referências conceituais: <a href="#ref-1">[1], seções 12.1 e 12.6</a>; <a href="#ref-2">[2], sistemas baseados em conhecimento</a>.</p>
         </div>
       </section>
 
