@@ -6,9 +6,9 @@
   <meta name="description" content="Aprofundamento da Aula 07: incerteza, probabilidade condicional, Bayes, atualização de crenças, independência condicional e interpretação de diagnósticos probabilísticos.">
   <meta name="theme-color" content="#0f172a">
   <title>Aula 07 | Raciocínio sob incerteza e inferência bayesiana | Aprofundamento</title>
-  <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="aula-07-aprofundamento.css">
-  <script defer src="../script.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/aula-07-aprofundamento.css">
+  <script defer src="script.js"></script>
   <script src="https://pfransozi.github.io/assets/js/ensino.js?v=9"></script>
   <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=13">
 </head>
@@ -17,10 +17,10 @@
   <div class="progress" id="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="container nav-wrap">
-      <a class="brand" href="../index.html" aria-label="IA Aplicada, página principal"><span class="brand-mark" aria-hidden="true">IA</span><span><strong>IA Aplicada</strong><small>Aula 07 · Aprofundamento</small></span></a>
+      <a class="brand" href="index.html" aria-label="IA Aplicada, página principal"><span class="brand-mark" aria-hidden="true">IA</span><span><strong>IA Aplicada</strong><small>Aula 07 · Aprofundamento</small></span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal"><span class="sr-only">Abrir menu</span><span></span><span></span><span></span></button>
       <nav id="menu-principal" class="main-nav" aria-label="Navegação principal">
-        <a href="../aula-07.html">Aula 07</a><a href="../index.html">Página principal</a><a href="#referencias">Referências</a>
+        <a href="aula-07.html">Aula 07</a><a href="index.html">Página principal</a><a href="#referencias">Referências</a>
         <button class="theme-toggle" type="button" aria-label="Ativar modo noturno" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-text">Modo noturno</span></button>
       </nav>
     </div>
@@ -33,7 +33,7 @@
             <p class="eyebrow">Aula 07 · Material de aprofundamento</p>
             <h1>Raciocínio sob incerteza e inferência bayesiana</h1>
             <p class="hero-lead">Fundamentos probabilísticos, atualização de hipóteses e interpretação de resultados em sistemas de diagnóstico.</p>
-            <div class="hero-actions"><a class="button button-primary" href="#incerteza">Iniciar a leitura</a><a class="button button-secondary" href="../aula-07.html">Retornar à aula</a></div>
+            <div class="hero-actions"><a class="button button-primary" href="#incerteza">Iniciar a leitura</a><a class="button button-secondary" href="aula-07.html">Retornar à aula</a></div>
           </div>
           <aside class="guiding-card"><span>Objetivo do aprofundamento</span><blockquote>Analisar os fundamentos da inferência bayesiana e as condições de sua aplicação ao diagnóstico probabilístico.</blockquote></aside>
         </div>
@@ -128,7 +128,7 @@
           <p>Na tabela, a coluna de <strong>prior</strong> informa a probabilidade inicial da causa. A coluna <strong>P(T|H)</strong> informa a probabilidade de timeout caso aquela causa seja verdadeira. Os significados são diferentes, embora ambos sejam expressos por números entre 0 e 1.</p>
           <div class="study-table-wrap" role="region" aria-label="Base probabilística do exemplo" tabindex="0"><table class="study-table"><caption>Probabilidades didáticas retomadas do exemplo de três hipóteses da Aula 07.</caption><thead><tr><th scope="col">Hipótese</th><th scope="col">Prior P(H)</th><th scope="col">P(T|H)</th></tr></thead><tbody><tr><th scope="row">B · Falha no banco</th><td>0,10</td><td>0,80</td></tr><tr><th scope="row">R · Falha de rede</th><td>0,30</td><td>0,60</td></tr><tr><th scope="row">A · Sobrecarga da aplicação</th><td>0,60</td><td>0,40</td></tr></tbody></table></div>
           <p>Os priors somam 1 porque descrevem alternativas exclusivas e exaustivas. Já 0,80 + 0,60 + 0,40 não precisa somar 1: cada probabilidade de timeout foi calculada sob uma condição diferente. Para uma mesma hipótese, o que soma 1 é a probabilidade de timeout mais a de não ocorrer timeout.</p>
-          <p class="study-source">Base numérica: <a href="../aula-07.html#exemplo2">Aula 07, exemplo 2</a>.</p>
+          <p class="study-source">Base numérica: <a href="aula-07.html#exemplo2">Aula 07, exemplo 2</a>.</p>
         </div>
       </section>
 
@@ -164,7 +164,7 @@
           <p>Os dois exemplos usam a mesma regra, mas não o mesmo modelo. No exemplo binário, a probabilidade de timeout <strong>sem falha no banco</strong> foi definida como 20%. No exemplo com três causas, “sem falha no banco” reúne rede e aplicação.</p>
           <p>Aqui, essas duas alternativas correspondem a 900 dos 1.000 casos, e 420 delas apresentam timeout. Assim, P(T|não B) = 420 ÷ 900 ≈ 46,7%, não 20%. A evidência é mais comum entre as alternativas, o que muda o posterior do banco.</p>
           <p>Os posteriores não são propriedades fixas do sintoma. Eles dependem das hipóteses, das probabilidades e do universo de referência utilizados em cada exemplo.</p>
-          <p class="study-source">Comparação entre os <a href="../aula-07.html#exemplo1">exemplos 1</a> e <a href="../aula-07.html#exemplo2">2 da Aula 07</a>.</p>
+          <p class="study-source">Comparação entre os <a href="aula-07.html#exemplo1">exemplos 1</a> e <a href="aula-07.html#exemplo2">2 da Aula 07</a>.</p>
         </div>
       </section>
 
@@ -202,7 +202,7 @@
           <div class="study-math">P(H|T, T) = P(H|T)</div>
           <p>Multiplicar novamente por P(T|H) contaria o mesmo evento duas vezes. Usar tempo de resposta e um indicador de timeout derivado desse mesmo tempo como se fossem observações independentes pode gerar um problema semelhante.</p>
           <p>Dois timeouts ocorridos em momentos diferentes podem fornecer informação adicional, mas isso exige representar duas observações e sua possível dependência. A simples repetição do nome de uma evidência não realiza essa modelagem.</p>
-          <p class="study-source">Base numérica: <a href="../aula-07.html#exemplo3">Aula 07, exemplo 3</a>.</p>
+          <p class="study-source">Base numérica: <a href="aula-07.html#exemplo3">Aula 07, exemplo 3</a>.</p>
         </div>
       </section>
 
