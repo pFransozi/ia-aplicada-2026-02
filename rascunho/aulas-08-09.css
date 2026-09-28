@@ -48,3 +48,20 @@ body.draft-lesson .draft-small { font-size: .88rem; color: var(--muted); }
   body.draft-lesson pre.code-block code { white-space: pre-wrap; overflow-wrap: anywhere; }
   body.draft-lesson .draft-table-wrap { overflow: visible; }
 }
+
+/* Visão da aula: componentes já utilizados nas aulas 05 e 06. */
+body.draft-lesson .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+body.draft-lesson .overview-grid > .topics-card { grid-row: auto; }
+body.draft-lesson .competency-stack { display: grid; gap: 16px; min-width: 0; }
+body.draft-lesson .competency-stack > h3 { margin: 0; }
+body.draft-lesson .competency-stack .card { margin: 0; }
+body.draft-lesson .competency h4 { margin: 0; font-size: 1.05rem; line-height: 1.5; letter-spacing: 0; }
+body.draft-lesson .competency-context { margin: .9rem 0 0; padding-top: .8rem; border-top: 1px solid var(--line); font-size: .92rem; }
+body.draft-lesson .learning-objectives { padding-left: 1.4rem; }
+body.draft-lesson .learning-objectives li + li { margin-top: .65rem; }
+body.draft-lesson .topics-card h3:not(:first-child) { margin-top: 1.7rem; }
+body.draft-lesson .section-anchor { display: block; scroll-margin-top: 90px; }
+body.draft-lesson #competencias-titulo { scroll-margin-top: 90px; }
+@media (max-width: 760px) {
+  body.draft-lesson .overview-grid { grid-template-columns: minmax(0, 1fr); }
+}
