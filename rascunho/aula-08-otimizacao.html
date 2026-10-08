@@ -111,17 +111,7 @@
 <tr><td>Elitismo</td><td>Preservação de parte dos indivíduos mais bem avaliados durante a formação de gerações.</td></tr>
 <tr><td>Geração e parada</td><td>Iteração do processo evolutivo e condição para encerrar a busca.</td></tr>
 </tbody></table></div>
-<h3>Exemplo de cruzamento e mutação</h3>
-<p>Considere que cada posição de um cromossomo representa uma tarefa e que o valor do gene identifica uma das três máquinas disponíveis (0, 1 ou 2). Em um cruzamento de ponto único, podemos combinar os quatro primeiros genes do pai A com os quatro últimos do pai B:</p>
-<pre class="code-block"><code>Pai A   [1, 0, 1, 2 | 2, 1, 0, 1]
-Pai B   [2, 1, 0, 0 | 1, 2, 2, 0]
-Filho   [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
-<p>O descendente contém decisões herdadas dos dois pais. Uma mutação poderia alterar o gene referente à tarefa T7 de <code>2</code> para <code>0</code>, modificando a máquina atribuída. <strong>Nem o cruzamento nem a mutação garantem melhora imediata:</strong> a solução resultante precisa passar pela função de aptidão.</p>
-<h3>Diversidade, pressão seletiva e convergência</h3>
-<p>Uma população com pouca diversidade pode explorar poucas regiões do espaço de soluções. Uma seleção muito intensa pode favorecer rapidamente indivíduos semelhantes, aumentando o risco de convergência prematura. Taxas muito baixas de mutação podem limitar a introdução de variações; taxas muito altas podem desfazer combinações promissoras. A evolução da aptidão e a diversidade da população ajudam a interpretar o comportamento do algoritmo.</p>
 </div>
-<div class="note"><strong>Aplicação ao nosso problema.</strong> Cada indivíduo representará uma distribuição de tarefas entre máquinas. A função de aptidão medirá a qualidade dessa distribuição com base no tempo de conclusão da produção. Os operadores genéticos gerarão outras distribuições, que serão avaliadas nas gerações seguintes.</div>
-<p>Na próxima parte, aplicaremos esses conceitos à <strong>modelagem do problema industrial</strong>, definindo concretamente os genes, o cálculo da aptidão e as restrições.</p>
 </div></section>
 <section class="section section-soft" id="modelagem"><div class="container"><div class="section-heading"><p class="eyebrow">Parte III · Representação</p><h2>Da situação industrial ao modelo computacional</h2></div><p>Vamos trabalhar com uma versão reduzida do problema de escalonamento. Oito tarefas independentes precisam ser atribuídas a três máquinas heterogêneas. Cada máquina processa uma tarefa por vez, na ordem fixa T1, T2, ... das tarefas que lhe forem atribuídas. Todas podem começar no instante zero. <strong>Aqui otimizamos a atribuição; não otimizamos a ordem de execução.</strong></p>
 <div class="tbl"><table><thead><tr><th>Tarefa</th><th>Máquina 0</th><th>Máquina 1</th><th>Máquina 2</th></tr></thead><tbody><tr><td>T1</td><td>9</td><td>6</td><td>8</td></tr><tr><td>T2</td><td>5</td><td>8</td><td>6</td></tr><tr><td>T3</td><td>7</td><td>5</td><td>9</td></tr><tr><td>T4</td><td>8</td><td>9</td><td>4</td></tr><tr><td>T5</td><td>6</td><td>7</td><td>5</td></tr><tr><td>T6</td><td>9</td><td>6</td><td>7</td></tr><tr><td>T7</td><td>4</td><td>8</td><td>6</td></tr><tr><td>T8</td><td>7</td><td>5</td><td>8</td></tr></tbody></table></div>
