@@ -50,6 +50,25 @@
 .ga-draft .ga-time-table th,.ga-draft .ga-time-table td{padding:.48rem .75rem;text-align:center}
 .ga-draft .ga-time-table th:first-child,.ga-draft .ga-time-table td:first-child{text-align:left}
 @media(max-width:480px){.ga-draft .ga-time-table-wrap{max-width:100%}.ga-draft .ga-time-table th,.ga-draft .ga-time-table td{padding:.42rem .45rem}}
+
+/* Tabelas pontuais da modelagem: compactas, centralizadas e responsivas. */
+.ga-draft .ga-compact-table-wrap{width:100%;max-width:820px;margin:1.2rem auto;overflow-x:auto}
+.ga-draft .ga-compact-table-wrap .ga-compact-table{width:100%;min-width:0;border-collapse:collapse;table-layout:auto}
+.ga-draft .ga-compact-table th,.ga-draft .ga-compact-table td{padding:.45rem .7rem;vertical-align:middle;line-height:1.4}
+.ga-draft .ga-genes-wrap{max-width:740px}
+.ga-draft .ga-genes-wrap .ga-compact-table{table-layout:fixed}
+.ga-draft .ga-genes-wrap th,.ga-draft .ga-genes-wrap td{text-align:center;padding:.5rem .35rem}
+.ga-draft .ga-genes-wrap th:first-child,.ga-draft .ga-genes-wrap td:first-child{text-align:left;width:100px}
+.ga-draft .ga-population-wrap{max-width:900px}
+.ga-draft .ga-population-wrap td:nth-child(2){white-space:nowrap}
+.ga-draft .ga-load-wrap{max-width:670px}
+.ga-draft .ga-selection-wrap{max-width:850px}
+@media(max-width:680px){
+  .ga-draft .ga-compact-table-wrap{max-width:100%}
+  .ga-draft .ga-compact-table-wrap .ga-compact-table{min-width:520px}
+  .ga-draft .ga-genes-wrap .ga-compact-table{min-width:430px}
+  .ga-draft .ga-compact-table th,.ga-draft .ga-compact-table td{padding:.4rem .5rem}
+}
 </style></head><body class="teaching-page teaching-lesson lesson-page draft-lesson ga-draft">
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
 <header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 08 · Rascunho alternativo</small></span></a><nav class="main-nav"><a href="../index.html">Página principal</a><a href="#problema">Problema</a><a href="#ciclo">Ciclo</a><a href="#modelagem">Modelagem</a><a href="#fundamentos">Conceitos</a><a href="#exercicios">Exercícios</a><button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button></nav></div></header>
@@ -148,7 +167,7 @@
 <div class="section-heading"><h2>Etapa 1 · Codificar o espaço de soluções</h2></div>
 <p>Antes de aplicar qualquer operador genético, precisamos decidir <strong>o que representa uma solução</strong>. No problema industrial, uma solução não é uma tarefa isolada, mas a atribuição de todas as tarefas às máquinas. A codificação deve permitir reconstruir essa distribuição e calcular seu desempenho.</p>
 <p>Adotaremos uma <strong>codificação inteira</strong>: cada gene assume um dos valores <code>0</code>, <code>1</code> ou <code>2</code>. A posição do gene identifica a tarefa; seu valor identifica a máquina. O comprimento do cromossomo é sempre oito.</p>
-<div class="tbl"><table><thead><tr><th>Posição</th><th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>T8</th></tr></thead><tbody><tr><td>Gene</td><td>1</td><td>0</td><td>1</td><td>2</td><td>2</td><td>1</td><td>0</td><td>1</td></tr></tbody></table></div>
+<div class="tbl ga-compact-table-wrap ga-genes-wrap"><table class="ga-compact-table"><thead><tr><th>Posição</th><th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>T8</th></tr></thead><tbody><tr><td>Gene</td><td>1</td><td>0</td><td>1</td><td>2</td><td>2</td><td>1</td><td>0</td><td>1</td></tr></tbody></table></div>
 <p>Essa codificação expressa a atribuição sem precisar registrar uma lista de tarefas separada para cada máquina. Como qualquer gene pode assumir três valores, o espaço contém <strong>3<sup>8</sup> = 6.561</strong> cromossomos possíveis. Neste modelo simplificado, todos representam atribuições válidas, mas nem todos oferecem boa distribuição de carga.</p>
 <p>Um indivíduo é um vetor com oito posições. A posição corresponde à tarefa, e o valor (0, 1 ou 2) indica a máquina escolhida. Assim, <code>[1,0,1,2,2,1,0,1]</code> representa uma configuração completa e válida no modelo simplificado.</p>
 <div class="cells" aria-label="Cromossomo de exemplo"><span>1</span><span>0</span><span>1</span><span>2</span><span>2</span><span>1</span><span>0</span><span>1</span></div>
@@ -181,7 +200,7 @@ elitismo ← 1</code></pre>
 <div class="section-heading"><h2>Etapa 3 · Criar a população inicial</h2></div>
 <p>Uma população é um conjunto de cromossomos. Em vez de escolher imediatamente uma única distribuição, geramos configurações diferentes, que poderão receber avaliações distintas. A diversidade inicial é importante: se todos os indivíduos começarem iguais, o algoritmo terá poucas alternativas para combinar.</p>
 <p>Uma população de exemplo, com três dos seis indivíduos, poderia ser:</p>
-<div class="tbl"><table><thead><tr><th>Indivíduo</th><th>Cromossomo</th><th>Interpretação</th></tr></thead><tbody>
+<div class="tbl ga-compact-table-wrap ga-population-wrap"><table class="ga-compact-table"><thead><tr><th>Indivíduo</th><th>Cromossomo</th><th>Interpretação</th></tr></thead><tbody>
 <tr><td>A</td><td><code>[1,0,1,2,2,1,0,1]</code></td><td>T1 fica em M1, T2 em M0, e assim por diante</td></tr>
 <tr><td>B</td><td><code>[0,2,1,2,0,1,0,2]</code></td><td>Outra combinação de atribuições</td></tr>
 <tr><td>C</td><td><code>[2,1,0,0,1,2,2,0]</code></td><td>Terceira distribuição candidata</td></tr>
@@ -199,7 +218,7 @@ elitismo ← 1</code></pre>
 <div class="section-heading"><h2>Etapa 4 · Avaliar a aptidão</h2></div>
 <p>Aptidão não significa simplesmente contar quantas tarefas uma máquina recebeu. O tempo de processamento varia com a <strong>combinação entre tarefa e máquina</strong>. Portanto, precisamos consultar a matriz de tempos e somar, separadamente, as durações de cada máquina.</p>
 <p>Considere o indivíduo A, representado por <code>[1,0,1,2,2,1,0,1]</code>:</p>
-<div class="tbl"><table><thead><tr><th>Máquina</th><th>Tarefas</th><th>Cálculo</th><th>Carga</th></tr></thead><tbody>
+<div class="tbl ga-compact-table-wrap ga-load-wrap"><table class="ga-compact-table"><thead><tr><th>Máquina</th><th>Tarefas</th><th>Cálculo</th><th>Carga</th></tr></thead><tbody>
 <tr><td>M0</td><td>T2, T7</td><td>5 + 4</td><td>9</td></tr>
 <tr><td>M1</td><td>T1, T3, T6, T8</td><td>6 + 5 + 6 + 5</td><td>22</td></tr>
 <tr><td>M2</td><td>T4, T5</td><td>4 + 5</td><td>9</td></tr>
@@ -235,7 +254,7 @@ FUNÇÃO calcular_aptidao(individuo, tempos):
 <div class="section-heading"><h2>Etapa 5 · Selecionar os pais</h2></div>
 <p>Após avaliar os indivíduos, queremos favorecer a reprodução daqueles com melhor desempenho, <strong>sem excluir completamente os demais</strong>. Uma estratégia possível é a <strong>seleção por roleta</strong>: cada indivíduo recebe uma probabilidade de ser escolhido proporcional à sua aptidão. A roleta é apenas uma analogia para o sorteio ponderado.</p>
 <p>Por exemplo, suponha que três indivíduos de uma população demonstrativa apresentem as seguintes aptidões:</p>
-<div class="tbl"><table><thead><tr><th>Indivíduo</th><th>Tempo total de conclusão</th><th>Aptidão</th><th>Probabilidade de seleção (aprox.)</th></tr></thead><tbody>
+<div class="tbl ga-compact-table-wrap ga-selection-wrap"><table class="ga-compact-table"><thead><tr><th>Indivíduo</th><th>Tempo total de conclusão</th><th>Aptidão</th><th>Probabilidade de seleção (aprox.)</th></tr></thead><tbody>
 <tr><td>A</td><td>22</td><td>1/23 = 0,0435</td><td>27,0%</td></tr>
 <tr><td>B</td><td>16</td><td>1/17 = 0,0588</td><td>36,5%</td></tr>
 <tr><td>C</td><td>16</td><td>1/17 = 0,0588</td><td>36,5%</td></tr>
