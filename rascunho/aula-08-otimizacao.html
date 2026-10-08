@@ -146,17 +146,18 @@
     RETORNAR individuo</code></pre>
 
 <div class="section-heading"><h2>Etapa 2 · Definir os parâmetros</h2></div>
-<p>O algoritmo precisa de uma política para decidir <strong>quantas soluções examinar simultaneamente</strong>, como escolher indivíduos para reprodução e quantas alterações introduzir nos descendentes. Esses parâmetros não são características das máquinas: são decisões sobre o comportamento do processo de busca.</p>
-<p>Para acompanhar os cálculos manualmente, utilizaremos uma população pequena. Depois, na prática, poderemos aumentar o número de indivíduos e de gerações. A configuração influencia o equilíbrio entre a <em>exploração</em> de novas regiões do espaço de soluções e o <em>aproveitamento</em> de combinações que já apresentaram boa aptidão.</p>
-<div class="tbl"><table><thead><tr><th>Parâmetro</th><th>Valor didático</th><th>Consequência</th></tr></thead><tbody>
-<tr><td>Tamanho da população</td><td>6</td><td>Seis distribuições candidatas em cada geração</td></tr>
-<tr><td>Gerações</td><td>20</td><td>Limite da repetição evolutiva</td></tr>
-<tr><td>Seleção de pais</td><td>Roleta proporcional à aptidão</td><td>Maiores aptidões têm maior probabilidade de seleção</td></tr>
-<tr><td>Cruzamento</td><td>Um ponto; probabilidade 0,8</td><td>Combina segmentos de dois pais</td></tr>
-<tr><td>Mutação</td><td>Probabilidade 0,1 por gene</td><td>Pode trocar a máquina atribuída a uma tarefa</td></tr>
-<tr><td>Elitismo</td><td>1 indivíduo</td><td>Preserva a melhor solução da geração anterior</td></tr>
+<p>Depois de definir como uma solução será representada, precisamos estabelecer <strong>como o algoritmo genético realizará a busca</strong>. Para isso, configuramos parâmetros que determinam quantos indivíduos formarão a população, por quantas gerações o processo será repetido e como ocorrerão a seleção e a reprodução.</p>
+<p>Os valores abaixo foram escolhidos para permitir que acompanhemos o funcionamento do algoritmo com um número reduzido de distribuições de tarefas. Eles não são propriedades das máquinas nem uma configuração comprovadamente ótima. Cada parâmetro controla uma parte do processo evolutivo.</p>
+<div class="tbl"><table><thead><tr><th>Parâmetro</th><th>Valor usado na aula</th><th>Como interpretar esse valor</th></tr></thead><tbody>
+<tr><td><strong>Tamanho da população</strong></td><td><strong>6 indivíduos</strong></td><td>Em cada geração, o algoritmo mantém seis distribuições completas das oito tarefas entre as máquinas.</td></tr>
+<tr><td><strong>Número de gerações</strong></td><td><strong>20</strong></td><td>O ciclo evolutivo é repetido durante vinte gerações, conforme o limite estabelecido para esta implementação.</td></tr>
+<tr><td><strong>Seleção de pais</strong></td><td>Roleta proporcional à aptidão</td><td>Indivíduos com maior aptidão possuem mais chances de serem escolhidos para produzir descendentes. Outros indivíduos ainda podem ser selecionados.</td></tr>
+<tr><td><strong>Cruzamento</strong></td><td>Um ponto; probabilidade de <strong>0,8 (80%)</strong></td><td>Em cada reprodução, há 80% de chance de combinar segmentos dos dois pais. Caso não ocorra cruzamento, o descendente começa como uma cópia do primeiro pai.</td></tr>
+<tr><td><strong>Mutação</strong></td><td>Probabilidade de <strong>0,1 (10%) por gene</strong></td><td>Cada posição do cromossomo possui 10% de chance de ser alterada, trocando a máquina atribuída à tarefa correspondente.</td></tr>
+<tr><td><strong>Elitismo</strong></td><td><strong>1 indivíduo</strong></td><td>Uma cópia da melhor solução da geração atual é preservada na próxima geração.</td></tr>
 </tbody></table></div>
-<p>Precisamos decidir quantas soluções serão comparadas em cada geração, quantas gerações poderão ocorrer e como serão aplicados seleção, cruzamento, mutação e elitismo. Para uma demonstração inicial, podemos utilizar uma população de 6 indivíduos, seleção por roleta, cruzamento de ponto único, mutação com baixa probabilidade e preservação do melhor indivíduo. Esses valores são escolhas didáticas, não uma configuração ótima.</p>
+<p><strong>Por que esses valores importam?</strong> A configuração influencia o equilíbrio entre a <em>exploração</em> de novas soluções e o <em>aproveitamento</em> das soluções que já apresentaram boa aptidão. Por exemplo, aumentar a mutação pode gerar mais variações, mas também pode desfazer combinações promissoras. Os efeitos desses parâmetros ficarão mais claros nas etapas em que estudaremos cada operador.</p>
+<p>Inicialmente, registraremos os valores necessários ao pseudocódigo. O funcionamento da roleta, do cruzamento, da mutação e do elitismo será detalhado nas etapas correspondentes.</p>
 <pre class="code-block"><code>tamanho_populacao ← 6
 maximo_geracoes ← 20
 probabilidade_cruzamento ← 0,8
