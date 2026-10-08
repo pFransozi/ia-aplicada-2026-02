@@ -36,6 +36,13 @@
 .ga-draft .ga-cycle-loop{padding:.85rem 1rem;margin:1rem 0;border:1px solid var(--line);border-radius:8px;background:var(--soft);line-height:1.6}
 @media(max-width:1000px){.ga-draft .ga-cycle-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.ga-draft .ga-cycle-grid{grid-template-columns:1fr}}
+
+.ga-draft .ga-lifecycle-figure{margin:1.5rem 0 1.8rem}
+.ga-draft .ga-lifecycle-image{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+.ga-draft .ga-lifecycle-dark{display:none}
+:root[data-theme="dark"] .ga-draft .ga-lifecycle-light,body.theme-dark.ga-draft .ga-lifecycle-light,body[data-theme="dark"].ga-draft .ga-lifecycle-light{display:none}
+:root[data-theme="dark"] .ga-draft .ga-lifecycle-dark,body.theme-dark.ga-draft .ga-lifecycle-dark,body[data-theme="dark"].ga-draft .ga-lifecycle-dark{display:block}
+.ga-draft .ga-lifecycle-figure figcaption{margin-top:.7rem;font-size:.88rem;color:var(--muted);line-height:1.6}
 </style></head><body class="teaching-page teaching-lesson lesson-page draft-lesson ga-draft">
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
 <header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 08 · Rascunho alternativo</small></span></a><nav class="main-nav"><a href="../index.html">Página principal</a><a href="#problema">Problema</a><a href="#ciclo">Ciclo</a><a href="#modelagem">Modelagem</a><a href="#fundamentos">Fundamentos</a><a href="#pratica">Prática</a><a href="#exercicios">Exercícios</a><button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button></nav></div></header>
@@ -85,16 +92,11 @@
 <div class="section-heading"><p class="eyebrow">Parte II · Visão geral</p><h2>O ciclo de vida de um algoritmo genético</h2></div>
 <p>Antes de estudar como representar o problema industrial, vamos observar o funcionamento do algoritmo genético como um todo. O processo começa pela definição de como as soluções serão representadas e avaliadas. Em seguida, uma população inicial é gerada e cada indivíduo recebe uma medida de aptidão. A partir daí, o algoritmo seleciona pais, produz descendentes e forma novas gerações, repetindo esse procedimento até satisfazer um critério de parada.</p>
 <p>Essa sequência permite distinguir duas atividades: <strong>modelar e configurar o problema</strong>, que estabelece o que será otimizado, e <strong>executar o ciclo evolutivo</strong>, que procura melhorar as soluções candidatas.</p>
-<div class="ga-cycle-grid" aria-label="Oito etapas do ciclo de vida de um algoritmo genético">
-  <article class="ga-cycle-step"><span>1</span><h3>Codificar as soluções</h3><p>Definir os genes, seus valores possíveis e como um indivíduo representa uma solução completa.</p></article>
-  <article class="ga-cycle-step"><span>2</span><h3>Configurar o algoritmo</h3><p>Definir população, seleção, cruzamento, mutação e critérios de parada.</p></article>
-  <article class="ga-cycle-step"><span>3</span><h3>Criar a população inicial</h3><p>Gerar diferentes soluções candidatas para iniciar a exploração.</p></article>
-  <article class="ga-cycle-step"><span>4</span><h3>Avaliar os indivíduos</h3><p>Calcular a aptidão de cada solução segundo a função definida para o problema.</p></article>
-  <article class="ga-cycle-step"><span>5</span><h3>Selecionar os pais</h3><p>Escolher indivíduos para reprodução conforme o método de seleção.</p></article>
-  <article class="ga-cycle-step"><span>6</span><h3>Produzir descendentes</h3><p>Aplicar cruzamento e mutação para criar novas combinações de genes.</p></article>
-  <article class="ga-cycle-step"><span>7</span><h3>Formar a nova geração</h3><p>Construir a população seguinte, segundo a estratégia de substituição e elitismo.</p></article>
-  <article class="ga-cycle-step"><span>8</span><h3>Avaliar e verificar a parada</h3><p>Avaliar a nova população e encerrar ou retornar à seleção de pais para continuar a evolução.</p></article>
-</div>
+<figure class="ga-lifecycle-figure">
+  <img class="ga-lifecycle-image ga-lifecycle-light" src="assets/ciclo-genetico-claro.svg?v=2" width="1440" height="840" loading="lazy" alt="Fluxograma do algoritmo genético com oito etapas. Preparação: codificar soluções, configurar parâmetros, criar e avaliar a população inicial. Ciclo: selecionar pais, gerar descendentes, formar e avaliar a nova geração. Se o critério de parada não for atingido, retornar à seleção; caso contrário, devolver a melhor solução."/>
+  <img class="ga-lifecycle-image ga-lifecycle-dark" src="assets/ciclo-genetico-escuro.svg?v=2" width="1440" height="840" loading="lazy" alt="" aria-hidden="true"/>
+  <figcaption><strong>Figura 2 · Ciclo de vida de um algoritmo genético.</strong> Após a preparação e a avaliação da população inicial, as etapas de seleção, reprodução, formação e avaliação da nova geração se repetem até que o critério de parada seja satisfeito.</figcaption>
+</figure>
 <div class="ga-cycle-loop"><strong>Repetição evolutiva:</strong> seleção de pais → reprodução → formação da geração → avaliação → verificar parada. Se o critério não for atendido, o ciclo recomeça na seleção.</div>
 <div class="note"><strong>Aplicação ao nosso problema.</strong> Cada indivíduo representará uma distribuição de tarefas entre máquinas. A função de aptidão medirá a qualidade dessa distribuição com base no tempo de conclusão da produção. Os operadores genéticos gerarão outras distribuições, que serão avaliadas nas gerações seguintes.</div>
 <p>Nas próximas partes, estudaremos primeiro <strong>como codificar e avaliar as soluções</strong> e, depois, <strong>como os operadores evolutivos produzem novas gerações</strong>.</p>
