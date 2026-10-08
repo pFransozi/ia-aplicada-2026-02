@@ -190,23 +190,23 @@ elitismo ← 1</code></pre>
 <tr><td>M1</td><td>T1, T3, T6, T8</td><td>6 + 5 + 6 + 5</td><td>22</td></tr>
 <tr><td>M2</td><td>T4, T5</td><td>4 + 5</td><td>9</td></tr>
 </tbody></table></div>
-<p>Como as três máquinas podem trabalhar em paralelo, a produção termina quando a máquina mais ocupada conclui suas tarefas. Nesse exemplo, M1 termina por último, após <strong>22 unidades de tempo</strong>. Logo, o tempo total de conclusão é <strong>max(9, 22, 9) = 22</strong>. Esse valor é chamado de <strong><em>makespan</em></strong>.</p>
+<p>Como as três máquinas podem trabalhar em paralelo, a produção termina quando a máquina mais ocupada conclui suas tarefas. Nesse exemplo, M1 termina por último, após <strong>22 unidades de tempo</strong>. Logo, o tempo total de conclusão é <strong>max(9, 22, 9) = 22</strong>. Essa medida é chamada de <strong>tempo total de conclusão (<em>makespan</em>)</strong>: o instante em que a última máquina termina suas tarefas. Não deve ser confundida com a soma dos tempos de processamento.</p>
 <h3>Do tempo de conclusão à função de aptidão</h3>
-<p>Nosso <strong>objetivo de otimização</strong> é reduzir o <em>makespan</em>: quanto menor o tempo necessário para terminar toda a produção, melhor a distribuição das tarefas. Entretanto, na estratégia de seleção adotada para o algoritmo genético, usaremos uma medida de <strong>aptidão (<em>fitness</em>)</strong> em que valores maiores representem indivíduos melhores.</p>
+<p>Nosso <strong>objetivo de otimização</strong> é reduzir o <strong>tempo total de conclusão</strong>: quanto menor o tempo necessário para terminar toda a produção, melhor a distribuição das tarefas. Entretanto, na estratégia de seleção adotada para o algoritmo genético, usaremos uma medida de <strong>aptidão (<em>fitness</em>)</strong> em que valores maiores representem indivíduos melhores.</p>
 <p>Precisamos, portanto, transformar o tempo de conclusão em uma pontuação que aumente quando o tempo diminui. Para isso, adotaremos:</p>
-<div class="note"><strong>Função de aptidão:</strong> <code>fitness = 1 / (1 + makespan)</code>. O número <code>1</code> no denominador evita uma divisão por zero caso o tempo calculado seja zero. A transformação mantém a mesma ordem de preferência: <strong>menor makespan → maior fitness</strong>.</div>
-<p>Para o indivíduo A, cujo <em>makespan</em> é 22, o cálculo fica:</p>
+<div class="note"><strong>Função de aptidão:</strong> <code>fitness = 1 / (1 + makespan)</code>. O número <code>1</code> no denominador evita uma divisão por zero caso o tempo calculado seja zero. A transformação mantém a mesma ordem de preferência: <strong>menor tempo total de conclusão → maior fitness</strong>.</div>
+<p>Para o indivíduo A, cujo tempo total de conclusão é 22, o cálculo fica:</p>
 <pre class="code-block"><code>makespan = 22
 fitness = 1 / (1 + 22)
 fitness = 1 / 23
 fitness ≈ 0,0435</code></pre>
 <p>O valor <strong>0,0435 não é um tempo, nem uma porcentagem de acerto</strong>. É uma pontuação usada para comparar a qualidade das soluções. Para observar como a transformação funciona, considere outros tempos hipotéticos:</p>
-<div class="tbl"><table><thead><tr><th>Makespan</th><th>Fitness</th><th>Interpretação</th></tr></thead><tbody>
+<div class="tbl"><table><thead><tr><th>Tempo total de conclusão</th><th>Fitness</th><th>Interpretação</th></tr></thead><tbody>
 <tr><td>22</td><td>0,0435</td><td>Distribuição do indivíduo A</td></tr>
 <tr><td>18</td><td>0,0526</td><td>Tempo menor, aptidão maior</td></tr>
 <tr><td>14</td><td>0,0667</td><td>Tempo ainda menor, aptidão ainda maior</td></tr>
 </tbody></table></div>
-<p>Assim, entre essas três avaliações ilustrativas, uma solução com <em>makespan</em> de 14 teria maior aptidão e seria favorecida no processo de seleção. A função de aptidão deve refletir o objetivo real: simplesmente premiar o uso de máquinas individualmente rápidas poderia provocar sobrecarga e não reduzir o tempo final de produção.</p>
+<p>Assim, entre essas três avaliações ilustrativas, uma solução com tempo total de conclusão de 14 teria maior aptidão e seria favorecida no processo de seleção. A função de aptidão deve refletir o objetivo real: simplesmente premiar o uso de máquinas individualmente rápidas poderia provocar sobrecarga e não reduzir o tempo final de produção.</p>
 <pre class="code-block"><code>FUNÇÃO calcular_makespan(individuo, tempos):
     cargas ← [0, 0, 0]
     PARA tarefa de 0 até 7:
@@ -221,7 +221,7 @@ FUNÇÃO calcular_aptidao(individuo, tempos):
 <div class="section-heading"><h2>Etapa 5 · Selecionar os pais</h2></div>
 <p>Após avaliar os indivíduos, queremos favorecer a reprodução daqueles com melhor desempenho, <strong>sem excluir completamente os demais</strong>. Uma estratégia possível é a <strong>seleção por roleta</strong>: cada indivíduo recebe uma probabilidade de ser escolhido proporcional à sua aptidão. A roleta é apenas uma analogia para o sorteio ponderado.</p>
 <p>Por exemplo, suponha que três indivíduos de uma população demonstrativa apresentem as seguintes aptidões:</p>
-<div class="tbl"><table><thead><tr><th>Indivíduo</th><th>Makespan</th><th>Aptidão</th><th>Probabilidade de seleção (aprox.)</th></tr></thead><tbody>
+<div class="tbl"><table><thead><tr><th>Indivíduo</th><th>Tempo total de conclusão</th><th>Aptidão</th><th>Probabilidade de seleção (aprox.)</th></tr></thead><tbody>
 <tr><td>A</td><td>22</td><td>1/23 = 0,0435</td><td>27,0%</td></tr>
 <tr><td>B</td><td>16</td><td>1/17 = 0,0588</td><td>36,5%</td></tr>
 <tr><td>C</td><td>16</td><td>1/17 = 0,0588</td><td>36,5%</td></tr>
@@ -272,8 +272,8 @@ Filho: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
 
 <div class="section-heading"><h2>Etapa 8 · Avaliar e decidir quando parar</h2></div>
 <p>Depois de formar a geração seguinte, precisamos calcular novamente a aptidão dos indivíduos. O processo se repete: <strong>avaliar → selecionar → reproduzir → formar nova geração</strong>. A execução pode terminar após um número fixo de gerações, ao atingir uma meta de aptidão ou quando não há melhora relevante durante várias gerações.</p>
-<p>Para a primeira implementação, adotaremos vinte gerações e registraremos o melhor makespan de cada uma. O registro permite construir um gráfico de convergência. Como existe aleatoriedade, duas execuções podem terminar com resultados diferentes, e uma melhora aparente não comprova que o ótimo global foi encontrado.</p>
-<p>A nova geração é avaliada pela mesma função de aptidão. Repetimos seleção e reprodução até completar o número de gerações. Ao final, devolvemos a melhor distribuição encontrada e seu makespan. Isso não prova que a solução seja globalmente ótima.</p>
+<p>Para a primeira implementação, adotaremos vinte gerações e registraremos o menor tempo total de conclusão de cada uma. O registro permite construir um gráfico de convergência. Como existe aleatoriedade, duas execuções podem terminar com resultados diferentes, e uma melhora aparente não comprova que o ótimo global foi encontrado.</p>
+<p>A nova geração é avaliada pela mesma função de aptidão. Repetimos seleção e reprodução até completar o número de gerações. Ao final, devolvemos a melhor distribuição encontrada e seu tempo total de conclusão. Isso não prova que a solução seja globalmente ótima.</p>
 <pre class="code-block"><code>ALGORITMO genetico_escalonamento:
     populacao ← criar_populacao(tamanho_populacao)
 
@@ -289,10 +289,10 @@ Filho: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
 </div></section>
 
 <section class="section" id="exercicios"><div class="container"><div class="section-heading"><p class="eyebrow">Parte IV · Atividades</p><h2>Exercícios de aplicação</h2></div>
-<article class="card"><h3>Exercício 1 · Interpretar uma atribuição</h3><p>Usando os tempos da tabela, avalie o cromossomo <code>[0,1,2,2,0,1,0,2]</code>. Identifique as tarefas de cada máquina, calcule as cargas e determine o makespan. Explique por que a melhor decisão individual para cada tarefa não garante necessariamente a melhor configuração global.</p></article>
+<article class="card"><h3>Exercício 1 · Interpretar uma atribuição</h3><p>Usando os tempos da tabela, avalie o cromossomo <code>[0,1,2,2,0,1,0,2]</code>. Identifique as tarefas de cada máquina, calcule as cargas e determine o tempo total de conclusão. Explique por que a melhor decisão individual para cada tarefa não garante necessariamente a melhor configuração global.</p></article>
 <article class="card"><h3>Exercício 2 · Modelar um problema de Engenharia de Software</h3><p>Dez serviços devem ser distribuídos entre quatro servidores com capacidades limitadas de CPU e memória e custos operacionais distintos. Defina os genes, seus domínios, a função objetivo, as restrições de capacidade e uma maneira de tratar soluções inviáveis.</p></article>
 <article class="card"><h3>Exercício 3 · Selecionar uma abordagem</h3><p>Compare três situações: (a) encontrar o caminho de menor custo em um mapa; (b) conceder acesso segundo regras explícitas; (c) distribuir centenas de tarefas heterogêneas entre máquinas para minimizar atrasos. Para cada uma, indique qual classe de abordagem deve ser inicialmente considerada e justifique. Reconheça alternativas possíveis.</p></article>
-<article class="card"><h3>Exercício 4 · Investigar hiperparâmetros</h3><p>Compare duas taxas de mutação. Registre semente, configuração, melhor solução, makespan e gráfico. O resultado de uma única execução basta para dizer que uma taxa é superior? Justifique.</p></article>
+<article class="card"><h3>Exercício 4 · Investigar hiperparâmetros</h3><p>Compare duas taxas de mutação. Registre semente, configuração, melhor solução, tempo total de conclusão e gráfico. O resultado de uma única execução basta para dizer que uma taxa é superior? Justifique.</p></article>
 <article class="card"><h3>Exercício 5 · Ampliar o modelo</h3><p>Acrescente conceitualmente as restrições: T4 depende de T1 e a máquina 2 não pode executar T6. Identifique por que a representação atual não resolve inteiramente o novo problema e indique modificações necessárias.</p></article>
 </div></section>
 <section class="section section-soft"><div class="container"><h2>Síntese</h2><p>O algoritmo genético modifica e avalia soluções <em>do problema que foi modelado</em>. Sua aplicação exige escolhas de representação, função de aptidão e restrições. A qualidade dessas escolhas é tão importante quanto a configuração dos operadores evolutivos.</p><h3>Referências de estudo</h3><ul><li>Luger, <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>, cap. 12, seção 12.1.</li><li>Hurbans, <em>Grokking Artificial Intelligence Algorithms</em>, cap. 4.</li><li>Russell e Norvig, <em>Artificial Intelligence: A Modern Approach</em>, cap. 4.</li></ul></div></section>
