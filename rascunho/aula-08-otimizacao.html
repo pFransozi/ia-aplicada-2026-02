@@ -147,7 +147,7 @@
 
 <div class="section-heading"><h2>Etapa 2 · Definir os parâmetros</h2></div>
 <p>O algoritmo precisa de uma política para decidir <strong>quantas soluções examinar simultaneamente</strong>, como escolher indivíduos para reprodução e quantas alterações introduzir nos descendentes. Esses parâmetros não são características das máquinas: são decisões sobre o comportamento do processo de busca.</p>
-<p>Para acompanhar os cálculos manualmente, utilizaremos uma população pequena. Depois, na prática, poderemos aumentar o número de indivíduos e de gerações. O livro destaca que a configuração modifica o equilíbrio entre <em>exploração</em> de novas regiões e <em>aproveitamento</em> de soluções promissoras.</p>
+<p>Para acompanhar os cálculos manualmente, utilizaremos uma população pequena. Depois, na prática, poderemos aumentar o número de indivíduos e de gerações. A configuração influencia o equilíbrio entre a <em>exploração</em> de novas regiões do espaço de soluções e o <em>aproveitamento</em> de combinações que já apresentaram boa aptidão.</p>
 <div class="tbl"><table><thead><tr><th>Parâmetro</th><th>Valor didático</th><th>Consequência</th></tr></thead><tbody>
 <tr><td>Tamanho da população</td><td>6</td><td>Seis distribuições candidatas em cada geração</td></tr>
 <tr><td>Gerações</td><td>20</td><td>Limite da repetição evolutiva</td></tr>
@@ -202,7 +202,7 @@ FUNÇÃO calcular_aptidao(individuo, tempos):
     RETORNAR 1 / (1 + tempo_total)</code></pre>
 
 <div class="section-heading"><h2>Etapa 5 · Selecionar os pais</h2></div>
-<p>Após avaliar os indivíduos, queremos favorecer a reprodução daqueles com melhor desempenho, <strong>sem excluir completamente os demais</strong>. Uma estratégia apresentada no capítulo é a <strong>seleção por roleta</strong>: cada indivíduo recebe uma probabilidade proporcional à sua aptidão. A roleta é apenas uma analogia para o sorteio ponderado.</p>
+<p>Após avaliar os indivíduos, queremos favorecer a reprodução daqueles com melhor desempenho, <strong>sem excluir completamente os demais</strong>. Uma estratégia possível é a <strong>seleção por roleta</strong>: cada indivíduo recebe uma probabilidade de ser escolhido proporcional à sua aptidão. A roleta é apenas uma analogia para o sorteio ponderado.</p>
 <p>Por exemplo, suponha que três indivíduos de uma população demonstrativa apresentem as seguintes aptidões:</p>
 <div class="tbl"><table><thead><tr><th>Indivíduo</th><th>Makespan</th><th>Aptidão</th><th>Probabilidade de seleção (aprox.)</th></tr></thead><tbody>
 <tr><td>A</td><td>22</td><td>1/23 = 0,0435</td><td>27,0%</td></tr>
