@@ -123,11 +123,11 @@
 <p>Um algoritmo genético é um método de otimização que trabalha com uma população de soluções candidatas. Inicialmente, define-se como essas soluções serão representadas e como sua qualidade será medida por uma função de aptidão. Em seguida, gera-se uma população inicial, cujos indivíduos são avaliados. O algoritmo então seleciona indivíduos para reprodução e aplica operadores de cruzamento e mutação para produzir novas soluções. Esse processo se repete ao longo de sucessivas gerações, buscando melhorar a qualidade das soluções até que um critério de parada seja atendido.</p>
 <p>Essa sequência permite distinguir duas atividades: <strong>modelar e configurar o problema</strong>, que estabelece o que será otimizado, e <strong>executar o ciclo evolutivo</strong>, que procura melhorar as soluções candidatas.</p>
 <figure class="ga-lifecycle-figure">
-  <img class="ga-lifecycle-image ga-lifecycle-light" src="assets/ciclo-genetico-claro.svg?v=3" width="1600" height="920" loading="lazy" alt="Fluxograma do algoritmo genético com oito etapas. Preparação: codificar soluções, configurar parâmetros, criar e avaliar a população inicial. Ciclo: selecionar pais, gerar descendentes, formar e avaliar a nova geração. Se o critério de parada não for atingido, retornar à seleção; caso contrário, devolver a melhor solução."/>
+  <img class="ga-lifecycle-image ga-lifecycle-light" src="assets/ciclo-genetico-claro.svg?v=3" width="1600" height="920" loading="lazy" alt="Fluxograma do algoritmo genético com oito etapas. Preparação: codificar soluções, configurar parâmetros, criar e avaliar a população inicial. Ciclo: selecionar progenitores, gerar descendentes, formar e avaliar a nova geração. Se o critério de parada não for atingido, retornar à seleção; caso contrário, devolver a melhor solução."/>
   <img class="ga-lifecycle-image ga-lifecycle-dark" src="assets/ciclo-genetico-escuro.svg?v=3" width="1600" height="920" loading="lazy" alt="" aria-hidden="true"/>
   <figcaption><strong>Figura 2 · Ciclo de vida de um algoritmo genético.</strong> Após a preparação e a avaliação da população inicial, as etapas de seleção, reprodução, formação e avaliação da nova geração se repetem até que o critério de parada seja satisfeito.</figcaption>
 </figure>
-<div class="ga-cycle-loop"><strong>Repetição evolutiva:</strong> seleção de pais → reprodução → formação da geração → avaliação → verificar parada. Se o critério não for atendido, o ciclo recomeça na seleção.</div>
+<div class="ga-cycle-loop"><strong>Repetição evolutiva:</strong> seleção de progenitores → reprodução → formação da geração → avaliação → verificar parada. Se o critério não for atendido, o ciclo recomeça na seleção.</div>
 <div id="fundamentos" class="ga-cycle-concepts">
 <div class="section-heading"><h2>Principais conceitos do ciclo evolutivo</h2></div>
 <p>Os termos da computação evolucionária descrevem as soluções e as operações realizadas sobre elas. Uma <strong>solução candidata</strong> corresponde a um indivíduo; sua codificação é chamada de cromossomo, composto por genes. O conjunto de indivíduos forma a população.</p>
@@ -136,7 +136,7 @@
 <tr><td>Indivíduo e população</td><td>Um indivíduo é uma solução candidata; uma população reúne diferentes candidatos.</td></tr>
 <tr><td>Aptidão (<em>fitness</em>)</td><td>Medida de qualidade utilizada para avaliar e comparar indivíduos.</td></tr>
 <tr><td>Seleção</td><td>Escolha dos indivíduos que participarão da reprodução, conforme a estratégia adotada.</td></tr>
-<tr><td>Cruzamento</td><td>Combinação de partes de cromossomos parentais para produzir descendentes.</td></tr>
+<tr><td>Cruzamento</td><td>Combinação de partes de cromossomos dos progenitores para produzir descendentes.</td></tr>
 <tr><td>Mutação</td><td>Modificação de um ou mais genes para introduzir variação.</td></tr>
 <tr><td>Elitismo</td><td>Preservação de parte dos indivíduos mais bem avaliados durante a formação de gerações.</td></tr>
 <tr><td>Geração e parada</td><td>Iteração do processo evolutivo e condição para encerrar a busca.</td></tr>
@@ -188,8 +188,8 @@
 <div class="tbl"><table><thead><tr><th>Parâmetro</th><th>Valor usado na aula</th><th>Como interpretar esse valor</th></tr></thead><tbody>
 <tr><td><strong>Tamanho da população</strong></td><td><strong>6 indivíduos</strong></td><td>Em cada geração, o algoritmo mantém seis distribuições completas das oito tarefas entre as máquinas.</td></tr>
 <tr><td><strong>Número de gerações</strong></td><td><strong>20</strong></td><td>O ciclo evolutivo é repetido durante vinte gerações, conforme o limite estabelecido para esta implementação.</td></tr>
-<tr><td><strong>Seleção de pais</strong></td><td>Roleta proporcional à aptidão</td><td>Indivíduos com maior aptidão possuem mais chances de serem escolhidos para produzir descendentes. Outros indivíduos ainda podem ser selecionados.</td></tr>
-<tr><td><strong>Cruzamento</strong></td><td>Um ponto; probabilidade de <strong>0,8 (80%)</strong></td><td>Em cada reprodução, há 80% de chance de combinar segmentos dos dois pais. Caso não ocorra cruzamento, o descendente começa como uma cópia do primeiro pai.</td></tr>
+<tr><td><strong>Seleção de progenitores</strong></td><td>Roleta proporcional à aptidão</td><td>Indivíduos com maior aptidão possuem mais chances de serem escolhidos para produzir descendentes. Outros indivíduos ainda podem ser selecionados.</td></tr>
+<tr><td><strong>Cruzamento</strong></td><td>Um ponto; probabilidade de <strong>0,8 (80%)</strong></td><td>Em cada reprodução, há 80% de chance de combinar segmentos dos dois progenitores. Caso não ocorra cruzamento, o descendente começa como uma cópia do primeiro progenitor.</td></tr>
 <tr><td><strong>Mutação</strong></td><td>Probabilidade de <strong>0,1 (10%) por gene</strong></td><td>Cada posição do cromossomo possui 10% de chance de ser alterada, trocando a máquina atribuída à tarefa correspondente.</td></tr>
 <tr><td><strong>Elitismo</strong></td><td><strong>1 indivíduo</strong></td><td>Uma cópia da melhor solução da geração atual é preservada na próxima geração.</td></tr>
 </tbody></table></div>
@@ -255,7 +255,7 @@ FUNÇÃO calcular_aptidao(individuo, tempos):
     tempo_total ← calcular_makespan(individuo, tempos)
     RETORNAR 1 / (1 + tempo_total)</code></pre>
 
-<div class="section-heading"><h2>Etapa 5 · Selecionar os pais</h2></div>
+<div class="section-heading"><h2>Etapa 5 · Selecionar os progenitores</h2></div>
 <p>Depois de avaliar a população, precisamos escolher os indivíduos que participarão da reprodução. Na <strong>seleção por roleta</strong>, cada indivíduo recebe uma chance de ser escolhido proporcional à sua aptidão: indivíduos melhores têm maior probabilidade, mas os demais ainda podem ser selecionados.</p>
 <h3>Como calcular essas probabilidades?</h3>
 <p>Vamos usar os três cromossomos A, B e C apresentados na Etapa 3. Calculando seus tempos totais de conclusão com a matriz do problema, encontramos 22, 19 e 22, respectivamente. Aplicamos a função de aptidão e dividimos cada resultado pela soma das três aptidões.</p>
@@ -272,10 +272,10 @@ soma ≈ 0,13696</code></pre>
 P(A) ≈ 0,3175 = 31,75%</code></pre>
 <p>Repetimos para B e C. Por isso B possui maior chance de reprodução: seu tempo de conclusão é menor, sua aptidão é maior e sua parcela da roleta também é maior. <strong>Uma chance maior não significa seleção garantida.</strong></p>
 <h3>Interpretando o sorteio</h3>
-<p>Imagine um número aleatório de 0 a 100. A recebe a faixa até 31,75; B recebe a faixa de 31,75 a 68,25; C recebe o restante, até 100. Um sorteio de <code>50</code> seleciona B; um sorteio de <code>20</code> seleciona A. Para obter dois pais, realizamos dois sorteios, que podem escolher o mesmo indivíduo.</p>
+<p>Imagine um número aleatório de 0 a 100. A recebe a faixa até 31,75; B recebe a faixa de 31,75 a 68,25; C recebe o restante, até 100. Um sorteio de <code>50</code> seleciona B; um sorteio de <code>20</code> seleciona A. Para selecionar dois progenitores, realizamos dois sorteios, que podem escolher o mesmo indivíduo.</p>
 <div class="note"><strong>Exemplo simplificado.</strong> Esses percentuais consideram somente A, B e C para facilitar os cálculos. Na implementação, a população possui seis indivíduos; portanto, a soma das aptidões e as probabilidades de seleção deverão considerar os seis.</div>
 <h3>Pseudocódigo da seleção por roleta</h3>
-<pre class="code-block"><code>FUNÇÃO selecionar_pai(populacao, aptidoes):
+<pre class="code-block"><code>FUNÇÃO selecionar_progenitor(populacao, aptidoes):
     total ← soma de todas as aptidoes
     sorteio ← número aleatório entre 0 e total
     acumulado ← 0
@@ -286,20 +286,20 @@ P(A) ≈ 0,3175 = 31,75%</code></pre>
     RETORNAR cópia do último individuo</code></pre>
 
 <div class="section-heading"><h2>Etapa 6 · Gerar descendentes</h2></div>
-<p>Os pais selecionados são combinações completas de tarefas e máquinas. O <strong>cruzamento de ponto único</strong> escolhe uma posição de corte e junta o prefixo de um pai ao sufixo do outro. Isso produz outra distribuição possível, preservando grupos de genes das soluções parentais.</p>
-<p>Vamos usar dois pais com oito genes e escolher o ponto de corte após T4:</p>
-<p>No cruzamento de ponto único, sorteamos uma posição entre dois genes e combinamos trechos dos pais. A mutação, quando ocorre, troca o valor de um gene por outra máquina válida. Por exemplo:</p>
-<pre class="code-block"><code>Pai A: [1, 0, 1, 2 | 2, 1, 0, 1]
-Pai B: [2, 1, 0, 0 | 1, 2, 2, 0]
-Filho: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
+<p>Os progenitores selecionados são indivíduos que representam distribuições completas de tarefas entre máquinas. O <strong>cruzamento de ponto único</strong> escolhe uma posição de corte e junta o prefixo de um progenitor ao sufixo do outro. Isso produz outra distribuição possível, preservando grupos de genes das soluções dos progenitores.</p>
+<p>Vamos usar dois progenitores com oito genes e escolher o ponto de corte após T4:</p>
+<p>No cruzamento de ponto único, sorteamos uma posição entre dois genes e combinamos trechos dos progenitores. A mutação, quando ocorre, troca o valor de um gene por outra máquina válida. Por exemplo:</p>
+<pre class="code-block"><code>Progenitor A: [1, 0, 1, 2 | 2, 1, 0, 1]
+Progenitor B: [2, 1, 0, 0 | 1, 2, 2, 0]
+Descendente: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
 <p>Uma mutação no gene da T7 poderia substituir 2 por 0. Essa alteração não garante melhoria: o descendente precisa ser avaliado. Para a implementação, o cruzamento será aplicado com a probabilidade configurada, e a mutação será considerada separadamente para cada gene.</p>
-<pre class="code-block"><code>FUNÇÃO reproduzir(pai_a, pai_b):
+<pre class="code-block"><code>FUNÇÃO reproduzir(progenitor_a, progenitor_b):
     SE sorteio() &lt; probabilidade_cruzamento:
         ponto ← escolher posição entre 1 e 7
-        filho ← genes de pai_a antes do ponto
-                 + genes de pai_b a partir do ponto
+        filho ← genes de progenitor_a antes do ponto
+                 + genes de progenitor_b a partir do ponto
     SENÃO:
-        filho ← cópia de pai_a
+        filho ← cópia de progenitor_a
     PARA cada gene do filho:
         SE sorteio() &lt; probabilidade_mutacao_por_gene:
             substituir gene por outra máquina em {0, 1, 2}
@@ -308,13 +308,13 @@ Filho: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
 <div class="section-heading"><h2>Etapa 7 · Formar a nova geração</h2></div>
 <p>Os descendentes recém-gerados precisam integrar uma nova população. Há diferentes estratégias de substituição: algumas trocam praticamente todos os indivíduos, enquanto outras preservam parte da população anterior. Para nossa implementação, usaremos uma <strong>substituição geracional com elitismo</strong>.</p>
 <p>Se a população possui seis indivíduos, preservamos uma cópia do melhor e preenchemos as cinco vagas restantes com descendentes. Desse modo, uma solução de boa aptidão não é perdida apenas por efeito do sorteio genético, embora preservar muitos indivíduos possa reduzir a diversidade.</p>
-<p>Preservaremos uma cópia do indivíduo com maior aptidão (elitismo de um indivíduo). As outras posições serão preenchidas por descendentes obtidos dos pais selecionados. Assim, a população permanece com o mesmo tamanho.</p>
+<p>Preservaremos uma cópia do indivíduo com maior aptidão (elitismo de um indivíduo). As outras posições serão preenchidas por descendentes obtidos dos progenitores selecionados. Assim, a população permanece com o mesmo tamanho.</p>
 <pre class="code-block"><code>FUNÇÃO proxima_geracao(populacao, aptidoes):
     nova ← [cópia do indivíduo com maior aptidão]
     ENQUANTO tamanho(nova) &lt; tamanho_populacao:
-        pai_a ← selecionar_pai(populacao, aptidoes)
-        pai_b ← selecionar_pai(populacao, aptidoes)
-        acrescentar reproduzir(pai_a, pai_b) a nova
+        progenitor_a ← selecionar_pai(populacao, aptidoes)
+        progenitor_b ← selecionar_pai(populacao, aptidoes)
+        acrescentar reproduzir(progenitor_a, progenitor_b) a nova
     RETORNAR nova</code></pre>
 
 <div class="section-heading"><h2>Etapa 8 · Avaliar e decidir quando parar</h2></div>
