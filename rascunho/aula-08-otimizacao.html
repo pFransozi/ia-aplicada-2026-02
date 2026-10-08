@@ -113,56 +113,153 @@
 </tbody></table></div>
 </div>
 </div></section>
-<section class="section section-soft" id="modelagem"><div class="container"><div class="section-heading"><p class="eyebrow">Parte III · Representação</p><h2>Da situação industrial ao modelo computacional</h2></div><p>Vamos trabalhar com uma versão reduzida do problema de escalonamento. Oito tarefas independentes precisam ser atribuídas a três máquinas heterogêneas. Cada máquina processa uma tarefa por vez, na ordem fixa T1, T2, ... das tarefas que lhe forem atribuídas. Todas podem começar no instante zero. <strong>Aqui otimizamos a atribuição; não otimizamos a ordem de execução.</strong></p>
-<div class="tbl"><table><thead><tr><th>Tarefa</th><th>Máquina 0</th><th>Máquina 1</th><th>Máquina 2</th></tr></thead><tbody><tr><td>T1</td><td>9</td><td>6</td><td>8</td></tr><tr><td>T2</td><td>5</td><td>8</td><td>6</td></tr><tr><td>T3</td><td>7</td><td>5</td><td>9</td></tr><tr><td>T4</td><td>8</td><td>9</td><td>4</td></tr><tr><td>T5</td><td>6</td><td>7</td><td>5</td></tr><tr><td>T6</td><td>9</td><td>6</td><td>7</td></tr><tr><td>T7</td><td>4</td><td>8</td><td>6</td></tr><tr><td>T8</td><td>7</td><td>5</td><td>8</td></tr></tbody></table></div>
-<h3>1. Decisões e restrições</h3><p>Cada tarefa deve ser atribuída a exatamente uma máquina, e não pode executar simultaneamente com outra tarefa na mesma máquina. Os valores da tabela representam tempos de processamento, em unidades didáticas.</p><h3>2. Indivíduos e genes</h3><p>Um cromossomo é um vetor com oito genes. Cada gene representa a máquina escolhida para uma tarefa: 0, 1 ou 2.</p><div class="cells" aria-label="Exemplo de indivíduo"><span>1</span><span>0</span><span>1</span><span>2</span><span>2</span><span>1</span><span>0</span><span>1</span></div>
-<p>O exemplo atribui T2 e T7 à máquina 0 (carga 5+4=9), T1, T3, T6 e T8 à máquina 1 (carga 6+5+6+5=22) e T4 e T5 à máquina 2 (carga 4+5=9). As máquinas trabalham em paralelo, portanto o tempo para concluir toda a produção é <strong>max(9,22,9)=22</strong>, e não a soma das cargas.</p>
-<h3>3. Função objetivo e aptidão</h3><p>Desejamos minimizar o tempo de conclusão (<em>makespan</em>): o maior dos três tempos acumulados. Como PyGAD maximiza a aptidão, podemos empregar <code>fitness = 1 / (1 + makespan)</code>. Uma solução com menor makespan terá maior aptidão.</p><h3>4. Os limites da representação</h3><p>O modelo ainda não contempla precedências, janelas de entrega, compatibilidade de ferramentas nem ordens de execução variáveis. Para contemplá-las, seria necessário ampliar os genes, alterar a avaliação ou estabelecer mecanismos de validação e reparo. O algoritmo não otimiza condições que ficaram fora da formulação.</p></div></section>
-<section class="section section-soft" id="pratica"><div class="container"><div class="section-heading"><p class="eyebrow">Parte IV · Exercício guiado</p><h2>Implementação em Python com PyGAD</h2><p>O problema e a avaliação permanecerão visíveis no código. PyGAD executará o ciclo evolutivo, permitindo concentrar a atividade na modelagem e interpretação.</p></div>
-<h3>Etapa 1 · Representar dados e avaliar um indivíduo</h3><pre class="code-block"><code>!pip -q install pygad
-import numpy as np
-import pygad
+<section class="section section-soft" id="modelagem"><div class="container">
+<div class="section-heading"><p class="eyebrow">Parte III · Modelagem e pseudocódigo</p><h2>O problema das máquinas em cada etapa do algoritmo genético</h2><p>Vamos percorrer o mesmo problema em todas as etapas do ciclo de vida. Primeiro construiremos a lógica do algoritmo em pseudocódigo; a tradução para Python será realizada posteriormente, em conjunto, durante a prática.</p></div>
+<p>Uma indústria possui três máquinas com tempos de processamento diferentes para cada tarefa. Algumas tarefas são mais demoradas que outras, e a máquina mais eficiente varia conforme a operação. Precisamos distribuir oito tarefas independentes entre essas máquinas, minimizando o instante em que a última máquina termina sua carga de trabalho.</p>
+<div class="tbl"><table><thead><tr><th>Tarefa</th><th>M0</th><th>M1</th><th>M2</th></tr></thead><tbody>
+<tr><td>T1</td><td>9</td><td>6</td><td>8</td></tr><tr><td>T2</td><td>5</td><td>8</td><td>6</td></tr>
+<tr><td>T3</td><td>7</td><td>5</td><td>9</td></tr><tr><td>T4</td><td>8</td><td>9</td><td>4</td></tr>
+<tr><td>T5</td><td>6</td><td>7</td><td>5</td></tr><tr><td>T6</td><td>9</td><td>6</td><td>7</td></tr>
+<tr><td>T7</td><td>4</td><td>8</td><td>6</td></tr><tr><td>T8</td><td>7</td><td>5</td><td>8</td></tr>
+</tbody></table></div>
+<div class="note"><strong>Recorte do modelo.</strong> Cada tarefa será atribuída a exatamente uma máquina; máquinas distintas podem trabalhar em paralelo, mas cada máquina processa suas tarefas sequencialmente. A ordem interna das tarefas está fixa. Por enquanto, não estamos modelando precedências, indisponibilidade de equipamento ou outras restrições da figura introdutória. São <strong>3<sup>8</sup> = 6.561</strong> atribuições possíveis neste exemplo reduzido.</div>
 
-tempos = np.array([
+<h3>Etapa 1 · Codificar o espaço de soluções</h3>
+<p>Um indivíduo é um vetor com oito posições. A posição corresponde à tarefa, e o valor (0, 1 ou 2) indica a máquina escolhida. Assim, <code>[1,0,1,2,2,1,0,1]</code> representa uma configuração completa e válida no modelo simplificado.</p>
+<div class="cells" aria-label="Cromossomo de exemplo"><span>1</span><span>0</span><span>1</span><span>2</span><span>2</span><span>1</span><span>0</span><span>1</span></div>
+<pre class="code-block"><code>FUNÇÃO criar_individuo():
+    individuo ← vetor vazio
+    PARA cada tarefa:
+        escolher aleatoriamente uma máquina em {0, 1, 2}
+        acrescentar a escolha ao individuo
+    RETORNAR individuo</code></pre>
+
+<h3>Etapa 2 · Definir os parâmetros</h3>
+<p>Precisamos decidir quantas soluções serão comparadas em cada geração, quantas gerações poderão ocorrer e como serão aplicados seleção, cruzamento, mutação e elitismo. Para uma demonstração inicial, podemos utilizar uma população de 6 indivíduos, seleção por torneio, cruzamento de ponto único, mutação com baixa probabilidade e preservação do melhor indivíduo. Esses valores são escolhas didáticas, não uma configuração ótima.</p>
+<pre class="code-block"><code>tamanho_populacao ← 6
+maximo_geracoes ← 20
+probabilidade_cruzamento ← 0,8
+probabilidade_mutacao_por_gene ← 0,1
+elitismo ← 1</code></pre>
+
+<h3>Etapa 3 · Criar a população inicial</h3>
+<p>Em vez de iniciar com uma única atribuição, geramos várias. Por exemplo, uma população poderia conter <code>[1,0,1,2,2,1,0,1]</code>, <code>[0,2,1,2,0,1,0,2]</code> e outras configurações. Indivíduos distintos permitem explorar diferentes distribuições de carga desde o começo.</p>
+<pre class="code-block"><code>FUNÇÃO criar_populacao(quantidade):
+    populacao ← lista vazia
+    REPETIR quantidade vezes:
+        acrescentar criar_individuo() à populacao
+    RETORNAR populacao</code></pre>
+
+<h3>Etapa 4 · Avaliar a aptidão</h3>
+<p>A função objetivo será minimizar o <em>makespan</em>, isto é, a maior carga de processamento entre as três máquinas. Para o indivíduo <code>[1,0,1,2,2,1,0,1]</code>, as cargas são M0 = 5 + 4 = 9; M1 = 6 + 5 + 6 + 5 = 22; M2 = 4 + 5 = 9. Portanto, <strong>makespan = 22</strong>. Como o algoritmo genético será configurado para maximizar a aptidão, utilizaremos <code>1 / (1 + makespan)</code>: menor tempo implica maior aptidão.</p>
+<pre class="code-block"><code>FUNÇÃO calcular_makespan(individuo, tempos):
+    cargas ← [0, 0, 0]
+    PARA tarefa de 0 até 7:
+        maquina ← individuo[tarefa]
+        cargas[maquina] ← cargas[maquina] + tempos[tarefa][maquina]
+    RETORNAR máximo(cargas)
+
+FUNÇÃO calcular_aptidao(individuo, tempos):
+    tempo_total ← calcular_makespan(individuo, tempos)
+    RETORNAR 1 / (1 + tempo_total)</code></pre>
+
+<h3>Etapa 5 · Selecionar os pais</h3>
+<p>Depois de avaliar a população, selecionamos indivíduos para reprodução. Na seleção por torneio, alguns candidatos são sorteados e aquele com maior aptidão é escolhido. O processo é repetido para selecionar outro pai. Indivíduos melhores têm vantagem, mas não necessariamente serão escolhidos em todas as seleções.</p>
+<pre class="code-block"><code>FUNÇÃO selecionar_pai(populacao, aptidoes):
+    candidatos ← sortear índices de 3 indivíduos
+    vencedor ← candidato com maior aptidão
+    RETORNAR uma cópia de populacao[vencedor]</code></pre>
+
+<h3>Etapa 6 · Gerar descendentes</h3>
+<p>No cruzamento de ponto único, sorteamos uma posição entre dois genes e combinamos trechos dos pais. A mutação, quando ocorre, troca o valor de um gene por outra máquina válida. Por exemplo:</p>
+<pre class="code-block"><code>Pai A: [1, 0, 1, 2 | 2, 1, 0, 1]
+Pai B: [2, 1, 0, 0 | 1, 2, 2, 0]
+Filho: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
+<p>Uma mutação no gene da T7 poderia substituir 2 por 0. Essa alteração não garante melhoria: o descendente precisa ser avaliado. Para a implementação, o cruzamento será aplicado com a probabilidade configurada, e a mutação será considerada separadamente para cada gene.</p>
+<pre class="code-block"><code>FUNÇÃO reproduzir(pai_a, pai_b):
+    SE sorteio() &lt; probabilidade_cruzamento:
+        ponto ← escolher posição entre 1 e 7
+        filho ← genes de pai_a antes do ponto
+                 + genes de pai_b a partir do ponto
+    SENÃO:
+        filho ← cópia de pai_a
+    PARA cada gene do filho:
+        SE sorteio() &lt; probabilidade_mutacao_por_gene:
+            substituir gene por outra máquina em {0, 1, 2}
+    RETORNAR filho</code></pre>
+
+<h3>Etapa 7 · Formar a nova geração</h3>
+<p>Preservaremos uma cópia do indivíduo com maior aptidão (elitismo de um indivíduo). As outras posições serão preenchidas por descendentes obtidos dos pais selecionados. Assim, a população permanece com o mesmo tamanho.</p>
+<pre class="code-block"><code>FUNÇÃO proxima_geracao(populacao, aptidoes):
+    nova ← [cópia do indivíduo com maior aptidão]
+    ENQUANTO tamanho(nova) &lt; tamanho_populacao:
+        pai_a ← selecionar_pai(populacao, aptidoes)
+        pai_b ← selecionar_pai(populacao, aptidoes)
+        acrescentar reproduzir(pai_a, pai_b) a nova
+    RETORNAR nova</code></pre>
+
+<h3>Etapa 8 · Avaliar e decidir quando parar</h3>
+<p>A nova geração é avaliada pela mesma função de aptidão. Repetimos seleção e reprodução até completar o número de gerações. Ao final, devolvemos a melhor distribuição encontrada e seu makespan. Isso não prova que a solução seja globalmente ótima.</p>
+<pre class="code-block"><code>ALGORITMO genetico_escalonamento:
+    populacao ← criar_populacao(tamanho_populacao)
+
+    PARA geracao de 1 até maximo_geracoes:
+        aptidoes ← avaliar todos os indivíduos da populacao
+        registrar melhor aptidão desta geração
+        populacao ← proxima_geracao(populacao, aptidoes)
+
+    aptidoes_finais ← avaliar todos os indivíduos da populacao
+    melhor ← indivíduo com maior aptidão na população final
+    RETORNAR melhor, calcular_makespan(melhor, tempos)</code></pre>
+<div class="note"><strong>Do modelo ao programa.</strong> Os procedimentos acima explicitam as decisões essenciais do algoritmo. Na prática em Python, transformaremos essas operações em funções e verificaremos seu comportamento por testes, preservando a distinção entre o problema que modelamos e a estratégia que usamos para procurar soluções.</div>
+</div></section>
+
+<section class="section section-soft" id="pratica"><div class="container">
+<div class="section-heading"><p class="eyebrow">Parte IV · Prática guiada em Python</p><h2>Da descrição algorítmica à implementação</h2><p>A construção do código será conduzida com os estudantes. O material apresenta a sequência de implementação e os requisitos de teste, sem fornecer a resolução completa.</p></div>
+<div class="note"><strong>Escolha da implementação.</strong> Para reproduzir fielmente o pseudocódigo, a primeira versão será construída com estruturas básicas do Python, <code>random</code> e, opcionalmente, NumPy. Depois de compreender o mecanismo, a turma poderá comparar o próprio algoritmo com uma implementação em <strong>PyGAD</strong>. Não é necessário programar manualmente todos os operadores e utilizar PyGAD ao mesmo tempo.</div>
+<div class="tbl"><table><thead><tr><th>Etapa no notebook</th><th>O que implementar</th><th>Verificação esperada</th></tr></thead><tbody>
+<tr><td>1 · Dados</td><td>Registrar a matriz de tempos das oito tarefas e três máquinas.</td><td>Conferir posições, dimensões e valores.</td></tr>
+<tr><td>2 · Representação</td><td>Implementar <code>criar_individuo()</code> e <code>criar_populacao()</code>.</td><td>Todos os cromossomos possuem oito genes no domínio {0,1,2}.</td></tr>
+<tr><td>3 · Avaliação</td><td>Implementar <code>calcular_makespan()</code> e <code>calcular_aptidao()</code>.</td><td>O cromossomo de referência produz cargas [9,22,9] e makespan 22.</td></tr>
+<tr><td>4 · Operadores</td><td>Implementar seleção por torneio, cruzamento de ponto único e mutação.</td><td>Os descendentes continuam representando atribuições válidas.</td></tr>
+<tr><td>5 · Evolução</td><td>Implementar elitismo, atualização da população e repetição das gerações.</td><td>População com tamanho constante; registro da melhor aptidão.</td></tr>
+<tr><td>6 · Análise</td><td>Exibir melhor solução, makespan e histórico de aptidão.</td><td>Interpretar a evolução e os limites dos resultados.</td></tr>
+</tbody></table></div>
+<h3>Estrutura inicial do notebook</h3>
+<p>A implementação pode começar apenas com os dados e as assinaturas das funções. O conteúdo de cada função será construído progressivamente em sala.</p>
+<pre class="code-block"><code>import random
+
+TEMPOS = [
     [9, 6, 8], [5, 8, 6], [7, 5, 9], [8, 9, 4],
     [6, 7, 5], [9, 6, 7], [4, 8, 6], [7, 5, 8]
-])
+]
 
-def avaliar(solucao):
-    cargas = np.zeros(3, dtype=int)
-    for tarefa, maquina in enumerate(solucao):
-        maquina = int(maquina)
-        cargas[maquina] += tempos[tarefa, maquina]
-    return int(cargas.max()), cargas
+def criar_individuo():
+    # Implementar a codificação de uma atribuição.
+    pass
 
-exemplo = [1, 0, 1, 2, 2, 1, 0, 1]
-print(avaliar(exemplo))  # makespan = 22
+def calcular_makespan(individuo):
+    # Calcular as cargas e retornar a maior.
+    pass
 
-def fitness_func(ga_instance, solution, solution_idx):
-    makespan, cargas = avaliar(solution)
-    return 1.0 / (1.0 + makespan)</code></pre><h3>Etapa 2 · Configurar a evolução</h3><pre class="code-block"><code>ga = pygad.GA(
-    num_generations=70,
-    num_parents_mating=10,
-    sol_per_pop=24,
-    num_genes=8,
-    gene_space=[0, 1, 2],
-    gene_type=int,
-    fitness_func=fitness_func,
-    parent_selection_type="tournament",
-    K_tournament=3,
-    crossover_type="single_point",
-    mutation_type="random",
-    mutation_percent_genes=20,
-    keep_elitism=1,
-    random_seed=42
-)
-ga.run()
-melhor, fitness, _ = ga.best_solution()
-makespan, cargas = avaliar(melhor)
-print("Solução:", melhor.astype(int))
-print("Cargas:", cargas)
-print("Makespan:", makespan)
-ga.plot_fitness()</code></pre><h3>Etapa 3 · Analisar o resultado</h3><p>Identifique quais máquinas receberam mais tarefas, quais ficaram mais carregadas e como a melhor aptidão variou nas gerações. Compare o makespan obtido com o indivíduo do exemplo e com uma regra simples de atribuição. Um gráfico de melhora não comprova que o ótimo global foi alcançado.</p><h3>Etapa 4 · Experimento controlado</h3><p>Repita a execução com <code>mutation_percent_genes=5</code> e <code>mutation_percent_genes=30</code>, mantendo os demais parâmetros. Registre os resultados e explique o efeito observado. Para sustentar conclusões gerais, seria necessário repetir cada condição com diferentes sementes.</p></div></section>
+def calcular_aptidao(individuo):
+    # Transformar o makespan em aptidão.
+    pass
+
+def selecionar_pai(populacao, aptidoes):
+    # Implementar torneio.
+    pass
+
+def reproduzir(pai_a, pai_b):
+    # Implementar cruzamento e mutação.
+    pass
+
+def executar_algoritmo_genetico():
+    # Integrar as etapas do pseudocódigo.
+    pass</code></pre>
+<h3>Experimento de fechamento</h3>
+<p>Após a execução funcionar, comparar duas taxas de mutação, mantendo os demais parâmetros e registrando sementes, makespan e histórico da melhor aptidão. Uma única execução não é suficiente para concluir que uma configuração é superior em geral.</p>
+</div></section>
 <section class="section" id="exercicios"><div class="container"><div class="section-heading"><p class="eyebrow">Parte V · Atividades</p><h2>Exercícios de aplicação</h2></div>
 <article class="card"><h3>Exercício 1 · Interpretar uma atribuição</h3><p>Usando os tempos da tabela, avalie o cromossomo <code>[0,1,2,2,0,1,0,2]</code>. Identifique as tarefas de cada máquina, calcule as cargas e determine o makespan. Explique por que a melhor decisão individual para cada tarefa não garante necessariamente a melhor configuração global.</p></article>
 <article class="card"><h3>Exercício 2 · Modelar um problema de Engenharia de Software</h3><p>Dez serviços devem ser distribuídos entre quatro servidores com capacidades limitadas de CPU e memória e custos operacionais distintos. Defina os genes, seus domínios, a função objetivo, as restrições de capacidade e uma maneira de tratar soluções inviáveis.</p></article>
