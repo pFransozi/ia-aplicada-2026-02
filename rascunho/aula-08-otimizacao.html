@@ -131,7 +131,7 @@
 </tbody></table></div>
 <div class="note"><strong>Recorte do modelo.</strong> Cada tarefa será atribuída a exatamente uma máquina; máquinas distintas podem trabalhar em paralelo, mas cada máquina processa suas tarefas sequencialmente. A ordem interna das tarefas está fixa. Por enquanto, não estamos modelando precedências, indisponibilidade de equipamento ou outras restrições da figura introdutória. São <strong>3<sup>8</sup> = 6.561</strong> atribuições possíveis neste exemplo reduzido.</div>
 
-<h3>Etapa 1 · Codificar o espaço de soluções</h3>
+<div class="section-heading"><h2>Etapa 1 · Codificar o espaço de soluções</h2></div>
 <p>Antes de aplicar qualquer operador genético, precisamos decidir <strong>o que representa uma solução</strong>. No problema industrial, uma solução não é uma tarefa isolada, mas a atribuição de todas as tarefas às máquinas. A codificação deve permitir reconstruir essa distribuição e calcular seu desempenho.</p>
 <p>Adotaremos uma <strong>codificação inteira</strong>, diferente da codificação binária usada no exemplo da mochila do livro: cada gene assume um dos valores <code>0</code>, <code>1</code> ou <code>2</code>. A posição do gene identifica a tarefa; seu valor identifica a máquina. O comprimento do cromossomo é sempre oito.</p>
 <div class="tbl"><table><thead><tr><th>Posição</th><th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>T8</th></tr></thead><tbody><tr><td>Gene</td><td>1</td><td>0</td><td>1</td><td>2</td><td>2</td><td>1</td><td>0</td><td>1</td></tr></tbody></table></div>
@@ -145,7 +145,7 @@
         acrescentar a escolha ao individuo
     RETORNAR individuo</code></pre>
 
-<h3>Etapa 2 · Definir os parâmetros</h3>
+<div class="section-heading"><h2>Etapa 2 · Definir os parâmetros</h2></div>
 <p>O algoritmo precisa de uma política para decidir <strong>quantas soluções examinar simultaneamente</strong>, como escolher indivíduos para reprodução e quantas alterações introduzir nos descendentes. Esses parâmetros não são características das máquinas: são decisões sobre o comportamento do processo de busca.</p>
 <p>Para acompanhar os cálculos manualmente, utilizaremos uma população pequena. Depois, na prática, poderemos aumentar o número de indivíduos e de gerações. O livro destaca que a configuração modifica o equilíbrio entre <em>exploração</em> de novas regiões e <em>aproveitamento</em> de soluções promissoras.</p>
 <div class="tbl"><table><thead><tr><th>Parâmetro</th><th>Valor didático</th><th>Consequência</th></tr></thead><tbody>
@@ -163,7 +163,7 @@ probabilidade_cruzamento ← 0,8
 probabilidade_mutacao_por_gene ← 0,1
 elitismo ← 1</code></pre>
 
-<h3>Etapa 3 · Criar a população inicial</h3>
+<div class="section-heading"><h2>Etapa 3 · Criar a população inicial</h2></div>
 <p>Uma população é um conjunto de cromossomos. Em vez de escolher imediatamente uma única distribuição, geramos configurações diferentes, que poderão receber avaliações distintas. A diversidade inicial é importante: se todos os indivíduos começarem iguais, o algoritmo terá poucas alternativas para combinar.</p>
 <p>Uma população de exemplo, com três dos seis indivíduos, poderia ser:</p>
 <div class="tbl"><table><thead><tr><th>Indivíduo</th><th>Cromossomo</th><th>Interpretação</th></tr></thead><tbody>
@@ -179,7 +179,7 @@ elitismo ← 1</code></pre>
         acrescentar criar_individuo() à populacao
     RETORNAR populacao</code></pre>
 
-<h3>Etapa 4 · Avaliar a aptidão</h3>
+<div class="section-heading"><h2>Etapa 4 · Avaliar a aptidão</h2></div>
 <p>Aptidão não significa simplesmente contar quantas tarefas uma máquina recebeu. O tempo de processamento varia com a <strong>combinação entre tarefa e máquina</strong>. Portanto, precisamos consultar a matriz de tempos e somar, separadamente, as durações de cada máquina.</p>
 <p>Considere o indivíduo A, representado por <code>[1,0,1,2,2,1,0,1]</code>:</p>
 <div class="tbl"><table><thead><tr><th>Máquina</th><th>Tarefas</th><th>Cálculo</th><th>Carga</th></tr></thead><tbody>
@@ -201,7 +201,7 @@ FUNÇÃO calcular_aptidao(individuo, tempos):
     tempo_total ← calcular_makespan(individuo, tempos)
     RETORNAR 1 / (1 + tempo_total)</code></pre>
 
-<h3>Etapa 5 · Selecionar os pais</h3>
+<div class="section-heading"><h2>Etapa 5 · Selecionar os pais</h2></div>
 <p>Após avaliar os indivíduos, queremos favorecer a reprodução daqueles com melhor desempenho, <strong>sem excluir completamente os demais</strong>. Uma estratégia apresentada no capítulo é a <strong>seleção por roleta</strong>: cada indivíduo recebe uma probabilidade proporcional à sua aptidão. A roleta é apenas uma analogia para o sorteio ponderado.</p>
 <p>Por exemplo, suponha que três indivíduos de uma população demonstrativa apresentem as seguintes aptidões:</p>
 <div class="tbl"><table><thead><tr><th>Indivíduo</th><th>Makespan</th><th>Aptidão</th><th>Probabilidade de seleção (aprox.)</th></tr></thead><tbody>
@@ -221,7 +221,7 @@ FUNÇÃO calcular_aptidao(individuo, tempos):
             RETORNAR cópia de populacao[indice]
     RETORNAR cópia do último individuo</code></pre>
 
-<h3>Etapa 6 · Gerar descendentes</h3>
+<div class="section-heading"><h2>Etapa 6 · Gerar descendentes</h2></div>
 <p>Os pais selecionados são combinações completas de tarefas e máquinas. O <strong>cruzamento de ponto único</strong> escolhe uma posição de corte e junta o prefixo de um pai ao sufixo do outro. Isso produz outra distribuição possível, preservando grupos de genes das soluções parentais.</p>
 <p>Vamos usar dois pais com oito genes e escolher o ponto de corte após T4:</p>
 <p>No cruzamento de ponto único, sorteamos uma posição entre dois genes e combinamos trechos dos pais. A mutação, quando ocorre, troca o valor de um gene por outra máquina válida. Por exemplo:</p>
@@ -241,7 +241,7 @@ Filho: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
             substituir gene por outra máquina em {0, 1, 2}
     RETORNAR filho</code></pre>
 
-<h3>Etapa 7 · Formar a nova geração</h3>
+<div class="section-heading"><h2>Etapa 7 · Formar a nova geração</h2></div>
 <p>Os descendentes recém-gerados precisam integrar uma nova população. Há diferentes estratégias de substituição: algumas trocam praticamente todos os indivíduos, enquanto outras preservam parte da população anterior. Para nossa implementação, usaremos uma <strong>substituição geracional com elitismo</strong>.</p>
 <p>Se a população possui seis indivíduos, preservamos uma cópia do melhor e preenchemos as cinco vagas restantes com descendentes. Desse modo, uma solução de boa aptidão não é perdida apenas por efeito do sorteio genético, embora preservar muitos indivíduos possa reduzir a diversidade.</p>
 <p>Preservaremos uma cópia do indivíduo com maior aptidão (elitismo de um indivíduo). As outras posições serão preenchidas por descendentes obtidos dos pais selecionados. Assim, a população permanece com o mesmo tamanho.</p>
@@ -253,7 +253,7 @@ Filho: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
         acrescentar reproduzir(pai_a, pai_b) a nova
     RETORNAR nova</code></pre>
 
-<h3>Etapa 8 · Avaliar e decidir quando parar</h3>
+<div class="section-heading"><h2>Etapa 8 · Avaliar e decidir quando parar</h2></div>
 <p>Depois de formar a geração seguinte, precisamos calcular novamente a aptidão dos indivíduos. O processo se repete: <strong>avaliar → selecionar → reproduzir → formar nova geração</strong>. A execução pode terminar após um número fixo de gerações, ao atingir uma meta de aptidão ou quando não há melhora relevante durante várias gerações.</p>
 <p>Para a primeira implementação, adotaremos vinte gerações e registraremos o melhor makespan de cada uma. O registro permite construir um gráfico de convergência. Como existe aleatoriedade, duas execuções podem terminar com resultados diferentes, e uma melhora aparente não comprova que o ótimo global foi encontrado.</p>
 <p>A nova geração é avaliada pela mesma função de aptidão. Repetimos seleção e reprodução até completar o número de gerações. Ao final, devolvemos a melhor distribuição encontrada e seu makespan. Isso não prova que a solução seja globalmente ótima.</p>
