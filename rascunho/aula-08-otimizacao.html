@@ -198,11 +198,11 @@ FUNÇÃO calcular_aptidao(individuo, tempos):
 <p>Após avaliar os indivíduos, queremos favorecer a reprodução daqueles com melhor desempenho, <strong>sem excluir completamente os demais</strong>. Uma estratégia apresentada no capítulo é a <strong>seleção por roleta</strong>: cada indivíduo recebe uma probabilidade proporcional à sua aptidão. A roleta é apenas uma analogia para o sorteio ponderado.</p>
 <p>Por exemplo, suponha que três indivíduos de uma população demonstrativa apresentem as seguintes aptidões:</p>
 <div class="tbl"><table><thead><tr><th>Indivíduo</th><th>Makespan</th><th>Aptidão</th><th>Probabilidade de seleção (aprox.)</th></tr></thead><tbody>
-<tr><td>A</td><td>22</td><td>1/23 = 0,0435</td><td>27,3%</td></tr>
-<tr><td>B</td><td>16</td><td>1/17 = 0,0588</td><td>36,9%</td></tr>
-<tr><td>C</td><td>16</td><td>1/17 = 0,0588</td><td>36,9%</td></tr>
+<tr><td>A</td><td>22</td><td>1/23 = 0,0435</td><td>27,0%</td></tr>
+<tr><td>B</td><td>16</td><td>1/17 = 0,0588</td><td>36,5%</td></tr>
+<tr><td>C</td><td>16</td><td>1/17 = 0,0588</td><td>36,5%</td></tr>
 </tbody></table></div>
-<p>Esses três valores ilustrativos são normalizados pela soma das aptidões. Assim, B e C têm probabilidades maiores, mas A ainda pode ser escolhido. A seleção é repetida para obter os pais necessários. No algoritmo efetivo, as probabilidades serão calculadas considerando <strong>todos os seis indivíduos</strong> da população, não apenas os três desta tabela demonstrativa.</p>
+<p>Esses três valores ilustrativos são normalizados pela soma das aptidões (aproximadamente 0,1611). Assim, B e C têm probabilidades maiores, mas A ainda pode ser escolhido. A seleção é repetida para obter os pais necessários. No algoritmo efetivo, as probabilidades serão calculadas considerando <strong>todos os seis indivíduos</strong> da população, não apenas os três desta tabela demonstrativa.</p>
 <p>Depois de avaliar a população, selecionamos indivíduos para reprodução. Na seleção por roleta, alguns candidatos são sorteados e aquele com maior aptidão é escolhido. O processo é repetido para selecionar outro pai. Indivíduos melhores têm vantagem, mas não necessariamente serão escolhidos em todas as seleções.</p>
 <pre class="code-block"><code>FUNÇÃO selecionar_pai(populacao, aptidoes):
     total ← soma de todas as aptidoes
