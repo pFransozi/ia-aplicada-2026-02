@@ -1,0 +1,67 @@
+/* Componentes didáticos locais; tema e estrutura vêm de ensino.css. */
+body.draft-lesson .draft-banner { margin: 0 0 1.4rem; padding: .8rem 1rem; border: 1px dashed var(--line); border-radius: 8px; background: var(--soft); }
+body.draft-lesson .draft-banner strong { color: var(--blue); }
+body.draft-lesson .draft-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 1.3rem 0; }
+body.draft-lesson .draft-card { min-width: 0; margin: 0; padding: 1.15rem; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+body.draft-lesson .draft-card h3 { margin: 0 0 .6rem; font-size: 1.1rem; }
+body.draft-lesson .draft-card p:last-child { margin-bottom: 0; }
+body.draft-lesson .draft-note { padding: 1rem 1.15rem; border-left: 3px solid var(--blue); border-radius: 0 8px 8px 0; background: var(--soft); margin: 1.2rem 0; }
+body.draft-lesson .draft-note p:first-child { margin-top: 0; }
+body.draft-lesson .draft-note p:last-child { margin-bottom: 0; }
+body.draft-lesson .draft-table-wrap { max-width: 100%; overflow-x: auto; margin: 1.2rem 0 1.5rem; border: 1px solid var(--line); border-radius: 8px; }
+body.draft-lesson .draft-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+body.draft-lesson .draft-table caption { text-align: left; padding: .75rem 1rem; color: var(--muted); background: var(--soft); }
+body.draft-lesson .draft-table th, body.draft-lesson .draft-table td { padding: .7rem .85rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+body.draft-lesson .draft-table th { font-weight: 600; color: var(--ink); }
+body.draft-lesson .draft-table tr:last-child td { border-bottom: 0; }
+body.draft-lesson .draft-formula { overflow-x: auto; margin: 1rem 0; padding: 1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); }
+body.draft-lesson .draft-formula code { white-space: nowrap; background: transparent; }
+body.draft-lesson .draft-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 1.4rem 0; padding: 0; list-style: none; counter-reset: etapa; }
+body.draft-lesson .draft-steps li { counter-increment: etapa; border: 1px solid var(--line); border-radius: 8px; padding: 1rem; background: var(--paper); }
+body.draft-lesson .draft-steps li::before { content: counter(etapa, decimal-leading-zero); display: block; color: var(--blue); font-weight: 600; margin-bottom: .4rem; }
+body.draft-lesson .draft-steps strong { display: block; color: var(--ink); margin-bottom: .3rem; }
+body.draft-lesson .draft-label { display: inline-block; font-size: .8rem; color: var(--blue); padding: .15rem .55rem; border: 1px solid var(--line); border-radius: 999px; margin-bottom: .5rem; }
+body.draft-lesson pre.code-block { max-width: 100%; overflow-x: auto; margin: 1rem 0 1.5rem; padding: 1.1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--ensino-code-bg, var(--soft)); color: var(--ensino-code-text, var(--ink)); font-size: .89rem; line-height: 1.65; tab-size: 4; }
+body.draft-lesson pre.code-block code { white-space: pre; overflow-wrap: normal; word-break: normal; font-size: inherit; background: transparent; padding: 0; }
+body.draft-lesson p code, body.draft-lesson li code, body.draft-lesson td code { overflow-wrap: anywhere; word-break: normal; }
+body.draft-lesson .draft-output { white-space: pre-wrap; overflow-wrap: anywhere; padding: 1rem; background: var(--soft); border: 1px solid var(--line); border-radius: 8px; font-family: ui-monospace, monospace; font-size: .9rem; }
+body.draft-lesson .draft-actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin: 1rem 0; }
+body.draft-lesson .draft-actions button, body.draft-lesson .draft-actions a { padding: .55rem .85rem; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); color: var(--blue); text-decoration: none; cursor: pointer; font: inherit; }
+body.draft-lesson .draft-actions button:hover, body.draft-lesson .draft-actions a:hover { border-color: var(--blue); }
+body.draft-lesson .draft-exercise { margin: 1.2rem 0; padding: 1.2rem; border: 1px solid var(--line); border-radius: 8px; }
+body.draft-lesson .draft-exercise h3 { margin-top: 0; }
+body.draft-lesson details.draft-details { margin: 1.2rem 0; padding: 1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+body.draft-lesson details.draft-details summary { cursor: pointer; font-weight: 500; color: var(--ink); }
+body.draft-lesson .draft-reference { padding: 1rem 0; border-top: 1px solid var(--line); }
+body.draft-lesson .draft-reference p { margin-bottom: 0; }
+body.draft-lesson .draft-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+body.draft-lesson .draft-controls label { display: grid; gap: .5rem; }
+body.draft-lesson .draft-controls input { width: 100%; padding: .6rem; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); }
+body.draft-lesson .draft-small { font-size: .88rem; color: var(--muted); }
+@media (max-width: 760px) {
+  body.draft-lesson .draft-grid, body.draft-lesson .draft-steps, body.draft-lesson .draft-controls { grid-template-columns: 1fr; }
+  body.draft-lesson .draft-table th, body.draft-lesson .draft-table td { padding: .6rem; }
+  body.draft-lesson pre.code-block { font-size: .82rem; }
+}
+@media print {
+  body.draft-lesson .draft-actions, body.draft-lesson .draft-controls { display: none; }
+  body.draft-lesson pre.code-block code { white-space: pre-wrap; overflow-wrap: anywhere; }
+  body.draft-lesson .draft-table-wrap { overflow: visible; }
+}
+
+/* Visão da aula: componentes já utilizados nas aulas 05 e 06. */
+body.draft-lesson .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+body.draft-lesson .overview-grid > .topics-card { grid-row: auto; }
+body.draft-lesson .competency-stack { display: grid; gap: 16px; min-width: 0; }
+body.draft-lesson .competency-stack > h3 { margin: 0; }
+body.draft-lesson .competency-stack .card { margin: 0; }
+body.draft-lesson .competency h4 { margin: 0; font-size: 1.05rem; line-height: 1.5; letter-spacing: 0; }
+body.draft-lesson .competency-context { margin: .9rem 0 0; padding-top: .8rem; border-top: 1px solid var(--line); font-size: .92rem; }
+body.draft-lesson .learning-objectives { padding-left: 1.4rem; }
+body.draft-lesson .learning-objectives li + li { margin-top: .65rem; }
+body.draft-lesson .topics-card h3:not(:first-child) { margin-top: 1.7rem; }
+body.draft-lesson .section-anchor { display: block; scroll-margin-top: 90px; }
+body.draft-lesson #competencias-titulo { scroll-margin-top: 90px; }
+@media (max-width: 760px) {
+  body.draft-lesson .overview-grid { grid-template-columns: minmax(0, 1fr); }
+}
