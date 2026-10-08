@@ -256,15 +256,25 @@ FUNÇÃO calcular_aptidao(individuo, tempos):
     RETORNAR 1 / (1 + tempo_total)</code></pre>
 
 <div class="section-heading"><h2>Etapa 5 · Selecionar os pais</h2></div>
-<p>Após avaliar os indivíduos, queremos favorecer a reprodução daqueles com melhor desempenho, <strong>sem excluir completamente os demais</strong>. Uma estratégia possível é a <strong>seleção por roleta</strong>: cada indivíduo recebe uma probabilidade de ser escolhido proporcional à sua aptidão. A roleta é apenas uma analogia para o sorteio ponderado.</p>
-<p>Por exemplo, suponha que três indivíduos de uma população demonstrativa apresentem as seguintes aptidões:</p>
-<div class="tbl ga-compact-table-wrap ga-selection-wrap"><table class="ga-compact-table"><thead><tr><th>Indivíduo</th><th>Tempo total de conclusão</th><th>Aptidão</th><th>Probabilidade de seleção (aprox.)</th></tr></thead><tbody>
-<tr><td>A</td><td>22</td><td>1/23 = 0,0435</td><td>27,0%</td></tr>
-<tr><td>B</td><td>16</td><td>1/17 = 0,0588</td><td>36,5%</td></tr>
-<tr><td>C</td><td>16</td><td>1/17 = 0,0588</td><td>36,5%</td></tr>
+<p>Depois de avaliar a população, precisamos escolher os indivíduos que participarão da reprodução. Na <strong>seleção por roleta</strong>, cada indivíduo recebe uma chance de ser escolhido proporcional à sua aptidão: indivíduos melhores têm maior probabilidade, mas os demais ainda podem ser selecionados.</p>
+<h3>Como calcular essas probabilidades?</h3>
+<p>Vamos usar os três cromossomos A, B e C apresentados na Etapa 3. Calculando seus tempos totais de conclusão com a matriz do problema, encontramos 22, 19 e 22, respectivamente. Aplicamos a função de aptidão e dividimos cada resultado pela soma das três aptidões.</p>
+<div class="tbl ga-compact-table-wrap ga-selection-wrap"><table class="ga-compact-table"><thead><tr><th>Indivíduo</th><th>Tempo total de conclusão</th><th>Aptidão</th><th>Probabilidade de seleção</th></tr></thead><tbody>
+<tr><td>A</td><td>22</td><td>1/23 ≈ 0,0435</td><td>31,75%</td></tr>
+<tr><td>B</td><td>19</td><td>1/20 = 0,0500</td><td>36,50%</td></tr>
+<tr><td>C</td><td>22</td><td>1/23 ≈ 0,0435</td><td>31,75%</td></tr>
 </tbody></table></div>
-<p>Esses três valores ilustrativos são normalizados pela soma das aptidões (aproximadamente 0,1611). Assim, B e C têm probabilidades maiores, mas A ainda pode ser escolhido. A seleção é repetida para obter os pais necessários. No algoritmo efetivo, as probabilidades serão calculadas considerando <strong>todos os seis indivíduos</strong> da população, não apenas os três desta tabela demonstrativa.</p>
-<p>Depois de avaliar a população, selecionamos indivíduos para reprodução. Na seleção por roleta, alguns candidatos são sorteados e aquele com maior aptidão é escolhido. O processo é repetido para selecionar outro pai. Indivíduos melhores têm vantagem, mas não necessariamente serão escolhidos em todas as seleções.</p>
+<p><strong>Primeiro:</strong> somamos as três aptidões.</p>
+<pre class="code-block"><code>soma = 1/23 + 1/20 + 1/23
+soma ≈ 0,13696</code></pre>
+<p><strong>Depois:</strong> dividimos a aptidão de cada indivíduo por essa soma. Para A:</p>
+<pre class="code-block"><code>P(A) = (1/23) / (1/23 + 1/20 + 1/23)
+P(A) ≈ 0,3175 = 31,75%</code></pre>
+<p>Repetimos para B e C. Por isso B possui maior chance de reprodução: seu tempo de conclusão é menor, sua aptidão é maior e sua parcela da roleta também é maior. <strong>Uma chance maior não significa seleção garantida.</strong></p>
+<h3>Interpretando o sorteio</h3>
+<p>Imagine um número aleatório de 0 a 100. A recebe a faixa até 31,75; B recebe a faixa de 31,75 a 68,25; C recebe o restante, até 100. Um sorteio de <code>50</code> seleciona B; um sorteio de <code>20</code> seleciona A. Para obter dois pais, realizamos dois sorteios, que podem escolher o mesmo indivíduo.</p>
+<div class="note"><strong>Exemplo simplificado.</strong> Esses percentuais consideram somente A, B e C para facilitar os cálculos. Na implementação, a população possui seis indivíduos; portanto, a soma das aptidões e as probabilidades de seleção deverão considerar os seis.</div>
+<h3>Pseudocódigo da seleção por roleta</h3>
 <pre class="code-block"><code>FUNÇÃO selecionar_pai(populacao, aptidoes):
     total ← soma de todas as aptidoes
     sorteio ← número aleatório entre 0 e total
