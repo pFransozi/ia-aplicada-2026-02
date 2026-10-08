@@ -309,12 +309,23 @@ Descendente: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
 <p>Os descendentes recém-gerados precisam integrar uma nova população. Há diferentes estratégias de substituição: algumas trocam praticamente todos os indivíduos, enquanto outras preservam parte da população anterior. Para nossa implementação, usaremos uma <strong>substituição geracional com elitismo</strong>.</p>
 <p>Se a população possui seis indivíduos, preservamos uma cópia do melhor e preenchemos as cinco vagas restantes com descendentes. Desse modo, uma solução de boa aptidão não é perdida apenas por efeito do sorteio genético, embora preservar muitos indivíduos possa reduzir a diversidade.</p>
 <p>Preservaremos uma cópia do indivíduo com maior aptidão (elitismo de um indivíduo). As outras posições serão preenchidas por descendentes obtidos dos progenitores selecionados. Assim, a população permanece com o mesmo tamanho.</p>
+<p><strong>Como identificar o melhor indivíduo?</strong> Precisamos comparar as aptidões da população. A função abaixo percorre a lista, guarda o índice da maior aptidão e devolve esse índice. Em caso de empate, mantém o primeiro encontrado.</p>
+<pre class="code-block"><code>FUNÇÃO indice_melhor(aptidoes):
+    melhor_indice ← 0
+    PARA indice de 1 até tamanho(aptidoes)-1:
+        SE aptidoes[indice] &gt; aptidoes[melhor_indice]:
+            melhor_indice ← indice
+    RETORNAR melhor_indice</code></pre>
+<p>Como cada posição da lista de aptidões corresponde à mesma posição na população, podemos usar o índice retornado para localizar e copiar o cromossomo do indivíduo mais bem avaliado.</p>
 <pre class="code-block"><code>FUNÇÃO proxima_geracao(populacao, aptidoes):
-    nova ← [cópia do indivíduo com maior aptidão]
+    melhor_indice ← indice_melhor(aptidoes)
+    nova ← [cópia de populacao[melhor_indice]]
+
     ENQUANTO tamanho(nova) &lt; tamanho_populacao:
-        progenitor_a ← selecionar_pai(populacao, aptidoes)
-        progenitor_b ← selecionar_pai(populacao, aptidoes)
+        progenitor_a ← selecionar_progenitor(populacao, aptidoes)
+        progenitor_b ← selecionar_progenitor(populacao, aptidoes)
         acrescentar reproduzir(progenitor_a, progenitor_b) a nova
+
     RETORNAR nova</code></pre>
 
 <div class="section-heading"><h2>Etapa 8 · Avaliar e decidir quando parar</h2></div>
@@ -330,7 +341,8 @@ Descendente: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
         populacao ← proxima_geracao(populacao, aptidoes)
 
     aptidoes_finais ← avaliar todos os indivíduos da populacao
-    melhor ← indivíduo com maior aptidão na população final
+    melhor_indice ← indice_melhor(aptidoes_finais)
+    melhor ← populacao[melhor_indice]
     RETORNAR melhor, calcular_makespan(melhor, tempos)</code></pre>
 <div class="note"><strong>Do modelo ao programa.</strong> Os procedimentos acima explicitam as decisões essenciais do algoritmo. Na prática em Python, transformaremos essas operações em funções e verificaremos seu comportamento por testes, preservando a distinção entre o problema que modelamos e a estratégia que usamos para procurar soluções.</div>
 </div></section>
