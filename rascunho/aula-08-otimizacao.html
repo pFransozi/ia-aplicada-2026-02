@@ -69,6 +69,10 @@
   .ga-draft .ga-genes-wrap .ga-compact-table{min-width:430px}
   .ga-draft .ga-compact-table th,.ga-draft .ga-compact-table td{padding:.4rem .5rem}
 }
+
+.ga-draft .ga-fitness-wrap{max-width:750px}
+.ga-draft .ga-fitness-wrap th:first-child,.ga-draft .ga-fitness-wrap td:first-child{width:32%}
+.ga-draft .ga-fitness-wrap th:nth-child(2),.ga-draft .ga-fitness-wrap td:nth-child(2){width:18%;text-align:center}
 </style></head><body class="teaching-page teaching-lesson lesson-page draft-lesson ga-draft">
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
 <header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 08 · Rascunho alternativo</small></span></a><nav class="main-nav"><a href="../index.html">Página principal</a><a href="#problema">Problema</a><a href="#ciclo">Ciclo</a><a href="#modelagem">Modelagem</a><a href="#fundamentos">Conceitos</a><button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button></nav></div></header>
@@ -234,7 +238,7 @@ fitness = 1 / (1 + 22)
 fitness = 1 / 23
 fitness ≈ 0,0435</code></pre>
 <p>O valor <strong>0,0435 não é um tempo, nem uma porcentagem de acerto</strong>. É uma pontuação usada para comparar a qualidade das soluções. Para observar como a transformação funciona, considere outros tempos hipotéticos:</p>
-<div class="tbl"><table><thead><tr><th>Tempo total de conclusão</th><th>Fitness</th><th>Interpretação</th></tr></thead><tbody>
+<div class="tbl ga-compact-table-wrap ga-fitness-wrap"><table class="ga-compact-table"><thead><tr><th>Tempo total de conclusão</th><th>Fitness</th><th>Interpretação</th></tr></thead><tbody>
 <tr><td>22</td><td>0,0435</td><td>Distribuição do indivíduo A</td></tr>
 <tr><td>18</td><td>0,0526</td><td>Tempo menor, aptidão maior</td></tr>
 <tr><td>14</td><td>0,0667</td><td>Tempo ainda menor, aptidão ainda maior</td></tr>
