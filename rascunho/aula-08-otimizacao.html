@@ -89,7 +89,7 @@
 <p><strong>Limite da escolha:</strong> um grande número de combinações, isoladamente, não torna algoritmos genéticos a melhor opção. Métodos exatos ou especializados também devem ser considerados conforme as restrições, os recursos computacionais disponíveis e as garantias exigidas.</p>
 </div></div></section>
 <section class="section" id="ciclo"><div class="container">
-<div class="section-heading"><p class="eyebrow">Parte II · Visão geral</p><h2>O ciclo de vida de um algoritmo genético</h2></div>
+<div class="section-heading"><p class="eyebrow">Parte II · Visão geral</p><h2>Principais conceitos do ciclo evolutivo</h2></div>
 <p>Antes de estudar como representar o problema industrial, vamos observar o funcionamento do algoritmo genético como um todo. O processo começa pela definição de como as soluções serão representadas e avaliadas. Em seguida, uma população inicial é gerada e cada indivíduo recebe uma medida de aptidão. A partir daí, o algoritmo seleciona pais, produz descendentes e forma novas gerações, repetindo esse procedimento até satisfazer um critério de parada.</p>
 <p>Essa sequência permite distinguir duas atividades: <strong>modelar e configurar o problema</strong>, que estabelece o que será otimizado, e <strong>executar o ciclo evolutivo</strong>, que procura melhorar as soluções candidatas.</p>
 <figure class="ga-lifecycle-figure">
@@ -99,7 +99,6 @@
 </figure>
 <div class="ga-cycle-loop"><strong>Repetição evolutiva:</strong> seleção de pais → reprodução → formação da geração → avaliação → verificar parada. Se o critério não for atendido, o ciclo recomeça na seleção.</div>
 <div id="fundamentos" class="ga-cycle-concepts">
-<h3>Principais conceitos do ciclo evolutivo</h3>
 <p>Os termos da computação evolucionária descrevem as soluções e as operações realizadas sobre elas. Uma <strong>solução candidata</strong> corresponde a um indivíduo; sua codificação é chamada de cromossomo, composto por genes. O conjunto de indivíduos forma a população.</p>
 <div class="tbl"><table><thead><tr><th>Conceito</th><th>Função no algoritmo</th></tr></thead><tbody>
 <tr><td>Gene e cromossomo</td><td>Um gene representa um componente ou decisão; o cromossomo codifica uma solução completa.</td></tr>
