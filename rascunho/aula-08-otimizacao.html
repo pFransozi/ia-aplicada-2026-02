@@ -45,7 +45,7 @@
 .ga-draft .ga-lifecycle-figure figcaption{margin-top:.7rem;font-size:.88rem;color:var(--muted);line-height:1.6}
 </style></head><body class="teaching-page teaching-lesson lesson-page draft-lesson ga-draft">
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
-<header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 08 · Rascunho alternativo</small></span></a><nav class="main-nav"><a href="../index.html">Página principal</a><a href="#problema">Problema</a><a href="#ciclo">Ciclo</a><a href="#modelagem">Modelagem</a><a href="#fundamentos">Conceitos</a><a href="#pratica">Prática</a><a href="#exercicios">Exercícios</a><button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button></nav></div></header>
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 08 · Rascunho alternativo</small></span></a><nav class="main-nav"><a href="../index.html">Página principal</a><a href="#problema">Problema</a><a href="#ciclo">Ciclo</a><a href="#modelagem">Modelagem</a><a href="#fundamentos">Conceitos</a><a href="#exercicios">Exercícios</a><button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button></nav></div></header>
 <div class="lesson-shell lesson-page-grid"><main id="conteudo">
 <section class="hero"><div class="container hero-grid"><div><div class="draft-banner"><strong>Rascunho para validação.</strong> Esta versão não substitui a aula oficial.</div><p class="eyebrow">Aula 08 · Computação evolucionária</p><h1>Algoritmos genéticos: modelagem e otimização de problemas</h1><p class="hero-lead">Distinguir problemas de busca, inferência e otimização; construir uma representação genética; executar e avaliar um algoritmo genético.</p><div class="hero-actions"><a class="button button-primary" href="#problema">Iniciar a aula</a><a class="button button-secondary" href="#pratica">Exercício guiado</a></div></div><aside class="guiding-card"><span>Questão orientadora</span><blockquote>Como procurar configurações de boa qualidade quando o número de combinações possíveis é muito elevado?</blockquote></aside></div></section>
 <section class="section section-soft" id="visao"><div class="container"><div class="section-heading"><p class="eyebrow">Visão da aula</p><h2>Objetivos e competências</h2></div><div class="overview-grid"><article class="card"><h3>Objetivos de aprendizagem</h3><ol><li>Identificar problemas de otimização combinatória e distinguir abordagens computacionais.</li><li>Definir variáveis de decisão, restrições, representação dos indivíduos e função de aptidão.</li><li>Explicar seleção, cruzamento, mutação, elitismo, diversidade e convergência.</li><li>Construir progressivamente um algoritmo genético em Python a partir de seu pseudocódigo, implementando os operadores evolutivos.</li><li>Avaliar resultados sem confundir a melhor solução encontrada com um ótimo comprovado.</li></ol><h3>Conteúdo programático</h3><p>Otimização; modelagem de problemas; representação genética; população, genes e cromossomos; fitness; operadores genéticos; seleção e pressão seletiva; critérios de parada; análise experimental.</p></article><article class="card"><h3>Competências e habilidades</h3><p><strong>C2 · H6:</strong> aplicar processos de construção e avaliação de soluções.</p><p><strong>C3 · H10:</strong> comparar abordagens e configurações tecnológicas.</p><p><strong>C6 · H21:</strong> empregar Python e suas estruturas básicas para construir e testar o algoritmo.</p><p><strong>C11 · H38:</strong> desenvolver e validar algoritmos.</p><p><strong>C13 · H45:</strong> interpretar resultados e limites com base em evidências.</p><p><strong>Metodologia:</strong> exposição dialogada, modelagem conjunta, simulação manual de operadores, implementação guiada e exercícios.</p><p><strong>Recursos:</strong> quadro, Python (biblioteca padrão), Google Colab/Jupyter, notebook-base e AVA.</p></article></div></div></section>
@@ -264,61 +264,7 @@ Filho: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
 <div class="note"><strong>Do modelo ao programa.</strong> Os procedimentos acima explicitam as decisões essenciais do algoritmo. Na prática em Python, transformaremos essas operações em funções e verificaremos seu comportamento por testes, preservando a distinção entre o problema que modelamos e a estratégia que usamos para procurar soluções.</div>
 </div></section>
 
-<section class="section section-soft" id="pratica"><div class="container">
-<div class="section-heading"><p class="eyebrow">Parte IV · Prática guiada em Python</p><h2>Da descrição algorítmica à implementação</h2><p>A construção do código será conduzida com os estudantes. O material apresenta a sequência de implementação e os requisitos de teste, sem fornecer a resolução completa.</p></div>
-<div class="note"><strong>Estratégia de implementação.</strong> O algoritmo será construído pelos estudantes, etapa por etapa, usando Python e sua biblioteca padrão (<code>random</code>). Cada bloco de pseudocódigo da Parte III será convertido em uma função, testado isoladamente e integrado ao ciclo evolutivo. Não utilizaremos uma biblioteca especializada que implemente os operadores genéticos por nós.</div>
-<div class="tbl"><table><thead><tr><th>Etapa no notebook</th><th>O que implementar</th><th>Verificação esperada</th></tr></thead><tbody>
-<tr><td>1 · Dados</td><td>Registrar a matriz de tempos das oito tarefas e três máquinas.</td><td>Conferir posições, dimensões e valores.</td></tr>
-<tr><td>2 · Representação</td><td>Implementar <code>criar_individuo()</code> e <code>criar_populacao()</code>.</td><td>Todos os cromossomos possuem oito genes no domínio {0,1,2}.</td></tr>
-<tr><td>3 · Avaliação</td><td>Implementar <code>calcular_makespan()</code> e <code>calcular_aptidao()</code>.</td><td>O cromossomo de referência produz cargas [9,22,9] e makespan 22.</td></tr>
-<tr><td>4 · Operadores</td><td>Implementar seleção por roleta, cruzamento de ponto único e mutação.</td><td>Os descendentes continuam representando atribuições válidas.</td></tr>
-<tr><td>5 · Evolução</td><td>Implementar elitismo, atualização da população e repetição das gerações.</td><td>População com tamanho constante; registro da melhor aptidão.</td></tr>
-<tr><td>6 · Análise</td><td>Exibir melhor solução, makespan e histórico de aptidão.</td><td>Interpretar a evolução e os limites dos resultados.</td></tr>
-</tbody></table></div>
-<h3>Estrutura inicial do notebook</h3>
-<p>O notebook será preenchido progressivamente durante a aula. Depois de explicar e simular cada etapa, implementaremos a função correspondente, verificaremos o resultado e somente então avançaremos para a etapa seguinte.</p>
-<pre class="code-block"><code>import random
-
-TEMPOS = [
-    [9, 6, 8], [5, 8, 6], [7, 5, 9], [8, 9, 4],
-    [6, 7, 5], [9, 6, 7], [4, 8, 6], [7, 5, 8]
-]
-
-def criar_individuo():
-    # Implementar a codificação de uma atribuição.
-    pass
-
-def criar_populacao(quantidade):
-    # Gerar vários indivíduos.
-    pass
-
-def calcular_makespan(individuo):
-    # Calcular as cargas e retornar a maior.
-    pass
-
-def calcular_aptidao(individuo):
-    # Transformar o makespan em aptidão.
-    pass
-
-def selecionar_pai(populacao, aptidoes):
-    # Implementar roleta proporcional à aptidão.
-    pass
-
-def reproduzir(pai_a, pai_b):
-    # Implementar cruzamento e mutação.
-    pass
-
-def proxima_geracao(populacao, aptidoes):
-    # Aplicar seleção, reprodução e elitismo.
-    pass
-
-def executar_algoritmo_genetico():
-    # Integrar as etapas do pseudocódigo.
-    pass</code></pre>
-<h3>Experimento de fechamento</h3>
-<p>Após a execução funcionar, comparar duas taxas de mutação, mantendo os demais parâmetros e registrando sementes, makespan e histórico da melhor aptidão. Uma única execução não é suficiente para concluir que uma configuração é superior em geral.</p>
-</div></section>
-<section class="section" id="exercicios"><div class="container"><div class="section-heading"><p class="eyebrow">Parte V · Atividades</p><h2>Exercícios de aplicação</h2></div>
+<section class="section" id="exercicios"><div class="container"><div class="section-heading"><p class="eyebrow">Parte IV · Atividades</p><h2>Exercícios de aplicação</h2></div>
 <article class="card"><h3>Exercício 1 · Interpretar uma atribuição</h3><p>Usando os tempos da tabela, avalie o cromossomo <code>[0,1,2,2,0,1,0,2]</code>. Identifique as tarefas de cada máquina, calcule as cargas e determine o makespan. Explique por que a melhor decisão individual para cada tarefa não garante necessariamente a melhor configuração global.</p></article>
 <article class="card"><h3>Exercício 2 · Modelar um problema de Engenharia de Software</h3><p>Dez serviços devem ser distribuídos entre quatro servidores com capacidades limitadas de CPU e memória e custos operacionais distintos. Defina os genes, seus domínios, a função objetivo, as restrições de capacidade e uma maneira de tratar soluções inviáveis.</p></article>
 <article class="card"><h3>Exercício 3 · Selecionar uma abordagem</h3><p>Compare três situações: (a) encontrar o caminho de menor custo em um mapa; (b) conceder acesso segundo regras explícitas; (c) distribuir centenas de tarefas heterogêneas entre máquinas para minimizar atrasos. Para cada uma, indique qual classe de abordagem deve ser inicialmente considerada e justifique. Reconheça alternativas possíveis.</p></article>
