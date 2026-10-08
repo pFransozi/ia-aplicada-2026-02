@@ -43,6 +43,13 @@
 :root[data-theme="dark"] .ga-draft .ga-lifecycle-light,body.theme-dark.ga-draft .ga-lifecycle-light,body[data-theme="dark"].ga-draft .ga-lifecycle-light{display:none}
 :root[data-theme="dark"] .ga-draft .ga-lifecycle-dark,body.theme-dark.ga-draft .ga-lifecycle-dark,body[data-theme="dark"].ga-draft .ga-lifecycle-dark{display:block}
 .ga-draft .ga-lifecycle-figure figcaption{margin-top:.7rem;font-size:.88rem;color:var(--muted);line-height:1.6}
+
+/* Tabela de tempos: apresentação compacta, sem ocupar toda a largura da aula. */
+.ga-draft .ga-time-table-wrap{width:100%;max-width:580px;overflow-x:auto}
+.ga-draft .ga-time-table{width:100%;min-width:0;table-layout:fixed}
+.ga-draft .ga-time-table th,.ga-draft .ga-time-table td{padding:.48rem .75rem;text-align:center}
+.ga-draft .ga-time-table th:first-child,.ga-draft .ga-time-table td:first-child{text-align:left}
+@media(max-width:480px){.ga-draft .ga-time-table-wrap{max-width:100%}.ga-draft .ga-time-table th,.ga-draft .ga-time-table td{padding:.42rem .45rem}}
 </style></head><body class="teaching-page teaching-lesson lesson-page draft-lesson ga-draft">
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
 <header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 08 · Rascunho alternativo</small></span></a><nav class="main-nav"><a href="../index.html">Página principal</a><a href="#problema">Problema</a><a href="#ciclo">Ciclo</a><a href="#modelagem">Modelagem</a><a href="#fundamentos">Conceitos</a><a href="#exercicios">Exercícios</a><button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button></nav></div></header>
@@ -116,7 +123,7 @@
 <section class="section section-soft" id="modelagem"><div class="container">
 <div class="section-heading"><p class="eyebrow">Parte III · Modelagem e pseudocódigo</p><h2>O problema das máquinas em cada etapa do algoritmo genético</h2><p>Vamos percorrer o mesmo problema em todas as etapas do ciclo de vida. Primeiro construiremos a lógica do algoritmo em pseudocódigo;</p></div>
 <p>Uma indústria possui três máquinas com tempos de processamento diferentes para cada tarefa. Algumas tarefas são mais demoradas que outras, e a máquina mais eficiente varia conforme a operação. Precisamos distribuir oito tarefas independentes entre essas máquinas, minimizando o instante em que a última máquina termina sua carga de trabalho.</p>
-<div class="tbl"><table><thead><tr><th>Tarefa</th><th>M0</th><th>M1</th><th>M2</th></tr></thead><tbody>
+<div class="tbl ga-time-table-wrap"><table class="ga-time-table"><thead><tr><th>Tarefa</th><th>M0</th><th>M1</th><th>M2</th></tr></thead><tbody>
 <tr><td>T1</td><td>9</td><td>6</td><td>8</td></tr><tr><td>T2</td><td>5</td><td>8</td><td>6</td></tr>
 <tr><td>T3</td><td>7</td><td>5</td><td>9</td></tr><tr><td>T4</td><td>8</td><td>9</td><td>4</td></tr>
 <tr><td>T5</td><td>6</td><td>7</td><td>5</td></tr><tr><td>T6</td><td>9</td><td>6</td><td>7</td></tr>
