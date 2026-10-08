@@ -172,12 +172,14 @@ elitismo ← 1</code></pre>
 <tr><td>B</td><td><code>[0,2,1,2,0,1,0,2]</code></td><td>Outra combinação de atribuições</td></tr>
 <tr><td>C</td><td><code>[2,1,0,0,1,2,2,0]</code></td><td>Terceira distribuição candidata</td></tr>
 </tbody></table></div>
-<p>O pseudocódigo a seguir produz os seis indivíduos sorteando, para cada tarefa, uma das três máquinas. Neste recorte, não é necessário corrigir atribuições inválidas; em versões mais complexas, a geração da população também precisaria respeitar ou tratar restrições adicionais.</p>
-<p>Em vez de iniciar com uma única atribuição, geramos várias. Por exemplo, uma população poderia conter <code>[1,0,1,2,2,1,0,1]</code>, <code>[0,2,1,2,0,1,0,2]</code> e outras configurações. Indivíduos distintos permitem explorar diferentes distribuições de carga desde o começo.</p>
+<p>Para manter a diversidade da população inicial, adotaremos uma regra adicional: <strong>um cromossomo sorteado só será incluído se ainda não existir na população</strong>. Dois indivíduos com genes idênticos representam a mesma distribuição de tarefas e, neste problema determinístico, terão a mesma aptidão. Como existem 3<sup>8</sup> = 6.561 distribuições possíveis e queremos apenas seis indivíduos, é possível gerar uma população inicial sem duplicatas.</p>
+<p>Esse controle é uma escolha didática, não uma exigência de todos os algoritmos genéticos. Nas gerações seguintes, indivíduos iguais ainda poderão surgir por seleção e reprodução, e não vamos impedir isso automaticamente.</p>
 <pre class="code-block"><code>FUNÇÃO criar_populacao(quantidade):
     populacao ← lista vazia
-    REPETIR quantidade vezes:
-        acrescentar criar_individuo() à populacao
+    ENQUANTO tamanho(populacao) &lt; quantidade:
+        individuo ← criar_individuo()
+        SE individuo não pertence à populacao:
+            acrescentar individuo à populacao
     RETORNAR populacao</code></pre>
 
 <div class="section-heading"><h2>Etapa 4 · Avaliar a aptidão</h2></div>
