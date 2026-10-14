@@ -188,7 +188,7 @@
 <p><strong>Critério de escolha:</strong> uma população que melhora suas avaliações demonstra progresso na busca, mas não constitui prova de que a solução ótima foi encontrada. A definição da aptidão, dos operadores, dos parâmetros e do critério de parada influencia diretamente os resultados.</p>
 </div></div></section>
 <section class="section section-soft" id="modelagem"><div class="container">
-<div class="section-heading"><p class="eyebrow">Parte III · Modelagem e pseudocódigo</p><h2>O problema das máquinas em cada etapa do algoritmo genético</h2><p>Vamos percorrer o mesmo problema em todas as etapas do ciclo de vida. Primeiro construiremos a lógica do algoritmo em pseudocódigo;</p></div>
+<div class="section-heading"><p class="eyebrow">Parte III · Modelagem e pseudocódigo</p><h2>O problema das máquinas em cada etapa do algoritmo genético</h2><p>Vamos percorrer o mesmo problema em todas as etapas do ciclo de vida. Nesta parte, desenvolveremos progressivamente a modelagem computacional do problema industrial, desde a representação das soluções até a construção do algoritmo genético em pseudocódigo.</p></div>
 <p>Uma indústria possui três máquinas com tempos de processamento diferentes para cada tarefa. Algumas tarefas são mais demoradas que outras, e a máquina mais eficiente varia conforme a operação. Precisamos distribuir oito tarefas independentes entre essas máquinas, minimizando o instante em que a última máquina termina sua carga de trabalho.</p>
 <div class="tbl ga-time-table-wrap"><table class="ga-time-table"><thead><tr><th>Tarefa</th><th>M0</th><th>M1</th><th>M2</th></tr></thead><tbody>
 <tr><td>T1</td><td>9</td><td>6</td><td>8</td></tr><tr><td>T2</td><td>5</td><td>8</td><td>6</td></tr>
@@ -305,7 +305,7 @@ FUNÇÃO calcular_aptidao(individuo, tempos):
 <p>Vamos usar os três cromossomos A, B e C apresentados na Etapa 3. Calculando seus tempos totais de conclusão com a matriz do problema, encontramos 22, 19 e 22, respectivamente. Aplicamos a função de aptidão e dividimos cada resultado pela soma das três aptidões.</p>
 <div class="tbl ga-compact-table-wrap ga-selection-wrap"><table class="ga-compact-table"><thead><tr><th>Indivíduo</th><th>Tempo total de conclusão</th><th>Aptidão</th><th>Probabilidade de seleção</th></tr></thead><tbody>
 <tr><td>A</td><td>22</td><td>1/23 ≈ 0,0435</td><td>31,75%</td></tr>
-<tr><td>B</td><td>19</td><td>1/20 = 0,0500</td><td>36,50%</td></tr>
+<tr><td>B</td><td>19</td><td>1/20 = 0,0500</td><td>36,51%</td></tr>
 <tr><td>C</td><td>22</td><td>1/23 ≈ 0,0435</td><td>31,75%</td></tr>
 </tbody></table></div>
 <p><strong>Primeiro:</strong> somamos as três aptidões.</p>
@@ -316,7 +316,7 @@ soma ≈ 0,13696</code></pre>
 P(A) ≈ 0,3175 = 31,75%</code></pre>
 <p>Repetimos para B e C. Por isso B possui maior chance de reprodução: seu tempo de conclusão é menor, sua aptidão é maior e sua parcela da roleta também é maior. <strong>Uma chance maior não significa seleção garantida.</strong></p>
 <h3>Interpretando o sorteio</h3>
-<p>Imagine um número aleatório de 0 a 100. A recebe a faixa até 31,75; B recebe a faixa de 31,75 a 68,25; C recebe o restante, até 100. Um sorteio de <code>50</code> seleciona B; um sorteio de <code>20</code> seleciona A. Para selecionar dois progenitores, realizamos dois sorteios, que podem escolher o mesmo indivíduo.</p>
+<p>Imagine um número aleatório de 0 a 100. A recebe aproximadamente os primeiros 31,75%; B ocupa a faixa seguinte, até cerca de 68,25%; C recebe o restante, até 100. Os percentuais apresentados na tabela são arredondados. Um sorteio de <code>50</code> seleciona B; um sorteio de <code>20</code> seleciona A. Para selecionar dois progenitores, realizamos dois sorteios, que podem escolher o mesmo indivíduo.</p>
 <div class="note"><strong>Exemplo simplificado.</strong> Esses percentuais consideram somente A, B e C para facilitar os cálculos. Na implementação, a população possui seis indivíduos; portanto, a soma das aptidões e as probabilidades de seleção deverão considerar os seis.</div>
 <h3>Pseudocódigo da seleção por roleta</h3>
 <pre class="code-block"><code>FUNÇÃO selecionar_progenitor(populacao, aptidoes):
@@ -331,8 +331,7 @@ P(A) ≈ 0,3175 = 31,75%</code></pre>
 
 <div class="section-heading"><h2>Etapa 6 · Gerar descendentes</h2></div>
 <p>Os progenitores selecionados são indivíduos que representam distribuições completas de tarefas entre máquinas. O <strong>cruzamento de ponto único</strong> escolhe uma posição de corte e junta o prefixo de um progenitor ao sufixo do outro. Isso produz outra distribuição possível, preservando grupos de genes das soluções dos progenitores.</p>
-<p>Vamos usar dois progenitores com oito genes e escolher o ponto de corte após T4:</p>
-<p>No cruzamento de ponto único, sorteamos uma posição entre dois genes e combinamos trechos dos progenitores. A mutação, quando ocorre, troca o valor de um gene por outra máquina válida. Por exemplo:</p>
+<p>No exemplo abaixo, o ponto de corte foi escolhido após T4. O descendente combina os quatro primeiros genes do progenitor A com os quatro últimos do progenitor B:</p>
 <pre class="code-block"><code>Progenitor A: [1, 0, 1, 2 | 2, 1, 0, 1]
 Progenitor B: [2, 1, 0, 0 | 1, 2, 2, 0]
 Descendente: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
@@ -351,8 +350,7 @@ Descendente: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
 
 <div class="section-heading"><h2>Etapa 7 · Formar a nova geração</h2></div>
 <p>Os descendentes recém-gerados precisam integrar uma nova população. Há diferentes estratégias de substituição: algumas trocam praticamente todos os indivíduos, enquanto outras preservam parte da população anterior. Para nossa implementação, usaremos uma <strong>substituição geracional com elitismo</strong>.</p>
-<p>Se a população possui seis indivíduos, preservamos uma cópia do melhor e preenchemos as cinco vagas restantes com descendentes. Desse modo, uma solução de boa aptidão não é perdida apenas por efeito do sorteio genético, embora preservar muitos indivíduos possa reduzir a diversidade.</p>
-<p>Preservaremos uma cópia do indivíduo com maior aptidão (elitismo de um indivíduo). As outras posições serão preenchidas por descendentes obtidos dos progenitores selecionados. Assim, a população permanece com o mesmo tamanho.</p>
+<p>Com uma população de seis indivíduos, preservaremos uma cópia do melhor e preencheremos as cinco vagas restantes com descendentes. Essa estratégia mantém constante o tamanho da população e evita perder a melhor solução por efeito do sorteio, embora o elitismo excessivo possa reduzir a diversidade.</p>
 <p><strong>Como identificar o melhor indivíduo?</strong> Precisamos comparar as aptidões da população. A função abaixo percorre a lista, guarda o índice da maior aptidão e devolve esse índice. Em caso de empate, mantém o primeiro encontrado.</p>
 <pre class="code-block"><code>FUNÇÃO indice_melhor(aptidoes):
     melhor_indice ← 0
@@ -374,18 +372,18 @@ Descendente: [1, 0, 1, 2 | 1, 2, 2, 0]</code></pre>
 
 <div class="section-heading"><h2>Etapa 8 · Avaliar e decidir quando parar</h2></div>
 <p>Depois de formar a geração seguinte, precisamos calcular novamente a aptidão dos indivíduos. O processo se repete: <strong>avaliar → selecionar → reproduzir → formar nova geração</strong>. A execução pode terminar após um número fixo de gerações, ao atingir uma meta de aptidão ou quando não há melhora relevante durante várias gerações.</p>
-<p>Para a primeira implementação, adotaremos vinte gerações e registraremos o menor tempo total de conclusão de cada uma. O registro permite construir um gráfico de convergência. Como existe aleatoriedade, duas execuções podem terminar com resultados diferentes, e uma melhora aparente não comprova que o ótimo global foi encontrado.</p>
-<p>A nova geração é avaliada pela mesma função de aptidão. Repetimos seleção e reprodução até completar o número de gerações. Ao final, devolvemos a melhor distribuição encontrada e seu tempo total de conclusão. Isso não prova que a solução seja globalmente ótima.</p>
+<p>Na primeira implementação, avaliaremos e registraremos a <strong>população inicial (geração 0)</strong> e, depois, cada uma das <strong>20 gerações produzidas</strong>. Teremos, portanto, 21 registros para o gráfico de convergência. Em cada registro, acompanharemos o menor tempo total de conclusão da população. Como existe aleatoriedade, execuções diferentes podem produzir resultados distintos; a melhoria observada não comprova que o ótimo global foi encontrado.</p>
 <pre class="code-block"><code>ALGORITMO genetico_escalonamento:
     populacao ← criar_populacao(tamanho_populacao)
+    aptidoes ← avaliar todos os indivíduos da populacao
+    registrar menor makespan da populacao inicial (geração 0)
 
     PARA geracao de 1 até maximo_geracoes:
-        aptidoes ← avaliar todos os indivíduos da populacao
-        registrar melhor aptidão desta geração
         populacao ← proxima_geracao(populacao, aptidoes)
+        aptidoes ← avaliar todos os indivíduos da nova populacao
+        registrar menor makespan da geração atual
 
-    aptidoes_finais ← avaliar todos os indivíduos da populacao
-    melhor_indice ← indice_melhor(aptidoes_finais)
+    melhor_indice ← indice_melhor(aptidoes)
     melhor ← populacao[melhor_indice]
     RETORNAR melhor, calcular_makespan(melhor, tempos)</code></pre>
 
