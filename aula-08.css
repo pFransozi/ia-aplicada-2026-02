@@ -65,3 +65,22 @@ body.draft-lesson #competencias-titulo { scroll-margin-top: 90px; }
 @media (max-width: 760px) {
   body.draft-lesson .overview-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+
+/* Parte II: representação visual dos conceitos do ciclo evolutivo. */
+body.draft-lesson .ga-concepts-figure { margin: 1.5rem 0; border: 1px solid var(--line); border-radius: 12px; padding: 1rem; background: var(--paper); }
+body.draft-lesson .ga-concepts-visual { display: grid; gap: .7rem; }
+body.draft-lesson .ga-concepts-label { font-weight: 650; color: var(--ink); }
+body.draft-lesson .ga-concepts-label-secondary { margin-top: .5rem; }
+body.draft-lesson .ga-concepts-genes { max-width: 680px; }
+body.draft-lesson .ga-concepts-tasks, body.draft-lesson .ga-concepts-values { display: grid; grid-template-columns: repeat(8, minmax(0,1fr)); gap: .35rem; text-align: center; }
+body.draft-lesson .ga-concepts-tasks { font-size: .78rem; color: var(--muted); margin-bottom: .3rem; }
+body.draft-lesson .ga-concepts-values span { display: flex; align-items: center; justify-content: center; min-height: 2.6rem; border: 1px solid var(--line); border-radius: 7px; font-family: ui-monospace, monospace; font-weight: 700; background: var(--soft); color: var(--ink); }
+body.draft-lesson .ga-concepts-values .ga-gene-focus { border: 2px solid var(--blue); background: var(--paper); color: var(--blue); }
+body.draft-lesson .ga-concepts-detail { font-size: .92rem; margin: .25rem 0 .5rem; }
+body.draft-lesson .ga-concepts-population { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .65rem; }
+body.draft-lesson .ga-concepts-population > div { border: 1px solid var(--line); border-radius: 8px; padding: .7rem; background: var(--soft); min-width: 0; }
+body.draft-lesson .ga-concepts-population strong { display: block; font-size: .87rem; margin-bottom: .4rem; }
+body.draft-lesson .ga-concepts-population code { display: block; overflow-wrap: anywhere; font-size: .82rem; background: transparent; color: var(--ink); }
+body.draft-lesson .ga-concepts-figure figcaption { margin-top: .85rem; font-size: .85rem; color: var(--muted); }
+@media(max-width:760px){ body.draft-lesson .ga-concepts-population { grid-template-columns: 1fr; } body.draft-lesson .ga-concepts-values span { min-height: 2rem; } }
