@@ -136,30 +136,57 @@
 <p><strong>Limitações:</strong> algoritmos genéticos não garantem a obtenção da solução ótima. Seu desempenho depende da representação dos indivíduos, da função de aptidão, dos operadores e dos parâmetros evolutivos. Além disso, a manutenção e a avaliação de populações podem exigir recursos computacionais significativos. A escolha do método deve considerar alternativas exatas ou especializadas, os recursos disponíveis e as garantias exigidas.</p>
 </div></div></section>
 <section class="section" id="ciclo"><div class="container">
-<div class="section-heading"><p class="eyebrow">Parte II · Visão geral</p><h2>Ciclo de vida de um algoritmo genético</h2></div>
-<p>Um algoritmo genético é um método de otimização que trabalha com uma população de soluções candidatas. Inicialmente, define-se como essas soluções serão representadas e como sua qualidade será medida por uma função de aptidão. Em seguida, gera-se uma população inicial, cujos indivíduos são avaliados. O algoritmo então seleciona indivíduos para reprodução e aplica operadores de cruzamento e mutação para produzir novas soluções. Esse processo se repete ao longo de sucessivas gerações, buscando melhorar a qualidade das soluções até que um critério de parada seja atendido.</p>
-<p>Essa sequência permite distinguir duas atividades: <strong>modelar e configurar o problema</strong>, que estabelece o que será otimizado, e <strong>executar o ciclo evolutivo</strong>, que procura melhorar as soluções candidatas.</p>
+<div class="section-heading"><p class="eyebrow">Parte II · Visão geral</p><h2>Fundamentos e ciclo evolutivo de um algoritmo genético</h2></div>
+<h3>Inspiração evolutiva</h3>
+<p>Algoritmos genéticos são métodos de busca e otimização inspirados em princípios da evolução biológica. Na evolução natural, indivíduos de uma população apresentam diferenças, algumas características podem ser transmitidas aos descendentes e a reprodução diferencial pode alterar a composição da população ao longo das gerações. No algoritmo genético, esses princípios são representados de maneira simplificada e computacional.</p>
+<p>Três ideias fundamentam a analogia: <strong>variação</strong>, pela existência de indivíduos diferentes; <strong>herança</strong>, pela transmissão e recombinação de características; e <strong>seleção</strong>, que favorece a reprodução de indivíduos com características vantajosas. Em computação, a vantagem é medida por uma <strong>função de aptidão (<em>fitness</em>)</strong> definida para o problema.</p>
+<p>Uma diferença importante em relação a estratégias que exploram uma solução por vez é que o algoritmo genético mantém uma <strong>população de soluções candidatas</strong>. Assim, várias configurações são avaliadas em cada geração. Os operadores de seleção, cruzamento e mutação orientam a criação de novos candidatos, sem exigir que o algoritmo examine exaustivamente todas as soluções possíveis.</p>
+<h3>Como a população evolui</h3>
+<p>Inicialmente, são gerados indivíduos que representam soluções completas. Cada um recebe uma avaliação de qualidade. Em seguida, a seleção favorece indivíduos mais aptos como progenitores; o cruzamento combina partes de suas representações; e a mutação introduz variações. Os descendentes são avaliados e utilizados na formação da geração seguinte, de acordo com a estratégia de substituição.</p>
+<p>Esse processo <strong>pode produzir soluções progressivamente melhores</strong>, porque combina a preferência por candidatos promissores com a exploração de novas configurações. Entretanto, cruzamento e mutação também podem gerar descendentes piores. Portanto, a aptidão média e a melhor aptidão da população não precisam melhorar em todas as gerações. A preservação explícita dos melhores indivíduos, denominada <em>elitismo</em>, evita a perda do melhor resultado já encontrado em uma implementação que a utiliza.</p>
+<h3>Ciclo de vida de um algoritmo genético</h3>
+<p>O processo completo pode ser organizado em duas atividades: <strong>modelar e configurar o problema</strong>, estabelecendo a representação dos indivíduos, a função de aptidão e os parâmetros; e <strong>executar o ciclo evolutivo</strong>, avaliando, selecionando, reproduzindo e formando novas gerações até o atendimento de um critério de parada.</p>
 <figure class="ga-lifecycle-figure">
   <img class="ga-lifecycle-image ga-lifecycle-light" src="assets/aula-08-ciclo-genetico-claro.svg?v=1" width="1600" height="920" loading="lazy" alt="Fluxograma do algoritmo genético com oito etapas. Preparação: codificar soluções, configurar parâmetros, criar e avaliar a população inicial. Ciclo: selecionar progenitores, gerar descendentes, formar e avaliar a nova geração. Se o critério de parada não for atingido, retornar à seleção; caso contrário, devolver a melhor solução."/>
   <img class="ga-lifecycle-image ga-lifecycle-dark" src="assets/aula-08-ciclo-genetico-escuro.svg?v=1" width="1600" height="920" loading="lazy" alt="" aria-hidden="true"/>
   <figcaption><strong>Figura 2 · Ciclo de vida de um algoritmo genético.</strong> Após a preparação e a avaliação da população inicial, as etapas de seleção, reprodução, formação e avaliação da nova geração se repetem até que o critério de parada seja satisfeito.</figcaption>
-</figure>
-<div class="ga-cycle-loop"><strong>Repetição evolutiva:</strong> seleção de progenitores → reprodução → formação da geração → avaliação → verificar parada. Se o critério não for atendido, o ciclo recomeça na seleção.</div>
+</figure><div class="ga-cycle-loop"><strong>Repetição evolutiva:</strong> avaliação → seleção de progenitores → cruzamento e mutação → formação da nova geração → nova avaliação → verificação do critério de parada.</div>
 <div id="fundamentos" class="ga-cycle-concepts">
 <div class="section-heading"><h2>Principais conceitos do ciclo evolutivo</h2></div>
-<p>Os termos da computação evolucionária descrevem as soluções e as operações realizadas sobre elas. Uma <strong>solução candidata</strong> corresponde a um indivíduo; sua codificação é chamada de cromossomo, composto por genes. O conjunto de indivíduos forma a população.</p>
-<div class="tbl"><table><thead><tr><th>Conceito</th><th>Função no algoritmo</th></tr></thead><tbody>
-<tr><td>Gene e cromossomo</td><td>Um gene representa um componente ou decisão; o cromossomo codifica uma solução completa.</td></tr>
-<tr><td>Indivíduo e população</td><td>Um indivíduo é uma solução candidata; uma população reúne diferentes candidatos.</td></tr>
-<tr><td>Aptidão (<em>fitness</em>)</td><td>Medida de qualidade utilizada para avaliar e comparar indivíduos.</td></tr>
-<tr><td>Seleção</td><td>Escolha dos indivíduos que participarão da reprodução, conforme a estratégia adotada.</td></tr>
-<tr><td>Cruzamento</td><td>Combinação de partes de cromossomos dos progenitores para produzir descendentes.</td></tr>
-<tr><td>Mutação</td><td>Modificação de um ou mais genes para introduzir variação.</td></tr>
-<tr><td>Elitismo</td><td>Preservação de parte dos indivíduos mais bem avaliados durante a formação de gerações.</td></tr>
-<tr><td>Geração e parada</td><td>Iteração do processo evolutivo e condição para encerrar a busca.</td></tr>
+<p>A terminologia dos algoritmos genéticos permite distinguir a <strong>representação de cada solução</strong> das <strong>operações realizadas sobre um conjunto de soluções</strong>. No problema industrial, cada indivíduo corresponde a uma atribuição completa de tarefas às máquinas. Um gene identifica a máquina escolhida para uma tarefa; o cromossomo reúne todas essas decisões.</p>
+<figure class="ga-concepts-figure" aria-labelledby="ga-concepts-caption">
+  <div class="ga-concepts-visual">
+    <div class="ga-concepts-label">Uma solução candidata (indivíduo)</div>
+    <div class="ga-concepts-genes" role="img" aria-label="Cromossomo com oito genes, um para cada tarefa: 1, 0, 1, 2, 2, 1, 0, 1. O terceiro gene está destacado como exemplo.">
+      <div class="ga-concepts-tasks"><span>T1</span><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>T8</span></div>
+      <div class="ga-concepts-values"><span>1</span><span>0</span><span class="ga-gene-focus">1</span><span>2</span><span>2</span><span>1</span><span>0</span><span>1</span></div>
+    </div>
+    <p class="ga-concepts-detail"><strong>Gene em destaque:</strong> a tarefa T3 é atribuída à máquina M1. O conjunto dos oito genes forma o <strong>cromossomo</strong> que codifica uma distribuição completa.</p>
+    <div class="ga-concepts-label ga-concepts-label-secondary">Uma população reúne várias soluções candidatas</div>
+    <div class="ga-concepts-population">
+      <div><strong>Indivíduo A</strong><code>[1, 0, 1, 2, 2, 1, 0, 1]</code></div>
+      <div><strong>Indivíduo B</strong><code>[0, 2, 1, 2, 0, 1, 0, 2]</code></div>
+      <div><strong>Indivíduo C</strong><code>[2, 1, 0, 0, 1, 2, 2, 0]</code></div>
+    </div>
+  </div>
+  <figcaption id="ga-concepts-caption"><strong>Figura 3 · Gene, cromossomo, indivíduo e população.</strong> Uma representação inteira permite codificar as escolhas de máquinas para cada tarefa. A população contém diferentes distribuições candidatas, que serão avaliadas pela função de aptidão.</figcaption>
+</figure>
+<div class="tbl"><table><thead><tr><th>Conceito</th><th>Função no algoritmo</th><th>No exemplo industrial</th></tr></thead><tbody>
+<tr><td>Gene</td><td>Elemento da codificação de uma solução.</td><td>Valor que indica a máquina designada para determinada tarefa.</td></tr>
+<tr><td>Cromossomo</td><td>Conjunto organizado de genes que representa a solução.</td><td>Vetor com as escolhas para todas as tarefas.</td></tr>
+<tr><td>Indivíduo e população</td><td>Uma solução candidata e um conjunto dessas soluções, respectivamente.</td><td>Uma distribuição completa e várias distribuições possíveis.</td></tr>
+<tr><td>Aptidão (<em>fitness</em>)</td><td>Medida utilizada para avaliar e comparar candidatos.</td><td>Pontuação obtida a partir do tempo total de conclusão.</td></tr>
+<tr><td>Seleção</td><td>Escolha de indivíduos para reprodução, favorecendo os mais aptos conforme o método utilizado.</td><td>Maior chance de selecionar distribuições com melhor avaliação.</td></tr>
+<tr><td>Cruzamento</td><td>Recombinação de partes de cromossomos dos progenitores.</td><td>Combinação de atribuições provenientes de duas distribuições.</td></tr>
+<tr><td>Mutação</td><td>Alteração aleatória de genes conforme uma probabilidade definida.</td><td>Substituição da máquina escolhida para alguma tarefa.</td></tr>
+<tr><td>Elitismo</td><td>Preservação direta de um ou mais indivíduos de melhor desempenho.</td><td>Manutenção de uma boa distribuição na próxima geração.</td></tr>
+<tr><td>Geração e parada</td><td>Etapa sucessiva da evolução e condição para encerrar a execução.</td><td>Repetir a busca até o limite de gerações ou outro critério definido.</td></tr>
 </tbody></table></div>
-</div>
-</div></section>
+<h3>Diversidade e convergência</h3>
+<p>A seleção de indivíduos mais aptos direciona a busca para regiões promissoras, mas também pode diminuir a diversidade da população. Se muitas soluções se tornarem semelhantes, o algoritmo corre o risco de <strong>convergência prematura</strong>: a população se concentra em uma configuração sem que tenha sido encontrado o ótimo global.</p>
+<p>Por isso, é necessário equilibrar o <strong>aproveitamento das soluções encontradas</strong> (<em>exploitation</em>) com a <strong>exploração de novas possibilidades</strong> (<em>exploration</em>). O cruzamento recombina características existentes; a mutação pode introduzir alternativas; e o elitismo preserva resultados promissores, embora em excesso também possa reduzir a diversidade.</p>
+<p><strong>Critério de escolha:</strong> uma população que melhora suas avaliações demonstra progresso na busca, mas não constitui prova de que a solução ótima foi encontrada. A definição da aptidão, dos operadores, dos parâmetros e do critério de parada influencia diretamente os resultados.</p>
+</div></div></section>
 <section class="section section-soft" id="modelagem"><div class="container">
 <div class="section-heading"><p class="eyebrow">Parte III · Modelagem e pseudocódigo</p><h2>O problema das máquinas em cada etapa do algoritmo genético</h2><p>Vamos percorrer o mesmo problema em todas as etapas do ciclo de vida. Primeiro construiremos a lógica do algoritmo em pseudocódigo;</p></div>
 <p>Uma indústria possui três máquinas com tempos de processamento diferentes para cada tarefa. Algumas tarefas são mais demoradas que outras, e a máquina mais eficiente varia conforme a operação. Precisamos distribuir oito tarefas independentes entre essas máquinas, minimizando o instante em que a última máquina termina sua carga de trabalho.</p>
