@@ -69,21 +69,21 @@
     @media print{.ml-page .ml-lab-actions,.ml-page .ml-toc{display:none}.ml-page .ml-steps{grid-template-columns:repeat(2,1fr)}}
   
     /* Comparação introdutória entre programação explícita e aprendizagem a partir de dados. */
-    .ml-page .ml-paradigm-figure{margin:1.7rem 0 1.9rem;padding:1.25rem;border:1px solid var(--line);border-radius:16px;background:var(--soft)}
-    .ml-page .ml-paradigm-figure>h4{margin:0 0 1rem;color:var(--ink);font-size:1.1rem}
-    .ml-page .ml-paradigm-group{padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+    .ml-page .ml-paradigm-figure{width:min(100%,1060px);margin:1.7rem auto 1.9rem;padding:.9rem;border:1px solid var(--line);border-radius:16px;background:var(--soft)}
+    .ml-page .ml-paradigm-figure>h4{margin:0 0 1rem;color:var(--ink);font-size:1.1rem;text-align:center}
+    .ml-page .ml-paradigm-group{padding:.85rem;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
     .ml-page .ml-paradigm-group+.ml-paradigm-group{margin-top:1rem}
-    .ml-page .ml-paradigm-group h5{font-size:1rem;margin:0 0 .8rem;color:var(--ink)}
-    .ml-page .ml-paradigm-flow{display:flex;align-items:center;justify-content:center;gap:.7rem;flex-wrap:wrap}
-    .ml-page .ml-paradigm-inputs{display:flex;flex-direction:column;gap:.5rem;flex:1 1 135px;max-width:240px}
+    .ml-page .ml-paradigm-group h5{font-size:1rem;margin:0 0 .8rem;color:var(--ink);text-align:center}
+    .ml-page .ml-paradigm-flow{display:grid;grid-template-columns:minmax(0,1fr) 26px minmax(0,1.13fr) 26px minmax(0,1fr);align-items:center;gap:.45rem;width:100%;margin-inline:auto}
+    .ml-page .ml-paradigm-inputs{display:flex;flex-direction:column;gap:.5rem;min-width:0;width:100%}
     .ml-page .ml-paradigm-node{padding:.73rem .9rem;border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink);font-size:.94rem;text-align:center;font-weight:650}
-    .ml-page .ml-paradigm-node.process{background:var(--blue-soft);color:var(--blue);border-color:var(--line);flex:1 1 135px;max-width:235px}
-    .ml-page .ml-paradigm-node.result{background:var(--teal-soft);color:var(--teal);flex:1 1 135px;max-width:235px}
-    .ml-page .ml-paradigm-arrow{font-size:1.45rem;font-weight:800;color:var(--blue);line-height:1;flex:0 0 auto}
-    .ml-page .ml-paradigm-phase{margin:.9rem 0 .45rem;color:var(--muted);font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+    .ml-page .ml-paradigm-node.process{background:var(--blue-soft);color:var(--blue);border-color:var(--line);width:100%;min-width:0}
+    .ml-page .ml-paradigm-node.result{background:var(--teal-soft);color:var(--teal);width:100%;min-width:0}
+    .ml-page .ml-paradigm-arrow{font-size:1.45rem;font-weight:800;color:var(--blue);line-height:1;text-align:center}
+    .ml-page .ml-paradigm-phase{margin:.9rem 0 .45rem;color:var(--muted);font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;text-align:center}
     .ml-page .ml-paradigm-phase:first-of-type{margin-top:0}
-    .ml-page .ml-paradigm-caption{font-size:.87rem;color:var(--muted);margin:.95rem 0 0}
-    @media(max-width:640px){.ml-page .ml-paradigm-flow{flex-direction:column;gap:.4rem}.ml-page .ml-paradigm-inputs,.ml-page .ml-paradigm-node.process,.ml-page .ml-paradigm-node.result{width:100%;max-width:none;flex:auto}.ml-page .ml-paradigm-arrow{transform:rotate(90deg)}}
+    .ml-page .ml-paradigm-caption{font-size:.87rem;color:var(--muted);margin:.95rem auto 0;max-width:940px;text-align:center}
+    @media(max-width:700px){.ml-page .ml-paradigm-figure{padding:.65rem}.ml-page .ml-paradigm-group{padding:.65rem}.ml-page .ml-paradigm-flow{grid-template-columns:minmax(0,1fr);gap:.5rem}.ml-page .ml-paradigm-arrow{transform:rotate(90deg)}}
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
