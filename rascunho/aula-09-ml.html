@@ -67,6 +67,23 @@
     @media(max-width:900px){.ml-page .ml-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.ml-page .ml-lab-grid{grid-template-columns:1fr}}
     @media(max-width:690px){.ml-page .ml-grid,.ml-page .ml-steps{grid-template-columns:1fr}.ml-page .ml-taxonomy{padding:.85rem}.ml-page .ml-tier{padding:.75rem}}
     @media print{.ml-page .ml-lab-actions,.ml-page .ml-toc{display:none}.ml-page .ml-steps{grid-template-columns:repeat(2,1fr)}}
+  
+    /* Comparação introdutória entre programação explícita e aprendizagem a partir de dados. */
+    .ml-page .ml-paradigm-figure{margin:1.7rem 0 1.9rem;padding:1.25rem;border:1px solid var(--line);border-radius:16px;background:var(--soft)}
+    .ml-page .ml-paradigm-figure>h4{margin:0 0 1rem;color:var(--ink);font-size:1.1rem}
+    .ml-page .ml-paradigm-group{padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+    .ml-page .ml-paradigm-group+.ml-paradigm-group{margin-top:1rem}
+    .ml-page .ml-paradigm-group h5{font-size:1rem;margin:0 0 .8rem;color:var(--ink)}
+    .ml-page .ml-paradigm-flow{display:flex;align-items:center;justify-content:center;gap:.7rem;flex-wrap:wrap}
+    .ml-page .ml-paradigm-inputs{display:flex;flex-direction:column;gap:.5rem;flex:1 1 135px;max-width:240px}
+    .ml-page .ml-paradigm-node{padding:.73rem .9rem;border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink);font-size:.94rem;text-align:center;font-weight:650}
+    .ml-page .ml-paradigm-node.process{background:var(--blue-soft);color:var(--blue);border-color:var(--line);flex:1 1 135px;max-width:235px}
+    .ml-page .ml-paradigm-node.result{background:var(--teal-soft);color:var(--teal);flex:1 1 135px;max-width:235px}
+    .ml-page .ml-paradigm-arrow{font-size:1.45rem;font-weight:800;color:var(--blue);line-height:1;flex:0 0 auto}
+    .ml-page .ml-paradigm-phase{margin:.9rem 0 .45rem;color:var(--muted);font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+    .ml-page .ml-paradigm-phase:first-of-type{margin-top:0}
+    .ml-page .ml-paradigm-caption{font-size:.87rem;color:var(--muted);margin:.95rem 0 0}
+    @media(max-width:640px){.ml-page .ml-paradigm-flow{flex-direction:column;gap:.4rem}.ml-page .ml-paradigm-inputs,.ml-page .ml-paradigm-node.process,.ml-page .ml-paradigm-node.result{width:100%;max-width:none;flex:auto}.ml-page .ml-paradigm-arrow{transform:rotate(90deg)}}
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -136,6 +153,39 @@
   <h3>Em que sentido a aprendizagem de máquina altera o problema?</h3>
   <p>Nos sistemas baseados em regras, por exemplo, o desenvolvedor especifica quais condições conduzem a determinadas conclusões. <strong>A aprendizagem de máquina introduz outra forma de construir o comportamento de um sistema:</strong> em vez de definir antecipadamente todas as relações que serão utilizadas, podemos empregar dados ou experiências para identificar regularidades e orientar seu funcionamento.</p>
   <p>Isso não significa que o computador aprende sem programação ou intervenção humana. Ainda precisamos definir o problema, selecionar os dados, escolher procedimentos de aprendizagem e avaliar os resultados. O que muda é que <strong>uma parte do comportamento do sistema passa a ser determinada pelo processo de aprendizagem</strong>, e não exclusivamente por regras formuladas de maneira explícita.</p>
+    <figure class="ml-paradigm-figure" aria-labelledby="ml-paradigm-title">
+    <h4 id="ml-paradigm-title">Programação tradicional e aprendizagem a partir de dados</h4>
+    <div class="ml-paradigm-group">
+      <h5>Programação tradicional</h5>
+      <div class="ml-paradigm-flow">
+        <div class="ml-paradigm-inputs"><div class="ml-paradigm-node">Dados de entrada</div><div class="ml-paradigm-node">Regras programadas</div></div>
+        <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
+        <div class="ml-paradigm-node process">Programa executa as regras</div>
+        <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
+        <div class="ml-paradigm-node result">Resultado</div>
+      </div>
+    </div>
+    <div class="ml-paradigm-group">
+      <h5>Aprendizagem de máquina: exemplo com resultados conhecidos</h5>
+      <p class="ml-paradigm-phase">Construção do modelo</p>
+      <div class="ml-paradigm-flow">
+        <div class="ml-paradigm-inputs"><div class="ml-paradigm-node">Dados de treinamento</div><div class="ml-paradigm-node">Resultados conhecidos</div></div>
+        <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
+        <div class="ml-paradigm-node process">Algoritmo de aprendizagem</div>
+        <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
+        <div class="ml-paradigm-node result">Modelo aprendido</div>
+      </div>
+      <p class="ml-paradigm-phase">Utilização do modelo</p>
+      <div class="ml-paradigm-flow">
+        <div class="ml-paradigm-inputs"><div class="ml-paradigm-node">Novos dados</div><div class="ml-paradigm-node">Modelo aprendido</div></div>
+        <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
+        <div class="ml-paradigm-node process">Programa aplica o modelo</div>
+        <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
+        <div class="ml-paradigm-node result">Previsão</div>
+      </div>
+    </div>
+    <figcaption class="ml-paradigm-caption">Figura 1 · Comparação didática entre a execução de regras explicitamente programadas e a construção de um modelo a partir de exemplos. O segundo fluxo representa apenas uma forma de aprendizagem de máquina: outros métodos não exigem resultados conhecidos durante o treinamento.</figcaption>
+  </figure>
   <div class="ml-grid">
     <article class="ml-box"><h3>Comportamento especificado</h3><p>Para monitorar uma API, o desenvolvedor estabelece uma condição: se a taxa de erros ultrapassar 10% durante cinco minutos, o sistema emite um alerta. O limite e a regra são definidos antecipadamente.</p></article>
     <article class="ml-box"><h3>Comportamento aprendido</h3><p>Para monitorar a mesma API, o sistema utiliza registros históricos de erros, tráfego e latência para aprender padrões habituais de funcionamento e identificar comportamentos atípicos. O que é considerado incomum depende dos dados e do procedimento adotado.</p></article>
