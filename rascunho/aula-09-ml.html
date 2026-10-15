@@ -124,6 +124,12 @@
     @media(max-width:900px){.ml-page .ml-paradigm-item{grid-template-columns:1fr;gap:.9rem}.ml-page .ml-paradigm-visual{max-width:700px;margin-inline:auto}}
     @media(max-width:520px){.ml-page .ml-paradigm-item{padding:.7rem}.ml-page .ml-tasks{grid-template-columns:1fr}}
 
+      .ml-page .ml-paradigm-summary-wrap{margin:1.25rem 0 1.5rem}
+    .ml-page .ml-paradigm-summary{min-width:960px;table-layout:fixed}
+    .ml-page .ml-paradigm-summary th,.ml-page .ml-paradigm-summary td{padding:.8rem .95rem;line-height:1.5;overflow-wrap:break-word}
+    .ml-page .ml-paradigm-summary th:first-child{width:19%}
+    .ml-page .ml-paradigm-summary tbody th{background:var(--soft);color:var(--ink);font-size:.9rem;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+    .ml-page .ml-summary-caption{caption-side:top;text-align:left;padding:.8rem 1rem;font-size:.84rem;font-weight:700;color:var(--muted)}
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -267,7 +273,7 @@
   <p>Uma implementação de A* pode utilizar uma heurística definida pelo projetista, sem treinamento com exemplos. Da mesma forma, um sistema de regras pode realizar inferências sem aprender novas regras. Ambos pertencem ao campo da IA, mesmo que não dependam de aprendizagem de máquina.</p>
   <p>Por outro lado, ML pode participar da construção de heurísticas, da estimativa de probabilidades, da definição de políticas de decisão e de sistemas que combinam componentes simbólicos e estatísticos. As fronteiras entre abordagens descrevem métodos de pesquisa, não impedem sua integração.</p>
   <h3>Três paradigmas de aprendizagem: visão inicial</h3>
-  <p>A expressão <strong>aprendizagem de máquina</strong> reúne diferentes formas de utilizar dados ou experiência para melhorar o desempenho de sistemas. Uma distinção introdutória é observar <strong>qual informação orienta a aprendizagem</strong> e <strong>que resultado procuramos obter</strong>.</p>
+  <p>A expressão <strong>aprendizagem de máquina</strong> reúne diferentes formas de utilizar dados ou experiência para melhorar o desempenho de sistemas. Para comparar os três paradigmas, observaremos cinco aspectos: <strong>entrada, sinal de aprendizagem, procedimento, o que é aprendido e resultado produzido</strong>. Esses aspectos são comuns como perguntas de análise, mas suas respostas variam conforme o paradigma.</p>
   <div class="ml-paradigms">
     <article class="ml-paradigm-item">
       <a class="ml-paradigm-visual" href="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem supervisionada em tamanho completo">
@@ -307,6 +313,22 @@
       </div>
     </article>
   </div>
+  <h3>Elementos de comparação entre os paradigmas</h3>
+  <p>As figuras mostram exemplos de funcionamento. O quadro a seguir reúne os principais elementos de cada abordagem, permitindo identificar o que é compartilhado e o que se diferencia.</p>
+  <div class="ml-table-wrap ml-paradigm-summary-wrap">
+    <table class="ml-table ml-paradigm-summary">
+      <caption class="ml-summary-caption">Quadro 1 · Cinco aspectos para comparar os paradigmas de aprendizagem</caption>
+      <thead><tr><th scope="col">Aspecto</th><th scope="col">Supervisionada</th><th scope="col">Não supervisionada</th><th scope="col">Por reforço</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Entrada</th><td>Dados de entrada acompanhados de respostas conhecidas.</td><td>Dados sem rótulos de resposta para a tarefa.</td><td>Estados ou observações recebidos do ambiente.</td></tr>
+        <tr><th scope="row">Sinal de aprendizagem</th><td>Respostas conhecidas (rótulos ou valores-alvo).</td><td>Não utiliza rótulos-alvo; as regularidades dos dados são exploradas segundo um critério definido pelo método.</td><td>Recompensas associadas à interação com o ambiente.</td></tr>
+        <tr><th scope="row">Procedimento</th><td>Constrói ou ajusta um modelo utilizando exemplos e suas respostas.</td><td>Procura estruturas, relações ou representações nos dados.</td><td>Aprende com as consequências de ações realizadas no ambiente.</td></tr>
+        <tr><th scope="row">O que é aprendido</th><td>Modelo capaz de prever respostas para novas entradas.</td><td>Agrupamentos, representações ou outras estruturas dos dados.</td><td>Política de decisão, valores de ações ou outras estruturas úteis à escolha de ações.</td></tr>
+        <tr><th scope="row">Resultado produzido</th><td>Classe (classificação) ou valor numérico (regressão).</td><td>Grupos, padrões ou representações.</td><td>Ações ou decisões orientadas pelo que foi aprendido.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>O que é comum?</strong> Os três paradigmas utilizam entradas, procedimentos computacionais e alguma forma de aprendizagem. <strong>O que muda?</strong> A informação disponível para orientar esse processo, aquilo que é aprendido e o modo como o resultado é utilizado.</p>
   <p><strong>Recorte adotado:</strong> nas próximas partes, utilizaremos a aprendizagem supervisionada para compreender a relação entre dados, funções, ajuste e generalização. Essa base também será utilizada no estudo posterior de redes neurais.</p>
 </div></section>
 
