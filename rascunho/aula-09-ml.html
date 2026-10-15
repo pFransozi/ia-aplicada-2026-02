@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Rascunho da Aula 09: das técnicas clássicas de IA à aprendizagem de máquina, funções, seleção, otimização, generalização e fluxo de projeto.">
+  <title>Aula 09 · Fundamentos da aprendizagem de máquina · Rascunho</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../aula-04.css">
+  <script src="https://pfransozi.github.io/assets/js/ensino.js?v=9"></script>
+  <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=13">
+  <style>
+    .ml-page .ml-draft-mark{display:inline-block;padding:.5rem .85rem;background:var(--soft);border:1px solid var(--line);border-radius:10px;font-size:.82rem;color:var(--muted);font-weight:650;margin-bottom:1.1rem}
+    .ml-page .ml-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--paper);margin:1.4rem 0}
+    .ml-page .ml-table{width:100%;min-width:720px;border-collapse:collapse}
+    .ml-page .ml-table th,.ml-page .ml-table td{padding:.8rem 1rem;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+    .ml-page .ml-table th{background:var(--soft);font-size:.85rem;color:var(--ink)}
+    .ml-page .ml-table td{font-size:.92rem;color:var(--muted)}
+    .ml-page .ml-table tr:last-child td{border-bottom:0}
+    .ml-page .ml-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1.3rem 0}
+    .ml-page .ml-box{padding:1.25rem;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+    .ml-page .ml-box h3,.ml-page .ml-box h4{margin:0 0 .6rem}
+    .ml-page .ml-box p:last-child{margin-bottom:0}
+    .ml-page .ml-note{background:var(--soft);border-left:3px solid var(--blue);padding:1rem 1.25rem;border-radius:0 10px 10px 0;margin:1.4rem 0}
+    .ml-page .ml-note p:last-child{margin-bottom:0}
+    .ml-page .ml-small{font-size:.9rem;color:var(--muted)}
+    .ml-page .ml-formula{display:block;max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--soft);padding:1rem 1.1rem;margin:1.2rem 0;font-family:Consolas,"Liberation Mono",monospace;font-size:clamp(.94rem,2.5vw,1.1rem);color:var(--ink);text-align:center}
+    .ml-page .ml-code{overflow-x:auto;border-radius:12px;border:1px solid #26324a;background:#0b1220;color:#dce6f5;padding:1rem 1.15rem;line-height:1.6;font: .88rem/1.6 Consolas,"Liberation Mono",monospace;white-space:pre;margin:1.1rem 0}
+    .ml-page .ml-taxonomy{margin:1.7rem 0;padding:1.3rem;border:1px solid var(--line);border-radius:16px;background:var(--soft)}
+    .ml-page .ml-tier{border:1px solid var(--line);border-radius:12px;padding:1rem;background:var(--paper)}
+    .ml-page .ml-tier strong{display:block;color:var(--ink);margin-bottom:.25rem}
+    .ml-page .ml-tier p{font-size:.88rem;margin:0}
+    .ml-page .ml-tier-one{max-width:800px;margin:1rem auto 0;background:var(--soft)}
+    .ml-page .ml-tier-two{max-width:660px;margin:1rem auto 0;background:var(--paper)}
+    .ml-page .ml-tier-three{max-width:510px;margin:1rem auto 0;background:var(--soft)}
+    .ml-page .ml-taxonomy figcaption{font-size:.86rem;color:var(--muted);margin-top:.85rem}
+    .ml-page .ml-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.85rem;margin:1.4rem 0}
+    .ml-page .ml-step{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:1.05rem}
+    .ml-page .ml-step .ml-number{display:inline-grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--soft);color:var(--blue);font-weight:800;margin-bottom:.6rem}
+    .ml-page .ml-step strong{display:block;margin-bottom:.35rem}
+    .ml-page .ml-step p{font-size:.88rem;line-height:1.55;margin:0}
+    .ml-page .ml-lab{border:1px solid var(--line);border-radius:16px;background:var(--paper);padding:1.25rem;margin:1.4rem 0}
+    .ml-page .ml-lab-grid{display:grid;grid-template-columns:minmax(200px,.85fr) minmax(0,1.4fr);gap:1.5rem;align-items:start}
+    .ml-page .ml-control{margin-bottom:1.25rem}
+    .ml-page .ml-control label{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.45rem;font-weight:650}
+    .ml-page .ml-control output{font:700 1rem Consolas,monospace;color:var(--blue)}
+    .ml-page input[type="range"]{width:100%;accent-color:var(--blue)}
+    .ml-page .ml-lab-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.1rem}
+    .ml-page .ml-lab-actions button{border:1px solid var(--line);border-radius:9px;padding:.55rem .8rem;background:var(--soft);color:var(--ink);cursor:pointer;font-weight:650}
+    .ml-page .ml-lab-actions button:hover{border-color:var(--blue)}
+    .ml-page .ml-results{padding:.85rem;background:var(--soft);border-radius:10px;margin-top:1rem}
+    .ml-page .ml-results strong{color:var(--ink)}
+    .ml-page .ml-results p{margin:.35rem 0 0;font-size:.88rem}
+    .ml-page .ml-plot{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+    .ml-page .ml-legend{display:flex;gap:1.1rem;flex-wrap:wrap;margin:.6rem 0;font-size:.85rem;color:var(--muted)}
+    .ml-page .ml-dot{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.3rem}
+    .ml-page .ml-dot-train{background:var(--blue)}
+    .ml-page .ml-dot-test{background:var(--amber)}
+    .ml-page .ml-line-legend{display:inline-block;vertical-align:middle;width:1.3rem;border-top:3px solid var(--teal);margin-right:.35rem}
+    .ml-page .ml-toc{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0 0}
+    .ml-page .ml-toc a{display:inline-block;padding:.45rem .7rem;background:var(--paper);border:1px solid var(--line);border-radius:9px;text-decoration:none;color:var(--ink);font-size:.85rem}
+    .ml-page .ml-toc a:hover{border-color:var(--blue)}
+    .ml-page .ml-check{padding-left:1.4rem}
+    .ml-page .ml-check li{margin:.5rem 0}
+    .ml-page .ml-conclusion{max-width:900px;font-size:1.08rem}
+    @media(max-width:900px){.ml-page .ml-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.ml-page .ml-lab-grid{grid-template-columns:1fr}}
+    @media(max-width:690px){.ml-page .ml-grid,.ml-page .ml-steps{grid-template-columns:1fr}.ml-page .ml-taxonomy{padding:.85rem}.ml-page .ml-tier{padding:.75rem}}
+    @media print{.ml-page .ml-lab-actions,.ml-page .ml-toc{display:none}.ml-page .ml-steps{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 09 · Rascunho de ML</small></span></a>
+    <nav class="main-nav" aria-label="Navegação principal">
+      <a href="../index.html">Página principal</a><a href="index.html">Rascunhos</a><a href="#retomada">Retomada</a><a href="#estrutura">IA, ML e DL</a><a href="#projetos">Projetos</a>
+      <button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button>
+    </nav>
+  </div>
+</header>
+<div class="lesson-shell lesson-page-grid">
+<main id="conteudo">
+<section class="hero" id="inicio"><div class="container hero-grid">
+  <div>
+    <div class="ml-draft-mark">Material em revisão · Ainda não oficializado</div>
+    <p class="eyebrow">Aula 09 · Introdução à aprendizagem de máquina</p>
+    <h1>Modelos, aprendizagem e generalização</h1>
+    <p class="hero-lead">Relações entre as técnicas de inteligência artificial e a aprendizagem de funções a partir de dados. Introdução ao ajuste de modelos e ao ciclo de desenvolvimento de projetos de Machine Learning.</p>
+    <div class="hero-actions"><a class="button button-primary" href="#retomada">Iniciar a aula</a><a class="button button-secondary" href="#funcoes">Ir aos modelos como funções</a></div>
+  </div>
+  <aside class="guiding-card">
+    <span>Questão orientadora</span>
+    <blockquote>Como construir um programa cujo comportamento seja determinado, em parte, pelos exemplos disponíveis?</blockquote>
+  </aside>
+</div></section>
+<section class="section section-soft" id="visao"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Visão da aula</p><h2>Objetivos, conteúdos e competências</h2><p>O material está dividido em blocos conceituais. As Partes I e II podem ser trabalhadas independentemente como introdução; as demais aprofundam os fundamentos do treinamento e o fluxo de um projeto.</p></div>
+  <div class="overview-grid">
+    <article class="card">
+      <h3>Objetivos de aprendizagem</h3>
+      <ol>
+        <li>Comparar os métodos de busca, representação do conhecimento, inferência, raciocínio probabilístico e otimização estudados anteriormente.</li>
+        <li>Situar IA, aprendizagem de máquina (ML) e aprendizagem profunda (DL) em suas relações de abrangência.</li>
+        <li>Descrever, no contexto supervisionado, como dados orientam a construção de uma função de previsão.</li>
+        <li>Distinguir classe de modelos, parâmetros, função de perda, otimização e generalização.</li>
+        <li>Identificar as etapas fundamentais do desenvolvimento de um projeto de ML.</li>
+      </ol>
+      <h3>Conteúdo programático</h3><p>Abordagens de IA; organização conceitual IA–ML–DL; paradigmas de aprendizagem; dados, atributos e rótulos; modelos e funções; classes de hipóteses; ajuste e função de perda; subajuste, sobreajuste e generalização; fluxo de projeto de ML.</p>
+    </article>
+    <article class="card">
+      <h3>Competências e habilidades</h3>
+      <p><strong>C2 · H6:</strong> aplicar processos e procedimentos de construção de soluções computacionais.</p>
+      <p><strong>C3 · H9 e H10:</strong> identificar necessidades tecnológicas e avaliar alternativas de modelagem.</p>
+      <p><strong>C11 · H38:</strong> desenvolver e analisar algoritmos e soluções utilizados em engenharia.</p>
+      <p><strong>C13 · H45:</strong> fundamentar a avaliação de modelos em resultados e evidências.</p>
+      <div class="ml-note"><p><strong>Organização sugerida:</strong> iniciar com as Partes I e II após concluir o material de algoritmos genéticos. As Partes III a VI formam a continuidade, sem exigência de encerramento no mesmo encontro.</p></div>
+    </article>
+  </div>
+  <nav class="ml-toc" aria-label="Partes da aula"><a href="#retomada">I · Retomada</a><a href="#estrutura">II · Organização do campo</a><a href="#funcoes">III · Modelos como funções</a><a href="#otimizacao">IV · Ajuste</a><a href="#generalizacao">V · Generalização</a><a href="#projetos">VI · Projetos</a><a href="#sintese">Síntese</a></nav>
+</div></section>
+
+<section class="section" id="retomada"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Parte I · Retomada</p><h2>Como as abordagens anteriores produzem soluções?</h2><p>As técnicas de IA estudadas até aqui diferem pelo modo como descrevem o problema e pelo procedimento utilizado para produzir uma resposta.</p></div>
+  <p>Nas aulas de <strong>busca</strong>, representamos estados, ações, custos e objetivos. Com BFS e DFS, estudamos diferentes estratégias de exploração; com a busca gulosa e o A*, investigamos como informações heurísticas orientam a escolha dos próximos estados.</p>
+  <p>Nos <strong>sistemas baseados em conhecimento</strong>, representamos fatos, relações e regras. Um mecanismo de inferência utiliza essas representações para obter conclusões. No <strong>raciocínio probabilístico</strong>, incorporamos graus de crença e atualizamos probabilidades à luz das evidências disponíveis.</p>
+  <p>Nos <strong>algoritmos genéticos</strong>, representamos soluções candidatas e utilizamos uma função de aptidão para compará-las. A busca ocorre pela avaliação de populações e produção de novas soluções ao longo das gerações.</p>
+  <div class="ml-table-wrap"><table class="ml-table">
+    <thead><tr><th>Abordagem</th><th>O que precisa ser representado?</th><th>Como produz uma resposta?</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Busca (BFS, DFS, gulosa e A*)</strong></td><td>Estados, ações, objetivo, custos e, quando aplicável, heurísticas.</td><td>Explora alternativas até encontrar um estado objetivo ou uma solução para o problema.</td></tr>
+      <tr><td><strong>Representação e inferência</strong></td><td>Fatos, relações, regras e uma estratégia de inferência.</td><td>Aplica regras aos fatos conhecidos para produzir conclusões.</td></tr>
+      <tr><td><strong>Raciocínio probabilístico</strong></td><td>Hipóteses, probabilidades e evidências.</td><td>Calcula ou atualiza probabilidades de hipóteses, conforme um modelo probabilístico.</td></tr>
+      <tr><td><strong>Algoritmos genéticos</strong></td><td>Soluções candidatas, restrições, função de aptidão e operadores de evolução.</td><td>Busca soluções de boa qualidade por seleção, recombinação e mutação.</td></tr>
+      <tr><td><strong>Aprendizagem supervisionada</strong></td><td>Exemplos de entradas e saídas conhecidas; uma classe de modelos e um critério de ajuste.</td><td>Constrói ou ajusta uma função para produzir previsões sobre novas entradas.</td></tr>
+    </tbody></table></div>
+  <h3>Em que sentido a aprendizagem de máquina altera o problema?</h3>
+  <p>Nos exemplos de sistemas baseados em regras, parte importante da relação entre condições e conclusões era especificada explicitamente por quem desenvolvia o sistema. Na aprendizagem supervisionada, buscamos obter essa relação a partir de <strong>exemplos observados</strong>, considerando uma representação de modelo e um procedimento de aprendizagem.</p>
+  <div class="ml-grid">
+    <article class="ml-box"><h3>Comportamento especificado</h3><p>O desenvolvedor escreve a condição que será aplicada. Exemplo: se um servidor responder com erro 500 e o banco estiver indisponível, produzir uma conclusão previamente definida.</p></article>
+    <article class="ml-box"><h3>Comportamento aprendido</h3><p>O desenvolvedor fornece exemplos de incidentes, atributos observados e classificações conhecidas. O algoritmo de aprendizagem determina, a partir desses dados, uma regra de previsão.</p></article>
+  </div>
+  <div class="ml-note"><p><strong>Distinção importante:</strong> não se trata de separar todas as técnicas anteriores de ML em categorias mutuamente exclusivas. Algoritmos genéticos podem otimizar parâmetros de um modelo; probabilidades podem ser estimadas a partir de dados; e métodos de busca e de inferência podem integrar um sistema que também aprende.</p></div>
+  <h3>Discussão orientada</h3><p>Em um sistema de diagnóstico de incidentes, o que muda quando as regras de classificação deixam de ser integralmente definidas pelo desenvolvedor e passam a ser ajustadas com base em exemplos? Quais decisões continuam sendo responsabilidade do projetista?</p>
+</div></section>
+
+<section class="section section-soft" id="estrutura"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Parte II · Organização do conhecimento</p><h2>Relações entre IA, ML e DL</h2><p>IA, ML e DL não são três áreas paralelas. A relação usual é de inclusão: a aprendizagem profunda constitui um subcampo da aprendizagem de máquina, que integra o campo mais amplo da inteligência artificial.</p></div>
+  <figure class="ml-taxonomy" aria-labelledby="tax-caption">
+    <div class="ml-tier ml-tier-one"><strong>Inteligência Artificial (IA)</strong><p>Campo amplo de pesquisa e desenvolvimento de sistemas capazes de realizar tarefas associadas a raciocínio, planejamento, percepção, decisão e aprendizagem.</p>
+      <div class="ml-tier ml-tier-two"><strong>Aprendizagem de Máquina (ML)</strong><p>Subcampo que investiga como melhorar o desempenho de sistemas a partir de experiência ou dados, em vez de especificar manualmente todas as decisões.</p>
+        <div class="ml-tier ml-tier-three"><strong>Aprendizagem Profunda (DL)</strong><p>Subcampo de ML baseado em redes neurais com múltiplas camadas de transformações e aprendizagem de representações.</p></div>
+      </div>
+    </div>
+    <figcaption id="tax-caption">A hierarquia representa relações de abrangência entre áreas, não uma escala de superioridade ou um conjunto de técnicas mutuamente exclusivas.</figcaption>
+  </figure>
+  <h3>IA não se reduz a ML</h3>
+  <p>Uma implementação de A* pode utilizar uma heurística definida pelo projetista, sem treinamento com exemplos. Da mesma forma, um sistema de regras pode realizar inferências sem aprender novas regras. Ambos pertencem ao campo da IA, mesmo que não dependam de aprendizagem de máquina.</p>
+  <p>Por outro lado, ML pode participar da construção de heurísticas, da estimativa de probabilidades, da definição de políticas de decisão e de sistemas que combinam componentes simbólicos e estatísticos. As fronteiras entre abordagens descrevem métodos de pesquisa, não impedem sua integração.</p>
+  <h3>Três paradigmas de aprendizagem: visão inicial</h3>
+  <div class="ml-steps">
+    <article class="ml-step"><span class="ml-number">1</span><strong>Supervisionada</strong><p>Exemplos com entradas e respostas conhecidas orientam a aprendizagem de uma função de previsão. Aplicações: regressão e classificação.</p></article>
+    <article class="ml-step"><span class="ml-number">2</span><strong>Não supervisionada</strong><p>O sistema procura regularidades, agrupamentos ou representações a partir de dados sem rótulos de resposta para a tarefa.</p></article>
+    <article class="ml-step"><span class="ml-number">3</span><strong>Por reforço</strong><p>Um agente interage com um ambiente e utiliza sinais de recompensa para melhorar seu comportamento ao longo do tempo.</p></article>
+  </div>
+  <p><strong>Recorte adotado:</strong> para compreender seleção, ajuste e generalização, começaremos com aprendizagem supervisionada. Essa é uma porta de entrada para modelos clássicos e, posteriormente, redes neurais.</p>
+  <div class="ml-note"><p><strong>Ponto possível de encerramento do encontro:</strong> solicitar que a turma explique por que A*, um sistema de regras e uma rede neural pertencem à IA, mas não constituem necessariamente o mesmo tipo de solução. A continuidade começa na Parte III.</p></div>
+</div></section>
+
+<section class="section" id="funcoes"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Parte III · Fundamentos da aprendizagem</p><h2>O modelo aprendido como uma função computacional</h2><p>Em aprendizagem supervisionada, temos pares de entradas e respostas observadas. O objetivo é construir uma função que produza previsões úteis para novas entradas.</p></div>
+  <div class="ml-formula">D = {(x₁, y₁), (x₂, y₂), …, (xₙ, yₙ)} &nbsp; → &nbsp; ŷ = f<sub>θ</sub>(x)</div>
+  <p>O conjunto <strong>D</strong> reúne os exemplos; <strong>x</strong> representa as características de entrada; <strong>y</strong> é a resposta observada; <strong>ŷ</strong> é a previsão; e <strong>θ</strong> representa os parâmetros do modelo, quando o modelo possui essa parametrização.</p>
+  <h3>Qual parte é programada e qual parte é aprendida?</h3>
+  <div class="ml-grid">
+    <article class="ml-box"><h3>Uma função definida explicitamente</h3>
+      <pre class="ml-code"><code>def estimar_tempo(carga):
+    return 2 * carga + 1</code></pre>
+      <p>Coeficientes e operação são determinados antecipadamente pelo programador.</p>
+    </article>
+    <article class="ml-box"><h3>Uma família de funções ajustáveis</h3>
+      <pre class="ml-code"><code>def estimar_tempo(carga, a, b):
+    return a * carga + b</code></pre>
+      <p>A estrutura é programada. Um procedimento de aprendizagem pode estimar <code>a</code> e <code>b</code> com base nos dados.</p>
+    </article>
+  </div>
+  <p>Quando treinamos um modelo dessa família, normalmente não reescrevemos as instruções Python. Determinamos valores que alteram o comportamento da função. Em outras classes de modelos, o que é aprendido pode incluir divisões de uma árvore, estruturas de decisão ou representações internas.</p>
+  <h3>Escolher uma família não é escolher uma função específica</h3>
+  <div class="ml-grid">
+    <article class="ml-box"><h3>Família linear</h3><div class="ml-formula">f(x) = ax + b</div><p>Os valores de <code>a</code> e <code>b</code> definem uma função entre muitas possíveis da mesma família.</p></article>
+    <article class="ml-box"><h3>Família quadrática</h3><div class="ml-formula">f(x) = ax² + bx + c</div><p>A estrutura permite representar certas relações curvas que uma função estritamente linear não representa.</p></article>
+  </div>
+  <p>Ao escolher uma família, delimitamos um <strong>espaço de hipóteses</strong>. Ao ajustar seus parâmetros, procuramos uma função específica nesse espaço. A família escolhida impõe possibilidades e limites ao resultado, independentemente da qualidade do procedimento de ajuste.</p>
+</div></section>
+
+<section class="section section-soft" id="otimizacao"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Parte IV · Aprendizagem e otimização</p><h2>Como encontrar uma função adequada dentro da família escolhida?</h2><p>Precisamos definir como avaliar os erros da função e utilizar um procedimento capaz de encontrar parâmetros que produzam resultados melhores segundo esse critério.</p></div>
+  <p>Considere um exemplo didático: queremos estimar o tempo médio de resposta de um serviço em função de uma medida simplificada de carga. Os valores são <strong>sintéticos</strong>, criados apenas para estudar a relação entre dados e modelos. Temos registros utilizados para ajustar o modelo e observações reservadas para avaliação.</p>
+  <div class="ml-table-wrap"><table class="ml-table">
+    <thead><tr><th>Carga (x)</th><th>Tempo observado (y, ms)</th><th>Destinação</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>3</td><td>Treinamento</td></tr><tr><td>2</td><td>4</td><td>Treinamento</td></tr>
+      <tr><td>3</td><td>6</td><td>Treinamento</td></tr><tr><td>4</td><td>8</td><td>Avaliação reservada</td></tr>
+      <tr><td>5</td><td>11</td><td>Treinamento</td></tr><tr><td>6</td><td>14</td><td>Treinamento</td></tr>
+      <tr><td>7</td><td>18</td><td>Avaliação reservada</td></tr><tr><td>8</td><td>23</td><td>Treinamento</td></tr>
+    </tbody></table></div>
+  <h3>Erro de previsão</h3>
+  <p>Para cada observação, podemos calcular a diferença entre o valor observado e a previsão. Uma forma simples de avaliar o conjunto é utilizar a média dos quadrados dos erros, conhecida como <strong>erro quadrático médio (MSE)</strong>.</p>
+  <div class="ml-formula">MSE = (1/n) · Σ (yᵢ − ŷᵢ)²</div>
+  <p>Na família linear, procurar os melhores parâmetros para esse critério equivale a encontrar valores de <code>a</code> e <code>b</code> que minimizem o MSE nos dados de treinamento. Isso é um <strong>problema de otimização</strong>. Uma solução pode ser obtida analiticamente por mínimos quadrados ou estimada por procedimentos iterativos, dependendo do modelo e das condições.</p>
+  <div class="ml-lab" aria-labelledby="lab-title">
+    <h3 id="lab-title">Experimento: ajuste de uma reta aos dados</h3>
+    <p>Modifique os parâmetros da função <code>f(x) = ax + b</code> e observe como o erro de treinamento muda. Depois, utilize o ajuste por mínimos quadrados e compare os resultados. Os dados reservados não são utilizados para calcular a reta.</p>
+    <div class="ml-lab-grid">
+      <div>
+        <div class="ml-control"><label for="ml-a">Inclinação <code>a</code> <output id="ml-a-val" for="ml-a">2,0</output></label><input id="ml-a" type="range" min="-1" max="4" step="0.1" value="2"></div>
+        <div class="ml-control"><label for="ml-b">Intercepto <code>b</code> <output id="ml-b-val" for="ml-b">1,0</output></label><input id="ml-b" type="range" min="-6" max="9" step="0.1" value="1"></div>
+        <div class="ml-results" aria-live="polite"><strong id="ml-equation">f(x) = 2,0x + 1,0</strong><p id="ml-train-error">Erro quadrático médio (treino): —</p><p id="ml-test-error">Avaliação reservada: não realizada.</p></div>
+        <div class="ml-lab-actions"><button id="ml-fit" type="button">Calcular a melhor reta no treino</button><button id="ml-test" type="button">Avaliar dados reservados</button></div>
+        <p class="ml-small">Ao modificar os parâmetros, a avaliação reservada é ocultada novamente. Em um projeto real, o conjunto de teste final não deve orientar o ajuste de parâmetros nem a escolha de modelos.</p>
+      </div>
+      <div>
+        <svg class="ml-plot" id="ml-plot" viewBox="0 0 640 385" role="img" aria-label="Dispersão com dados de treinamento, observações reservadas e uma reta ajustável."></svg>
+        <div class="ml-legend"><span><i class="ml-dot ml-dot-train"></i>Treinamento</span><span><i class="ml-dot ml-dot-test"></i>Dados reservados</span><span><i class="ml-line-legend"></i>Reta candidata</span></div>
+        <p class="ml-small">O gráfico apresenta as observações em uma mesma escala. A reta pode deixar de representar adequadamente a tendência mesmo depois de minimizado o erro da família linear.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ml-note"><p><strong>Conexão com a Aula 08:</strong> o problema também pode ser formulado como busca por parâmetros que minimizem uma função de erro. Algoritmos genéticos podem ser utilizados nessa otimização, embora não sejam necessários para resolver este pequeno problema de regressão linear.</p></div>
+</div></section>
+
+<section class="section" id="generalizacao"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Parte V · Avaliação de modelos</p><h2>O melhor ajuste é necessariamente o melhor modelo?</h2><p>Não. A função que produz o menor erro nos dados de treinamento pode apresentar resultados insatisfatórios quando aplicada a observações novas.</p></div>
+  <h3>Seleção da família e ajuste dos parâmetros</h3>
+  <p>Uma função linear pode ser a melhor <em>dentro da família das retas</em> segundo o MSE de treinamento, mas essa família pode ser inadequada para representar uma relação não linear. Aumentar a flexibilidade do modelo amplia as funções candidatas; ao mesmo tempo, pode facilitar o ajuste de variações específicas ou ruídos do treinamento.</p>
+  <div class="ml-grid">
+    <article class="ml-box"><h3>Subajuste (underfitting)</h3><p>O modelo não consegue capturar regularidades relevantes, por limitações de sua representação ou por um treinamento insuficiente. Pode apresentar desempenho ruim tanto no treinamento quanto em novos dados.</p></article>
+    <article class="ml-box"><h3>Sobreajuste (overfitting)</h3><p>O modelo se ajusta excessivamente às particularidades do conjunto de treinamento e apresenta desempenho pior nos novos dados. Um erro de treinamento muito pequeno, isoladamente, não comprova boa generalização.</p></article>
+  </div>
+  <h3>Para que servem treino, validação e teste?</h3>
+  <div class="ml-steps">
+    <article class="ml-step"><span class="ml-number">1</span><strong>Treinamento</strong><p>Utilizado para ajustar a função ou construir o modelo a partir dos exemplos disponíveis.</p></article>
+    <article class="ml-step"><span class="ml-number">2</span><strong>Validação</strong><p>Utilizado para comparar configurações, famílias de modelos e hiperparâmetros, sem recorrer ao teste final.</p></article>
+    <article class="ml-step"><span class="ml-number">3</span><strong>Teste</strong><p>Reservado para uma avaliação final em dados não utilizados no ajuste nem na seleção do modelo.</p></article>
+  </div>
+  <p>Em bases pequenas, a validação cruzada pode substituir uma única divisão de validação, mas o princípio permanece: o conjunto de teste final deve ser preservado durante as decisões de modelagem. O experimento anterior usa uma divisão didática simplificada para mostrar apenas a diferença entre ajustar e avaliar.</p>
+  <div class="ml-note"><p><strong>Questão:</strong> se uma função polinomial de alto grau reproduz todos os dados de treinamento e uma reta apresenta pequenos erros nesses mesmos registros, podemos concluir, apenas por isso, que a função polinomial produzirá melhores previsões? Justifique.</p></div>
+</div></section>
+
+<section class="section section-soft" id="projetos"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Parte VI · Engenharia de sistemas de ML</p><h2>O fluxo de um projeto de aprendizagem de máquina</h2><p>Aprender uma função é uma etapa de um processo maior. Para utilizar um modelo em uma aplicação, precisamos definir um problema, organizar os dados e estabelecer critérios de avaliação e operação.</p></div>
+  <div class="ml-steps">
+    <article class="ml-step"><span class="ml-number">1</span><strong>Definir o problema</strong><p>Qual decisão ou previsão será produzida? Quais requisitos e critérios de sucesso importam para o sistema?</p></article>
+    <article class="ml-step"><span class="ml-number">2</span><strong>Obter e compreender os dados</strong><p>Quais observações representam o fenômeno? Como foram coletadas? Há erros, lacunas ou vieses?</p></article>
+    <article class="ml-step"><span class="ml-number">3</span><strong>Preparar e separar</strong><p>Como representar as variáveis? Quais exemplos serão usados para treino, validação e teste? Como evitar vazamento de informação?</p></article>
+    <article class="ml-step"><span class="ml-number">4</span><strong>Selecionar classes de modelos</strong><p>Quais famílias e representações são adequadas à tarefa, à quantidade de dados e aos requisitos computacionais?</p></article>
+    <article class="ml-step"><span class="ml-number">5</span><strong>Treinar e validar</strong><p>Como ajustar os modelos, comparar configurações e identificar limitações sem utilizar o conjunto de teste final?</p></article>
+    <article class="ml-step"><span class="ml-number">6</span><strong>Avaliar, integrar e monitorar</strong><p>Como verificar o desempenho final, incorporar o modelo ao software e acompanhar mudanças de dados e comportamento em uso?</p></article>
+  </div>
+  <p>O fluxo não é rigidamente linear. Resultados de validação podem exigir voltar à escolha de atributos ou modelos; dificuldades na operação podem exigir nova coleta e treinamento. O desenvolvimento combina decisões de modelagem estatística com práticas de engenharia de software.</p>
+  <h3>Aplicação ao experimento do tempo de resposta</h3>
+  <div class="ml-table-wrap"><table class="ml-table">
+    <thead><tr><th>Etapa</th><th>Decisão no exemplo</th></tr></thead>
+    <tbody>
+      <tr><td>Problema</td><td>Estimar o tempo médio de resposta a partir da carga do serviço.</td></tr>
+      <tr><td>Dados</td><td>Observações sintéticas de carga e tempo, inicialmente apresentadas em uma tabela.</td></tr>
+      <tr><td>Modelagem</td><td>Investigar se uma função linear é suficiente e quais outras famílias poderiam ser consideradas.</td></tr>
+      <tr><td>Ajuste</td><td>Estimar parâmetros que minimizem o erro no treinamento.</td></tr>
+      <tr><td>Avaliação</td><td>Observar os erros em registros reservados, reconhecendo que os dados didáticos são insuficientes para validar uma implantação real.</td></tr>
+      <tr><td>Uso</td><td>Considerar integração, limites das previsões e monitoramento caso o problema fosse real.</td></tr>
+    </tbody></table></div>
+</div></section>
+
+<section class="section" id="sintese"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Síntese e verificação</p><h2>Três questões distintas</h2></div>
+  <div class="ml-grid">
+    <article class="ml-box"><h3>Que tipo de função considerar?</h3><p>Escolha de uma classe de modelos ou espaço de hipóteses.</p></article>
+    <article class="ml-box"><h3>Que função encontrar nessa classe?</h3><p>Ajuste ou otimização com base em um critério e dados de treinamento.</p></article>
+    <article class="ml-box"><h3>Como verificar sua utilidade?</h3><p>Avaliação da capacidade de generalizar para observações não utilizadas na construção e seleção.</p></article>
+    <article class="ml-box"><h3>Como utilizá-la em software?</h3><p>Definição de requisitos, integração, testes, monitoramento e manutenção do sistema de ML.</p></article>
+  </div>
+  <h3>Questões para discussão</h3>
+  <ol class="ml-check">
+    <li>Uma implementação de A* precisa necessariamente utilizar aprendizagem de máquina? Explique.</li>
+    <li>Qual relação hierárquica existe entre IA, ML e DL?</li>
+    <li>Em uma função <code>f(x) = ax + b</code>, o que significa escolher a família e o que significa estimar seus parâmetros?</li>
+    <li>Por que a melhor função de uma família pode não ser adequada para o problema?</li>
+    <li>Qual é a diferença entre minimizar o erro de treinamento e avaliar generalização?</li>
+    <li>Em qual etapa do fluxo de um projeto de ML são tomadas decisões sobre os dados de teste?</li>
+  </ol>
+  <p class="ml-conclusion"><strong>Conclusão conceitual:</strong> em aprendizagem supervisionada, construir um modelo envolve escolher uma representação para a relação entre entradas e saídas, aprender a partir de exemplos e avaliar se o comportamento obtido se mantém em observações novas.</p>
+</div></section>
+
+<section class="section section-soft" id="referencias"><div class="container">
+  <div class="section-heading"><p class="eyebrow">Referências</p><h2>Bibliografia de apoio</h2></div>
+  <p>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Pearson, 2022. Capítulos 19 (Learning from Examples) e 22 (Deep Learning).</p>
+  <p>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson, 2009. Parte IV, capítulos 10–13.</p>
+  <p>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. Manning, 2020. Capítulos 8 (Machine Learning) e 9 (Artificial Neural Networks).</p>
+</div></section>
+</main></div>
+<script>
+(function(){
+  "use strict";
+  const ns="http://www.w3.org/2000/svg";
+  const svg=document.getElementById("ml-plot");
+  const aEl=document.getElementById("ml-a"),bEl=document.getElementById("ml-b");
+  const aOut=document.getElementById("ml-a-val"),bOut=document.getElementById("ml-b-val");
+  const equation=document.getElementById("ml-equation");
+  const trainEl=document.getElementById("ml-train-error"),testEl=document.getElementById("ml-test-error");
+  if(!svg||!aEl||!bEl)return;
+  const train=[[1,3],[2,4],[3,6],[5,11],[6,14],[8,23]];
+  const held=[[4,8],[7,18]];
+  const left=56,top=26,width=550,height=294,xmax=9,ymax=27;
+  let evaluated=false;
+  function pX(x){return left+x/xmax*width;}
+  function pY(y){return top+height-(y/ymax*height);}
+  function el(name,attrs,parent){
+    const n=document.createElementNS(ns,name);
+    Object.keys(attrs).forEach(k=>n.setAttribute(k,String(attrs[k])));
+    (parent||svg).appendChild(n);
+    return n;
+  }
+  function txt(x,y,label,attrs){
+    const n=el("text",Object.assign({"x":x,"y":y,"fill":"var(--muted)","font-size":"12","font-family":"system-ui"},attrs||{}));
+    n.textContent=label;return n;
+  }
+  function num(n){return n.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});}
+  function mse(data,a,b){return data.reduce((total,p)=>total+Math.pow(p[1]-(a*p[0]+b),2),0)/data.length;}
+  function draw(){
+    svg.replaceChildren();
+    const a=Number(aEl.value),b=Number(bEl.value);
+    aOut.textContent=num(a);bOut.textContent=num(b);
+    equation.textContent="f(x) = "+num(a)+"x "+(b<0?"− ":"+ ")+num(Math.abs(b));
+    trainEl.textContent="Erro quadrático médio (treino): "+mse(train,a,b).toLocaleString("pt-BR",{maximumFractionDigits:3})+" ms²";
+    testEl.textContent=evaluated?"Erro quadrático médio (dados reservados): "+mse(held,a,b).toLocaleString("pt-BR",{maximumFractionDigits:3})+" ms²":"Avaliação reservada: não realizada.";
+    for(let y=0;y<=25;y+=5){
+      el("line",{x1:left,y1:pY(y),x2:left+width,y2:pY(y),stroke:"var(--line)","stroke-width":1});
+      txt(left-10,pY(y)+4,String(y),{"text-anchor":"end"});
+    }
+    for(let x=0;x<=9;x++){
+      el("line",{x1:pX(x),y1:top+height,x2:pX(x),y2:top+height+5,stroke:"var(--muted)","stroke-width":1});
+      txt(pX(x),top+height+20,String(x),{"text-anchor":"middle"});
+    }
+    el("line",{x1:left,y1:top,x2:left,y2:top+height,stroke:"var(--muted)","stroke-width":1.2});
+    el("line",{x1:left,y1:top+height,x2:left+width,y2:top+height,stroke:"var(--muted)","stroke-width":1.2});
+    txt(left+width/2,top+height+45,"Carga (unidade sintética)",{"text-anchor":"middle"});
+    txt(left,top-9,"Tempo de resposta (ms)");
+    const defs=el("defs",{});const clip=el("clipPath",{id:"ml-line-clip"},defs);
+    el("rect",{x:left,y:top,width:width,height:height},clip);
+    const group=el("g",{"clip-path":"url(#ml-line-clip)"});
+    el("line",{x1:pX(0),y1:pY(b),x2:pX(9),y2:pY(a*9+b),stroke:"var(--teal)","stroke-width":3},group);
+    train.forEach(p=>el("circle",{cx:pX(p[0]),cy:pY(p[1]),r:5.5,fill:"var(--blue)",stroke:"var(--paper)","stroke-width":1.5}));
+    held.forEach(p=>el("circle",{cx:pX(p[0]),cy:pY(p[1]),r:5.8,fill:"var(--amber)",stroke:"var(--paper)","stroke-width":1.5}));
+  }
+  [aEl,bEl].forEach(c=>c.addEventListener("input",()=>{evaluated=false;draw();}));
+  document.getElementById("ml-fit").addEventListener("click",()=>{
+    const n=train.length,sumX=train.reduce((s,p)=>s+p[0],0),sumY=train.reduce((s,p)=>s+p[1],0),sumXX=train.reduce((s,p)=>s+p[0]*p[0],0),sumXY=train.reduce((s,p)=>s+p[0]*p[1],0);
+    const a=(n*sumXY-sumX*sumY)/(n*sumXX-sumX*sumX),b=(sumY-a*sumX)/n;
+    aEl.value=Math.round(a*10)/10;bEl.value=Math.round(b*10)/10;
+    evaluated=false;draw();
+  });
+  document.getElementById("ml-test").addEventListener("click",()=>{evaluated=true;draw();});
+  draw();
+})();
+</script>
+</body>
+</html>
