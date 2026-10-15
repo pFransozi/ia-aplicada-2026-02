@@ -84,6 +84,25 @@
     .ml-page .ml-paradigm-phase:first-of-type{margin-top:0}
     .ml-page .ml-paradigm-caption{font-size:.87rem;color:var(--muted);margin:.95rem auto 0;max-width:940px;text-align:center}
     @media(max-width:700px){.ml-page .ml-paradigm-figure{padding:.65rem}.ml-page .ml-paradigm-group{padding:.65rem}.ml-page .ml-paradigm-flow{grid-template-columns:minmax(0,1fr);gap:.5rem}.ml-page .ml-paradigm-arrow{transform:rotate(90deg)}}
+  
+    /* Exemplo aplicado: uma mesma observação em dois modos de decisão. */
+    .ml-page .ml-api-comparison{width:min(100%,1040px);margin:1.25rem auto 1.5rem;padding:.95rem;border:1px solid var(--line);border-radius:16px;background:var(--soft)}
+    .ml-page .ml-api-scenario{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1rem;padding:.9rem 1rem;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+    .ml-page .ml-api-scenario-value{font-size:2.35rem;line-height:1;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+    .ml-page .ml-api-scenario-copy{font-size:.92rem;color:var(--muted);line-height:1.5}
+    .ml-page .ml-api-scenario-copy strong{display:block;color:var(--ink);font-size:.96rem}
+    .ml-page .ml-api-branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin-top:.9rem}
+    .ml-page .ml-api-branch{min-width:0;padding:1rem;background:var(--paper);border:1px solid var(--line);border-radius:12px;text-align:center;display:flex;flex-direction:column;align-items:center}
+    .ml-page .ml-api-branch h4{font-size:1.02rem;margin:0 0 .65rem;color:var(--ink)}
+    .ml-page .ml-api-branch .ml-api-criterion{width:100%;min-height:82px;padding:.75rem;background:var(--soft);border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem}
+    .ml-page .ml-api-branch .ml-api-criterion small{font-size:.76rem;color:var(--muted)}
+    .ml-page .ml-api-branch .ml-api-criterion strong{font-size:.97rem;color:var(--ink)}
+    .ml-page .ml-api-branch .ml-api-down{font-size:1.3rem;line-height:1.5;color:var(--blue)}
+    .ml-page .ml-api-branch .ml-api-decision{width:100%;padding:.8rem;border:1px solid var(--line);border-radius:10px;color:var(--ink);background:var(--soft);font-size:.95rem;font-weight:700}
+    .ml-page .ml-api-branch .ml-api-decision small{display:block;margin-top:.2rem;font-weight:450;font-size:.78rem;color:var(--muted)}
+    .ml-page .ml-api-caption{margin:.9rem .1rem 0;font-size:.86rem;line-height:1.55;color:var(--muted);text-align:center}
+    @media(max-width:720px){.ml-page .ml-api-comparison{padding:.65rem}.ml-page .ml-api-branches{grid-template-columns:1fr}.ml-page .ml-api-branch .ml-api-criterion{min-height:unset}.ml-page .ml-api-scenario{gap:.5rem}.ml-page .ml-api-scenario-value{font-size:2rem}}
+
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -187,9 +206,29 @@
     <figcaption class="ml-paradigm-caption">Figura 1 · Comparação didática entre a execução de regras explicitamente programadas e a construção de um modelo a partir de exemplos. O segundo fluxo representa apenas uma forma de aprendizagem de máquina: outros métodos não exigem resultados conhecidos durante o treinamento.</figcaption>
   </figure>
   <h3>Exemplo: monitoramento de uma API</h3>
-  <p>Em um sistema baseado em regras, poderíamos determinar: <strong>emitir um alerta quando a taxa de erros ultrapassar 10% durante cinco minutos</strong>. O critério é estabelecido antecipadamente pelo desenvolvedor. Essa abordagem é adequada quando a condição que desejamos identificar pode ser expressa de maneira explícita.</p>
-  <p>Entretanto, o comportamento de uma API pode variar conforme o horário, a quantidade de requisições e os tipos de operação. Nem sempre é simples descrever todas essas variações por meio de limites fixos. Com aprendizagem de máquina, podemos utilizar registros históricos de funcionamento para identificar regularidades e avaliar novas observações com base nelas, sem programar individualmente cada padrão.</p>
-  <p>Isso não elimina as decisões de engenharia: ainda precisamos definir quais dados utilizar, o que o sistema deverá identificar e como verificar a qualidade dos resultados. <strong>O que muda é a maneira de determinar parte do comportamento do sistema.</strong></p>
+  <p>Considere uma API que apresentou a seguinte taxa de erros. Como diferentes sistemas poderiam interpretar essa mesma observação?</p>
+  <figure class="ml-api-comparison" aria-labelledby="ml-api-figure-title">
+    <div class="ml-api-scenario">
+      <div class="ml-api-scenario-value" aria-hidden="true">6%</div>
+      <div class="ml-api-scenario-copy"><strong id="ml-api-figure-title">Taxa de erros observada: 6%</strong>Durante uma janela de cinco minutos</div>
+    </div>
+    <div class="ml-api-branches">
+      <div class="ml-api-branch">
+        <h4>Regra programada</h4>
+        <div class="ml-api-criterion"><small>Critério definido pelo desenvolvedor</small><strong>Alerta se erros &gt; 10%</strong></div>
+        <span class="ml-api-down" aria-hidden="true">↓</span>
+        <div class="ml-api-decision">Sem alerta<small>6% não ultrapassa o limite fixado</small></div>
+      </div>
+      <div class="ml-api-branch">
+        <h4>Modelo aprendido</h4>
+        <div class="ml-api-criterion"><small>Exemplo de padrão histórico, sob condições semelhantes</small><strong>Taxa usual: 0,5% a 1%</strong></div>
+        <span class="ml-api-down" aria-hidden="true">↓</span>
+        <div class="ml-api-decision">Poderia sinalizar anomalia<small>6% se distancia do comportamento usual</small></div>
+      </div>
+    </div>
+    <figcaption class="ml-api-caption">Exemplo hipotético: os valores ilustram a diferença entre um limite programado e uma regularidade identificada nos dados. Nenhum modelo foi treinado aqui; a sinalização real dependeria do método, dos dados e da sua avaliação.</figcaption>
+  </figure>
+  <p>O exemplo não demonstra que a aprendizagem de máquina seja sempre superior. <strong>O que muda é a origem do critério utilizado:</strong> uma condição estabelecida explicitamente ou um comportamento estimado com base em dados. Em ambos os casos, o sistema precisa ser projetado e avaliado.</p>
   <div class="ml-note"><p><strong>Síntese:</strong> regras explícitas e modelos aprendidos são formas distintas de construir comportamentos computacionais, mas não são incompatíveis. Um mesmo sistema pode combinar regras, modelos probabilísticos, métodos de busca e componentes que aprendem a partir dos dados.</p></div>
 </div></section>
 
