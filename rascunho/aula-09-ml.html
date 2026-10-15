@@ -153,6 +153,23 @@
     .ml-page .ml-family-figure figcaption{max-width:780px;margin:.8rem auto 0;font-size:.86rem;line-height:1.6;color:var(--muted);text-align:center}
     @media(max-width:630px){.ml-page .ml-family-figure{padding:.75rem}.ml-page .ml-family-candidates{grid-template-columns:1fr}.ml-page .ml-family-candidates>div{padding:.5rem .7rem}}
 
+  
+    /* Problema introdutório: observações antes da escolha de uma família de modelos. */
+    .ml-page .ml-case-grid{display:grid;grid-template-columns:minmax(230px,.7fr) minmax(0,1.3fr);gap:1rem;align-items:start;margin:1.4rem 0}
+    .ml-page .ml-case-data,.ml-page .ml-case-chart{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:1rem;min-width:0}
+    .ml-page .ml-case-data h4,.ml-page .ml-case-chart h4{margin:0 0 .8rem;color:var(--ink);font-size:1rem}
+    .ml-page .ml-case-data table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+    .ml-page .ml-case-data th,.ml-page .ml-case-data td{padding:.45rem .65rem;border-bottom:1px solid var(--line);text-align:center;color:var(--muted)}
+    .ml-page .ml-case-data th{background:var(--soft);color:var(--ink);font-size:.85rem}
+    .ml-page .ml-case-data tr:last-child td{border-bottom:0}
+    .ml-page .ml-case-chart svg{display:block;width:100%;height:auto;max-width:640px;margin-inline:auto}
+    .ml-page .ml-case-gridlines line{stroke:var(--line);stroke-width:1}
+    .ml-page .ml-case-axes line{stroke:var(--muted);stroke-width:1.5}
+    .ml-page .ml-case-axis-labels text{fill:var(--muted);font-size:13px;font-family:inherit}
+    .ml-page .ml-case-points circle{fill:var(--blue);stroke:var(--paper);stroke-width:2}
+    .ml-page .ml-case-chart figcaption{font-size:.83rem;line-height:1.5;color:var(--muted);margin-top:.4rem;text-align:center}
+    @media(max-width:760px){.ml-page .ml-case-grid{grid-template-columns:1fr}.ml-page .ml-case-data{max-width:530px;width:100%;margin-inline:auto}}
+
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -359,6 +376,68 @@
   <div class="section-heading"><p class="eyebrow">Parte III · Fundamentos da aprendizagem</p><h2>O modelo aprendido como uma função computacional</h2><p>Em aprendizagem supervisionada, temos pares de entradas e respostas observadas. O objetivo é construir uma função que produza previsões úteis para novas entradas.</p></div>
   <div class="ml-formula">D = {(x₁, y₁), (x₂, y₂), …, (xₙ, yₙ)} &nbsp; → &nbsp; ŷ = f<sub>θ</sub>(x)</div>
   <p>O conjunto <strong>D</strong> reúne os exemplos; <strong>x</strong> representa as características de entrada; <strong>y</strong> é a resposta observada; <strong>ŷ</strong> é a previsão; e <strong>θ</strong> representa os parâmetros do modelo, quando o modelo possui essa parametrização.</p>
+  <h3>Problema: estimar o tempo de processamento de um lote</h3>
+  <p>Uma aplicação executa periodicamente o processamento de lotes de registros. Queremos estimar <strong>quanto tempo essa operação levará</strong> conforme a quantidade de registros recebidos, mantendo as condições de execução aproximadamente constantes.</p>
+  <p>Nas medições ilustrativas abaixo, a entrada <code>x</code> é a quantidade de registros, em milhares, e a saída <code>y</code> é o tempo total de processamento, em segundos. Os valores são <strong>sintéticos</strong> e apresentam pequenas variações de medição.</p>
+  <div class="ml-case-grid">
+    <div class="ml-case-data">
+      <h4>Observações disponíveis</h4>
+      <table aria-label="Medições sintéticas de registros processados e duração da execução">
+        <thead><tr><th scope="col">Registros (mil)</th><th scope="col">Tempo (s)</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>3,0</td></tr>
+          <tr><td>2</td><td>5,2</td></tr>
+          <tr><td>3</td><td>6,9</td></tr>
+          <tr><td>4</td><td>9,1</td></tr>
+          <tr><td>5</td><td>10,8</td></tr>
+          <tr><td>6</td><td>13,2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figure class="ml-case-chart">
+      <h4>Observações representadas no plano</h4>
+      <svg viewBox="0 0 480 285" role="img" aria-labelledby="ml-case-title ml-case-desc">
+        <title id="ml-case-title">Dispersão de dados: quantidade de registros e tempo de processamento</title>
+        <desc id="ml-case-desc">Seis medições sintéticas de uma operação de processamento. De mil a seis mil registros, o tempo aumenta de aproximadamente três a treze segundos, com acréscimos semelhantes a cada mil registros.</desc>
+        <g class="ml-case-gridlines">
+          <line x1="55" y1="225" x2="433" y2="225"></line>
+          <line x1="55" y1="171.7" x2="433" y2="171.7"></line>
+          <line x1="55" y1="118.3" x2="433" y2="118.3"></line>
+          <line x1="55" y1="65" x2="433" y2="65"></line>
+        </g>
+        <g class="ml-case-axes">
+          <line x1="55" y1="25" x2="55" y2="225"></line>
+          <line x1="55" y1="225" x2="443" y2="225"></line>
+        </g>
+        <g class="ml-case-axis-labels">
+          <text x="43" y="230" text-anchor="end">0</text>
+          <text x="43" y="177" text-anchor="end">4</text>
+          <text x="43" y="123" text-anchor="end">8</text>
+          <text x="43" y="70" text-anchor="end">12</text>
+          <text x="55" y="244" text-anchor="middle">0</text>
+          <text x="109" y="244" text-anchor="middle">1</text>
+          <text x="163" y="244" text-anchor="middle">2</text>
+          <text x="217" y="244" text-anchor="middle">3</text>
+          <text x="271" y="244" text-anchor="middle">4</text>
+          <text x="325" y="244" text-anchor="middle">5</text>
+          <text x="379" y="244" text-anchor="middle">6</text>
+          <text x="55" y="16">Tempo (s)</text>
+          <text x="252" y="272" text-anchor="middle">Quantidade de registros (mil)</text>
+        </g>
+        <g class="ml-case-points">
+          <circle cx="109" cy="185" r="6"><title>1 mil registros: 3,0 s</title></circle>
+          <circle cx="163" cy="155.7" r="6"><title>2 mil registros: 5,2 s</title></circle>
+          <circle cx="217" cy="133" r="6"><title>3 mil registros: 6,9 s</title></circle>
+          <circle cx="271" cy="103.7" r="6"><title>4 mil registros: 9,1 s</title></circle>
+          <circle cx="325" cy="81" r="6"><title>5 mil registros: 10,8 s</title></circle>
+          <circle cx="379" cy="49" r="6"><title>6 mil registros: 13,2 s</title></circle>
+        </g>
+      </svg>
+      <figcaption>Gráfico de dispersão dos valores observados. Ainda não foi ajustada nenhuma função.</figcaption>
+    </figure>
+  </div>
+  <div class="ml-note"><p><strong>Questão para análise:</strong> ao aumentar a quantidade de registros em mil unidades, o tempo cresce aproximadamente pela mesma quantidade? Os pontos sugerem uma reta, uma curva acentuada ou algum outro comportamento?</p></div>
+  <p>Neste intervalo, os tempos apresentam acréscimos próximos de dois segundos para cada mil registros. Assim, <strong>uma função linear é uma primeira hipótese razoável</strong>: ela permitiria representar um custo inicial de execução e um aumento aproximadamente constante com o tamanho do lote. Essa escolha ainda é provisória; precisaremos ajustar o modelo e avaliar seus erros.</p>
   <h3>Qual parte é programada e qual parte é aprendida?</h3>
   <div class="ml-grid">
     <article class="ml-box"><h3>Uma função definida explicitamente</h3>
@@ -374,7 +453,7 @@
   </div>
   <p>Quando treinamos um modelo dessa família, normalmente não reescrevemos as instruções Python. Determinamos valores que alteram o comportamento da função. Em outras classes de modelos, o que é aprendido pode incluir divisões de uma árvore, estruturas de decisão ou representações internas.</p>
   <h3>Da família de funções à função aprendida</h3>
-  <p>Considere que queremos representar uma relação entre uma entrada <code>x</code> e uma saída <code>y</code>. Antes de conhecer os parâmetros do modelo, precisamos decidir <strong>que tipo de relação ele será capaz de representar</strong>. Essa escolha define uma <strong>família de funções</strong>, também chamada, nesse contexto, de <strong>classe de modelos</strong>.</p>
+  <p>Voltando aos dados dos lotes, queremos representar a relação entre o número de registros <code>x</code> e o tempo <code>y</code>. Como o gráfico sugere um crescimento aproximadamente constante por unidade adicionada, começaremos por uma <strong>família de funções lineares (afins)</strong>. Isso delimita quais relações o modelo poderá representar. Chamamos esse conjunto de possibilidades de <strong>classe de modelos</strong> ou <strong>espaço de hipóteses</strong>.</p>
   <div class="ml-grid">
     <article class="ml-box">
       <h3>1. Escolher a família</h3>
@@ -435,7 +514,7 @@
 
 <section class="section section-soft" id="otimizacao"><div class="container">
   <div class="section-heading"><p class="eyebrow">Parte IV · Aprendizagem e otimização</p><h2>Como encontrar uma função adequada dentro da família escolhida?</h2><p>Precisamos definir como avaliar os erros da função e utilizar um procedimento capaz de encontrar parâmetros que produzam resultados melhores segundo esse critério.</p></div>
-  <p>Considere um exemplo didático: queremos estimar o tempo médio de resposta de um serviço em função de uma medida simplificada de carga. Os valores são <strong>sintéticos</strong>, criados apenas para estudar a relação entre dados e modelos. Temos registros utilizados para ajustar o modelo e observações reservadas para avaliação.</p>
+  <p>Para investigar o ajuste e a generalização em <strong>outro conjunto de dados</strong>, considere agora a estimativa do tempo médio de resposta de um serviço em função de uma medida simplificada de carga. Os valores são <strong>sintéticos</strong>, criados apenas para estudar a relação entre dados e modelos. Temos registros utilizados para ajustar o modelo e observações reservadas para avaliação.</p>
   <div class="ml-table-wrap"><table class="ml-table">
     <thead><tr><th>Carga (x)</th><th>Tempo observado (y, ms)</th><th>Destinação</th></tr></thead>
     <tbody>
