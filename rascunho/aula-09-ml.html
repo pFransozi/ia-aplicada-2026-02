@@ -214,8 +214,8 @@
     <p>Modifique os parâmetros da função <code>f(x) = ax + b</code> e observe como o erro de treinamento muda. Depois, utilize o ajuste por mínimos quadrados e compare os resultados. Os dados reservados não são utilizados para calcular a reta.</p>
     <div class="ml-lab-grid">
       <div>
-        <div class="ml-control"><label for="ml-a">Inclinação <code>a</code> <output id="ml-a-val" for="ml-a">2,0</output></label><input id="ml-a" type="range" min="-1" max="4" step="0.1" value="2"></div>
-        <div class="ml-control"><label for="ml-b">Intercepto <code>b</code> <output id="ml-b-val" for="ml-b">1,0</output></label><input id="ml-b" type="range" min="-6" max="9" step="0.1" value="1"></div>
+        <div class="ml-control"><label for="ml-a">Inclinação <code>a</code> <output id="ml-a-val" for="ml-a">2,0</output></label><input id="ml-a" type="range" min="-1" max="4" step="any" value="2"></div>
+        <div class="ml-control"><label for="ml-b">Intercepto <code>b</code> <output id="ml-b-val" for="ml-b">1,0</output></label><input id="ml-b" type="range" min="-6" max="9" step="any" value="1"></div>
         <div class="ml-results" aria-live="polite"><strong id="ml-equation">f(x) = 2,0x + 1,0</strong><p id="ml-train-error">Erro quadrático médio (treino): —</p><p id="ml-test-error">Avaliação reservada: não realizada.</p></div>
         <div class="ml-lab-actions"><button id="ml-fit" type="button">Calcular a melhor reta no treino</button><button id="ml-test" type="button">Avaliar dados reservados</button></div>
         <p class="ml-small">Ao modificar os parâmetros, a avaliação reservada é ocultada novamente. Em um projeto real, o conjunto de teste final não deve orientar o ajuste de parâmetros nem a escolha de modelos.</p>
@@ -325,7 +325,7 @@
     const n=el("text",Object.assign({"x":x,"y":y,"fill":"var(--muted)","font-size":"12","font-family":"system-ui"},attrs||{}));
     n.textContent=label;return n;
   }
-  function num(n){return n.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});}
+  function num(n){return n.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:3});}
   function mse(data,a,b){return data.reduce((total,p)=>total+Math.pow(p[1]-(a*p[0]+b),2),0)/data.length;}
   function draw(){
     svg.replaceChildren();
@@ -357,7 +357,7 @@
   document.getElementById("ml-fit").addEventListener("click",()=>{
     const n=train.length,sumX=train.reduce((s,p)=>s+p[0],0),sumY=train.reduce((s,p)=>s+p[1],0),sumXX=train.reduce((s,p)=>s+p[0]*p[0],0),sumXY=train.reduce((s,p)=>s+p[0]*p[1],0);
     const a=(n*sumXY-sumX*sumY)/(n*sumXX-sumX*sumX),b=(sumY-a*sumX)/n;
-    aEl.value=Math.round(a*10)/10;bEl.value=Math.round(b*10)/10;
+    aEl.value=a;bEl.value=b;
     evaluated=false;draw();
   });
   document.getElementById("ml-test").addEventListener("click",()=>{evaluated=true;draw();});
