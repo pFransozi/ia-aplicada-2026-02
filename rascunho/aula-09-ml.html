@@ -103,6 +103,27 @@
     .ml-page .ml-api-caption{margin:.9rem .1rem 0;font-size:.86rem;line-height:1.55;color:var(--muted);text-align:center}
     @media(max-width:720px){.ml-page .ml-api-comparison{padding:.65rem}.ml-page .ml-api-branches{grid-template-columns:1fr}.ml-page .ml-api-branch .ml-api-criterion{min-height:unset}.ml-page .ml-api-scenario{gap:.5rem}.ml-page .ml-api-scenario-value{font-size:2rem}}
 
+  
+    /* Figuras didáticas e explicações dos paradigmas de aprendizagem. */
+    .ml-page .ml-paradigms{display:grid;gap:1.1rem;margin:1.5rem 0 1.7rem}
+    .ml-page .ml-paradigm-item{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:center;gap:1.35rem;padding:1.1rem;border:1px solid var(--line);border-radius:16px;background:var(--paper)}
+    .ml-page .ml-paradigm-visual{display:block;min-width:0;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:12px;transition:border-color .2s}
+    .ml-page .ml-paradigm-visual:hover,.ml-page .ml-paradigm-visual:focus-visible{border-color:var(--blue)}
+    .ml-page .ml-paradigm-visual img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain}
+    .ml-page .ml-paradigm-content{min-width:0}
+    .ml-page .ml-paradigm-content h4{font-size:1.3rem;margin:0 0 .7rem;color:var(--ink)}
+    .ml-page .ml-paradigm-content p{font-size:.95rem;line-height:1.6;margin:0 0 .8rem}
+    .ml-page .ml-paradigm-content p:last-child{margin-bottom:0}
+    .ml-page .ml-tasks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin:.75rem 0 .8rem}
+    .ml-page .ml-task{padding:.75rem;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+    .ml-page .ml-task strong,.ml-page .ml-task span,.ml-page .ml-task small{display:block}
+    .ml-page .ml-task strong{color:var(--ink);margin-bottom:.3rem;font-size:.92rem}
+    .ml-page .ml-task span{font-size:.85rem;color:var(--muted)}
+    .ml-page .ml-task small{font-size:.78rem;color:var(--muted);margin-top:.35rem;line-height:1.45}
+    .ml-page .ml-paradigm-content .ml-paradigm-footnote{font-size:.81rem;line-height:1.55;color:var(--muted)}
+    @media(max-width:900px){.ml-page .ml-paradigm-item{grid-template-columns:1fr;gap:.9rem}.ml-page .ml-paradigm-visual{max-width:700px;margin-inline:auto}}
+    @media(max-width:520px){.ml-page .ml-paradigm-item{padding:.7rem}.ml-page .ml-tasks{grid-template-columns:1fr}}
+
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -246,13 +267,47 @@
   <p>Uma implementação de A* pode utilizar uma heurística definida pelo projetista, sem treinamento com exemplos. Da mesma forma, um sistema de regras pode realizar inferências sem aprender novas regras. Ambos pertencem ao campo da IA, mesmo que não dependam de aprendizagem de máquina.</p>
   <p>Por outro lado, ML pode participar da construção de heurísticas, da estimativa de probabilidades, da definição de políticas de decisão e de sistemas que combinam componentes simbólicos e estatísticos. As fronteiras entre abordagens descrevem métodos de pesquisa, não impedem sua integração.</p>
   <h3>Três paradigmas de aprendizagem: visão inicial</h3>
-  <div class="ml-steps">
-    <article class="ml-step"><span class="ml-number">1</span><strong>Supervisionada</strong><p>Exemplos com entradas e respostas conhecidas orientam a aprendizagem de uma função de previsão. Aplicações: regressão e classificação.</p></article>
-    <article class="ml-step"><span class="ml-number">2</span><strong>Não supervisionada</strong><p>O sistema procura regularidades, agrupamentos ou representações a partir de dados sem rótulos de resposta para a tarefa.</p></article>
-    <article class="ml-step"><span class="ml-number">3</span><strong>Por reforço</strong><p>Um agente interage com um ambiente e utiliza sinais de recompensa para melhorar seu comportamento ao longo do tempo.</p></article>
+  <p>A expressão <strong>aprendizagem de máquina</strong> reúne diferentes formas de utilizar dados ou experiência para melhorar o desempenho de sistemas. Uma distinção introdutória é observar <strong>qual informação orienta a aprendizagem</strong> e <strong>que resultado procuramos obter</strong>.</p>
+  <div class="ml-paradigms">
+    <article class="ml-paradigm-item">
+      <a class="ml-paradigm-visual" href="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem supervisionada em tamanho completo">
+        <img src="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Fluxo de aprendizagem supervisionada: dados e respostas conhecidas orientam a construção de um modelo; depois, novas entradas permitem obter previsões. Inclui exemplos visuais de classificação e regressão.">
+      </a>
+      <div class="ml-paradigm-content">
+        <h4>Aprendizagem supervisionada</h4>
+        <p>O sistema recebe exemplos de entradas acompanhadas das respostas correspondentes. A partir desses exemplos, procura construir uma função capaz de produzir respostas para novas entradas.</p>
+        <p>Duas tarefas comuns são:</p>
+        <div class="ml-tasks">
+          <div class="ml-task"><strong>Classificação</strong><span>Prevê uma classe ou categoria.</span><small>Exemplo: e-mail spam ou legítimo.</small></div>
+          <div class="ml-task"><strong>Regressão</strong><span>Estima um valor numérico.</span><small>Exemplo: tempo de resposta de uma API, em ms.</small></div>
+        </div>
+        <p class="ml-paradigm-footnote">Na figura, os exemplos de classificação e regressão representam tarefas alternativas: cada uma requer um modelo adequado à saída pretendida.</p>
+      </div>
+    </article>
+    <article class="ml-paradigm-item">
+      <a class="ml-paradigm-visual" href="../assets/ia-aplicada/aula-09-aprendizagem-nao-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem não supervisionada em tamanho completo">
+        <img src="../assets/ia-aplicada/aula-09-aprendizagem-nao-supervisionada.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Fluxo de aprendizagem não supervisionada: dados sem rótulos são analisados para identificar padrões e possíveis agrupamentos de amostras.">
+      </a>
+      <div class="ml-paradigm-content">
+        <h4>Aprendizagem não supervisionada</h4>
+        <p>Os dados são apresentados sem respostas previamente identificadas para a tarefa. O procedimento procura estruturas e regularidades presentes nas observações, como grupos de elementos com características semelhantes.</p>
+        <p>O <strong>agrupamento</strong> (clustering) é um exemplo: podemos procurar padrões de utilização de um serviço a partir de registros de atividade, sem fornecer antecipadamente a qual grupo pertence cada registro.</p>
+        <p class="ml-paradigm-footnote">O agrupamento ilustra uma aplicação, mas não esgota a aprendizagem não supervisionada: também podem ser aprendidas representações e estruturas dos dados.</p>
+      </div>
+    </article>
+    <article class="ml-paradigm-item">
+      <a class="ml-paradigm-visual" href="../assets/ia-aplicada/aula-09-aprendizagem-por-reforco.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem por reforço em tamanho completo">
+        <img src="../assets/ia-aplicada/aula-09-aprendizagem-por-reforco.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Ciclo de aprendizagem por reforço: um agente executa ações no ambiente, recebe observações e recompensas, e melhora sua política de escolha de ações.">
+      </a>
+      <div class="ml-paradigm-content">
+        <h4>Aprendizagem por reforço</h4>
+        <p>Um agente interage com um ambiente e escolhe ações. Em resposta, recebe novas observações e sinais de <strong>recompensa</strong>, que orientam a melhoria de sua estratégia de decisão ao longo das interações.</p>
+        <p>Por exemplo, em uma simulação de navegação, um agente pode aprender quais ações favorecem alcançar um objetivo, considerando recompensas e consequências das decisões tomadas.</p>
+        <p class="ml-paradigm-footnote">Diferentemente dos exemplos supervisionados, não é necessário fornecer, para cada situação, uma resposta correta que o agente deva reproduzir.</p>
+      </div>
+    </article>
   </div>
-  <p><strong>Recorte adotado:</strong> para compreender seleção, ajuste e generalização, começaremos com aprendizagem supervisionada. Essa é uma porta de entrada para modelos clássicos e, posteriormente, redes neurais.</p>
-  <div class="ml-note"><p><strong>Ponto possível de encerramento do encontro:</strong> solicitar que a turma explique por que A*, um sistema de regras e uma rede neural pertencem à IA, mas não constituem necessariamente o mesmo tipo de solução. A continuidade começa na Parte III.</p></div>
+  <p><strong>Recorte adotado:</strong> nas próximas partes, utilizaremos a aprendizagem supervisionada para compreender a relação entre dados, funções, ajuste e generalização. Essa base também será utilizada no estudo posterior de redes neurais.</p>
 </div></section>
 
 <section class="section" id="funcoes"><div class="container">
