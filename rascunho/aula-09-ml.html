@@ -186,10 +186,8 @@
     </div>
     <figcaption class="ml-paradigm-caption">Figura 1 · Comparação didática entre a execução de regras explicitamente programadas e a construção de um modelo a partir de exemplos. O segundo fluxo representa apenas uma forma de aprendizagem de máquina: outros métodos não exigem resultados conhecidos durante o treinamento.</figcaption>
   </figure>
-  <div class="ml-grid">
-    <article class="ml-box"><h3>Comportamento especificado</h3><p>Para monitorar uma API, o desenvolvedor estabelece uma condição: se a taxa de erros ultrapassar 10% durante cinco minutos, o sistema emite um alerta. O limite e a regra são definidos antecipadamente.</p></article>
-    <article class="ml-box"><h3>Comportamento aprendido</h3><p>Para monitorar a mesma API, o sistema utiliza registros históricos de erros, tráfego e latência para aprender padrões habituais de funcionamento e identificar comportamentos atípicos. O que é considerado incomum depende dos dados e do procedimento adotado.</p></article>
-  </div>
+  <h3>Exemplo: monitoramento de uma API</h3>
+  <p>Podemos programar uma regra explícita: emitir um alerta quando a taxa de erros ultrapassar 10% durante cinco minutos. Outra possibilidade é utilizar dados históricos de tráfego, erros e latência para que um sistema aprenda padrões habituais de funcionamento e identifique comportamentos atípicos. No primeiro caso, o limite foi definido diretamente; no segundo, a avaliação depende das regularidades identificadas nos dados.</p>
   <div class="ml-note"><p><strong>Distinção importante:</strong> não se trata de separar todas as técnicas anteriores de ML em categorias mutuamente exclusivas. Algoritmos genéticos podem otimizar parâmetros de um modelo; probabilidades podem ser estimadas a partir de dados; e métodos de busca e de inferência podem integrar um sistema que também aprende.</p></div>
   <h3>Discussão orientada</h3><p>Nos dois exemplos de monitoramento da API, de onde vem o critério utilizado para emitir um alerta? Que vantagens e limitações cada abordagem apresenta? Quais decisões continuam sendo responsabilidade do desenvolvedor, mesmo quando o sistema utiliza aprendizagem de máquina?</p>
 </div></section>
