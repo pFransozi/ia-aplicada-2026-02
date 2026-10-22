@@ -152,6 +152,15 @@
     .ml-page .ml-family-point{stroke:var(--paper);stroke-width:2}
     .ml-page .ml-family-figure figcaption{max-width:780px;margin:.8rem auto 0;font-size:.86rem;line-height:1.6;color:var(--muted);text-align:center}
     @media(max-width:630px){.ml-page .ml-family-figure{padding:.75rem}.ml-page .ml-family-candidates{grid-template-columns:1fr}.ml-page .ml-family-candidates>div{padding:.5rem .7rem}}
+    .ml-page .ml-family-observed-legend{display:flex;gap:.45rem;align-items:center;justify-content:center;flex-wrap:wrap;margin:.2rem auto 1rem;color:var(--muted);font-size:.85rem;line-height:1.45;text-align:center}
+    .ml-page .ml-family-observed-key{display:inline-block;width:11px;height:11px;flex:0 0 11px;border-radius:50%;background:var(--ink);border:1px solid var(--line)}
+    .ml-page .ml-family-observed-points circle{fill:var(--ink);stroke:var(--paper);stroke-width:2}
+    .ml-page .ml-family-focus-ring{fill:none;stroke:var(--ink);stroke-width:1.35;stroke-dasharray:3 3}
+    .ml-page .ml-family-values-wrap{width:min(100%,660px);margin:1.15rem auto}
+    .ml-page .ml-family-values-wrap .ml-table{min-width:0}
+    .ml-page .ml-family-values-wrap th,.ml-page .ml-family-values-wrap td{font-variant-numeric:tabular-nums}
+    .ml-page .ml-family-values-wrap tbody th{font-size:.92rem}
+
 
   
     /* Problema introdutório: observações antes da escolha de uma família de modelos. */
@@ -708,12 +717,20 @@
 </div></section>
 
 <section class="section" id="funcoes"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Parte III · Fundamentos da aprendizagem</p><h2>O modelo aprendido como uma função computacional</h2><p>Em aprendizagem supervisionada, temos pares de entradas e respostas observadas. O objetivo é construir uma função que produza previsões úteis para novas entradas.</p></div>
+  <div class="section-heading">
+    <p class="eyebrow">Parte III · Fundamentos da aprendizagem</p>
+    <h2>O modelo aprendido como uma função computacional</h2>
+    <p>Nas partes anteriores, vimos que um modelo pode relacionar características de entrada a uma saída. Agora, vamos representar essa relação matematicamente e distinguir a escolha de uma família de funções do ajuste realizado com dados.</p>
+  </div>
+  <h3>Como representar entradas e saídas?</h3>
+  <p>Na aprendizagem supervisionada, trabalhamos com exemplos nos quais conhecemos tanto as entradas quanto as respostas observadas. Esses exemplos formam um conjunto de dados:</p>
   <div class="ml-formula">D = {(x₁, y₁), (x₂, y₂), …, (xₙ, yₙ)} &nbsp; → &nbsp; ŷ = f<sub>θ</sub>(x)</div>
-  <p>O conjunto <strong>D</strong> reúne os exemplos; <strong>x</strong> representa as características de entrada; <strong>y</strong> é a resposta observada; <strong>ŷ</strong> é a previsão; e <strong>θ</strong> representa os parâmetros do modelo, quando o modelo possui essa parametrização.</p>
+  <p><strong>D</strong> é o conjunto de exemplos; <strong>x</strong> representa a entrada; <strong>y</strong> é a resposta observada; <strong>ŷ</strong> é a previsão produzida pelo modelo; e <strong>θ</strong> denota seus parâmetros, neste caso. O objetivo é obter uma função que produza previsões adequadas para entradas não utilizadas no ajuste.</p>
+  <p>Na figura dos objetos, apresentada na Parte I, cada entrada podia ser descrita por um <strong>vetor de características</strong> (por exemplo, tamanho, forma e outras medidas). Para simplificar a análise matemática, nosso próximo exemplo utilizará <strong>uma única característica numérica</strong>. A ideia de relacionar entradas e saídas permanece a mesma.</p>
+
   <h3>Problema: estimar o tempo de processamento de um lote</h3>
-  <p>Uma aplicação executa periodicamente o processamento de lotes de registros. Queremos estimar <strong>quanto tempo essa operação levará</strong> conforme a quantidade de registros recebidos, mantendo as condições de execução aproximadamente constantes.</p>
-  <p>Nas medições ilustrativas abaixo, a entrada <code>x</code> é a quantidade de registros, em milhares, e a saída <code>y</code> é o tempo total de processamento, em segundos. Os valores são <strong>sintéticos</strong> e apresentam pequenas variações de medição.</p>
+  <p>Uma aplicação processa periodicamente lotes de registros. Queremos estimar <strong>quanto tempo uma execução levará</strong> em função da quantidade de registros, supondo condições de execução aproximadamente constantes.</p>
+  <p>Em nossas medições <strong>sintéticas</strong>, <code>x</code> indica a quantidade de registros <strong>em milhares</strong> e <code>y</code> indica o tempo de processamento <strong>em segundos</strong>. A tabela contém as observações, e o gráfico representa os mesmos pares de valores.</p>
   <div class="ml-case-grid">
     <div class="ml-case-data">
       <h4>Observações disponíveis</h4>
@@ -771,80 +788,115 @@
       <figcaption>Gráfico de dispersão dos valores observados. Ainda não foi ajustada nenhuma função.</figcaption>
     </figure>
   </div>
-  <div class="ml-note"><p><strong>Questão para análise:</strong> ao aumentar a quantidade de registros em mil unidades, o tempo cresce aproximadamente pela mesma quantidade? Os pontos sugerem uma reta, uma curva acentuada ou algum outro comportamento?</p></div>
-  <p>Neste intervalo, os tempos apresentam acréscimos próximos de dois segundos para cada mil registros. Assim, <strong>uma função linear é uma primeira hipótese razoável</strong>: ela permitiria representar um custo inicial de execução e um aumento aproximadamente constante com o tamanho do lote. Essa escolha ainda é provisória; precisaremos ajustar o modelo e avaliar seus erros.</p>
-  <h3>Qual parte é programada e qual parte é aprendida?</h3>
+
+  <div class="ml-note"><p><strong>Questão para análise:</strong> quando acrescentamos mil registros, o tempo aumenta aproximadamente pela mesma quantidade? Que tipo de função parece compatível com a distribuição dos pontos?</p></div>
+
+  <h3>Escolher uma família de funções</h3>
+  <p>Os valores sugerem um aumento de aproximadamente <strong>dois segundos por mil registros</strong>. Uma primeira hipótese é representar a relação por uma <strong>função afim</strong>, chamada frequentemente de modelo linear no contexto de regressão. Isso significa escolher uma família de funções possíveis, e não determinar ainda qual delas é a mais adequada aos dados.</p>
   <div class="ml-grid">
-    <article class="ml-box"><h3>Uma função definida explicitamente</h3>
+    <article class="ml-box">
+      <h4>Família ou espaço de hipóteses</h4>
+      <div class="ml-formula">f<sub>θ</sub>(x) = ax + b</div>
+      <p>A forma matemática é definida pelo desenvolvedor. Os coeficientes <code>a</code> e <code>b</code> ainda podem assumir diferentes valores. O conjunto dessas funções constitui uma <strong>classe de modelos</strong>, também chamada de <strong>espaço de hipóteses</strong>.</p>
+    </article>
+    <article class="ml-box">
+      <h4>Uma função candidata</h4>
+      <div class="ml-formula">f(x) = 2x + 1</div>
+      <p>Ao escolher <code>a = 2</code> e <code>b = 1</code>, definimos uma função específica dessa família. Esses números, por enquanto, foram <strong>escolhidos para exemplificar</strong>; não foram calculados por um procedimento de aprendizagem.</p>
+    </article>
+  </div>
+  <p>Nesse modelo, o parâmetro <strong><code>a</code> é a inclinação</strong>: representa o acréscimo previsto no tempo para cada mil registros adicionais (em segundos por mil registros). O parâmetro <strong><code>b</code> é o intercepto</strong>: representa o tempo previsto para <code>x = 0</code>. Como não medimos lotes com zero registros, interpretar <code>b</code> como um custo inicial real exige cuidado; trata-se, aqui, de uma extrapolação do modelo.</p>
+
+  <h3>Programar a função não é treiná-la</h3>
+  <p>Compare as duas implementações em Python. Na primeira, os números fazem parte das instruções; na segunda, eles são parâmetros fornecidos à função. <strong>Nenhuma das implementações aprende por si só.</strong> Para haver aprendizagem, um procedimento adicional deve utilizar os exemplos de <code>D</code> para determinar os valores dos parâmetros.</p>
+  <div class="ml-grid">
+    <article class="ml-box">
+      <h4>Coeficientes definidos no código</h4>
       <pre class="ml-code"><code>def estimar_tempo(carga):
     return 2 * carga + 1</code></pre>
-      <p>Coeficientes e operação são determinados antecipadamente pelo programador.</p>
+      <p>O programador escolheu diretamente a inclinação e o intercepto.</p>
     </article>
-    <article class="ml-box"><h3>Uma família de funções ajustáveis</h3>
+    <article class="ml-box">
+      <h4>Coeficientes ajustáveis</h4>
       <pre class="ml-code"><code>def estimar_tempo(carga, a, b):
     return a * carga + b</code></pre>
-      <p>A estrutura é programada. Um procedimento de aprendizagem pode estimar <code>a</code> e <code>b</code> com base nos dados.</p>
+      <p>A estrutura foi programada, mas um algoritmo de treinamento poderá estimar <code>a</code> e <code>b</code> a partir dos dados. Em ambos os exemplos, <code>carga</code> está expressa em milhares de registros.</p>
     </article>
   </div>
-  <p>Quando treinamos um modelo dessa família, normalmente não reescrevemos as instruções Python. Determinamos valores que alteram o comportamento da função. Em outras classes de modelos, o que é aprendido pode incluir divisões de uma árvore, estruturas de decisão ou representações internas.</p>
-  <h3>Da família de funções à função aprendida</h3>
-  <p>Voltando aos dados dos lotes, queremos representar a relação entre o número de registros <code>x</code> e o tempo <code>y</code>. Como o gráfico sugere um crescimento aproximadamente constante por unidade adicionada, começaremos por uma <strong>família de funções lineares (afins)</strong>. Isso delimita quais relações o modelo poderá representar. Chamamos esse conjunto de possibilidades de <strong>classe de modelos</strong> ou <strong>espaço de hipóteses</strong>.</p>
-  <div class="ml-grid">
-    <article class="ml-box">
-      <h3>1. Escolher a família</h3>
-      <p>Por exemplo, podemos restringir as funções candidatas a retas:</p>
-      <div class="ml-formula">f(x) = ax + b</div>
-      <p>Essa expressão não define uma única reta. Ela representa <strong>todas as retas possíveis</strong> obtidas ao variar os coeficientes <code>a</code> e <code>b</code>.</p>
-    </article>
-    <article class="ml-box">
-      <h3>2. Determinar uma função</h3>
-      <p>Depois de escolher a família, precisamos determinar valores para seus parâmetros. Se <code>a = 2</code> e <code>b = 1</code>, obtemos:</p>
-      <div class="ml-formula">f(x) = 2x + 1</div>
-      <p>Agora temos <strong>uma função específica</strong> da família linear. A questão é saber como escolher os parâmetros com base nos dados.</p>
-    </article>
-  </div>
+  <p>Em outras classes de modelos, o que se aprende pode incluir pesos de redes neurais, divisões em árvores ou outras estruturas. O princípio é semelhante: programamos o <strong>procedimento de aprendizagem</strong> e utilizamos seus resultados para determinar parte do comportamento do sistema.</p>
+
+  <h3>Comparar funções candidatas com os dados observados</h3>
+  <p>Para a mesma família <code>f(x) = ax + b</code>, podemos considerar três funções com <code>b = 1</code> e inclinações diferentes. O gráfico apresenta <strong>as três retas junto das seis observações</strong> da tabela inicial. Isso permite comparar visualmente previsões e medições.</p>
   <figure class="ml-family-figure" aria-labelledby="ml-family-caption">
-    <h4>Três funções diferentes da mesma família</h4>
-    <p>Variando apenas o parâmetro <code>a</code>, obtemos retas diferentes. Todas pertencem à família <code>f(x) = ax + b</code>.</p>
+    <h4>Três funções afins e seis medições</h4>
     <div class="ml-family-candidates">
       <div><span class="ml-family-key ml-family-blue"></span><strong>f₁(x) = x + 1</strong><small>a = 1; b = 1</small></div>
       <div><span class="ml-family-key ml-family-teal"></span><strong>f₂(x) = 2x + 1</strong><small>a = 2; b = 1</small></div>
       <div><span class="ml-family-key ml-family-violet"></span><strong>f₃(x) = 3x + 1</strong><small>a = 3; b = 1</small></div>
     </div>
-    <svg class="ml-family-plot" viewBox="0 0 640 316" role="img" aria-labelledby="ml-family-plot-title ml-family-plot-desc">
-      <title id="ml-family-plot-title">Uma família linear, diferentes retas</title>
-      <desc id="ml-family-plot-desc">Gráfico ilustrativo de f1 igual a x mais 1, f2 igual a 2x mais 1 e f3 igual a 3x mais 1. Para x igual a 4, as três funções produzem, respectivamente, 5, 9 e 13.</desc>
+    <p class="ml-family-observed-legend"><span class="ml-family-observed-key" aria-hidden="true"></span> Os pontos representam as seis medições; as linhas são funções candidatas, ainda não ajustadas por treinamento.</p>
+    <svg class="ml-family-plot" viewBox="0 0 640 340" role="img" aria-labelledby="ml-family-plot-title ml-family-plot-desc">
+      <title id="ml-family-plot-title">Comparação entre três funções candidatas e seis medições do tempo de processamento</title>
+      <desc id="ml-family-plot-desc">Gráfico com x de zero a seis mil registros e tempos de zero a vinte segundos. As funções x mais um, dois x mais um e três x mais um estão representadas por linhas distintas. Seis pontos medidos estão próximos da reta dois x mais um: três, cinco vírgula dois, seis vírgula nove, nove vírgula um, dez vírgula oito e treze vírgula dois segundos.</desc>
       <g class="ml-family-gridlines">
-        <line x1="62" y1="260" x2="560" y2="260"></line>
-        <line x1="62" y1="193.3" x2="560" y2="193.3"></line>
-        <line x1="62" y1="126.7" x2="560" y2="126.7"></line>
-        <line x1="62" y1="60" x2="560" y2="60"></line>
+        <line x1="62" y1="280" x2="552" y2="280"></line>
+        <line x1="62" y1="217.5" x2="552" y2="217.5"></line>
+        <line x1="62" y1="155" x2="552" y2="155"></line>
+        <line x1="62" y1="92.5" x2="552" y2="92.5"></line>
+        <line x1="62" y1="30" x2="552" y2="30"></line>
       </g>
       <g class="ml-family-axis">
-        <line x1="62" y1="19" x2="62" y2="260"></line>
-        <line x1="62" y1="260" x2="575" y2="260"></line>
+        <line x1="62" y1="25" x2="62" y2="280"></line>
+        <line x1="62" y1="280" x2="562" y2="280"></line>
       </g>
       <g class="ml-family-ticks">
-        <text x="51" y="264" text-anchor="end">0</text><text x="51" y="197" text-anchor="end">5</text>
-        <text x="51" y="131" text-anchor="end">10</text><text x="51" y="64" text-anchor="end">15</text>
-        <text x="62" y="281" text-anchor="middle">0</text><text x="162" y="281" text-anchor="middle">1</text>
-        <text x="262" y="281" text-anchor="middle">2</text><text x="362" y="281" text-anchor="middle">3</text>
-        <text x="462" y="281" text-anchor="middle">4</text><text x="562" y="281" text-anchor="middle">5</text>
-        <text x="585" y="263">x</text><text x="61" y="12">f(x)</text>
+        <text x="50" y="284" text-anchor="end">0</text>
+        <text x="50" y="221.5" text-anchor="end">5</text>
+        <text x="50" y="159" text-anchor="end">10</text>
+        <text x="50" y="96.5" text-anchor="end">15</text>
+        <text x="50" y="34" text-anchor="end">20</text>
+        <text x="62" y="302" text-anchor="middle">0</text>
+        <text x="142" y="302" text-anchor="middle">1</text>
+        <text x="222" y="302" text-anchor="middle">2</text>
+        <text x="302" y="302" text-anchor="middle">3</text>
+        <text x="382" y="302" text-anchor="middle">4</text>
+        <text x="462" y="302" text-anchor="middle">5</text>
+        <text x="542" y="302" text-anchor="middle">6</text>
+        <text x="66" y="16">Tempo (s)</text>
+        <text x="322" y="332" text-anchor="middle">Quantidade de registros (mil)</text>
       </g>
-      <line class="ml-family-x-reference" x1="462" y1="20" x2="462" y2="260"></line>
-      <path class="ml-family-line ml-family-blue" d="M62 246.7 L562 180"></path>
-      <path class="ml-family-line ml-family-teal" d="M62 246.7 L562 113.3"></path>
-      <path class="ml-family-line ml-family-violet" d="M62 246.7 L562 46.7"></path>
-      <circle class="ml-family-point ml-family-blue" cx="462" cy="193.3" r="5.5"></circle>
-      <circle class="ml-family-point ml-family-teal" cx="462" cy="140" r="5.5"></circle>
-      <circle class="ml-family-point ml-family-violet" cx="462" cy="86.7" r="5.5"></circle>
+      <line class="ml-family-x-reference" x1="382" y1="29" x2="382" y2="280"></line>
+      <path class="ml-family-line ml-family-blue" d="M 62 267.5 L 542 192.5"></path>
+      <path class="ml-family-line ml-family-teal" d="M 62 267.5 L 542 117.5"></path>
+      <path class="ml-family-line ml-family-violet" d="M 62 267.5 L 542 42.5"></path>
+      <g class="ml-family-observed-points">
+        <circle cx="142" cy="242.5" r="6"><title>1 mil registros: 3,0 s observados</title></circle>
+        <circle cx="222" cy="215" r="6"><title>2 mil registros: 5,2 s observados</title></circle>
+        <circle cx="302" cy="193.75" r="6"><title>3 mil registros: 6,9 s observados</title></circle>
+        <circle cx="382" cy="166.25" r="6"><title>4 mil registros: 9,1 s observados</title></circle>
+        <circle cx="462" cy="145" r="6"><title>5 mil registros: 10,8 s observados</title></circle>
+        <circle cx="542" cy="115" r="6"><title>6 mil registros: 13,2 s observados</title></circle>
+      </g>
+      <circle class="ml-family-focus-ring" cx="382" cy="166.25" r="11"><title>Observação destacada: 4 mil registros e 9,1 segundos</title></circle>
     </svg>
-    <figcaption id="ml-family-caption">Para a mesma entrada <strong>x = 4</strong>, as três funções produzem, respectivamente, <strong>5, 9 e 13</strong>. São funções candidatas: ainda não utilizamos dados observados para decidir qual delas seria adequada.</figcaption>
+    <figcaption id="ml-family-caption"><strong>Figura ·</strong> As seis medições aparecem sobre as funções candidatas. A reta <code>f₂(x) = 2x + 1</code> acompanha melhor a tendência visível, mas ainda não utilizamos um critério quantitativo para escolher parâmetros.</figcaption>
   </figure>
+  <p>Observe o caso em que <strong>x = 4</strong>, isto é, um lote de quatro mil registros. A medição correspondente foi de <strong>9,1 segundos</strong>:</p>
+  <div class="ml-table-wrap ml-family-values-wrap">
+    <table class="ml-table" aria-label="Comparação das previsões das funções candidatas para quatro mil registros">
+      <thead><tr><th scope="col">Função</th><th scope="col">Previsão para x = 4</th></tr></thead>
+      <tbody>
+        <tr><td>f₁(x) = x + 1</td><td>5 s</td></tr>
+        <tr><td>f₂(x) = 2x + 1</td><td>9 s</td></tr>
+        <tr><td>f₃(x) = 3x + 1</td><td>13 s</td></tr>
+        <tr><th scope="row">Valor observado</th><td><strong>9,1 s</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>A segunda função produz a previsão mais próxima <strong>nesse exemplo</strong>. Entretanto, para avaliar a adequação de um modelo, não basta considerar uma observação isolada. Precisamos examinar seus erros no conjunto de dados e estabelecer um critério para comparar alternativas.</p>
   <h3>E se a família escolhida não representar bem os dados?</h3>
-  <p>Uma família mais flexível poderia incluir relações curvas, por exemplo <code>f(x) = ax² + bx + c</code>. Quando <code>a ≠ 0</code>, a função é quadrática. Mesmo que encontremos a melhor reta segundo um critério de erro, <strong>ela continuará sendo uma reta</strong>: o ajuste dos coeficientes não modifica as possibilidades da família escolhida.</p>
-  <p>Portanto, são decisões distintas: <strong>selecionar uma família</strong> determina quais funções podemos considerar; <strong>ajustar o modelo</strong> procura, dentro dela, uma função adequada aos dados. Na próxima parte, veremos como medir erros e orientar esse ajuste.</p>
+  <p>Uma família de funções afins representa apenas retas. Se a relação real tiver curvatura relevante, podemos considerar uma família mais flexível, como <code>f(x) = ax² + bx + c</code>, que inclui funções quadráticas quando <code>a ≠ 0</code>. Mesmo o melhor ajuste possível <strong>dentro de uma família de retas</strong> não se torna uma curva apenas pela alteração de seus parâmetros.</p>
+  <p>Portanto, <strong>selecionar a família de modelos</strong> estabelece quais funções podem ser consideradas; <strong>ajustar os parâmetros</strong> procura uma função adequada dentro dessa família. Na Parte IV, utilizaremos um critério de erro para transformar essa escolha em um problema de otimização.</p>
 </div></section>
 
 <section class="section section-soft" id="otimizacao"><div class="container">
