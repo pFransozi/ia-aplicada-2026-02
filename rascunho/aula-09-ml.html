@@ -170,6 +170,89 @@
     .ml-page .ml-case-chart figcaption{font-size:.83rem;line-height:1.5;color:var(--muted);margin-top:.4rem;text-align:center}
     @media(max-width:760px){.ml-page .ml-case-grid{grid-template-columns:1fr}.ml-page .ml-case-data{max-width:530px;width:100%;margin-inline:auto}}
 
+    /* Cabeçalho estável em zoom: impede que o breakpoint de 1080px
+       empilhe os links da navegação e aumente a altura da barra. */
+    body.teaching-page.ml-page .site-header .nav-wrap {
+      min-height: 62px;
+      gap: .75rem;
+      flex-wrap: nowrap;
+    }
+    body.teaching-page.ml-page .site-header .brand {
+      min-width: 0;
+      flex: 0 1 auto;
+    }
+    body.teaching-page.ml-page .site-header .brand strong { white-space: nowrap; }
+    body.teaching-page.ml-page .site-header .main-nav {
+      display: flex;
+      flex: 0 0 auto;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: .75rem;
+    }
+    body.teaching-page.ml-page .site-header .main-nav > a { white-space: nowrap; }
+    body.teaching-page.ml-page .site-header .theme-toggle { flex-shrink: 0; }
+
+    /* O menu de telas estreitas sobrepõe o conteúdo, sem expandir o header. */
+    body.teaching-page.ml-page .site-header .ml-zoom-menu {
+      display: none;
+      position: relative;
+    }
+    body.teaching-page.ml-page .site-header .ml-zoom-menu summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      min-height: 34px;
+      padding: .3rem .55rem;
+      border: 1px solid var(--ensino-line, var(--line));
+      border-radius: 8px;
+      color: var(--ensino-text, var(--ink));
+      background: transparent;
+      font-size: .86rem;
+      cursor: pointer;
+    }
+    body.teaching-page.ml-page .site-header .ml-zoom-menu summary::-webkit-details-marker { display: none; }
+    body.teaching-page.ml-page .site-header .ml-zoom-menu summary:focus-visible {
+      outline: 2px solid var(--ensino-accent, var(--blue));
+      outline-offset: 2px;
+    }
+    body.teaching-page.ml-page .site-header .ml-zoom-menu-links {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 110;
+      display: grid;
+      width: min(240px, calc(100vw - 24px));
+      padding: .45rem;
+      border: 1px solid var(--ensino-line, var(--line));
+      border-radius: 10px;
+      background: var(--ensino-bg, var(--paper));
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .12);
+    }
+    body.teaching-page.ml-page .site-header .ml-zoom-menu-links a,
+    body.teaching-page.teaching-lesson.ml-page .site-header .ml-zoom-menu-links a[href^="#"] {
+      display: block;
+      padding: .55rem .65rem;
+      border-radius: 7px;
+      color: var(--ensino-text, var(--ink));
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    body.teaching-page.ml-page .site-header .ml-zoom-menu-links a:hover,
+    body.teaching-page.ml-page .site-header .ml-zoom-menu-links a:focus-visible {
+      background: var(--ensino-soft, var(--soft));
+    }
+    @media (max-width: 900px) {
+      body.teaching-page.ml-page .site-header .nav-wrap { min-height: 58px; }
+      body.teaching-page.ml-page .site-header .main-nav > a { display: none; }
+      body.teaching-page.ml-page .site-header .ml-zoom-menu { display: block; }
+    }
+    @media (max-width: 380px) {
+      body.teaching-page.ml-page .site-header .main-nav { gap: .45rem; }
+      body.teaching-page.ml-page .site-header .ml-zoom-menu-label { display: none; }
+    }
+
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -179,6 +262,16 @@
     <a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 09 · Rascunho de ML</small></span></a>
     <nav class="main-nav" aria-label="Navegação principal">
       <a href="../index.html">Página principal</a><a href="index.html">Rascunhos</a><a href="#retomada">Retomada</a><a href="#estrutura">IA, ML e DL</a><a href="#projetos">Projetos</a>
+      <details class="ml-zoom-menu">
+        <summary aria-label="Abrir menu de navegação"><span aria-hidden="true">☰</span><span class="ml-zoom-menu-label">Menu</span></summary>
+        <div class="ml-zoom-menu-links">
+          <a href="../index.html">Página principal</a>
+          <a href="index.html">Rascunhos</a>
+          <a href="#retomada">Retomada</a>
+          <a href="#estrutura">IA, ML e DL</a>
+          <a href="#projetos">Projetos</a>
+        </div>
+      </details>
       <button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button>
     </nav>
   </div>
