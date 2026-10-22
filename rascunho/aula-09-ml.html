@@ -537,20 +537,11 @@
 
   <p>O exemplo <strong>não estabelece superioridade de ML sobre regras explícitas</strong>. Um desenvolvedor também poderia programar uma regra baseada no comportamento histórico; do mesmo modo, um modelo mal escolhido poderia não reconhecer uma alteração relevante. O ponto central da comparação é <strong>como o critério passa a fazer parte do comportamento do sistema</strong>: por definição explícita ou por um processo de aprendizagem com dados.</p>
 
-  <h3>O que muda na verificação de um sistema de software?</h3>
-  <p>Um programa pode executar todas as suas instruções sem erro e, ainda assim, utilizar um modelo cujas previsões não sejam adequadas. Dados incompletos, pouco representativos ou alterações no ambiente podem comprometer os resultados mesmo quando o código e o modelo permanecem inalterados. Por isso, os testes tradicionais continuam necessários, mas não bastam para avaliar o comportamento aprendido.</p>
-  <div class="ml-grid">
-    <article class="ml-box">
-      <h4>Verificação do software</h4>
-      <p>Examinar contratos de entrada e saída, regras de negócio, tratamento de erros, integração entre componentes e requisitos operacionais.</p>
-    </article>
-    <article class="ml-box">
-      <h4>Avaliação do modelo</h4>
-      <p>Examinar qualidade e representatividade dos dados, desempenho em exemplos não utilizados no treinamento e possíveis mudanças de comportamento em uso.</p>
-    </article>
-  </div>
-  <p>As duas dimensões são complementares. Em Engenharia de Software, incorporar aprendizagem de máquina amplia os elementos que precisam ser projetados, versionados, testados e monitorados. Essa distinção será retomada nas Partes V e VI.</p>
-  <div class="ml-note"><p><strong>Questões para discussão:</strong> no exemplo da API, o que foi definido pelo desenvolvedor? O que poderia ser aprendido a partir de observações? Como verificaríamos se o alerta representa uma mudança relevante no funcionamento do serviço?</p></div>
+  <h3>Síntese da retomada</h3>
+  <p>As abordagens estudadas até aqui utilizam representações computacionais e procedimentos para produzir respostas. Na aprendizagem de máquina, <strong>parte das relações utilizadas para produzir essas respostas é ajustada a partir de dados ou experiências</strong>. O desenvolvedor continua definindo o problema, escolhendo a representação e programando os procedimentos necessários.</p>
+  <p>No exemplo da API, a regra <code>taxa_erros &gt; 4%</code> foi definida diretamente pelo desenvolvedor. Para falar de um modelo aprendido, seria necessário empregar dados históricos em um procedimento de aprendizagem que determinasse parâmetros ou estruturas utilizados nas decisões. <strong>Consultar dados anteriores ou calcular uma média, isoladamente, não caracteriza necessariamente um processo de ML.</strong></p>
+  <div class="ml-note"><p><strong>Questões para discussão:</strong> qual parte do comportamento da API foi explicitamente programada? O que poderia ser aprendido com exemplos? Um mesmo serviço poderia combinar uma regra explícita com um modelo aprendido?</p></div>
+  <p>Na próxima parte, situaremos a aprendizagem de máquina no campo da inteligência artificial e distinguiremos ML de aprendizagem profunda (DL).</p>
 </div></section>
 
 <section class="section section-soft" id="estrutura"><div class="container">
