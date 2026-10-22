@@ -397,7 +397,12 @@
     .ml-page .ml-paradigm-visual-frame .ml-paradigm-visual { width: 100%; }
     .ml-page .ml-paradigm-visual-frame .ml-paradigm-visual-dark { display: none; }
     body.theme-dark.ml-page .ml-paradigm-visual-frame .ml-paradigm-visual-light { display: none; }
-    body.theme-dark.ml-page .ml-paradigm-visual-frame .ml-paradigm-visual-dark { display: block; }
+    body.theme-dark.ml-page .ml-paradigm-visual-frame .ml-paradigm-visual-dark { display: block; background: #111827; border-color: #35465e; }
+    /* O tema escuro utiliza os diagramas completos, sem recortar nem perder conteúdo.
+       A adaptação cromática incide apenas na imagem do tema escuro. */
+    body.theme-dark.ml-page .ml-paradigm-visual-frame .ml-paradigm-visual-dark img {
+      filter: invert(.94) hue-rotate(180deg) saturate(.95);
+    }
     @media (max-width: 900px) {
       .ml-page .ml-paradigm-visual-frame { max-width: 700px; margin-inline: auto; }
     }
@@ -635,8 +640,8 @@
       <a class="ml-paradigm-visual ml-paradigm-visual-light" href="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem supervisionada em tamanho completo">
         <img src="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Fluxo de aprendizagem supervisionada: dados e respostas conhecidas orientam a construção de um modelo; depois, novas entradas permitem obter previsões. Inclui exemplos visuais de classificação e regressão.">
       </a>
-      <a class="ml-paradigm-visual ml-paradigm-visual-dark" href="img/aula-09-aprendizagem-supervisionada-escuro.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem em modo escuro, em tamanho completo">
-        <img src="img/aula-09-aprendizagem-supervisionada-escuro.webp" width="640" height="480" loading="lazy" decoding="async" alt="Diagrama em modo escuro: exemplos com entradas e rótulos conhecidos são apresentados a um modelo, que relaciona novas entradas a categorias.">
+      <a class="ml-paradigm-visual ml-paradigm-visual-dark" href="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico completo de aprendizagem supervisionada">
+        <img src="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Diagrama completo de aprendizagem supervisionada: treinamento com dados e rótulos, previsão para novas entradas e exemplos de classificação e regressão.">
       </a>
       </div>
       <div class="ml-paradigm-content">
@@ -655,8 +660,8 @@
       <a class="ml-paradigm-visual ml-paradigm-visual-light" href="../assets/ia-aplicada/aula-09-aprendizagem-nao-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem não supervisionada em tamanho completo">
         <img src="../assets/ia-aplicada/aula-09-aprendizagem-nao-supervisionada.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Fluxo de aprendizagem não supervisionada: dados sem rótulos são analisados para identificar padrões e possíveis agrupamentos de amostras.">
       </a>
-      <a class="ml-paradigm-visual ml-paradigm-visual-dark" href="img/aula-09-aprendizagem-nao-supervisionada-escuro.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem em modo escuro, em tamanho completo">
-        <img src="img/aula-09-aprendizagem-nao-supervisionada-escuro.webp" width="640" height="480" loading="lazy" decoding="async" alt="Diagrama em modo escuro: amostras inicialmente sem rótulos são agrupadas segundo semelhanças observadas nos dados.">
+      <a class="ml-paradigm-visual ml-paradigm-visual-dark" href="../assets/ia-aplicada/aula-09-aprendizagem-nao-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico completo de aprendizagem não supervisionada">
+        <img src="../assets/ia-aplicada/aula-09-aprendizagem-nao-supervisionada.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Diagrama completo de aprendizagem não supervisionada: dados sem rótulos, descoberta de padrões e agrupamentos de novas observações.">
       </a>
       </div>
       <div class="ml-paradigm-content">
@@ -671,8 +676,8 @@
       <a class="ml-paradigm-visual ml-paradigm-visual-light" href="../assets/ia-aplicada/aula-09-aprendizagem-por-reforco.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem por reforço em tamanho completo">
         <img src="../assets/ia-aplicada/aula-09-aprendizagem-por-reforco.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Ciclo de aprendizagem por reforço: um agente executa ações no ambiente, recebe observações e recompensas, e melhora sua política de escolha de ações.">
       </a>
-      <a class="ml-paradigm-visual ml-paradigm-visual-dark" href="img/aula-09-aprendizagem-por-reforco-escuro.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem em modo escuro, em tamanho completo">
-        <img src="img/aula-09-aprendizagem-por-reforco-escuro.webp" width="640" height="480" loading="lazy" decoding="async" alt="Diagrama em modo escuro: um agente interage com um ambiente, envia ações e recebe retorno em forma de recompensa.">
+      <a class="ml-paradigm-visual ml-paradigm-visual-dark" href="../assets/ia-aplicada/aula-09-aprendizagem-por-reforco.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico completo de aprendizagem por reforço">
+        <img src="../assets/ia-aplicada/aula-09-aprendizagem-por-reforco.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Diagrama completo de aprendizagem por reforço: interação entre agente e ambiente, ações, recompensas e política aprendida.">
       </a>
       </div>
       <div class="ml-paradigm-content">
