@@ -253,6 +253,92 @@
       body.teaching-page.ml-page .site-header .ml-zoom-menu-label { display: none; }
     }
 
+    /* Parte I: figura original da série temporal e legenda da comparação. */
+    .ml-page .ml-retomada-caption {
+      caption-side: top;
+      text-align: left;
+      padding: .8rem 1rem;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 700;
+    }
+    .ml-page .ml-api-observations {
+      max-width: 1040px;
+      margin: 1.3rem auto 1.5rem;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .ml-page .ml-api-observations h4 {
+      color: var(--ink);
+      font-size: 1.05rem;
+      margin: 0 0 .5rem;
+    }
+    .ml-page .ml-api-chart-scroll {
+      overflow-x: auto;
+      max-width: 100%;
+      scrollbar-width: thin;
+    }
+    .ml-page .ml-api-trend-svg {
+      display: block;
+      width: 100%;
+      min-width: 600px;
+      height: auto;
+      font-family: inherit;
+    }
+    .ml-page .ml-api-trend-grid line { stroke: var(--line); stroke-width: 1.2; }
+    .ml-page .ml-api-trend-ticks text,
+    .ml-page .ml-api-x-axis-title,
+    .ml-page .ml-api-context-label {
+      fill: var(--muted);
+      font-size: 14px;
+    }
+    .ml-page .ml-api-historic-band { fill: var(--teal); opacity: .14; }
+    .ml-page .ml-api-programmed-threshold {
+      stroke: var(--amber);
+      stroke-width: 2.3;
+      stroke-dasharray: 8 6;
+    }
+    .ml-page .ml-api-limit-label {
+      fill: var(--amber);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .ml-page .ml-api-observed-line {
+      stroke: var(--blue);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .ml-page .ml-api-observed-points circle {
+      fill: var(--blue);
+      stroke: var(--paper);
+      stroke-width: 2;
+    }
+    .ml-page .ml-api-current-point {
+      fill: var(--rose);
+      stroke: var(--paper);
+      stroke-width: 3;
+    }
+    .ml-page .ml-api-current-label {
+      fill: var(--rose);
+      font-size: 17px;
+      font-weight: 800;
+    }
+    .ml-page .ml-api-observations figcaption {
+      margin: .3rem auto 0;
+      max-width: 860px;
+      color: var(--muted);
+      text-align: center;
+      font-size: .84rem;
+      line-height: 1.55;
+    }
+    @media (max-width: 760px) {
+      .ml-page .ml-api-observations { padding: .7rem; }
+    }
+
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -316,28 +402,37 @@
 </div></section>
 
 <section class="section" id="retomada"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Parte I · Retomada</p><h2>Como as abordagens anteriores produzem soluções?</h2><p>As técnicas de IA estudadas até aqui diferem pelo modo como descrevem o problema e pelo procedimento utilizado para produzir uma resposta.</p></div>
-  <p>Nas aulas de <strong>busca</strong>, representamos estados, ações, custos e objetivos. Com BFS e DFS, estudamos diferentes estratégias de exploração; com a busca gulosa e o A*, investigamos como informações heurísticas orientam a escolha dos próximos estados.</p>
-  <p>Nos <strong>sistemas baseados em conhecimento</strong>, representamos fatos, relações e regras. Um mecanismo de inferência utiliza essas representações para obter conclusões. No <strong>raciocínio probabilístico</strong>, incorporamos graus de crença e atualizamos probabilidades à luz das evidências disponíveis.</p>
-  <p>Nos <strong>algoritmos genéticos</strong>, representamos soluções candidatas e utilizamos uma função de aptidão para compará-las. A busca ocorre pela avaliação de populações e produção de novas soluções ao longo das gerações.</p>
+  <div class="section-heading">
+    <p class="eyebrow">Parte I · Retomada</p>
+    <h2>Do comportamento programado ao comportamento aprendido</h2>
+    <p>Nas aulas anteriores, examinamos diferentes maneiras de representar um problema e produzir uma solução computacional. Agora, o objetivo é identificar o que o desenvolvedor define e o que pode ser determinado a partir dos dados.</p>
+  </div>
+  <p>Nas aulas de <strong>busca</strong>, definimos estados, ações e objetivos para explorar alternativas; nos <strong>sistemas baseados em conhecimento</strong>, fatos e regras permitem inferir conclusões. No <strong>raciocínio probabilístico</strong>, usamos modelos e evidências para calcular ou atualizar probabilidades. Nos <strong>algoritmos genéticos</strong>, representamos soluções candidatas e buscamos melhorar sua aptidão ao longo de gerações.</p>
+
   <div class="ml-table-wrap"><table class="ml-table">
-    <thead><tr><th>Abordagem</th><th>O que precisa ser representado?</th><th>Como produz uma resposta?</th></tr></thead>
+    <caption class="ml-retomada-caption">Quadro 1 · O que o desenvolvedor especifica e o que o procedimento produz</caption>
+    <thead><tr><th>Abordagem</th><th>O que precisa ser especificado?</th><th>O que o sistema produz ou determina?</th></tr></thead>
     <tbody>
-      <tr><td><strong>Busca (BFS, DFS, gulosa e A*)</strong></td><td>Estados, ações, objetivo, custos e, quando aplicável, heurísticas.</td><td>Explora alternativas até encontrar um estado objetivo ou uma solução para o problema.</td></tr>
-      <tr><td><strong>Representação e inferência</strong></td><td>Fatos, relações, regras e uma estratégia de inferência.</td><td>Aplica regras aos fatos conhecidos para produzir conclusões.</td></tr>
-      <tr><td><strong>Raciocínio probabilístico</strong></td><td>Hipóteses, probabilidades e evidências.</td><td>Calcula ou atualiza probabilidades de hipóteses, conforme um modelo probabilístico.</td></tr>
-      <tr><td><strong>Algoritmos genéticos</strong></td><td>Soluções candidatas, restrições, função de aptidão e operadores de evolução.</td><td>Busca soluções de boa qualidade por seleção, recombinação e mutação.</td></tr>
-      <tr><td><strong>Aprendizagem de máquina (ML)</strong></td><td>Dados ou experiências, uma tarefa, um modelo de aprendizagem e critérios para avaliar o resultado.</td><td>Utiliza regularidades identificadas nos dados ou informações obtidas pela experiência para orientar previsões, decisões ou outros comportamentos.</td></tr>
-    </tbody></table></div>
-  <h3>Em que sentido a aprendizagem de máquina altera o problema?</h3>
-  <p>Nos sistemas baseados em regras, por exemplo, o desenvolvedor especifica quais condições conduzem a determinadas conclusões. <strong>A aprendizagem de máquina introduz outra forma de construir o comportamento de um sistema:</strong> em vez de definir antecipadamente todas as relações que serão utilizadas, podemos empregar dados ou experiências para identificar regularidades e orientar seu funcionamento.</p>
-  <p>Isso não significa que o computador aprende sem programação ou intervenção humana. Ainda precisamos definir o problema, selecionar os dados, escolher procedimentos de aprendizagem e avaliar os resultados. O que muda é que <strong>uma parte do comportamento do sistema passa a ser determinada pelo processo de aprendizagem</strong>, e não exclusivamente por regras formuladas de maneira explícita.</p>
-    <figure class="ml-paradigm-figure" aria-labelledby="ml-paradigm-title">
-    <h4 id="ml-paradigm-title">Programação tradicional e aprendizagem a partir de dados</h4>
+      <tr><td><strong>Busca (BFS, DFS, gulosa e A*)</strong></td><td>Estados, ações, objetivo e, conforme o método, custos e heurísticas.</td><td>Explora o espaço de estados para encontrar uma solução ou um caminho.</td></tr>
+      <tr><td><strong>Representação e inferência</strong></td><td>Fatos, relações, regras e estratégia de inferência.</td><td>Deriva conclusões a partir do conhecimento representado.</td></tr>
+      <tr><td><strong>Raciocínio probabilístico</strong></td><td>Hipóteses, relações probabilísticas, probabilidades iniciais e evidências; alguns desses valores também podem ser estimados a partir de dados.</td><td>Calcula ou atualiza probabilidades segundo o modelo adotado.</td></tr>
+      <tr><td><strong>Algoritmos genéticos</strong></td><td>Representação de indivíduos, função de aptidão, operadores evolutivos e critérios de parada.</td><td>Procura soluções de boa qualidade por meio da evolução de uma população.</td></tr>
+      <tr><td><strong>Aprendizagem de máquina (ML)</strong></td><td>Problema, dados ou experiências, representação do modelo, procedimento de aprendizagem e critérios de avaliação.</td><td>Ajusta parâmetros ou estruturas que orientam previsões e decisões diante de novas entradas.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>As abordagens não são mutuamente excludentes</h3>
+  <p>Aprendizagem de máquina não substitui os demais métodos de IA. Uma heurística utilizada por um algoritmo de busca pode ser estimada a partir de exemplos; probabilidades podem ser aprendidas com dados; e um algoritmo genético pode ser empregado para otimizar parâmetros de um modelo. <strong>O papel de uma técnica depende de como ela é utilizada no sistema.</strong> Executar A* ou aplicar o Teorema de Bayes, por si só, não significa treinar um modelo.</p>
+
+  <h3>O que muda quando parte do comportamento é aprendida?</h3>
+  <p>Em um programa baseado em regras explícitas, o desenvolvedor determina diretamente as condições que levam a uma saída. Em um procedimento de aprendizagem supervisionada, o desenvolvedor continua programando o sistema, mas fornece também exemplos de entradas e respostas conhecidas para ajustar um modelo. O resultado do treinamento é então utilizado para processar novas entradas.</p>
+
+  <figure class="ml-paradigm-figure" aria-labelledby="ml-paradigm-title">
+    <h4 id="ml-paradigm-title">Programação explícita e aprendizagem supervisionada</h4>
     <div class="ml-paradigm-group">
-      <h5>Programação tradicional</h5>
+      <h5>Programa com regras definidas explicitamente</h5>
       <div class="ml-paradigm-flow">
-        <div class="ml-paradigm-inputs"><div class="ml-paradigm-node">Dados de entrada</div><div class="ml-paradigm-node">Regras programadas</div></div>
+        <div class="ml-paradigm-inputs"><div class="ml-paradigm-node">Dados de entrada</div><div class="ml-paradigm-node">Regras definidas no código</div></div>
         <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
         <div class="ml-paradigm-node process">Programa executa as regras</div>
         <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
@@ -345,51 +440,117 @@
       </div>
     </div>
     <div class="ml-paradigm-group">
-      <h5>Aprendizagem de máquina: exemplo com resultados conhecidos</h5>
-      <p class="ml-paradigm-phase">Construção do modelo</p>
+      <h5>Programa com modelo aprendido a partir de exemplos</h5>
+      <p class="ml-paradigm-phase">Etapa 1 · Treinamento</p>
       <div class="ml-paradigm-flow">
-        <div class="ml-paradigm-inputs"><div class="ml-paradigm-node">Dados de treinamento</div><div class="ml-paradigm-node">Resultados conhecidos</div></div>
+        <div class="ml-paradigm-inputs"><div class="ml-paradigm-node">Exemplos de entrada e respostas conhecidas</div><div class="ml-paradigm-node">Modelo e critérios definidos pelo desenvolvedor</div></div>
         <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
         <div class="ml-paradigm-node process">Algoritmo de aprendizagem</div>
         <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
-        <div class="ml-paradigm-node result">Modelo aprendido</div>
+        <div class="ml-paradigm-node result">Modelo ajustado</div>
       </div>
-      <p class="ml-paradigm-phase">Utilização do modelo</p>
+      <p class="ml-paradigm-phase">Etapa 2 · Utilização</p>
       <div class="ml-paradigm-flow">
-        <div class="ml-paradigm-inputs"><div class="ml-paradigm-node">Novos dados</div><div class="ml-paradigm-node">Modelo aprendido</div></div>
+        <div class="ml-paradigm-inputs"><div class="ml-paradigm-node">Novos dados</div><div class="ml-paradigm-node">Modelo ajustado</div></div>
         <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
         <div class="ml-paradigm-node process">Programa aplica o modelo</div>
         <span class="ml-paradigm-arrow" aria-hidden="true">→</span>
         <div class="ml-paradigm-node result">Previsão</div>
       </div>
     </div>
-    <figcaption class="ml-paradigm-caption">Figura 1 · Comparação didática entre a execução de regras explicitamente programadas e a construção de um modelo a partir de exemplos. O segundo fluxo representa apenas uma forma de aprendizagem de máquina: outros métodos não exigem resultados conhecidos durante o treinamento.</figcaption>
+    <figcaption class="ml-paradigm-caption">Figura 1 · Comparação entre duas formas de construir um comportamento computacional. O segundo fluxo representa a aprendizagem supervisionada, que utiliza respostas conhecidas; outros paradigmas de ML serão apresentados na Parte II.</figcaption>
   </figure>
-  <h3>Exemplo: monitoramento de uma API</h3>
-  <p>Considere uma API que apresentou a seguinte taxa de erros. Como diferentes sistemas poderiam interpretar essa mesma observação?</p>
+  <p><strong>Distinção importante:</strong> o treinamento não precisa gerar novas instruções Python. Dependendo da classe de modelos, ele determina valores de parâmetros, divisões de uma árvore ou outras estruturas. O programa que realiza o treinamento e utiliza o modelo continua sendo desenvolvido com algoritmos e código.</p>
+
+  <h3>Exemplo aplicado: monitoramento de uma API</h3>
+  <p>Considere um serviço cuja taxa de erros é medida a cada cinco minutos. Em cinco janelas anteriores, foram observadas taxas de <strong>0,7%, 0,9%, 0,8%, 1,0% e 0,6%</strong>. Na janela mais recente, a taxa chegou a <strong>6,0%</strong>. Os valores são sintéticos, escolhidos apenas para comparar duas maneiras de estabelecer um critério de alerta.</p>
+
+  <figure class="ml-api-observations" aria-labelledby="ml-api-chart-heading">
+    <h4 id="ml-api-chart-heading">Evolução ilustrativa da taxa de erros</h4>
+    <div class="ml-api-chart-scroll">
+      <svg class="ml-api-trend-svg" viewBox="0 0 920 304" role="img" aria-labelledby="ml-api-svg-title ml-api-svg-description" xmlns="http://www.w3.org/2000/svg">
+        <title id="ml-api-svg-title">Taxas de erro próximas de 1%, seguidas por uma taxa de 6% na janela atual</title>
+        <desc id="ml-api-svg-description">Seis janelas de cinco minutos. As cinco primeiras têm taxas de 0,7%, 0,9%, 0,8%, 1,0% e 0,6%; a última, 6%. Uma linha tracejada representa um limiar programado hipotético de 4%.</desc>
+        <g class="ml-api-trend-grid">
+          <line x1="86" y1="240" x2="846" y2="240"/>
+          <line x1="86" y1="194" x2="846" y2="194"/>
+          <line x1="86" y1="148" x2="846" y2="148"/>
+          <line x1="86" y1="102" x2="846" y2="102"/>
+          <line x1="86" y1="56" x2="846" y2="56"/>
+        </g>
+        <g class="ml-api-trend-ticks">
+          <text x="72" y="244" text-anchor="end">0%</text>
+          <text x="72" y="198" text-anchor="end">2%</text>
+          <text x="72" y="152" text-anchor="end">4%</text>
+          <text x="72" y="106" text-anchor="end">6%</text>
+          <text x="72" y="60" text-anchor="end">8%</text>
+          <text x="132" y="264" text-anchor="middle">−25 min</text>
+          <text x="267" y="264" text-anchor="middle">−20 min</text>
+          <text x="402" y="264" text-anchor="middle">−15 min</text>
+          <text x="537" y="264" text-anchor="middle">−10 min</text>
+          <text x="672" y="264" text-anchor="middle">−5 min</text>
+          <text x="807" y="264" text-anchor="middle">Agora</text>
+        </g>
+        <rect class="ml-api-historic-band" x="90" y="214.7" width="718" height="11.5" rx="5"/>
+        <line class="ml-api-programmed-threshold" x1="90" y1="148" x2="848" y2="148"/>
+        <text class="ml-api-limit-label" x="842" y="139" text-anchor="end">Limite programado: 4%</text>
+        <polyline class="ml-api-observed-line" points="132,223.9 267,219.3 402,221.6 537,217 672,226.2 807,102"/>
+        <g class="ml-api-observed-points">
+          <circle cx="132" cy="223.9" r="5.5"/>
+          <circle cx="267" cy="219.3" r="5.5"/>
+          <circle cx="402" cy="221.6" r="5.5"/>
+          <circle cx="537" cy="217" r="5.5"/>
+          <circle cx="672" cy="226.2" r="5.5"/>
+        </g>
+        <circle class="ml-api-current-point" cx="807" cy="102" r="8"/>
+        <text class="ml-api-current-label" x="807" y="86" text-anchor="middle">6,0%</text>
+        <text class="ml-api-context-label" x="100" y="205">Taxas anteriores: 0,6% a 1,0%</text>
+        <text class="ml-api-x-axis-title" x="466" y="294" text-anchor="middle">Janelas de observação (5 minutos cada)</text>
+      </svg>
+    </div>
+    <figcaption>Figura 2 · Dados didáticos de monitoramento. A série observada não corresponde a um modelo treinado; o limiar de 4% foi escolhido apenas para demonstrar uma regra programada.</figcaption>
+  </figure>
+
+  <p>Há pelo menos duas formas de analisar essa observação. Um programa pode comparar a taxa de erros com um <strong>limiar definido pelo desenvolvedor</strong>. Um sistema com aprendizagem de máquina poderia, após treinamento e avaliação adequados, estimar um padrão de referência a partir de registros anteriores, possivelmente levando em conta horário, volume de requisições e outras características.</p>
+
   <figure class="ml-api-comparison" aria-labelledby="ml-api-figure-title">
     <div class="ml-api-scenario">
-      <div class="ml-api-scenario-value" aria-hidden="true">6%</div>
-      <div class="ml-api-scenario-copy"><strong id="ml-api-figure-title">Taxa de erros observada: 6%</strong>Durante uma janela de cinco minutos</div>
+      <div class="ml-api-scenario-value" aria-hidden="true">6,0%</div>
+      <div class="ml-api-scenario-copy"><strong id="ml-api-figure-title">Mesma observação atual</strong>Taxa de erros em uma janela de cinco minutos</div>
     </div>
     <div class="ml-api-branches">
       <div class="ml-api-branch">
-        <h4>Regra programada</h4>
-        <div class="ml-api-criterion"><small>Critério definido pelo desenvolvedor</small><strong>Alerta se erros &gt; 10%</strong></div>
+        <h4>Regra explícita</h4>
+        <div class="ml-api-criterion"><small>Limiar estabelecido no código</small><strong>Alertar se taxa de erros &gt; 4%</strong></div>
         <span class="ml-api-down" aria-hidden="true">↓</span>
-        <div class="ml-api-decision">Sem alerta<small>6% não ultrapassa o limite fixado</small></div>
+        <div class="ml-api-decision">Alerta<small>6% ultrapassa o limite programado.</small></div>
       </div>
       <div class="ml-api-branch">
         <h4>Modelo aprendido</h4>
-        <div class="ml-api-criterion"><small>Exemplo de padrão histórico, sob condições semelhantes</small><strong>Taxa usual: 0,5% a 1%</strong></div>
+        <div class="ml-api-criterion"><small>Referência estimada a partir de dados históricos e de contexto</small><strong>Comportamento usual pode ser aprendido</strong></div>
         <span class="ml-api-down" aria-hidden="true">↓</span>
-        <div class="ml-api-decision">Poderia sinalizar anomalia<small>6% se distancia do comportamento usual</small></div>
+        <div class="ml-api-decision">Poderia sinalizar anomalia<small>Depende do modelo, do treinamento e dos critérios de avaliação.</small></div>
       </div>
     </div>
-    <figcaption class="ml-api-caption">Exemplo hipotético: os valores ilustram a diferença entre um limite programado e uma regularidade identificada nos dados. Nenhum modelo foi treinado aqui; a sinalização real dependeria do método, dos dados e da sua avaliação.</figcaption>
+    <figcaption class="ml-api-caption">Figura 3 · Comparação hipotética das origens do critério de decisão. A regra está completamente especificada; no segundo caso, não foi treinado nenhum modelo. Ambos os caminhos exigem projeto, testes e avaliação.</figcaption>
   </figure>
-  <p>O exemplo não demonstra que a aprendizagem de máquina seja sempre superior. <strong>O que muda é a origem do critério utilizado:</strong> uma condição estabelecida explicitamente ou um comportamento estimado com base em dados. Em ambos os casos, o sistema precisa ser projetado e avaliado.</p>
-  <div class="ml-note"><p><strong>Síntese:</strong> regras explícitas e modelos aprendidos são formas distintas de construir comportamentos computacionais, mas não são incompatíveis. Um mesmo sistema pode combinar regras, modelos probabilísticos, métodos de busca e componentes que aprendem a partir dos dados.</p></div>
+
+  <p>O exemplo <strong>não estabelece superioridade de ML sobre regras explícitas</strong>. Um desenvolvedor também poderia programar uma regra baseada no comportamento histórico; do mesmo modo, um modelo mal escolhido poderia não reconhecer uma alteração relevante. O ponto central da comparação é <strong>como o critério passa a fazer parte do comportamento do sistema</strong>: por definição explícita ou por um processo de aprendizagem com dados.</p>
+
+  <h3>O que muda na verificação de um sistema de software?</h3>
+  <p>Um programa pode executar todas as suas instruções sem erro e, ainda assim, utilizar um modelo cujas previsões não sejam adequadas. Dados incompletos, pouco representativos ou alterações no ambiente podem comprometer os resultados mesmo quando o código e o modelo permanecem inalterados. Por isso, os testes tradicionais continuam necessários, mas não bastam para avaliar o comportamento aprendido.</p>
+  <div class="ml-grid">
+    <article class="ml-box">
+      <h4>Verificação do software</h4>
+      <p>Examinar contratos de entrada e saída, regras de negócio, tratamento de erros, integração entre componentes e requisitos operacionais.</p>
+    </article>
+    <article class="ml-box">
+      <h4>Avaliação do modelo</h4>
+      <p>Examinar qualidade e representatividade dos dados, desempenho em exemplos não utilizados no treinamento e possíveis mudanças de comportamento em uso.</p>
+    </article>
+  </div>
+  <p>As duas dimensões são complementares. Em Engenharia de Software, incorporar aprendizagem de máquina amplia os elementos que precisam ser projetados, versionados, testados e monitorados. Essa distinção será retomada nas Partes V e VI.</p>
+  <div class="ml-note"><p><strong>Questões para discussão:</strong> no exemplo da API, o que foi definido pelo desenvolvedor? O que poderia ser aprendido a partir de observações? Como verificaríamos se o alerta representa uma mudança relevante no funcionamento do serviço?</p></div>
 </div></section>
 
 <section class="section section-soft" id="estrutura"><div class="container">
@@ -708,6 +869,7 @@
   <p>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Pearson, 2022. Capítulos 19 (Learning from Examples) e 22 (Deep Learning).</p>
   <p>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson, 2009. Parte IV, capítulos 10–13.</p>
   <p>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. Manning, 2020. Capítulos 8 (Machine Learning) e 9 (Artificial Neural Networks).</p>
+  <p>REDDI, Vijay Janapa. <em>Introduction to Machine Learning Systems</em>. Volume I, capítulo 1 (seções 1.2 e 1.6) e capítulo 3. Material disponível em: <a href="https://mlsysbook.ai/vol1/introduction/introduction.html" target="_blank" rel="noopener noreferrer">mlsysbook.ai</a>.</p>
 </div></section>
 </main></div>
 <script>
