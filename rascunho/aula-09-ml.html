@@ -368,6 +368,40 @@
       text-align: center;
     }
 
+    /* Parte II — infográficos legíveis nos temas claro e escuro. */
+    .ml-page .ml-taxonomy.ml-taxonomy-illustrated {
+      width: min(100%, 1120px);
+      margin: 1.5rem auto 1.7rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    .ml-page .ml-taxonomy-illustrated .ml-taxonomy-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+    }
+    .ml-page .ml-taxonomy-illustrated .ml-taxonomy-image-dark { display: none; }
+    body.theme-dark.ml-page .ml-taxonomy-illustrated .ml-taxonomy-image-light { display: none; }
+    body.theme-dark.ml-page .ml-taxonomy-illustrated .ml-taxonomy-image-dark { display: block; }
+    .ml-page .ml-taxonomy-illustrated figcaption {
+      max-width: 1000px;
+      margin: .7rem auto 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: .86rem;
+      text-align: center;
+    }
+    .ml-page .ml-paradigm-visual-frame { width: 100%; min-width: 0; }
+    .ml-page .ml-paradigm-visual-frame .ml-paradigm-visual { width: 100%; }
+    .ml-page .ml-paradigm-visual-frame .ml-paradigm-visual-dark { display: none; }
+    body.theme-dark.ml-page .ml-paradigm-visual-frame .ml-paradigm-visual-light { display: none; }
+    body.theme-dark.ml-page .ml-paradigm-visual-frame .ml-paradigm-visual-dark { display: block; }
+    @media (max-width: 900px) {
+      .ml-page .ml-paradigm-visual-frame { max-width: 700px; margin-inline: auto; }
+    }
+
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -583,13 +617,12 @@
 
 <section class="section section-soft" id="estrutura"><div class="container">
   <div class="section-heading"><p class="eyebrow">Parte II · Organização do conhecimento</p><h2>Relações entre IA, ML e DL</h2><p>IA, ML e DL não são três áreas paralelas. A relação usual é de inclusão: a aprendizagem profunda constitui um subcampo da aprendizagem de máquina, que integra o campo mais amplo da inteligência artificial.</p></div>
-  <figure class="ml-taxonomy" aria-labelledby="tax-caption">
-    <div class="ml-tier ml-tier-one"><strong>Inteligência Artificial (IA)</strong><p>Campo amplo de pesquisa e desenvolvimento de sistemas capazes de realizar tarefas associadas a raciocínio, planejamento, percepção, decisão e aprendizagem.</p>
-      <div class="ml-tier ml-tier-two"><strong>Aprendizagem de Máquina (ML)</strong><p>Subcampo que investiga como melhorar o desempenho de sistemas a partir de experiência ou dados, em vez de especificar manualmente todas as decisões.</p>
-        <div class="ml-tier ml-tier-three"><strong>Aprendizagem Profunda (DL)</strong><p>Subcampo de ML baseado em redes neurais com múltiplas camadas de transformações e aprendizagem de representações.</p></div>
-      </div>
-    </div>
-    <figcaption id="tax-caption">A hierarquia representa relações de abrangência entre áreas, não uma escala de superioridade ou um conjunto de técnicas mutuamente exclusivas.</figcaption>
+  <figure class="ml-taxonomy ml-taxonomy-illustrated" aria-labelledby="tax-caption">
+    <img class="ml-taxonomy-image ml-taxonomy-image-light" src="img/aula-09-hierarquia-claro.webp" width="1672" height="941" loading="lazy" decoding="async"
+      alt="Diagrama de conjuntos aninhados: IA contém aprendizagem de máquina; dentro de ML encontra-se a aprendizagem profunda, baseada em redes neurais com múltiplas camadas.">
+    <img class="ml-taxonomy-image ml-taxonomy-image-dark" src="img/aula-09-hierarquia-escuro.webp" width="1672" height="941" loading="lazy" decoding="async"
+      alt="Versão para modo escuro da hierarquia IA, ML e DL, representadas como campos progressivamente incluídos uns nos outros.">
+    <figcaption id="tax-caption">A relação é de <strong>abrangência conceitual</strong> (DL ⊂ ML ⊂ IA), não de superioridade. Há técnicas de IA que não dependem de ML, e diferentes métodos podem ser combinados em um mesmo sistema.</figcaption>
   </figure>
   <h3>IA não se reduz a ML</h3>
   <p>Uma implementação de A* pode utilizar uma heurística definida pelo projetista, sem treinamento com exemplos. Da mesma forma, um sistema de regras pode realizar inferências sem aprender novas regras. Ambos pertencem ao campo da IA, mesmo que não dependam de aprendizagem de máquina.</p>
@@ -598,9 +631,14 @@
   <p>A expressão <strong>aprendizagem de máquina</strong> reúne diferentes formas de utilizar dados ou experiência para melhorar o desempenho de sistemas. Para comparar os três paradigmas, observaremos cinco aspectos: <strong>entrada, sinal de aprendizagem, procedimento, o que é aprendido e resultado produzido</strong>. Esses aspectos são comuns como perguntas de análise, mas suas respostas variam conforme o paradigma.</p>
   <div class="ml-paradigms">
     <article class="ml-paradigm-item">
-      <a class="ml-paradigm-visual" href="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem supervisionada em tamanho completo">
+      <div class="ml-paradigm-visual-frame">
+      <a class="ml-paradigm-visual ml-paradigm-visual-light" href="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem supervisionada em tamanho completo">
         <img src="../assets/ia-aplicada/aula-09-aprendizagem-supervisionada.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Fluxo de aprendizagem supervisionada: dados e respostas conhecidas orientam a construção de um modelo; depois, novas entradas permitem obter previsões. Inclui exemplos visuais de classificação e regressão.">
       </a>
+      <a class="ml-paradigm-visual ml-paradigm-visual-dark" href="img/aula-09-aprendizagem-supervisionada-escuro.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem em modo escuro, em tamanho completo">
+        <img src="img/aula-09-aprendizagem-supervisionada-escuro.webp" width="640" height="480" loading="lazy" decoding="async" alt="Diagrama em modo escuro: exemplos com entradas e rótulos conhecidos são apresentados a um modelo, que relaciona novas entradas a categorias.">
+      </a>
+      </div>
       <div class="ml-paradigm-content">
         <h4>Aprendizagem supervisionada</h4>
         <p>O sistema recebe exemplos de entradas acompanhadas das respostas correspondentes. A partir desses exemplos, procura construir uma função capaz de produzir respostas para novas entradas.</p>
@@ -609,13 +647,18 @@
           <div class="ml-task"><strong>Classificação</strong><span>Prevê uma classe ou categoria.</span><small>Exemplo: e-mail spam ou legítimo.</small></div>
           <div class="ml-task"><strong>Regressão</strong><span>Estima um valor numérico.</span><small>Exemplo: tempo de resposta de uma API, em ms.</small></div>
         </div>
-        <p class="ml-paradigm-footnote">Na figura, os exemplos de classificação e regressão representam tarefas alternativas: cada uma requer um modelo adequado à saída pretendida.</p>
+        <p class="ml-paradigm-footnote">Classificação e regressão são tarefas distintas, que exigem saídas e critérios de avaliação adequados. Os diagramas apresentam exemplos ilustrativos.</p>
       </div>
     </article>
     <article class="ml-paradigm-item">
-      <a class="ml-paradigm-visual" href="../assets/ia-aplicada/aula-09-aprendizagem-nao-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem não supervisionada em tamanho completo">
+      <div class="ml-paradigm-visual-frame">
+      <a class="ml-paradigm-visual ml-paradigm-visual-light" href="../assets/ia-aplicada/aula-09-aprendizagem-nao-supervisionada.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem não supervisionada em tamanho completo">
         <img src="../assets/ia-aplicada/aula-09-aprendizagem-nao-supervisionada.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Fluxo de aprendizagem não supervisionada: dados sem rótulos são analisados para identificar padrões e possíveis agrupamentos de amostras.">
       </a>
+      <a class="ml-paradigm-visual ml-paradigm-visual-dark" href="img/aula-09-aprendizagem-nao-supervisionada-escuro.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem em modo escuro, em tamanho completo">
+        <img src="img/aula-09-aprendizagem-nao-supervisionada-escuro.webp" width="640" height="480" loading="lazy" decoding="async" alt="Diagrama em modo escuro: amostras inicialmente sem rótulos são agrupadas segundo semelhanças observadas nos dados.">
+      </a>
+      </div>
       <div class="ml-paradigm-content">
         <h4>Aprendizagem não supervisionada</h4>
         <p>Os dados são apresentados sem respostas previamente identificadas para a tarefa. O procedimento procura estruturas e regularidades presentes nas observações, como grupos de elementos com características semelhantes.</p>
@@ -624,9 +667,14 @@
       </div>
     </article>
     <article class="ml-paradigm-item">
-      <a class="ml-paradigm-visual" href="../assets/ia-aplicada/aula-09-aprendizagem-por-reforco.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem por reforço em tamanho completo">
+      <div class="ml-paradigm-visual-frame">
+      <a class="ml-paradigm-visual ml-paradigm-visual-light" href="../assets/ia-aplicada/aula-09-aprendizagem-por-reforco.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem por reforço em tamanho completo">
         <img src="../assets/ia-aplicada/aula-09-aprendizagem-por-reforco.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="Ciclo de aprendizagem por reforço: um agente executa ações no ambiente, recebe observações e recompensas, e melhora sua política de escolha de ações.">
       </a>
+      <a class="ml-paradigm-visual ml-paradigm-visual-dark" href="img/aula-09-aprendizagem-por-reforco-escuro.webp" target="_blank" rel="noopener" aria-label="Abrir infográfico de aprendizagem em modo escuro, em tamanho completo">
+        <img src="img/aula-09-aprendizagem-por-reforco-escuro.webp" width="640" height="480" loading="lazy" decoding="async" alt="Diagrama em modo escuro: um agente interage com um ambiente, envia ações e recebe retorno em forma de recompensa.">
+      </a>
+      </div>
       <div class="ml-paradigm-content">
         <h4>Aprendizagem por reforço</h4>
         <p>Um agente interage com um ambiente e escolhe ações. Em resposta, recebe novas observações e sinais de <strong>recompensa</strong>, que orientam a melhoria de sua estratégia de decisão ao longo das interações.</p>
