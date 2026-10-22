@@ -339,6 +339,35 @@
       .ml-page .ml-api-observations { padding: .7rem; }
     }
 
+    /* Figura da síntese: mesma composição em temas claro e escuro. */
+    .ml-page .ml-summary-figure {
+      width: min(100%, 1100px);
+      margin: 1.45rem auto 1.75rem;
+    }
+    .ml-page .ml-summary-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .ml-page .ml-summary-image-dark {
+      display: none;
+    }
+    body.theme-dark.ml-page .ml-summary-image-light {
+      display: none;
+    }
+    body.theme-dark.ml-page .ml-summary-image-dark {
+      display: block;
+    }
+    .ml-page .ml-summary-figure figcaption {
+      margin: .75rem auto 0;
+      max-width: 960px;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.55;
+      text-align: center;
+    }
+
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -539,6 +568,14 @@
 
   <h3>Síntese da retomada</h3>
   <p>As abordagens estudadas até aqui utilizam representações computacionais e procedimentos para produzir respostas. Na aprendizagem de máquina, <strong>parte das relações utilizadas para produzir essas respostas é ajustada a partir de dados ou experiências</strong>. O desenvolvedor continua definindo o problema, escolhendo a representação e programando os procedimentos necessários.</p>
+  <figure class="ml-summary-figure" aria-labelledby="ml-summary-figure-caption">
+    <img class="ml-summary-image ml-summary-image-light" src="img/ia-aula09-objetos-claro.webp" width="1774" height="887" loading="lazy" decoding="async"
+      alt="Diferentes objetos são representados por vetores de características, processados por uma função ajustada com exemplos e associados a três saídas.">
+    <img class="ml-summary-image ml-summary-image-dark" src="img/ia-aula09-objetos-escuro.webp" width="1774" height="887" loading="lazy" decoding="async"
+      alt="Versão para o modo escuro do diagrama com objetos, representação vetorial, função ajustada e três saídas.">
+    <figcaption id="ml-summary-figure-caption"><strong>Figura 4 ·</strong> Objetos representados por vetores de características <em>x</em> são associados a diferentes saídas por uma função <em>f(x)</em> ajustada a partir de exemplos. As regiões de decisão são ilustrativas; nenhum modelo foi treinado para produzir este diagrama.</figcaption>
+  </figure>
+
   <p>No exemplo da API, a regra <code>taxa_erros &gt; 4%</code> foi definida diretamente pelo desenvolvedor. Para falar de um modelo aprendido, seria necessário empregar dados históricos em um procedimento de aprendizagem que determinasse parâmetros ou estruturas utilizados nas decisões. <strong>Consultar dados anteriores ou calcular uma média, isoladamente, não caracteriza necessariamente um processo de ML.</strong></p>
   <div class="ml-note"><p><strong>Questões para discussão:</strong> qual parte do comportamento da API foi explicitamente programada? O que poderia ser aprendido com exemplos? Um mesmo serviço poderia combinar uma regra explícita com um modelo aprendido?</p></div>
   <p>Na próxima parte, situaremos a aprendizagem de máquina no campo da inteligência artificial e distinguiremos ML de aprendizagem profunda (DL).</p>
