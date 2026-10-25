@@ -571,7 +571,7 @@
 </div></section>
 
 <section class="section section-soft" id="estrutura"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Parte II · Organização do conhecimento</p><h2>Relações entre IA, ML e DL</h2><p>IA, ML e DL não são três áreas paralelas. A relação usual é de inclusão: a aprendizagem profunda constitui um subcampo da aprendizagem de máquina, que integra o campo mais amplo da inteligência artificial.</p></div>
+  <div class="section-heading"><p class="eyebrow">Parte II · Organização da aprendizagem de máquina</p><h2>Relações entre IA, ML e DL</h2><p>A inteligência artificial (IA) abrange diferentes métodos para construir sistemas capazes de realizar tarefas como busca, inferência e aprendizagem. A aprendizagem de máquina (ML) integra esse campo, e a aprendizagem profunda (DL) constitui um subcampo de ML.</p></div>
   <figure class="ml-taxonomy ml-taxonomy-illustrated" aria-labelledby="tax-caption">
     <img class="ml-taxonomy-image ml-taxonomy-image-light" src="img/aula-09-hierarquia-claro.webp" width="1672" height="941" loading="lazy" decoding="async"
       alt="Diagrama de conjuntos aninhados: IA contém aprendizagem de máquina; dentro de ML encontra-se a aprendizagem profunda, baseada em redes neurais com múltiplas camadas.">
@@ -579,13 +579,16 @@
       alt="Versão para modo escuro da hierarquia IA, ML e DL, representadas como campos progressivamente incluídos uns nos outros.">
     <figcaption id="tax-caption">A relação é de <strong>abrangência conceitual</strong> (DL ⊂ ML ⊂ IA), não de superioridade. Há técnicas de IA que não dependem de ML, e diferentes métodos podem ser combinados em um mesmo sistema.</figcaption>
   </figure>
-  <h3>IA não se reduz a ML</h3>
-  <p>Uma implementação de A* pode utilizar uma heurística definida pelo projetista, sem treinamento com exemplos. Da mesma forma, um sistema de regras pode realizar inferências sem aprender novas regras. Ambos pertencem ao campo da IA, mesmo que não dependam de aprendizagem de máquina.</p>
-  <p>Por outro lado, ML pode participar da construção de heurísticas, da estimativa de probabilidades, da definição de políticas de decisão e de sistemas que combinam componentes simbólicos e estatísticos. As fronteiras entre abordagens descrevem métodos de pesquisa, não impedem sua integração.</p>
-  <h3>Aprendizagem de representações</h3>
-  <p>Na aprendizagem de máquina tradicional, o desenvolvedor frequentemente projeta atributos que descrevem as entradas. Na aprendizagem profunda, modelos podem aprender também representações a partir dos dados, embora a preparação dos dados e as decisões de projeto continuem necessárias.</p>
-  <h3>Três paradigmas de aprendizagem: visão inicial</h3>
-  <p>A expressão <strong>aprendizagem de máquina</strong> reúne diferentes formas de utilizar dados ou experiência para melhorar o desempenho de sistemas. Para comparar os três paradigmas, observaremos cinco aspectos: <strong>entrada, sinal de aprendizagem, procedimento, o que é aprendido e resultado produzido</strong>. Esses aspectos são comuns como perguntas de análise, mas suas respostas variam conforme o paradigma.</p>
+  <p>O diagrama situa a aprendizagem dentro da IA. Métodos como A* com heurística definida pelo projetista e sistemas de regras podem produzir soluções sem treinamento com exemplos; por isso, pertencem à IA, mas não necessariamente à aprendizagem de máquina.</p>
+
+  <h3>O que caracteriza a aprendizagem profunda?</h3>
+  <p>A <strong>aprendizagem profunda</strong> utiliza redes neurais com múltiplas camadas de processamento. Durante o treinamento, essas camadas podem aprender <strong>representações sucessivas dos dados</strong>: formas de transformar as entradas em características úteis à tarefa.</p>
+  <p>Por exemplo, para reconhecer objetos em imagens, uma abordagem tradicional pode utilizar atributos definidos pelo desenvolvedor, como medidas de cor, forma e textura. Uma rede profunda pode aprender características diretamente dos pixels, combinando padrões locais, como bordas, em representações mais complexas. A coleta e a preparação dos dados continuam fazendo parte do projeto.</p>
+
+  <h3>Três paradigmas de aprendizagem: o que orienta o aprendizado?</h3>
+  <p>Os <strong>paradigmas de aprendizagem</strong> descrevem a informação disponível para orientar o processo: respostas conhecidas na aprendizagem supervisionada; regularidades dos próprios dados na não supervisionada; e recompensas decorrentes da interação com um ambiente na aprendizagem por reforço.</p>
+  <div class="ml-note"><p><strong>Como essas classificações se relacionam?</strong> DL caracteriza uma abordagem de modelagem baseada em redes neurais profundas. Já os paradigmas descrevem como a aprendizagem é orientada. Uma rede profunda pode ser utilizada em aprendizagem <strong>supervisionada, não supervisionada ou por reforço</strong>.</p></div>
+  <p>A <strong>tarefa</strong> indica o que queremos realizar, como prever uma categoria, estimar um valor ou agrupar observações. Nos exemplos a seguir, relacionaremos essas tarefas à informação disponível para aprender.</p>
   <div class="ml-paradigms">
     <article class="ml-paradigm-item">
       <div class="ml-paradigm-visual-frame">
@@ -598,7 +601,7 @@
       </div>
       <div class="ml-paradigm-content">
         <h4>Aprendizagem supervisionada</h4>
-        <p>O sistema recebe exemplos de entradas acompanhadas das respostas correspondentes. A partir desses exemplos, procura construir uma função capaz de produzir respostas para novas entradas.</p>
+        <p>O sistema recebe exemplos de entradas acompanhadas das respostas correspondentes, chamadas de <strong>rótulos ou valores-alvo</strong>. Essas respostas orientam o ajuste de um modelo capaz de produzir previsões para novas entradas.</p>
         <p>Duas tarefas comuns são:</p>
         <div class="ml-tasks">
           <div class="ml-task"><strong>Classificação</strong><span>Prevê uma classe ou categoria.</span><small>Exemplo: e-mail spam ou legítimo.</small></div>
@@ -618,7 +621,7 @@
       </div>
       <div class="ml-paradigm-content">
         <h4>Aprendizagem não supervisionada</h4>
-        <p>Os dados são apresentados sem respostas previamente identificadas para a tarefa. O procedimento procura estruturas e regularidades presentes nas observações, como grupos de elementos com características semelhantes.</p>
+        <p>Os dados são apresentados sem respostas previamente identificadas para a tarefa. A aprendizagem é orientada pela estrutura dos próprios dados e por um critério definido pelo método, como a similaridade entre observações.</p>
         <p>O <strong>agrupamento</strong> (clustering) é um exemplo: podemos procurar padrões de utilização de um serviço a partir de registros de atividade, sem fornecer antecipadamente a qual grupo pertence cada registro.</p>
         <p class="ml-paradigm-footnote">O agrupamento ilustra uma aplicação, mas não esgota a aprendizagem não supervisionada: também podem ser aprendidas representações e estruturas dos dados.</p>
       </div>
@@ -634,14 +637,14 @@
       </div>
       <div class="ml-paradigm-content">
         <h4>Aprendizagem por reforço</h4>
-        <p>Um agente interage com um ambiente e escolhe ações. Em resposta, recebe novas observações e sinais de <strong>recompensa</strong>, que orientam a melhoria de sua estratégia de decisão ao longo das interações.</p>
+        <p>Um agente interage com um ambiente e escolhe ações. Em resposta, recebe novas observações e sinais de <strong>recompensa</strong>, que orientam a melhoria de sua estratégia de decisão, chamada de <strong>política</strong>. O objetivo é aumentar a recompensa acumulada ao longo das interações.</p>
         <p>Por exemplo, em uma simulação de navegação, um agente pode aprender quais ações favorecem alcançar um objetivo, considerando recompensas e consequências das decisões tomadas.</p>
         <p class="ml-paradigm-footnote">Diferentemente dos exemplos supervisionados, não é necessário fornecer, para cada situação, uma resposta correta que o agente deva reproduzir.</p>
       </div>
     </article>
   </div>
   <h3>Elementos de comparação entre os paradigmas</h3>
-  <p>As figuras mostram exemplos de funcionamento. O quadro a seguir reúne os principais elementos de cada abordagem, permitindo identificar o que é compartilhado e o que se diferencia.</p>
+  <p>O quadro reúne cinco aspectos dos paradigmas: entrada, sinal de aprendizagem, procedimento, o que é aprendido e resultado produzido.</p>
   <div class="ml-table-wrap ml-paradigm-summary-wrap">
     <table class="ml-table ml-paradigm-summary">
       <caption class="ml-summary-caption">Quadro 1 · Cinco aspectos para comparar os paradigmas de aprendizagem</caption>
@@ -655,7 +658,8 @@
       </tbody>
     </table>
   </div>
-  <p><strong>O que é comum?</strong> Os três paradigmas utilizam entradas, procedimentos computacionais e alguma forma de aprendizagem. <strong>O que muda?</strong> A informação disponível para orientar esse processo, aquilo que é aprendido e o modo como o resultado é utilizado.</p>
+  <p>Para identificar o paradigma, examine <strong>qual informação orienta a aprendizagem</strong>. Para identificar a tarefa, observe <strong>qual resultado se pretende produzir</strong>. A escolha de uma rede profunda, por si só, não determina nenhuma dessas duas classificações.</p>
+  <div class="ml-note"><p><strong>Questão para análise:</strong> uma equipe reúne imagens de peças identificadas como “com defeito” ou “sem defeito” e utiliza esses exemplos para treinar um modelo que avaliará novas imagens. Qual é o paradigma de aprendizagem e qual é a tarefa? Justifique pela informação disponível no treinamento. A utilização de uma rede profunda mudaria essas classificações?</p></div>
   <p><strong>Recorte adotado:</strong> nas próximas partes, utilizaremos a aprendizagem supervisionada para compreender a relação entre dados, funções, ajuste e generalização. Essa base também será utilizada no estudo posterior de redes neurais.</p>
 </div></section>
 
