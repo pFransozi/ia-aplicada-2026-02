@@ -538,98 +538,23 @@
   </figure>
   <p><strong>Distinção importante:</strong> o treinamento não precisa gerar novas instruções Python. Dependendo da classe de modelos, ele determina valores de parâmetros, divisões de uma árvore ou outras estruturas. O programa que realiza o treinamento e utiliza o modelo continua sendo desenvolvido com algoritmos e código.</p>
 
-  <p>Essa mudança é descrita no livro como a passagem de <strong>Software 1.0</strong>, com a lógica de decisão explicitada no código, para <strong>Software 2.0</strong>, em que parte do comportamento é determinada por treinamento com dados. A expressão destaca uma mudança de construção, sem indicar que todo software deva aprender. Código, bibliotecas, testes e infraestrutura continuam necessários.</p>
+  <p>Essa mudança pode ser compreendida como a passagem de <strong>Software 1.0</strong>, com a lógica de decisão explicitada no código, para <strong>Software 2.0</strong>, em que parte do comportamento é determinada por treinamento com dados. A expressão destaca uma mudança de construção, sem indicar que todo software deva aprender. Código, bibliotecas, testes e infraestrutura continuam necessários.</p>
   <p>Também muda a investigação de falhas. Além de examinar a execução do código, precisamos verificar a qualidade e a representatividade dos exemplos, os rótulos e as condições de uso. Um modelo pode continuar executando normalmente e, ainda assim, produzir previsões piores quando os dados encontrados em operação diferem daqueles usados no treinamento.</p>
-
-  <h3>Exemplo aplicado: monitoramento de uma API</h3>
-  <p>Considere um serviço cuja taxa de erros é medida a cada cinco minutos. Em cinco janelas anteriores, foram observadas taxas de <strong>0,7%, 0,9%, 0,8%, 1,0% e 0,6%</strong>. Na janela mais recente, a taxa chegou a <strong>6,0%</strong>. Os valores são sintéticos, escolhidos apenas para comparar duas maneiras de estabelecer um critério de alerta.</p>
-
-  <figure class="ml-api-observations" aria-labelledby="ml-api-chart-heading">
-    <h4 id="ml-api-chart-heading">Evolução ilustrativa da taxa de erros</h4>
-    <div class="ml-api-chart-scroll">
-      <svg class="ml-api-trend-svg" viewBox="0 0 920 304" role="img" aria-labelledby="ml-api-svg-title ml-api-svg-description" xmlns="http://www.w3.org/2000/svg">
-        <title id="ml-api-svg-title">Taxas de erro próximas de 1%, seguidas por uma taxa de 6% na janela atual</title>
-        <desc id="ml-api-svg-description">Seis janelas de cinco minutos. As cinco primeiras têm taxas de 0,7%, 0,9%, 0,8%, 1,0% e 0,6%; a última, 6%. Uma linha tracejada representa um limiar programado hipotético de 4%.</desc>
-        <g class="ml-api-trend-grid">
-          <line x1="86" y1="240" x2="846" y2="240"/>
-          <line x1="86" y1="194" x2="846" y2="194"/>
-          <line x1="86" y1="148" x2="846" y2="148"/>
-          <line x1="86" y1="102" x2="846" y2="102"/>
-          <line x1="86" y1="56" x2="846" y2="56"/>
-        </g>
-        <g class="ml-api-trend-ticks">
-          <text x="72" y="244" text-anchor="end">0%</text>
-          <text x="72" y="198" text-anchor="end">2%</text>
-          <text x="72" y="152" text-anchor="end">4%</text>
-          <text x="72" y="106" text-anchor="end">6%</text>
-          <text x="72" y="60" text-anchor="end">8%</text>
-          <text x="132" y="264" text-anchor="middle">−25 min</text>
-          <text x="267" y="264" text-anchor="middle">−20 min</text>
-          <text x="402" y="264" text-anchor="middle">−15 min</text>
-          <text x="537" y="264" text-anchor="middle">−10 min</text>
-          <text x="672" y="264" text-anchor="middle">−5 min</text>
-          <text x="807" y="264" text-anchor="middle">Agora</text>
-        </g>
-        <rect class="ml-api-historic-band" x="90" y="217" width="718" height="9.2" rx="4"/>
-        <line class="ml-api-programmed-threshold" x1="90" y1="148" x2="848" y2="148"/>
-        <text class="ml-api-limit-label" x="842" y="139" text-anchor="end">Limite programado: 4%</text>
-        <polyline class="ml-api-observed-line" points="132,223.9 267,219.3 402,221.6 537,217 672,226.2 807,102"/>
-        <g class="ml-api-observed-points">
-          <circle cx="132" cy="223.9" r="5.5"/>
-          <circle cx="267" cy="219.3" r="5.5"/>
-          <circle cx="402" cy="221.6" r="5.5"/>
-          <circle cx="537" cy="217" r="5.5"/>
-          <circle cx="672" cy="226.2" r="5.5"/>
-        </g>
-        <circle class="ml-api-current-point" cx="807" cy="102" r="8"/>
-        <text class="ml-api-current-label" x="807" y="86" text-anchor="middle">6,0%</text>
-        <text class="ml-api-context-label" x="100" y="205">Taxas anteriores: 0,6% a 1,0%</text>
-        <text class="ml-api-x-axis-title" x="466" y="294" text-anchor="middle">Janelas de observação (5 minutos cada)</text>
-      </svg>
-    </div>
-    <figcaption>Figura 2 · Dados didáticos de monitoramento. A série observada não corresponde a um modelo treinado; o limiar de 4% foi escolhido apenas para demonstrar uma regra programada.</figcaption>
-  </figure>
-
-  <p>Há pelo menos duas formas de analisar essa observação. Um programa pode comparar a taxa de erros com um <strong>limiar definido pelo desenvolvedor</strong>. Um sistema com aprendizagem de máquina poderia, após treinamento e avaliação adequados, estimar um padrão de referência a partir de registros anteriores, possivelmente levando em conta horário, volume de requisições e outras características.</p>
-
-  <figure class="ml-api-comparison" aria-labelledby="ml-api-figure-title">
-    <div class="ml-api-scenario">
-      <div class="ml-api-scenario-value" aria-hidden="true">6,0%</div>
-      <div class="ml-api-scenario-copy"><strong id="ml-api-figure-title">Mesma observação atual</strong>Taxa de erros em uma janela de cinco minutos</div>
-    </div>
-    <div class="ml-api-branches">
-      <div class="ml-api-branch">
-        <h4>Regra explícita</h4>
-        <div class="ml-api-criterion"><small>Limiar estabelecido no código</small><strong>Alertar se taxa de erros &gt; 4%</strong></div>
-        <span class="ml-api-down" aria-hidden="true">↓</span>
-        <div class="ml-api-decision">Alerta<small>6% ultrapassa o limite programado.</small></div>
-      </div>
-      <div class="ml-api-branch">
-        <h4>Modelo aprendido</h4>
-        <div class="ml-api-criterion"><small>Referência estimada a partir de dados históricos e de contexto</small><strong>Comportamento usual pode ser aprendido</strong></div>
-        <span class="ml-api-down" aria-hidden="true">↓</span>
-        <div class="ml-api-decision">Poderia sinalizar anomalia<small>Depende do modelo, do treinamento e dos critérios de avaliação.</small></div>
-      </div>
-    </div>
-    <figcaption class="ml-api-caption">Figura 3 · Comparação hipotética das origens do critério de decisão. A regra está completamente especificada; no segundo caso, não foi treinado nenhum modelo. Ambos os caminhos exigem projeto, testes e avaliação.</figcaption>
-  </figure>
-
-  <p>O exemplo <strong>não estabelece superioridade de ML sobre regras explícitas</strong>. Um desenvolvedor também poderia programar uma regra baseada no comportamento histórico; do mesmo modo, um modelo mal escolhido poderia não reconhecer uma alteração relevante. O ponto central da comparação é <strong>como o critério passa a fazer parte do comportamento do sistema</strong>: por definição explícita ou por um processo de aprendizagem com dados.</p>
 
   <h3>Dados, algoritmos e máquinas: o modelo D·A·M</h3>
   <p>A aprendizagem desloca parte do esforço de escrever regras para <strong>selecionar exemplos, representar informações e avaliar resultados</strong>. Na aprendizagem de máquina tradicional, o desenvolvedor frequentemente projeta atributos que descrevem as entradas. Na aprendizagem profunda, modelos podem aprender também representações a partir dos dados, embora a preparação dos dados e as decisões de projeto continuem necessárias.</p>
-  <p>Para analisar um sistema de ML, o livro relaciona três dimensões interdependentes: <strong>Data (dados), Algorithm (algoritmo) e Machine (máquina)</strong>. O diagrama D·A·M mostra que a escolha de um algoritmo deve ser examinada junto dos dados disponíveis e dos recursos necessários para executá-lo.</p>
+  <p>Um sistema de ML pode ser analisado a partir de três dimensões interdependentes: <strong>Data (dados), Algorithm (algoritmo) e Machine (máquina)</strong>. O diagrama D·A·M mostra que a escolha de um algoritmo deve ser examinada junto dos dados disponíveis e dos recursos necessários para executá-lo.</p>
   <figure class="ml-dam-figure" aria-labelledby="ml-dam-caption">
     <img src="img/aula-09-dam.png" width="981" height="441" loading="lazy" decoding="async" alt="Diagrama triangular D·A·M: dados, algoritmo e máquina estão conectados entre si por setas de duas direções, indicando dependência mútua.">
-    <figcaption id="ml-dam-caption"><strong>Figura · Dados, algoritmo e máquina.</strong> As setas indicam relações de dependência: alterar uma dimensão pode exigir mudanças nas outras. Fonte: Reddi, <em>Introduction to Machine Learning Systems</em>, Volume I; imagem do material de referência.</figcaption>
+    <figcaption id="ml-dam-caption"><strong>Figura 2 · Dados, algoritmo e máquina.</strong> As setas indicam relações de dependência: alterar uma dimensão pode exigir mudanças nas outras. Fonte: Reddi, <em>Introduction to Machine Learning Systems</em>, Volume I; imagem do material de referência.</figcaption>
   </figure>
   <dl class="ml-dam-definitions">
-    <dt>D · Dados</dt><dd>Quantidade, qualidade, diversidade e representatividade dos exemplos. No monitoramento da API, precisamos de registros de períodos e condições relevantes; apenas acrescentar dados repetidos não garante um modelo melhor.</dd>
+    <dt>D · Dados</dt><dd>Quantidade, qualidade, diversidade e representatividade dos exemplos. Os registros precisam representar as situações em que o modelo será utilizado; apenas acrescentar dados repetidos não garante um modelo melhor.</dd>
     <dt>A · Algoritmo</dt><dd>Família de modelos e procedimento de aprendizagem. A escolha determina quais relações podem ser representadas e quais custos surgem no treinamento e na produção de previsões.</dd>
     <dt>M · Máquina</dt><dd>Processamento, memória, armazenamento e comunicação. Um modelo precisa atender às condições de execução do serviço, incluindo tempo de resposta e custo de operação.</dd>
   </dl>
-  <p>No exemplo da API, aumentar o histórico pode exigir mais armazenamento e tempo de treinamento. Um modelo mais complexo pode demandar mais memória e elevar a latência dos alertas. Uma infraestrutura maior pode acelerar o processamento, mas não corrige dados sem representatividade. <strong>A escalabilidade do sistema depende da combinação dessas três dimensões.</strong></p>
-  <div class="ml-note"><p><strong>Questão para análise:</strong> um detector funciona em uma API, mas passará a monitorar cem serviços com padrões de uso diferentes. Que mudanças seriam necessárias nos dados, no algoritmo e na infraestrutura? Por que apenas aumentar a capacidade do servidor pode ser insuficiente?</p></div>
+  <p>Ampliar o conjunto de dados pode exigir mais armazenamento e tempo de treinamento. Um modelo mais complexo pode demandar mais memória e aumentar o tempo necessário para produzir previsões. Uma infraestrutura maior pode acelerar o processamento, mas não corrige dados sem representatividade. <strong>A escalabilidade do sistema depende da combinação dessas três dimensões.</strong></p>
+  <div class="ml-note"><p><strong>Questão para análise:</strong> um sistema foi treinado com poucos exemplos e será utilizado em um conjunto mais amplo e diverso de situações. Que mudanças podem ser necessárias nos dados, no algoritmo e na infraestrutura? Por que apenas aumentar a capacidade de processamento pode ser insuficiente?</p></div>
 
   <h3>Síntese: construir e avaliar um comportamento aprendido</h3>
   <p>As abordagens estudadas até aqui utilizam representações computacionais e procedimentos para produzir respostas. Na aprendizagem de máquina, <strong>parte das relações utilizadas para produzir essas respostas é ajustada a partir de dados ou experiências</strong>. O desenvolvedor continua definindo o problema, escolhendo a representação e programando os procedimentos necessários.</p>
@@ -638,11 +563,10 @@
       alt="Diferentes objetos são representados por vetores de características, processados por uma função ajustada com exemplos e associados a três saídas.">
     <img class="ml-summary-image ml-summary-image-dark" src="img/ia-aula09-objetos-escuro.webp" width="1774" height="887" loading="lazy" decoding="async"
       alt="Versão para o modo escuro do diagrama com objetos, representação vetorial, função ajustada e três saídas.">
-    <figcaption id="ml-summary-figure-caption"><strong>Figura 4 ·</strong> Objetos representados por vetores de características <em>x</em> são associados a diferentes saídas por uma função <em>f(x)</em> ajustada a partir de exemplos. As regiões de decisão são ilustrativas; nenhum modelo foi treinado para produzir este diagrama.</figcaption>
+    <figcaption id="ml-summary-figure-caption"><strong>Figura 3 ·</strong> Objetos representados por vetores de características <em>x</em> são associados a diferentes saídas por uma função <em>f(x)</em> ajustada a partir de exemplos. As regiões de decisão são ilustrativas; nenhum modelo foi treinado para produzir este diagrama.</figcaption>
   </figure>
 
-  <p>No exemplo da API, a regra <code>taxa_erros &gt; 4%</code> foi definida diretamente pelo desenvolvedor. Para falar de um modelo aprendido, seria necessário empregar dados históricos em um procedimento de aprendizagem que determinasse parâmetros ou estruturas utilizados nas decisões. <strong>Consultar dados anteriores ou calcular uma média, isoladamente, não caracteriza necessariamente um processo de ML.</strong></p>
-  <div class="ml-note"><p><strong>Questões para discussão:</strong> qual parte do comportamento da API foi explicitamente programada? O que poderia ser aprendido com exemplos? Um mesmo serviço poderia combinar uma regra explícita com um modelo aprendido?</p></div>
+  <div class="ml-note"><p><strong>Questões para discussão:</strong> quais decisões continuam sob responsabilidade do desenvolvedor quando parte do comportamento é aprendida? Como um mesmo sistema poderia combinar regras explícitas com um modelo aprendido?</p></div>
   <p>Na próxima parte, situaremos a aprendizagem de máquina no campo da inteligência artificial e distinguiremos ML de aprendizagem profunda (DL).</p>
 </div></section>
 
