@@ -497,11 +497,8 @@
   <p>Considere o sistema de análise de crédito estudado anteriormente. Uma base pequena pode representar critérios delimitados de renda e comprometimento financeiro. Ampliá-la para diferentes perfis, produtos e contextos exige rever as combinações de condições e sua validade. Parte dessas relações pode ser investigada por aprendizagem com exemplos históricos, desde que os dados e os critérios de avaliação sejam adequados ao problema.</p>
   <div class="ml-note"><p><strong>Dois limites distintos:</strong> explorar um espaço de estados muito grande é um problema de custo computacional; representar e atualizar o conhecimento necessário é também um problema de modelagem e trabalho humano. Aprender com dados modifica a forma de construir parte desse conhecimento, mas não elimina os custos de processamento nem garante decisões corretas.</p></div>
 
-  <h3>As abordagens não são mutuamente excludentes</h3>
-  <p>Aprendizagem de máquina não substitui os demais métodos de IA. Uma heurística utilizada por um algoritmo de busca pode ser estimada a partir de exemplos; probabilidades podem ser aprendidas com dados; e um algoritmo genético pode ser empregado para otimizar parâmetros de um modelo. <strong>O papel de uma técnica depende de como ela é utilizada no sistema.</strong> Executar A* ou aplicar o Teorema de Bayes, por si só, não significa treinar um modelo.</p>
-
   <h3>Da lógica explícita ao comportamento aprendido</h3>
-  <p>Em um programa baseado em regras explícitas, o desenvolvedor determina diretamente as condições que levam a uma saída. Em um procedimento de aprendizagem supervisionada, o desenvolvedor continua programando o sistema, mas fornece também exemplos de entradas e respostas conhecidas para ajustar um modelo. O resultado do treinamento é então utilizado para processar novas entradas.</p>
+  <p>Em um programa baseado em regras explícitas, o desenvolvedor determina diretamente as condições que levam a uma saída. Em um procedimento de aprendizagem supervisionada, exemplos de entradas e respostas conhecidas orientam o ajuste de um modelo. O resultado do treinamento é então utilizado para processar novas entradas.</p>
 
   <figure class="ml-paradigm-figure" aria-labelledby="ml-paradigm-title">
     <h4 id="ml-paradigm-title">Programação explícita e aprendizagem supervisionada</h4>
@@ -536,13 +533,13 @@
     </div>
     <figcaption class="ml-paradigm-caption">Figura 1 · Comparação entre duas formas de construir um comportamento computacional. O segundo fluxo representa a aprendizagem supervisionada, que utiliza respostas conhecidas; outros paradigmas de ML serão apresentados na Parte II.</figcaption>
   </figure>
-  <p><strong>Distinção importante:</strong> o treinamento não precisa gerar novas instruções Python. Dependendo da classe de modelos, ele determina valores de parâmetros, divisões de uma árvore ou outras estruturas. O programa que realiza o treinamento e utiliza o modelo continua sendo desenvolvido com algoritmos e código.</p>
+  <p><strong>Distinção importante:</strong> o treinamento não precisa gerar novas instruções Python. Dependendo da classe de modelos, ele determina valores de parâmetros, divisões de uma árvore ou outras estruturas.</p>
 
-  <p>Essa mudança pode ser compreendida como a passagem de <strong>Software 1.0</strong>, com a lógica de decisão explicitada no código, para <strong>Software 2.0</strong>, em que parte do comportamento é determinada por treinamento com dados. A expressão destaca uma mudança de construção, sem indicar que todo software deva aprender. Código, bibliotecas, testes e infraestrutura continuam necessários.</p>
+  <p>Essa mudança pode ser compreendida como a passagem de <strong>Software 1.0</strong>, com a lógica de decisão explicitada no código, para <strong>Software 2.0</strong>, em que parte do comportamento é determinada por treinamento com dados. A expressão destaca duas formas de construir o comportamento de uma aplicação, que podem coexistir em um mesmo sistema.</p>
   <p>Também muda a investigação de falhas. Além de examinar a execução do código, precisamos verificar a qualidade e a representatividade dos exemplos, os rótulos e as condições de uso. Um modelo pode continuar executando normalmente e, ainda assim, produzir previsões piores quando os dados encontrados em operação diferem daqueles usados no treinamento.</p>
 
   <h3>Dados, algoritmos e máquinas: o modelo D·A·M</h3>
-  <p>A aprendizagem desloca parte do esforço de escrever regras para <strong>selecionar exemplos, representar informações e avaliar resultados</strong>. Na aprendizagem de máquina tradicional, o desenvolvedor frequentemente projeta atributos que descrevem as entradas. Na aprendizagem profunda, modelos podem aprender também representações a partir dos dados, embora a preparação dos dados e as decisões de projeto continuem necessárias.</p>
+  <p>A aprendizagem desloca parte do esforço de escrever regras para <strong>selecionar exemplos, representar informações e avaliar resultados</strong>.</p>
   <p>Um sistema de ML pode ser analisado a partir de três dimensões interdependentes: <strong>Data (dados), Algorithm (algoritmo) e Machine (máquina)</strong>. O diagrama D·A·M mostra que a escolha de um algoritmo deve ser examinada junto dos dados disponíveis e dos recursos necessários para executá-lo.</p>
   <figure class="ml-dam-figure" aria-labelledby="ml-dam-caption">
     <img src="img/aula-09-dam.png" width="981" height="441" loading="lazy" decoding="async" alt="Diagrama triangular D·A·M: dados, algoritmo e máquina estão conectados entre si por setas de duas direções, indicando dependência mútua.">
@@ -556,8 +553,11 @@
   <p>Ampliar o conjunto de dados pode exigir mais armazenamento e tempo de treinamento. Um modelo mais complexo pode demandar mais memória e aumentar o tempo necessário para produzir previsões. Uma infraestrutura maior pode acelerar o processamento, mas não corrige dados sem representatividade. <strong>A escalabilidade do sistema depende da combinação dessas três dimensões.</strong></p>
   <div class="ml-note"><p><strong>Questão para análise:</strong> um sistema foi treinado com poucos exemplos e será utilizado em um conjunto mais amplo e diverso de situações. Que mudanças podem ser necessárias nos dados, no algoritmo e na infraestrutura? Por que apenas aumentar a capacidade de processamento pode ser insuficiente?</p></div>
 
+  <h3>As abordagens não são mutuamente excludentes</h3>
+  <p>Aprendizagem de máquina não substitui os demais métodos de IA. Uma heurística utilizada por um algoritmo de busca pode ser estimada a partir de exemplos; probabilidades podem ser aprendidas com dados; e um algoritmo genético pode ser empregado para otimizar parâmetros de um modelo. <strong>O papel de uma técnica depende de como ela é utilizada no sistema.</strong> Executar A* ou aplicar o Teorema de Bayes, por si só, não significa treinar um modelo.</p>
+
   <h3>Síntese: construir e avaliar um comportamento aprendido</h3>
-  <p>As abordagens estudadas até aqui utilizam representações computacionais e procedimentos para produzir respostas. Na aprendizagem de máquina, <strong>parte das relações utilizadas para produzir essas respostas é ajustada a partir de dados ou experiências</strong>. O desenvolvedor continua definindo o problema, escolhendo a representação e programando os procedimentos necessários.</p>
+  <p>Na aprendizagem de máquina, <strong>parte das relações utilizadas para produzir essas respostas é ajustada a partir de dados ou experiências</strong>. O desenvolvedor continua definindo o problema, escolhendo a representação e programando os procedimentos necessários.</p>
   <figure class="ml-summary-figure" aria-labelledby="ml-summary-figure-caption">
     <img class="ml-summary-image ml-summary-image-light" src="img/ia-aula09-objetos-claro.webp" width="1774" height="887" loading="lazy" decoding="async"
       alt="Diferentes objetos são representados por vetores de características, processados por uma função ajustada com exemplos e associados a três saídas.">
@@ -582,6 +582,8 @@
   <h3>IA não se reduz a ML</h3>
   <p>Uma implementação de A* pode utilizar uma heurística definida pelo projetista, sem treinamento com exemplos. Da mesma forma, um sistema de regras pode realizar inferências sem aprender novas regras. Ambos pertencem ao campo da IA, mesmo que não dependam de aprendizagem de máquina.</p>
   <p>Por outro lado, ML pode participar da construção de heurísticas, da estimativa de probabilidades, da definição de políticas de decisão e de sistemas que combinam componentes simbólicos e estatísticos. As fronteiras entre abordagens descrevem métodos de pesquisa, não impedem sua integração.</p>
+  <h3>Aprendizagem de representações</h3>
+  <p>Na aprendizagem de máquina tradicional, o desenvolvedor frequentemente projeta atributos que descrevem as entradas. Na aprendizagem profunda, modelos podem aprender também representações a partir dos dados, embora a preparação dos dados e as decisões de projeto continuem necessárias.</p>
   <h3>Três paradigmas de aprendizagem: visão inicial</h3>
   <p>A expressão <strong>aprendizagem de máquina</strong> reúne diferentes formas de utilizar dados ou experiência para melhorar o desempenho de sistemas. Para comparar os três paradigmas, observaremos cinco aspectos: <strong>entrada, sinal de aprendizagem, procedimento, o que é aprendido e resultado produzido</strong>. Esses aspectos são comuns como perguntas de análise, mas suas respostas variam conforme o paradigma.</p>
   <div class="ml-paradigms">
