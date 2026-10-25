@@ -416,6 +416,11 @@
       .ml-page .ml-paradigm-visual-frame { max-width: 700px; margin-inline: auto; }
     }
 
+    .ml-page .ml-dam-figure{max-width:850px;margin:1.5rem auto;padding:1rem;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+    .ml-page .ml-dam-figure img{display:block;width:100%;height:auto;background:white;border-radius:8px}
+    .ml-page .ml-dam-figure figcaption{font-size:.86rem;line-height:1.6;color:var(--muted);margin-top:.9rem}
+    .ml-page .ml-dam-definitions dt{font-weight:700;color:var(--ink);margin-top:1rem}
+    .ml-page .ml-dam-definitions dd{margin:.35rem 0 0;line-height:1.65;color:var(--muted)}
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -424,13 +429,13 @@
   <div class="container nav-wrap">
     <a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 09 · Rascunho de ML</small></span></a>
     <nav class="main-nav" aria-label="Navegação principal">
-      <a href="../index.html">Página principal</a><a href="index.html">Rascunhos</a><a href="#retomada">Retomada</a><a href="#estrutura">IA, ML e DL</a><a href="#projetos">Projetos</a>
+      <a href="../index.html">Página principal</a><a href="index.html">Rascunhos</a><a href="#transicao">Programação e aprendizagem</a><a href="#estrutura">IA, ML e DL</a><a href="#projetos">Projetos</a>
       <details class="ml-zoom-menu">
         <summary aria-label="Abrir menu de navegação"><span aria-hidden="true">☰</span><span class="ml-zoom-menu-label">Menu</span></summary>
         <div class="ml-zoom-menu-links">
           <a href="../index.html">Página principal</a>
           <a href="index.html">Rascunhos</a>
-          <a href="#retomada">Retomada</a>
+          <a href="#transicao">Programação e aprendizagem</a>
           <a href="#estrutura">IA, ML e DL</a>
           <a href="#projetos">Projetos</a>
         </div>
@@ -447,7 +452,7 @@
     <p class="eyebrow">Aula 09 · Introdução à aprendizagem de máquina</p>
     <h1>Modelos, aprendizagem e generalização</h1>
     <p class="hero-lead">Relações entre as técnicas de inteligência artificial e a aprendizagem de funções a partir de dados. Introdução ao ajuste de modelos e ao ciclo de desenvolvimento de projetos de Machine Learning.</p>
-    <div class="hero-actions"><a class="button button-primary" href="#retomada">Iniciar a aula</a><a class="button button-secondary" href="#funcoes">Ir aos modelos como funções</a></div>
+    <div class="hero-actions"><a class="button button-primary" href="#transicao">Iniciar a aula</a><a class="button button-secondary" href="#funcoes">Ir aos modelos como funções</a></div>
   </div>
   <aside class="guiding-card">
     <span>Questão orientadora</span>
@@ -460,13 +465,13 @@
     <article class="card">
       <h3>Objetivos de aprendizagem</h3>
       <ol>
-        <li>Comparar os métodos de busca, representação do conhecimento, inferência, raciocínio probabilístico e otimização estudados anteriormente.</li>
+        <li>Analisar limites de escalabilidade das abordagens estudadas e explicar a transição da programação explícita para a aprendizagem com dados, considerando dados, algoritmos e recursos computacionais.</li>
         <li>Situar IA, aprendizagem de máquina (ML) e aprendizagem profunda (DL) em suas relações de abrangência.</li>
         <li>Descrever, no contexto supervisionado, como dados orientam a construção de uma função de previsão.</li>
         <li>Distinguir classe de modelos, parâmetros, função de perda, otimização e generalização.</li>
         <li>Identificar as etapas fundamentais do desenvolvimento de um projeto de ML.</li>
       </ol>
-      <h3>Conteúdo programático</h3><p>Abordagens de IA; organização conceitual IA–ML–DL; paradigmas de aprendizagem; dados, atributos e rótulos; modelos e funções; classes de hipóteses; ajuste e função de perda; subajuste, sobreajuste e generalização; fluxo de projeto de ML.</p>
+      <h3>Conteúdo programático</h3><p>Escalabilidade e aquisição de conhecimento; programação explícita e aprendizagem; dados, algoritmos e máquinas (D·A·M); abordagens de IA; organização conceitual IA–ML–DL; paradigmas de aprendizagem; dados, atributos e rótulos; modelos e funções; classes de hipóteses; ajuste e função de perda; subajuste, sobreajuste e generalização; fluxo de projeto de ML.</p>
     </article>
     <article class="card">
       <h3>Competências e habilidades</h3>
@@ -478,30 +483,24 @@
   </div>
 </div></section>
 
-<section class="section" id="retomada"><div class="container">
+<section class="section" id="transicao"><div class="container"><span id="retomada" aria-hidden="true"></span>
   <div class="section-heading">
-    <p class="eyebrow">Parte I · Retomada</p>
+    <p class="eyebrow">Parte I · Da programação à aprendizagem</p>
     <h2>Do comportamento programado ao comportamento aprendido</h2>
-    <p>Nas aulas anteriores, examinamos diferentes maneiras de representar um problema e produzir uma solução computacional. Agora, o objetivo é identificar o que o desenvolvedor define e o que pode ser determinado a partir dos dados.</p>
+    <p>Como construir sistemas quando se torna difícil especificar e manter todas as condições de decisão? Nesta parte, examinaremos os limites da construção manual do conhecimento, a aprendizagem a partir de exemplos e a relação entre dados, algoritmos e recursos computacionais.</p>
   </div>
   <p>Nas aulas de <strong>busca</strong>, definimos estados, ações e objetivos para explorar alternativas; nos <strong>sistemas baseados em conhecimento</strong>, fatos e regras permitem inferir conclusões. No <strong>raciocínio probabilístico</strong>, usamos modelos e evidências para calcular ou atualizar probabilidades. Nos <strong>algoritmos genéticos</strong>, representamos soluções candidatas e buscamos melhorar sua aptidão ao longo de gerações.</p>
 
-  <div class="ml-table-wrap"><table class="ml-table">
-    <caption class="ml-retomada-caption">Quadro 1 · O que o desenvolvedor especifica e o que o procedimento produz</caption>
-    <thead><tr><th>Abordagem</th><th>O que precisa ser especificado?</th><th>O que o sistema produz ou determina?</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Busca (BFS, DFS, gulosa e A*)</strong></td><td>Estados, ações, objetivo e, conforme o método, custos e heurísticas.</td><td>Explora o espaço de estados para encontrar uma solução ou um caminho.</td></tr>
-      <tr><td><strong>Representação e inferência</strong></td><td>Fatos, relações, regras e estratégia de inferência.</td><td>Deriva conclusões a partir do conhecimento representado.</td></tr>
-      <tr><td><strong>Raciocínio probabilístico</strong></td><td>Hipóteses, relações probabilísticas, probabilidades iniciais e evidências; alguns desses valores também podem ser estimados a partir de dados.</td><td>Calcula ou atualiza probabilidades segundo o modelo adotado.</td></tr>
-      <tr><td><strong>Algoritmos genéticos</strong></td><td>Representação de indivíduos, função de aptidão, operadores evolutivos e critérios de parada.</td><td>Procura soluções de boa qualidade por meio da evolução de uma população.</td></tr>
-      <tr><td><strong>Aprendizagem de máquina (ML)</strong></td><td>Problema, dados ou experiências, representação do modelo, procedimento de aprendizagem e critérios de avaliação.</td><td>Ajusta parâmetros ou estruturas que orientam previsões e decisões diante de novas entradas.</td></tr>
-    </tbody>
-  </table></div>
+  <h3>Escalabilidade: ampliar a busca e ampliar o conhecimento</h3>
+  <p><strong>Escalabilidade</strong> é a capacidade de lidar com o crescimento de um problema mantendo custos e resultados compatíveis com os requisitos. Nas buscas, o aumento de estados e alternativas pode elevar muito o tempo de execução e o consumo de memória. Heurísticas ajudam a orientar a exploração, mas sua utilidade depende da representação e do problema.</p>
+  <p>Nos sistemas baseados em conhecimento, há outro limite: <strong>adquirir, formalizar e manter o conhecimento</strong>. Para ampliar uma base de regras, precisamos consultar especialistas, resolver conflitos, tratar exceções e atualizar as condições quando o domínio muda. Esse trabalho constitui o <strong>gargalo de aquisição de conhecimento</strong>. Um computador mais rápido pode executar regras com mais eficiência, mas não determina, por si só, quais regras estão faltando.</p>
+  <p>Considere o sistema de análise de crédito estudado anteriormente. Uma base pequena pode representar critérios delimitados de renda e comprometimento financeiro. Ampliá-la para diferentes perfis, produtos e contextos exige rever as combinações de condições e sua validade. Parte dessas relações pode ser investigada por aprendizagem com exemplos históricos, desde que os dados e os critérios de avaliação sejam adequados ao problema.</p>
+  <div class="ml-note"><p><strong>Dois limites distintos:</strong> explorar um espaço de estados muito grande é um problema de custo computacional; representar e atualizar o conhecimento necessário é também um problema de modelagem e trabalho humano. Aprender com dados modifica a forma de construir parte desse conhecimento, mas não elimina os custos de processamento nem garante decisões corretas.</p></div>
 
   <h3>As abordagens não são mutuamente excludentes</h3>
   <p>Aprendizagem de máquina não substitui os demais métodos de IA. Uma heurística utilizada por um algoritmo de busca pode ser estimada a partir de exemplos; probabilidades podem ser aprendidas com dados; e um algoritmo genético pode ser empregado para otimizar parâmetros de um modelo. <strong>O papel de uma técnica depende de como ela é utilizada no sistema.</strong> Executar A* ou aplicar o Teorema de Bayes, por si só, não significa treinar um modelo.</p>
 
-  <h3>O que muda quando parte do comportamento é aprendida?</h3>
+  <h3>Da lógica explícita ao comportamento aprendido</h3>
   <p>Em um programa baseado em regras explícitas, o desenvolvedor determina diretamente as condições que levam a uma saída. Em um procedimento de aprendizagem supervisionada, o desenvolvedor continua programando o sistema, mas fornece também exemplos de entradas e respostas conhecidas para ajustar um modelo. O resultado do treinamento é então utilizado para processar novas entradas.</p>
 
   <figure class="ml-paradigm-figure" aria-labelledby="ml-paradigm-title">
@@ -538,6 +537,9 @@
     <figcaption class="ml-paradigm-caption">Figura 1 · Comparação entre duas formas de construir um comportamento computacional. O segundo fluxo representa a aprendizagem supervisionada, que utiliza respostas conhecidas; outros paradigmas de ML serão apresentados na Parte II.</figcaption>
   </figure>
   <p><strong>Distinção importante:</strong> o treinamento não precisa gerar novas instruções Python. Dependendo da classe de modelos, ele determina valores de parâmetros, divisões de uma árvore ou outras estruturas. O programa que realiza o treinamento e utiliza o modelo continua sendo desenvolvido com algoritmos e código.</p>
+
+  <p>Essa mudança é descrita no livro como a passagem de <strong>Software 1.0</strong>, com a lógica de decisão explicitada no código, para <strong>Software 2.0</strong>, em que parte do comportamento é determinada por treinamento com dados. A expressão destaca uma mudança de construção, sem indicar que todo software deva aprender. Código, bibliotecas, testes e infraestrutura continuam necessários.</p>
+  <p>Também muda a investigação de falhas. Além de examinar a execução do código, precisamos verificar a qualidade e a representatividade dos exemplos, os rótulos e as condições de uso. Um modelo pode continuar executando normalmente e, ainda assim, produzir previsões piores quando os dados encontrados em operação diferem daqueles usados no treinamento.</p>
 
   <h3>Exemplo aplicado: monitoramento de uma API</h3>
   <p>Considere um serviço cuja taxa de erros é medida a cada cinco minutos. Em cinco janelas anteriores, foram observadas taxas de <strong>0,7%, 0,9%, 0,8%, 1,0% e 0,6%</strong>. Na janela mais recente, a taxa chegou a <strong>6,0%</strong>. Os valores são sintéticos, escolhidos apenas para comparar duas maneiras de estabelecer um critério de alerta.</p>
@@ -614,7 +616,22 @@
 
   <p>O exemplo <strong>não estabelece superioridade de ML sobre regras explícitas</strong>. Um desenvolvedor também poderia programar uma regra baseada no comportamento histórico; do mesmo modo, um modelo mal escolhido poderia não reconhecer uma alteração relevante. O ponto central da comparação é <strong>como o critério passa a fazer parte do comportamento do sistema</strong>: por definição explícita ou por um processo de aprendizagem com dados.</p>
 
-  <h3>Síntese da retomada</h3>
+  <h3>Dados, algoritmos e máquinas: o modelo D·A·M</h3>
+  <p>A aprendizagem desloca parte do esforço de escrever regras para <strong>selecionar exemplos, representar informações e avaliar resultados</strong>. Na aprendizagem de máquina tradicional, o desenvolvedor frequentemente projeta atributos que descrevem as entradas. Na aprendizagem profunda, modelos podem aprender também representações a partir dos dados, embora a preparação dos dados e as decisões de projeto continuem necessárias.</p>
+  <p>Para analisar um sistema de ML, o livro relaciona três dimensões interdependentes: <strong>Data (dados), Algorithm (algoritmo) e Machine (máquina)</strong>. O diagrama D·A·M mostra que a escolha de um algoritmo deve ser examinada junto dos dados disponíveis e dos recursos necessários para executá-lo.</p>
+  <figure class="ml-dam-figure" aria-labelledby="ml-dam-caption">
+    <img src="img/aula-09-dam.png" width="981" height="441" loading="lazy" decoding="async" alt="Diagrama triangular D·A·M: dados, algoritmo e máquina estão conectados entre si por setas de duas direções, indicando dependência mútua.">
+    <figcaption id="ml-dam-caption"><strong>Figura · Dados, algoritmo e máquina.</strong> As setas indicam relações de dependência: alterar uma dimensão pode exigir mudanças nas outras. Fonte: Reddi, <em>Introduction to Machine Learning Systems</em>, Volume I; imagem do material de referência.</figcaption>
+  </figure>
+  <dl class="ml-dam-definitions">
+    <dt>D · Dados</dt><dd>Quantidade, qualidade, diversidade e representatividade dos exemplos. No monitoramento da API, precisamos de registros de períodos e condições relevantes; apenas acrescentar dados repetidos não garante um modelo melhor.</dd>
+    <dt>A · Algoritmo</dt><dd>Família de modelos e procedimento de aprendizagem. A escolha determina quais relações podem ser representadas e quais custos surgem no treinamento e na produção de previsões.</dd>
+    <dt>M · Máquina</dt><dd>Processamento, memória, armazenamento e comunicação. Um modelo precisa atender às condições de execução do serviço, incluindo tempo de resposta e custo de operação.</dd>
+  </dl>
+  <p>No exemplo da API, aumentar o histórico pode exigir mais armazenamento e tempo de treinamento. Um modelo mais complexo pode demandar mais memória e elevar a latência dos alertas. Uma infraestrutura maior pode acelerar o processamento, mas não corrige dados sem representatividade. <strong>A escalabilidade do sistema depende da combinação dessas três dimensões.</strong></p>
+  <div class="ml-note"><p><strong>Questão para análise:</strong> um detector funciona em uma API, mas passará a monitorar cem serviços com padrões de uso diferentes. Que mudanças seriam necessárias nos dados, no algoritmo e na infraestrutura? Por que apenas aumentar a capacidade do servidor pode ser insuficiente?</p></div>
+
+  <h3>Síntese: construir e avaliar um comportamento aprendido</h3>
   <p>As abordagens estudadas até aqui utilizam representações computacionais e procedimentos para produzir respostas. Na aprendizagem de máquina, <strong>parte das relações utilizadas para produzir essas respostas é ajustada a partir de dados ou experiências</strong>. O desenvolvedor continua definindo o problema, escolhendo a representação e programando os procedimentos necessários.</p>
   <figure class="ml-summary-figure" aria-labelledby="ml-summary-figure-caption">
     <img class="ml-summary-image ml-summary-image-light" src="img/ia-aula09-objetos-claro.webp" width="1774" height="887" loading="lazy" decoding="async"
@@ -1002,7 +1019,7 @@
   <p>RUSSELL, Stuart J.; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Pearson, 2022. Capítulos 19 (Learning from Examples) e 22 (Deep Learning).</p>
   <p>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson, 2009. Parte IV, capítulos 10–13.</p>
   <p>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. Manning, 2020. Capítulos 8 (Machine Learning) e 9 (Artificial Neural Networks).</p>
-  <p>REDDI, Vijay Janapa. <em>Introduction to Machine Learning Systems</em>. Volume I, capítulo 1 (seções 1.2 e 1.6) e capítulo 3. Material disponível em: <a href="https://mlsysbook.ai/vol1/introduction/introduction.html" target="_blank" rel="noopener noreferrer">mlsysbook.ai</a>.</p>
+  <p>REDDI, Vijay Janapa. <em>Introduction to Machine Learning Systems</em>. Volume I, capítulo 1 (mudança de paradigma, evolução dos gargalos e relações entre dados, algoritmos e máquinas) e capítulo 3. Material disponível em: <a href="https://mlsysbook.ai/vol1/introduction/introduction.html" target="_blank" rel="noopener noreferrer">mlsysbook.ai</a>.</p>
 </div></section>
 </main></div>
 <script>
