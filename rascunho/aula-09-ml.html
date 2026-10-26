@@ -692,17 +692,12 @@
   <div class="section-heading">
     <p class="eyebrow">Parte III · Fundamentos da aprendizagem</p>
     <h2>O modelo aprendido como uma função computacional</h2>
-    <p>Nas partes anteriores, vimos que um modelo pode relacionar características de entrada a uma saída. Agora, vamos representar essa relação matematicamente e distinguir a escolha de uma família de funções do ajuste realizado com dados.</p>
+    <p>A partir de um problema de previsão, vamos representar entradas e saídas, comparar funções candidatas e identificar os parâmetros que um procedimento de aprendizagem pode ajustar.</p>
   </div>
-  <h3>Como representar entradas e saídas?</h3>
-  <p>Na aprendizagem supervisionada, trabalhamos com exemplos nos quais conhecemos tanto as entradas quanto as respostas observadas. Esses exemplos formam um conjunto de dados:</p>
-  <div class="ml-formula">D = {(x₁, y₁), (x₂, y₂), …, (xₙ, yₙ)} &nbsp; → &nbsp; ŷ = f<sub>θ</sub>(x)</div>
-  <p><strong>D</strong> é o conjunto de exemplos; <strong>x</strong> representa a entrada; <strong>y</strong> é a resposta observada; <strong>ŷ</strong> é a previsão produzida pelo modelo; e <strong>θ</strong> denota seus parâmetros, neste caso. O objetivo é obter uma função que produza previsões adequadas para entradas não utilizadas no ajuste.</p>
-  <p>Na figura dos objetos, apresentada na Parte I, cada entrada podia ser descrita por um <strong>vetor de características</strong> (por exemplo, tamanho, forma e outras medidas). Para simplificar a análise matemática, nosso próximo exemplo utilizará <strong>uma única característica numérica</strong>. A ideia de relacionar entradas e saídas permanece a mesma.</p>
 
   <h3>Problema: estimar o tempo de processamento de um lote</h3>
-  <p>Uma aplicação processa periodicamente lotes de registros. Queremos estimar <strong>quanto tempo uma execução levará</strong> em função da quantidade de registros, supondo condições de execução aproximadamente constantes.</p>
-  <p>Em nossas medições <strong>sintéticas</strong>, <code>x</code> indica a quantidade de registros <strong>em milhares</strong> e <code>y</code> indica o tempo de processamento <strong>em segundos</strong>. A tabela contém as observações, e o gráfico representa os mesmos pares de valores.</p>
+  <p>Uma aplicação processa lotes de registros. Queremos estimar <strong>quanto tempo uma execução levará</strong> a partir da quantidade de registros, supondo condições de execução aproximadamente constantes. Como a resposta é um valor numérico, temos uma tarefa de <strong>regressão supervisionada</strong>.</p>
+  <p>A tabela e o gráfico apresentam seis medições <strong>sintéticas</strong>, criadas para o exemplo. A quantidade de registros está expressa em milhares, e o tempo de processamento, em segundos.</p>
   <div class="ml-case-grid">
     <div class="ml-case-data">
       <h4>Observações disponíveis</h4>
@@ -761,44 +756,28 @@
     </figure>
   </div>
 
-  <div class="ml-note"><p><strong>Questão para análise:</strong> quando acrescentamos mil registros, o tempo aumenta aproximadamente pela mesma quantidade? Que tipo de função parece compatível com a distribuição dos pontos?</p></div>
+
+  <h3>Entradas, respostas e previsões</h3>
+  <ul class="ml-check">
+    <li><strong>x — entrada:</strong> quantidade de registros, em milhares.</li>
+    <li><strong>y — resposta observada:</strong> tempo efetivamente medido, em segundos.</li>
+    <li><strong>ŷ — previsão:</strong> tempo estimado pelo modelo para uma entrada x, também em segundos.</li>
+  </ul>
+  <p>Cada linha da tabela forma um par <code>(xᵢ, yᵢ)</code>. O índice <code>i</code> identifica a observação, e o conjunto <strong>D</strong> reúne os exemplos disponíveis; aqui, <code>n = 6</code>.</p>
+  <div class="ml-formula">D = {(x₁, y₁), (x₂, y₂), …, (xₙ, yₙ)}</div>
+  <p>O modelo é uma função que recebe a entrada e produz uma previsão: <strong>ŷ = f(x)</strong>. Por exemplo, para quatro mil registros, conhecemos <code>x = 4</code> e <code>y = 9,1 s</code>; o valor de <code>ŷ</code> dependerá da função utilizada.</p>
 
   <h3>Escolher uma família de funções</h3>
-  <p>Os valores sugerem um aumento de aproximadamente <strong>dois segundos por mil registros</strong>. Uma primeira hipótese é representar a relação por uma <strong>função afim</strong>, chamada frequentemente de modelo linear no contexto de regressão. Isso significa escolher uma família de funções possíveis, e não determinar ainda qual delas é a mais adequada aos dados.</p>
-  <div class="ml-grid">
-    <article class="ml-box">
-      <h4>Família ou espaço de hipóteses</h4>
-      <div class="ml-formula">f<sub>θ</sub>(x) = ax + b</div>
-      <p>A forma matemática é definida pelo desenvolvedor. Os coeficientes <code>a</code> e <code>b</code> ainda podem assumir diferentes valores. O conjunto dessas funções constitui uma <strong>classe de modelos</strong>, também chamada de <strong>espaço de hipóteses</strong>.</p>
-    </article>
-    <article class="ml-box">
-      <h4>Uma função candidata</h4>
-      <div class="ml-formula">f(x) = 2x + 1</div>
-      <p>Ao escolher <code>a = 2</code> e <code>b = 1</code>, definimos uma função específica dessa família. Esses números, por enquanto, foram <strong>escolhidos para exemplificar</strong>; não foram calculados por um procedimento de aprendizagem.</p>
-    </article>
-  </div>
-  <p>Nesse modelo, o parâmetro <strong><code>a</code> é a inclinação</strong>: representa o acréscimo previsto no tempo para cada mil registros adicionais (em segundos por mil registros). O parâmetro <strong><code>b</code> é o intercepto</strong>: representa o tempo previsto para <code>x = 0</code>. Como não medimos lotes com zero registros, interpretar <code>b</code> como um custo inicial real exige cuidado; trata-se, aqui, de uma extrapolação do modelo.</p>
+  <p>As medições sugerem um aumento de aproximadamente <strong>dois segundos por mil registros</strong>. Uma hipótese inicial é utilizar a família de funções afins, frequentemente chamada de modelo linear no contexto de regressão:</p>
+  <div class="ml-formula">f<sub>θ</sub>(x) = ax + b &nbsp;&nbsp; θ = (a, b)</div>
+  <p>A letra <strong>θ</strong> representa os parâmetros do modelo; neste caso, o par <strong>(a, b)</strong>. Ao variar esses valores, obtemos diferentes funções da mesma família, que constitui uma <strong>classe de modelos</strong> ou <strong>espaço de hipóteses</strong>.</p>
+  <ul class="ml-check">
+    <li><strong>a — inclinação:</strong> acréscimo previsto no tempo para cada mil registros adicionais, em segundos por mil registros.</li>
+    <li><strong>b — intercepto:</strong> tempo previsto para <code>x = 0</code>, em segundos. Como não medimos lotes com zero registros, esse valor é uma extrapolação do modelo.</li>
+  </ul>
 
-  <h3>Programar a função não é treiná-la</h3>
-  <p>Compare as duas implementações em Python. Na primeira, os números fazem parte das instruções; na segunda, eles são parâmetros fornecidos à função. <strong>Nenhuma das implementações aprende por si só.</strong> Para haver aprendizagem, um procedimento adicional deve utilizar os exemplos de <code>D</code> para determinar os valores dos parâmetros.</p>
-  <div class="ml-grid">
-    <article class="ml-box">
-      <h4>Coeficientes definidos no código</h4>
-      <pre class="ml-code"><code>def estimar_tempo(carga):
-    return 2 * carga + 1</code></pre>
-      <p>O programador escolheu diretamente a inclinação e o intercepto.</p>
-    </article>
-    <article class="ml-box">
-      <h4>Coeficientes ajustáveis</h4>
-      <pre class="ml-code"><code>def estimar_tempo(carga, a, b):
-    return a * carga + b</code></pre>
-      <p>A estrutura foi programada, mas um algoritmo de treinamento poderá estimar <code>a</code> e <code>b</code> a partir dos dados. Em ambos os exemplos, <code>carga</code> está expressa em milhares de registros.</p>
-    </article>
-  </div>
-  <p>Em outras classes de modelos, o que se aprende pode incluir pesos de redes neurais, divisões em árvores ou outras estruturas. O princípio é semelhante: programamos o <strong>procedimento de aprendizagem</strong> e utilizamos seus resultados para determinar parte do comportamento do sistema.</p>
-
-  <h3>Comparar funções candidatas com os dados observados</h3>
-  <p>Para a mesma família <code>f(x) = ax + b</code>, podemos considerar três funções com <code>b = 1</code> e inclinações diferentes. O gráfico apresenta <strong>as três retas junto das seis observações</strong> da tabela inicial. Isso permite comparar visualmente previsões e medições.</p>
+  <h3>Comparar funções candidatas com os dados</h3>
+  <p>Fixando <code>b = 1</code> e escolhendo três valores para <code>a</code>, obtemos as funções abaixo. O gráfico permite comparar suas previsões com as seis medições.</p>
   <figure class="ml-family-figure" aria-labelledby="ml-family-caption">
     <h4>Três funções afins e seis medições</h4>
     <div class="ml-family-candidates">
@@ -853,7 +832,8 @@
     </svg>
     <figcaption id="ml-family-caption"><strong>Figura ·</strong> As seis medições aparecem sobre as funções candidatas. A reta <code>f₂(x) = 2x + 1</code> acompanha melhor a tendência visível, mas ainda não utilizamos um critério quantitativo para escolher parâmetros.</figcaption>
   </figure>
-  <p>Observe o caso em que <strong>x = 4</strong>, isto é, um lote de quatro mil registros. A medição correspondente foi de <strong>9,1 segundos</strong>:</p>
+
+  <p>Para <strong>x = 4</strong>, podemos comparar as previsões das três funções com o tempo observado de <strong>9,1 segundos</strong>:</p>
   <div class="ml-table-wrap ml-family-values-wrap">
     <table class="ml-table" aria-label="Comparação das previsões das funções candidatas para quatro mil registros">
       <thead><tr><th scope="col">Função</th><th scope="col">Previsão para x = 4</th></tr></thead>
@@ -865,10 +845,30 @@
       </tbody>
     </table>
   </div>
-  <p>A segunda função produz a previsão mais próxima <strong>nesse exemplo</strong>. Entretanto, para avaliar a adequação de um modelo, não basta considerar uma observação isolada. Precisamos examinar seus erros no conjunto de dados e estabelecer um critério para comparar alternativas.</p>
-  <h3>E se a família escolhida não representar bem os dados?</h3>
-  <p>Uma família de funções afins representa apenas retas. Se a relação real tiver curvatura relevante, podemos considerar uma família mais flexível, como <code>f(x) = ax² + bx + c</code>, que inclui funções quadráticas quando <code>a ≠ 0</code>. Mesmo o melhor ajuste possível <strong>dentro de uma família de retas</strong> não se torna uma curva apenas pela alteração de seus parâmetros.</p>
-  <p>Portanto, <strong>selecionar a família de modelos</strong> estabelece quais funções podem ser consideradas; <strong>ajustar os parâmetros</strong> procura uma função adequada dentro dessa família. Na Parte IV, utilizaremos um critério de erro para transformar essa escolha em um problema de otimização.</p>
+
+  <p>A função <code>f₂(x) = 2x + 1</code> produz a previsão mais próxima nessa observação e acompanha melhor a tendência visível no gráfico. Para avaliar o conjunto, precisaremos comparar os erros em todas as medições.</p>
+  <p>A família escolhida limita as relações que podemos representar: alterar <code>a</code> e <code>b</code> sempre produz uma reta. Se os dados apresentarem uma curvatura relevante, pode ser necessário considerar outra família, como <code>f(x) = ax² + bx + c</code>.</p>
+
+  <h3>Representar a função em código</h3>
+  <p>As implementações abaixo calculam previsões. Na primeira, os coeficientes estão definidos no código; na segunda, podem ser fornecidos como argumentos. Em ambas, <code>carga</code> é a entrada expressa em milhares de registros.</p>
+  <div class="ml-grid">
+    <article class="ml-box">
+      <h4>Coeficientes definidos no código</h4>
+      <pre class="ml-code"><code>def estimar_tempo(carga):
+    return 2 * carga + 1</code></pre>
+      <p>Representa a função candidata <code>f₂(x) = 2x + 1</code>.</p>
+    </article>
+    <article class="ml-box">
+      <h4>Coeficientes ajustáveis</h4>
+      <pre class="ml-code"><code>def estimar_tempo(carga, a, b):
+    return a * carga + b</code></pre>
+      <p>Permite utilizar diferentes valores de <code>a</code> e <code>b</code>.</p>
+    </article>
+  </div>
+  <p><strong>Treinar esse modelo</strong> consiste em utilizar os exemplos de <code>D</code> para determinar os valores de <code>a</code> e <code>b</code>. Essa etapa exige um procedimento adicional: os códigos acima apenas aplicam os coeficientes que recebem ou já possuem.</p>
+
+  <h3>Como escolher os parâmetros a partir dos dados?</h3>
+  <p>Escolher a família define quais funções podem ser consideradas; ajustar os parâmetros determina uma função dentro dela. Até aqui, comparamos candidatos visualmente. Para orientar o treinamento, precisamos <strong>medir a diferença entre as previsões e os valores observados</strong> e estabelecer um critério para comparar os resultados. Esse será o ponto de partida da Parte IV.</p>
 </div></section>
 
 <section class="section section-soft" id="otimizacao"><div class="container">
