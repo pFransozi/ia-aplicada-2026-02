@@ -440,6 +440,12 @@
     .ml-page .ml-fit-reserved-key{display:inline-block;width:.65rem;height:.65rem;margin-right:.4rem;background:var(--amber);transform:rotate(45deg)}
     @media(max-width:1000px){.ml-page .ml-fit-comparison{grid-template-columns:1fr}.ml-page .ml-fit-panel{max-width:620px;width:100%;margin-inline:auto}}
     @media print{.ml-page .ml-fit-panel{break-inside:avoid}}
+
+    /* Definição seguida do gráfico, com linhas alinhadas na comparação. */
+    .ml-page .ml-fit-panel{display:grid;grid-row:span 6;grid-template-rows:subgrid;row-gap:.7rem;align-content:start}
+    .ml-page .ml-fit-panel h4,.ml-page .ml-fit-panel p,.ml-page .ml-fit-panel .ml-fit-model{margin:0}
+    .ml-page .ml-fit-panel .ml-fit-definition{color:var(--muted)}
+    .ml-page .ml-fit-panel .ml-fit-model{font-weight:650;color:var(--ink)}
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -954,8 +960,8 @@
   </div>
   <div class="ml-fit-comparison">
     <article class="ml-fit-panel">
-      <h4>Subajuste</h4>
-      <p class="ml-fit-model">Modelo constante</p>
+      <h4>Subajuste (underfitting)</h4>
+      <p class="ml-fit-definition">O modelo não consegue capturar regularidades relevantes, por limitações de sua representação ou por um treinamento insuficiente. Pode apresentar desempenho ruim tanto no treinamento quanto em novos dados.</p>
       <svg viewBox="0 0 380 285" role="img" aria-labelledby="ml-fit-0-title ml-fit-0-desc">
 <title id="ml-fit-0-title">Subajuste: Modelo constante</title>
 <desc id="ml-fit-0-desc">Mesmos seis pontos de treinamento e três observações reservadas. Prevê o mesmo tempo para todos os lotes e não acompanha o crescimento observado. MSE no treinamento: 11,6889 segundos ao quadrado; nos dados reservados: 11,2778 segundos ao quadrado.</desc>
@@ -990,12 +996,13 @@
 <path d="M203.000 111.900 L208.000 116.900 L203.000 121.900 L198.000 116.900 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
 <path d="M317.815 42.200 L322.815 47.200 L317.815 52.200 L312.815 47.200 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
 </svg>
+      <p class="ml-fit-model">Modelo constante</p>
       <p class="ml-fit-metrics"><strong>MSE treino:</strong> 11,6889 s²<br><strong>MSE reservado:</strong> 11,2778 s²</p>
       <p>Prevê o mesmo tempo para todos os lotes e não acompanha o crescimento observado.</p>
     </article>
     <article class="ml-fit-panel">
       <h4>Ajuste adequado ao exemplo</h4>
-      <p class="ml-fit-model">Modelo linear</p>
+      <p class="ml-fit-definition">O modelo captura a tendência relevante e mantém erros pequenos tanto no treinamento quanto nos dados reservados. Neste exemplo, a reta apresenta esse comportamento.</p>
       <svg viewBox="0 0 380 285" role="img" aria-labelledby="ml-fit-1-title ml-fit-1-desc">
 <title id="ml-fit-1-title">Ajuste adequado ao exemplo: Modelo linear</title>
 <desc id="ml-fit-1-desc">Mesmos seis pontos de treinamento e três observações reservadas. Acompanha a tendência e mantém erros pequenos nas observações reservadas. MSE no treinamento: 0,0222 segundos ao quadrado; nos dados reservados: 0,0778 segundos ao quadrado.</desc>
@@ -1030,12 +1037,13 @@
 <path d="M203.000 111.900 L208.000 116.900 L203.000 121.900 L198.000 116.900 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
 <path d="M317.815 42.200 L322.815 47.200 L317.815 52.200 L312.815 47.200 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
 </svg>
+      <p class="ml-fit-model">Modelo linear</p>
       <p class="ml-fit-metrics"><strong>MSE treino:</strong> 0,0222 s²<br><strong>MSE reservado:</strong> 0,0778 s²</p>
       <p>Acompanha a tendência e mantém erros pequenos nas observações reservadas.</p>
     </article>
     <article class="ml-fit-panel">
-      <h4>Sobreajuste no exemplo</h4>
-      <p class="ml-fit-model">Polinômio de grau 5</p>
+      <h4>Sobreajuste (overfitting)</h4>
+      <p class="ml-fit-definition">O modelo se ajusta excessivamente às particularidades do conjunto de treinamento e apresenta desempenho pior nos novos dados. Um erro de treinamento muito pequeno, isoladamente, não comprova boa generalização.</p>
       <svg viewBox="0 0 380 285" role="img" aria-labelledby="ml-fit-5-title ml-fit-5-desc">
 <title id="ml-fit-5-title">Sobreajuste no exemplo: Polinômio de grau 5</title>
 <desc id="ml-fit-5-desc">Mesmos seis pontos de treinamento e três observações reservadas. Reproduz as seis medições de treinamento, mas apresenta erro maior nas observações reservadas. MSE no treinamento: 0,0000 segundos ao quadrado; nos dados reservados: 0,2396 segundos ao quadrado.</desc>
@@ -1070,11 +1078,11 @@
 <path d="M203.000 111.900 L208.000 116.900 L203.000 121.900 L198.000 116.900 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
 <path d="M317.815 42.200 L322.815 47.200 L317.815 52.200 L312.815 47.200 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
 </svg>
+      <p class="ml-fit-model">Polinômio de grau 5</p>
       <p class="ml-fit-metrics"><strong>MSE treino:</strong> 0,0000 s²<br><strong>MSE reservado:</strong> 0,2396 s²</p>
       <p>Reproduz as seis medições de treinamento, mas apresenta erro maior nas observações reservadas.</p>
     </article>
   </div>
-  <p>O <strong>subajuste</strong> ocorre quando o modelo não captura regularidades relevantes dos dados. O <strong>sobreajuste</strong> ocorre quando ele se ajusta excessivamente às particularidades do treinamento, prejudicando seu desempenho em novos dados.</p>
   <p>Neste exemplo, o polinômio de grau 5 zera o erro de treinamento, mas apresenta MSE maior nos dados reservados do que a reta. Portanto, <strong>o menor erro de treinamento não garante as melhores previsões em novos dados</strong>. Essa comparação ilustra o problema; não significa que modelos mais flexíveis sejam sempre piores.</p>
 
   <h3>Para que servem treino, validação e teste?</h3>
