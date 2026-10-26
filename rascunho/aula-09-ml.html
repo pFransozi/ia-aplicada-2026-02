@@ -664,8 +664,25 @@
       </tbody>
     </table>
   </div>
-  <div class="ml-note"><p><strong>Questão para análise:</strong> uma equipe reúne imagens de peças identificadas como “com defeito” ou “sem defeito” e utiliza esses exemplos para treinar um modelo que avaliará novas imagens. Qual é o paradigma de aprendizagem e qual é a tarefa? Justifique pela informação disponível no treinamento. A utilização de uma rede profunda mudaria essas classificações?</p></div>
-  <p><strong>Recorte adotado:</strong> nas próximas partes, utilizaremos a aprendizagem supervisionada para compreender a relação entre dados, funções, ajuste e generalização. Essa base também será utilizada no estudo posterior de redes neurais.</p>
+  <h3>Exemplos de aplicação dos paradigmas</h3>
+
+  <h4>Aprendizagem supervisionada</h4>
+  <ul class="ml-check">
+    <li><strong>Inspeção de peças em uma fábrica — classificação.</strong> A equipe reúne imagens que inspetores já identificaram como “com defeito” ou “sem defeito”. Essas respostas orientam o treinamento de um modelo que analisa novas imagens e indica peças para revisão. A aprendizagem é supervisionada porque a categoria de cada exemplo de treinamento é conhecida.</li>
+    <li><strong>Estimativa do tempo de entrega — regressão.</strong> Uma transportadora possui registros de distância, horário de saída, volume da carga e duração efetiva das entregas. O modelo aprende a relacionar essas informações ao tempo observado para estimar a duração de novas entregas. O valor-alvo é numérico: o tempo de entrega.</li>
+  </ul>
+
+  <h4>Aprendizagem não supervisionada</h4>
+  <ul class="ml-check">
+    <li><strong>Segmentação de clientes — agrupamento.</strong> Uma loja analisa frequência de compras, valores gastos e categorias de produtos adquiridos, sem informar previamente os perfis dos clientes. O algoritmo reúne comportamentos semelhantes; depois, a equipe interpreta os grupos para planejar ações de atendimento. Os grupos são descobertos nos dados, em vez de fornecidos como respostas no treinamento.</li>
+    <li><strong>Organização de chamados de suporte — agrupamento.</strong> Uma equipe possui milhares de descrições de problemas ainda sem categorias atribuídas. Um método agrupa chamados com conteúdos semelhantes, ajudando a identificar assuntos recorrentes e organizar a triagem. A equipe examina e nomeia os grupos encontrados; o algoritmo não recebe antecipadamente uma categoria correta para cada chamado.</li>
+  </ul>
+
+  <h4>Aprendizagem por reforço</h4>
+  <ul class="ml-check">
+    <li><strong>Navegação de um robô em um armazém.</strong> O agente observa sua posição e os obstáculos e escolhe movimentos. Um sinal de recompensa favorece alcançar o destino e penaliza colisões e atrasos. Ao experimentar sequências de ações, inicialmente em simulação, aprende uma política de navegação. A aprendizagem considera as consequências dos movimentos, sem exigir uma ação correta previamente indicada para cada situação.</li>
+    <li><strong>Controle de climatização de um edifício.</strong> O agente observa temperatura, ocupação e condições externas e escolhe ajustes nos equipamentos. A recompensa combina menor consumo de energia com a manutenção do conforto térmico. Como um ajuste influencia a temperatura e o consumo nos períodos seguintes, a política é aprendida considerando resultados ao longo do tempo, com treinamento e avaliação em condições controladas.</li>
+  </ul>
 </div></section>
 
 <section class="section" id="funcoes"><div class="container">
