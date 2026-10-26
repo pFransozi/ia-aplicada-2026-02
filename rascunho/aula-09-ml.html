@@ -426,6 +426,20 @@
     .ml-page .ml-dam-definitions dt{font-weight:700;color:var(--ink);margin-top:1rem}
     .ml-page .ml-dam-definitions dd{margin:.35rem 0 0;line-height:1.65;color:var(--muted)}
     .ml-page .ml-residual-legend{display:inline-block;vertical-align:middle;width:1.3rem;border-top:2px dashed var(--amber);margin-right:.35rem}
+
+    /* Parte V: comparação de ajustes com os mesmos dados e escalas. */
+    .ml-page .ml-fit-comparison{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.25rem 0}
+    .ml-page .ml-fit-panel{min-width:0;padding:1rem;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+    .ml-page .ml-fit-panel h4{margin:0 0 .35rem;color:var(--ink);font-size:1.05rem}
+    .ml-page .ml-fit-panel p{font-size:.9rem;line-height:1.55;margin:.75rem 0}
+    .ml-page .ml-fit-panel p:last-child{margin-bottom:0}
+    .ml-page .ml-fit-panel .ml-fit-model{margin:0 0 .75rem;color:var(--muted)}
+    .ml-page .ml-fit-panel svg{display:block;width:100%;height:auto;max-width:500px;margin-inline:auto}
+    .ml-page .ml-fit-panel svg text{fill:var(--muted);font-family:inherit;font-size:14px}
+    .ml-page .ml-fit-panel .ml-fit-metrics{padding:.65rem .75rem;border-radius:8px;background:var(--soft);font-variant-numeric:tabular-nums}
+    .ml-page .ml-fit-reserved-key{display:inline-block;width:.65rem;height:.65rem;margin-right:.4rem;background:var(--amber);transform:rotate(45deg)}
+    @media(max-width:1000px){.ml-page .ml-fit-comparison{grid-template-columns:1fr}.ml-page .ml-fit-panel{max-width:620px;width:100%;margin-inline:auto}}
+    @media print{.ml-page .ml-fit-panel{break-inside:avoid}}
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -911,9 +925,11 @@
 </div></section>
 
 <section class="section" id="generalizacao"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Parte V · Avaliação de modelos</p><h2>O melhor ajuste é necessariamente o melhor modelo?</h2><p>Não. A função que produz o menor erro nos dados de treinamento pode apresentar resultados insatisfatórios quando aplicada a observações novas.</p></div>
+  <div class="section-heading"><p class="eyebrow">Parte V · Avaliação de modelos</p><h2>O melhor ajuste é necessariamente o melhor modelo?</h2><p>Na Parte IV, ajustamos os parâmetros para reduzir o erro de treinamento. Agora, precisamos verificar como o modelo se comporta em observações que não participaram desse ajuste.</p></div>
+  <div class="ml-note"><p><strong>Generalização</strong> é a capacidade de um modelo de produzir bons resultados em novos dados, não utilizados no treinamento, que representem as situações em que ele será aplicado.</p></div>
+
   <h3>Avaliar a reta em novas observações</h3>
-  <p>Considere agora três medições <strong>sintéticas adicionais</strong> dos lotes, reservadas para avaliação. Utilizaremos a reta calculada por mínimos quadrados com as seis observações da Parte III. Seus parâmetros ficam fixos nesta comparação, independentemente das alterações feitas nos controles do experimento.</p>
+  <p>Considere três medições <strong>sintéticas adicionais</strong> dos lotes, reservadas para avaliação. Utilizaremos a reta calculada por mínimos quadrados com as seis observações da Parte III. Seus parâmetros ficam fixos nesta comparação, independentemente das alterações feitas nos controles do experimento.</p>
   <div class="ml-formula" id="ml-eval-equation">Reta ajustada no treinamento: —</div>
   <div class="ml-table-wrap"><table class="ml-table" aria-label="Avaliação da reta ajustada em três observações reservadas">
     <thead><tr><th scope="col">Registros (mil)</th><th scope="col">Observado y (s)</th><th scope="col">Previsão ŷ (s)</th><th scope="col">Erro² (s²)</th></tr></thead>
@@ -925,22 +941,150 @@
   </table></div>
   <div class="ml-lab-actions"><button id="ml-test" type="button">Avaliar a reta nos dados reservados</button></div>
   <p id="ml-test-error" class="ml-small" aria-live="polite">Avaliação ainda não calculada.</p>
-  <p class="ml-small">Essas três observações não são utilizadas no ajuste. A comparação ilustra a diferença entre ajustar e avaliar; uma amostra tão pequena não é suficiente para validar uma aplicação real.</p>
+  <p><strong>Como interpretar?</strong> O MSE passa de aproximadamente <strong>0,0222 s² no treinamento</strong> para <strong>0,0778 s² nos dados reservados</strong>. A reta comete erros maiores nessas novas observações, mas esse aumento, isoladamente, não demonstra sobreajuste. Também precisamos considerar a quantidade e a representatividade dos dados e o erro aceitável para a aplicação.</p>
+  <p class="ml-small">As três observações não foram utilizadas no ajuste. Elas permitem acompanhar o cálculo, mas são insuficientes para concluir que o modelo funcionará bem em uma aplicação real.</p>
 
-  <h3>Seleção da família e ajuste dos parâmetros</h3>
-  <p>Uma função linear pode ser a melhor <em>dentro da família das retas</em> segundo o MSE de treinamento, mas essa família pode ser inadequada para representar uma relação não linear. Aumentar a flexibilidade do modelo amplia as funções candidatas; ao mesmo tempo, pode facilitar o ajuste de variações específicas ou ruídos do treinamento.</p>
-  <div class="ml-grid">
-    <article class="ml-box"><h3>Subajuste (underfitting)</h3><p>O modelo não consegue capturar regularidades relevantes, por limitações de sua representação ou por um treinamento insuficiente. Pode apresentar desempenho ruim tanto no treinamento quanto em novos dados.</p></article>
-    <article class="ml-box"><h3>Sobreajuste (overfitting)</h3><p>O modelo se ajusta excessivamente às particularidades do conjunto de treinamento e apresenta desempenho pior nos novos dados. Um erro de treinamento muito pequeno, isoladamente, não comprova boa generalização.</p></article>
+  <h3>Subajuste, ajuste adequado e sobreajuste</h3>
+  <p>Compare três modelos ajustados às <strong>mesmas seis observações de treinamento</strong>. Os gráficos usam as mesmas escalas e mostram também os três dados reservados. Os segmentos tracejados indicam os erros de previsão nessas observações.</p>
+  <div class="ml-legend" aria-label="Legenda dos gráficos comparativos">
+    <span><i class="ml-dot ml-dot-train" aria-hidden="true"></i>Treinamento</span>
+    <span><i class="ml-fit-reserved-key" aria-hidden="true"></i>Dados reservados</span>
+    <span><i class="ml-line-legend" aria-hidden="true"></i>Modelo ajustado</span>
+    <span><i class="ml-residual-legend" aria-hidden="true"></i>Erro nos dados reservados</span>
   </div>
+  <div class="ml-fit-comparison">
+    <article class="ml-fit-panel">
+      <h4>Subajuste</h4>
+      <p class="ml-fit-model">Modelo constante</p>
+      <svg viewBox="0 0 380 285" role="img" aria-labelledby="ml-fit-0-title ml-fit-0-desc">
+<title id="ml-fit-0-title">Subajuste: Modelo constante</title>
+<desc id="ml-fit-0-desc">Mesmos seis pontos de treinamento e três observações reservadas. Prevê o mesmo tempo para todos os lotes e não acompanha o crescimento observado. MSE no treinamento: 11,6889 segundos ao quadrado; nos dados reservados: 11,2778 segundos ao quadrado.</desc>
+<line x1="48" y1="224.000" x2="358" y2="224.000" stroke="var(--line)"/>
+<text x="39" y="229.000" text-anchor="end">2</text>
+<line x1="48" y1="156.000" x2="358" y2="156.000" stroke="var(--line)"/>
+<text x="39" y="161.000" text-anchor="end">6</text>
+<line x1="48" y1="88.000" x2="358" y2="88.000" stroke="var(--line)"/>
+<text x="39" y="93.000" text-anchor="end">10</text>
+<line x1="48" y1="20.000" x2="358" y2="20.000" stroke="var(--line)"/>
+<text x="39" y="25.000" text-anchor="end">14</text>
+<text x="59.481" y="246" text-anchor="middle">1</text>
+<text x="116.889" y="246" text-anchor="middle">2</text>
+<text x="174.296" y="246" text-anchor="middle">3</text>
+<text x="231.704" y="246" text-anchor="middle">4</text>
+<text x="289.111" y="246" text-anchor="middle">5</text>
+<text x="346.519" y="246" text-anchor="middle">6</text>
+<path d="M48 20 V224 H358" fill="none" stroke="var(--muted)"/>
+<text x="48" y="14">Tempo (s)</text>
+<text x="203" y="275" text-anchor="middle">Quantidade de registros (mil)</text>
+<line x1="88.185" y1="186.600" x2="88.185" y2="121.433" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+<line x1="203.000" y1="116.900" x2="203.000" y2="121.433" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+<line x1="317.815" y1="47.200" x2="317.815" y2="121.433" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+<path d="M59.481 121.433 L60.438 121.433 L61.395 121.433 L62.352 121.433 L63.309 121.433 L64.265 121.433 L65.222 121.433 L66.179 121.433 L67.136 121.433 L68.093 121.433 L69.049 121.433 L70.006 121.433 L70.963 121.433 L71.920 121.433 L72.877 121.433 L73.833 121.433 L74.790 121.433 L75.747 121.433 L76.704 121.433 L77.660 121.433 L78.617 121.433 L79.574 121.433 L80.531 121.433 L81.488 121.433 L82.444 121.433 L83.401 121.433 L84.358 121.433 L85.315 121.433 L86.272 121.433 L87.228 121.433 L88.185 121.433 L89.142 121.433 L90.099 121.433 L91.056 121.433 L92.012 121.433 L92.969 121.433 L93.926 121.433 L94.883 121.433 L95.840 121.433 L96.796 121.433 L97.753 121.433 L98.710 121.433 L99.667 121.433 L100.623 121.433 L101.580 121.433 L102.537 121.433 L103.494 121.433 L104.451 121.433 L105.407 121.433 L106.364 121.433 L107.321 121.433 L108.278 121.433 L109.235 121.433 L110.191 121.433 L111.148 121.433 L112.105 121.433 L113.062 121.433 L114.019 121.433 L114.975 121.433 L115.932 121.433 L116.889 121.433 L117.846 121.433 L118.802 121.433 L119.759 121.433 L120.716 121.433 L121.673 121.433 L122.630 121.433 L123.586 121.433 L124.543 121.433 L125.500 121.433 L126.457 121.433 L127.414 121.433 L128.370 121.433 L129.327 121.433 L130.284 121.433 L131.241 121.433 L132.198 121.433 L133.154 121.433 L134.111 121.433 L135.068 121.433 L136.025 121.433 L136.981 121.433 L137.938 121.433 L138.895 121.433 L139.852 121.433 L140.809 121.433 L141.765 121.433 L142.722 121.433 L143.679 121.433 L144.636 121.433 L145.593 121.433 L146.549 121.433 L147.506 121.433 L148.463 121.433 L149.420 121.433 L150.377 121.433 L151.333 121.433 L152.290 121.433 L153.247 121.433 L154.204 121.433 L155.160 121.433 L156.117 121.433 L157.074 121.433 L158.031 121.433 L158.988 121.433 L159.944 121.433 L160.901 121.433 L161.858 121.433 L162.815 121.433 L163.772 121.433 L164.728 121.433 L165.685 121.433 L166.642 121.433 L167.599 121.433 L168.556 121.433 L169.512 121.433 L170.469 121.433 L171.426 121.433 L172.383 121.433 L173.340 121.433 L174.296 121.433 L175.253 121.433 L176.210 121.433 L177.167 121.433 L178.123 121.433 L179.080 121.433 L180.037 121.433 L180.994 121.433 L181.951 121.433 L182.907 121.433 L183.864 121.433 L184.821 121.433 L185.778 121.433 L186.735 121.433 L187.691 121.433 L188.648 121.433 L189.605 121.433 L190.562 121.433 L191.519 121.433 L192.475 121.433 L193.432 121.433 L194.389 121.433 L195.346 121.433 L196.302 121.433 L197.259 121.433 L198.216 121.433 L199.173 121.433 L200.130 121.433 L201.086 121.433 L202.043 121.433 L203.000 121.433 L203.957 121.433 L204.914 121.433 L205.870 121.433 L206.827 121.433 L207.784 121.433 L208.741 121.433 L209.698 121.433 L210.654 121.433 L211.611 121.433 L212.568 121.433 L213.525 121.433 L214.481 121.433 L215.438 121.433 L216.395 121.433 L217.352 121.433 L218.309 121.433 L219.265 121.433 L220.222 121.433 L221.179 121.433 L222.136 121.433 L223.093 121.433 L224.049 121.433 L225.006 121.433 L225.963 121.433 L226.920 121.433 L227.877 121.433 L228.833 121.433 L229.790 121.433 L230.747 121.433 L231.704 121.433 L232.660 121.433 L233.617 121.433 L234.574 121.433 L235.531 121.433 L236.488 121.433 L237.444 121.433 L238.401 121.433 L239.358 121.433 L240.315 121.433 L241.272 121.433 L242.228 121.433 L243.185 121.433 L244.142 121.433 L245.099 121.433 L246.056 121.433 L247.012 121.433 L247.969 121.433 L248.926 121.433 L249.883 121.433 L250.840 121.433 L251.796 121.433 L252.753 121.433 L253.710 121.433 L254.667 121.433 L255.623 121.433 L256.580 121.433 L257.537 121.433 L258.494 121.433 L259.451 121.433 L260.407 121.433 L261.364 121.433 L262.321 121.433 L263.278 121.433 L264.235 121.433 L265.191 121.433 L266.148 121.433 L267.105 121.433 L268.062 121.433 L269.019 121.433 L269.975 121.433 L270.932 121.433 L271.889 121.433 L272.846 121.433 L273.802 121.433 L274.759 121.433 L275.716 121.433 L276.673 121.433 L277.630 121.433 L278.586 121.433 L279.543 121.433 L280.500 121.433 L281.457 121.433 L282.414 121.433 L283.370 121.433 L284.327 121.433 L285.284 121.433 L286.241 121.433 L287.198 121.433 L288.154 121.433 L289.111 121.433 L290.068 121.433 L291.025 121.433 L291.981 121.433 L292.938 121.433 L293.895 121.433 L294.852 121.433 L295.809 121.433 L296.765 121.433 L297.722 121.433 L298.679 121.433 L299.636 121.433 L300.593 121.433 L301.549 121.433 L302.506 121.433 L303.463 121.433 L304.420 121.433 L305.377 121.433 L306.333 121.433 L307.290 121.433 L308.247 121.433 L309.204 121.433 L310.160 121.433 L311.117 121.433 L312.074 121.433 L313.031 121.433 L313.988 121.433 L314.944 121.433 L315.901 121.433 L316.858 121.433 L317.815 121.433 L318.772 121.433 L319.728 121.433 L320.685 121.433 L321.642 121.433 L322.599 121.433 L323.556 121.433 L324.512 121.433 L325.469 121.433 L326.426 121.433 L327.383 121.433 L328.340 121.433 L329.296 121.433 L330.253 121.433 L331.210 121.433 L332.167 121.433 L333.123 121.433 L334.080 121.433 L335.037 121.433 L335.994 121.433 L336.951 121.433 L337.907 121.433 L338.864 121.433 L339.821 121.433 L340.778 121.433 L341.735 121.433 L342.691 121.433 L343.648 121.433 L344.605 121.433 L345.562 121.433 L346.519 121.433" fill="none" stroke="var(--teal)" stroke-width="2.5"/>
+<circle cx="59.481" cy="207.000" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="116.889" cy="169.600" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="174.296" cy="140.700" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="231.704" cy="103.300" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="289.111" cy="74.400" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="346.519" cy="33.600" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<path d="M88.185 181.600 L93.185 186.600 L88.185 191.600 L83.185 186.600 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
+<path d="M203.000 111.900 L208.000 116.900 L203.000 121.900 L198.000 116.900 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
+<path d="M317.815 42.200 L322.815 47.200 L317.815 52.200 L312.815 47.200 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
+</svg>
+      <p class="ml-fit-metrics"><strong>MSE treino:</strong> 11,6889 s²<br><strong>MSE reservado:</strong> 11,2778 s²</p>
+      <p>Prevê o mesmo tempo para todos os lotes e não acompanha o crescimento observado.</p>
+    </article>
+    <article class="ml-fit-panel">
+      <h4>Ajuste adequado ao exemplo</h4>
+      <p class="ml-fit-model">Modelo linear</p>
+      <svg viewBox="0 0 380 285" role="img" aria-labelledby="ml-fit-1-title ml-fit-1-desc">
+<title id="ml-fit-1-title">Ajuste adequado ao exemplo: Modelo linear</title>
+<desc id="ml-fit-1-desc">Mesmos seis pontos de treinamento e três observações reservadas. Acompanha a tendência e mantém erros pequenos nas observações reservadas. MSE no treinamento: 0,0222 segundos ao quadrado; nos dados reservados: 0,0778 segundos ao quadrado.</desc>
+<line x1="48" y1="224.000" x2="358" y2="224.000" stroke="var(--line)"/>
+<text x="39" y="229.000" text-anchor="end">2</text>
+<line x1="48" y1="156.000" x2="358" y2="156.000" stroke="var(--line)"/>
+<text x="39" y="161.000" text-anchor="end">6</text>
+<line x1="48" y1="88.000" x2="358" y2="88.000" stroke="var(--line)"/>
+<text x="39" y="93.000" text-anchor="end">10</text>
+<line x1="48" y1="20.000" x2="358" y2="20.000" stroke="var(--line)"/>
+<text x="39" y="25.000" text-anchor="end">14</text>
+<text x="59.481" y="246" text-anchor="middle">1</text>
+<text x="116.889" y="246" text-anchor="middle">2</text>
+<text x="174.296" y="246" text-anchor="middle">3</text>
+<text x="231.704" y="246" text-anchor="middle">4</text>
+<text x="289.111" y="246" text-anchor="middle">5</text>
+<text x="346.519" y="246" text-anchor="middle">6</text>
+<path d="M48 20 V224 H358" fill="none" stroke="var(--muted)"/>
+<text x="48" y="14">Tempo (s)</text>
+<text x="203" y="275" text-anchor="middle">Quantidade de registros (mil)</text>
+<line x1="88.185" y1="186.600" x2="88.185" y2="189.433" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+<line x1="203.000" y1="116.900" x2="203.000" y2="121.433" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+<line x1="317.815" y1="47.200" x2="317.815" y2="53.433" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+<path d="M59.481 206.433 L60.438 205.867 L61.395 205.300 L62.352 204.733 L63.309 204.167 L64.265 203.600 L65.222 203.033 L66.179 202.467 L67.136 201.900 L68.093 201.333 L69.049 200.767 L70.006 200.200 L70.963 199.633 L71.920 199.067 L72.877 198.500 L73.833 197.933 L74.790 197.367 L75.747 196.800 L76.704 196.233 L77.660 195.667 L78.617 195.100 L79.574 194.533 L80.531 193.967 L81.488 193.400 L82.444 192.833 L83.401 192.267 L84.358 191.700 L85.315 191.133 L86.272 190.567 L87.228 190.000 L88.185 189.433 L89.142 188.867 L90.099 188.300 L91.056 187.733 L92.012 187.167 L92.969 186.600 L93.926 186.033 L94.883 185.467 L95.840 184.900 L96.796 184.333 L97.753 183.767 L98.710 183.200 L99.667 182.633 L100.623 182.067 L101.580 181.500 L102.537 180.933 L103.494 180.367 L104.451 179.800 L105.407 179.233 L106.364 178.667 L107.321 178.100 L108.278 177.533 L109.235 176.967 L110.191 176.400 L111.148 175.833 L112.105 175.267 L113.062 174.700 L114.019 174.133 L114.975 173.567 L115.932 173.000 L116.889 172.433 L117.846 171.867 L118.802 171.300 L119.759 170.733 L120.716 170.167 L121.673 169.600 L122.630 169.033 L123.586 168.467 L124.543 167.900 L125.500 167.333 L126.457 166.767 L127.414 166.200 L128.370 165.633 L129.327 165.067 L130.284 164.500 L131.241 163.933 L132.198 163.367 L133.154 162.800 L134.111 162.233 L135.068 161.667 L136.025 161.100 L136.981 160.533 L137.938 159.967 L138.895 159.400 L139.852 158.833 L140.809 158.267 L141.765 157.700 L142.722 157.133 L143.679 156.567 L144.636 156.000 L145.593 155.433 L146.549 154.867 L147.506 154.300 L148.463 153.733 L149.420 153.167 L150.377 152.600 L151.333 152.033 L152.290 151.467 L153.247 150.900 L154.204 150.333 L155.160 149.767 L156.117 149.200 L157.074 148.633 L158.031 148.067 L158.988 147.500 L159.944 146.933 L160.901 146.367 L161.858 145.800 L162.815 145.233 L163.772 144.667 L164.728 144.100 L165.685 143.533 L166.642 142.967 L167.599 142.400 L168.556 141.833 L169.512 141.267 L170.469 140.700 L171.426 140.133 L172.383 139.567 L173.340 139.000 L174.296 138.433 L175.253 137.867 L176.210 137.300 L177.167 136.733 L178.123 136.167 L179.080 135.600 L180.037 135.033 L180.994 134.467 L181.951 133.900 L182.907 133.333 L183.864 132.767 L184.821 132.200 L185.778 131.633 L186.735 131.067 L187.691 130.500 L188.648 129.933 L189.605 129.367 L190.562 128.800 L191.519 128.233 L192.475 127.667 L193.432 127.100 L194.389 126.533 L195.346 125.967 L196.302 125.400 L197.259 124.833 L198.216 124.267 L199.173 123.700 L200.130 123.133 L201.086 122.567 L202.043 122.000 L203.000 121.433 L203.957 120.867 L204.914 120.300 L205.870 119.733 L206.827 119.167 L207.784 118.600 L208.741 118.033 L209.698 117.467 L210.654 116.900 L211.611 116.333 L212.568 115.767 L213.525 115.200 L214.481 114.633 L215.438 114.067 L216.395 113.500 L217.352 112.933 L218.309 112.367 L219.265 111.800 L220.222 111.233 L221.179 110.667 L222.136 110.100 L223.093 109.533 L224.049 108.967 L225.006 108.400 L225.963 107.833 L226.920 107.267 L227.877 106.700 L228.833 106.133 L229.790 105.567 L230.747 105.000 L231.704 104.433 L232.660 103.867 L233.617 103.300 L234.574 102.733 L235.531 102.167 L236.488 101.600 L237.444 101.033 L238.401 100.467 L239.358 99.900 L240.315 99.333 L241.272 98.767 L242.228 98.200 L243.185 97.633 L244.142 97.067 L245.099 96.500 L246.056 95.933 L247.012 95.367 L247.969 94.800 L248.926 94.233 L249.883 93.667 L250.840 93.100 L251.796 92.533 L252.753 91.967 L253.710 91.400 L254.667 90.833 L255.623 90.267 L256.580 89.700 L257.537 89.133 L258.494 88.567 L259.451 88.000 L260.407 87.433 L261.364 86.867 L262.321 86.300 L263.278 85.733 L264.235 85.167 L265.191 84.600 L266.148 84.033 L267.105 83.467 L268.062 82.900 L269.019 82.333 L269.975 81.767 L270.932 81.200 L271.889 80.633 L272.846 80.067 L273.802 79.500 L274.759 78.933 L275.716 78.367 L276.673 77.800 L277.630 77.233 L278.586 76.667 L279.543 76.100 L280.500 75.533 L281.457 74.967 L282.414 74.400 L283.370 73.833 L284.327 73.267 L285.284 72.700 L286.241 72.133 L287.198 71.567 L288.154 71.000 L289.111 70.433 L290.068 69.867 L291.025 69.300 L291.981 68.733 L292.938 68.167 L293.895 67.600 L294.852 67.033 L295.809 66.467 L296.765 65.900 L297.722 65.333 L298.679 64.767 L299.636 64.200 L300.593 63.633 L301.549 63.067 L302.506 62.500 L303.463 61.933 L304.420 61.367 L305.377 60.800 L306.333 60.233 L307.290 59.667 L308.247 59.100 L309.204 58.533 L310.160 57.967 L311.117 57.400 L312.074 56.833 L313.031 56.267 L313.988 55.700 L314.944 55.133 L315.901 54.567 L316.858 54.000 L317.815 53.433 L318.772 52.867 L319.728 52.300 L320.685 51.733 L321.642 51.167 L322.599 50.600 L323.556 50.033 L324.512 49.467 L325.469 48.900 L326.426 48.333 L327.383 47.767 L328.340 47.200 L329.296 46.633 L330.253 46.067 L331.210 45.500 L332.167 44.933 L333.123 44.367 L334.080 43.800 L335.037 43.233 L335.994 42.667 L336.951 42.100 L337.907 41.533 L338.864 40.967 L339.821 40.400 L340.778 39.833 L341.735 39.267 L342.691 38.700 L343.648 38.133 L344.605 37.567 L345.562 37.000 L346.519 36.433" fill="none" stroke="var(--teal)" stroke-width="2.5"/>
+<circle cx="59.481" cy="207.000" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="116.889" cy="169.600" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="174.296" cy="140.700" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="231.704" cy="103.300" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="289.111" cy="74.400" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="346.519" cy="33.600" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<path d="M88.185 181.600 L93.185 186.600 L88.185 191.600 L83.185 186.600 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
+<path d="M203.000 111.900 L208.000 116.900 L203.000 121.900 L198.000 116.900 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
+<path d="M317.815 42.200 L322.815 47.200 L317.815 52.200 L312.815 47.200 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
+</svg>
+      <p class="ml-fit-metrics"><strong>MSE treino:</strong> 0,0222 s²<br><strong>MSE reservado:</strong> 0,0778 s²</p>
+      <p>Acompanha a tendência e mantém erros pequenos nas observações reservadas.</p>
+    </article>
+    <article class="ml-fit-panel">
+      <h4>Sobreajuste no exemplo</h4>
+      <p class="ml-fit-model">Polinômio de grau 5</p>
+      <svg viewBox="0 0 380 285" role="img" aria-labelledby="ml-fit-5-title ml-fit-5-desc">
+<title id="ml-fit-5-title">Sobreajuste no exemplo: Polinômio de grau 5</title>
+<desc id="ml-fit-5-desc">Mesmos seis pontos de treinamento e três observações reservadas. Reproduz as seis medições de treinamento, mas apresenta erro maior nas observações reservadas. MSE no treinamento: 0,0000 segundos ao quadrado; nos dados reservados: 0,2396 segundos ao quadrado.</desc>
+<line x1="48" y1="224.000" x2="358" y2="224.000" stroke="var(--line)"/>
+<text x="39" y="229.000" text-anchor="end">2</text>
+<line x1="48" y1="156.000" x2="358" y2="156.000" stroke="var(--line)"/>
+<text x="39" y="161.000" text-anchor="end">6</text>
+<line x1="48" y1="88.000" x2="358" y2="88.000" stroke="var(--line)"/>
+<text x="39" y="93.000" text-anchor="end">10</text>
+<line x1="48" y1="20.000" x2="358" y2="20.000" stroke="var(--line)"/>
+<text x="39" y="25.000" text-anchor="end">14</text>
+<text x="59.481" y="246" text-anchor="middle">1</text>
+<text x="116.889" y="246" text-anchor="middle">2</text>
+<text x="174.296" y="246" text-anchor="middle">3</text>
+<text x="231.704" y="246" text-anchor="middle">4</text>
+<text x="289.111" y="246" text-anchor="middle">5</text>
+<text x="346.519" y="246" text-anchor="middle">6</text>
+<path d="M48 20 V224 H358" fill="none" stroke="var(--muted)"/>
+<text x="48" y="14">Tempo (s)</text>
+<text x="203" y="275" text-anchor="middle">Quantidade de registros (mil)</text>
+<line x1="88.185" y1="186.600" x2="88.185" y2="182.895" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+<line x1="203.000" y1="116.900" x2="203.000" y2="121.960" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+<line x1="317.815" y1="47.200" x2="317.815" y2="60.176" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+<path d="M59.481 207.000 L60.438 205.848 L61.395 204.727 L62.352 203.636 L63.309 202.576 L64.265 201.544 L65.222 200.540 L66.179 199.563 L67.136 198.612 L68.093 197.688 L69.049 196.787 L70.006 195.911 L70.963 195.058 L71.920 194.228 L72.877 193.419 L73.833 192.632 L74.790 191.865 L75.747 191.117 L76.704 190.388 L77.660 189.678 L78.617 188.986 L79.574 188.310 L80.531 187.651 L81.488 187.007 L82.444 186.379 L83.401 185.765 L84.358 185.165 L85.315 184.579 L86.272 184.005 L87.228 183.444 L88.185 182.895 L89.142 182.356 L90.099 181.828 L91.056 181.311 L92.012 180.803 L92.969 180.304 L93.926 179.814 L94.883 179.332 L95.840 178.859 L96.796 178.392 L97.753 177.932 L98.710 177.479 L99.667 177.032 L100.623 176.590 L101.580 176.154 L102.537 175.722 L103.494 175.295 L104.451 174.872 L105.407 174.453 L106.364 174.038 L107.321 173.625 L108.278 173.215 L109.235 172.808 L110.191 172.403 L111.148 171.999 L112.105 171.597 L113.062 171.196 L114.019 170.796 L114.975 170.397 L115.932 169.999 L116.889 169.600 L117.846 169.201 L118.802 168.802 L119.759 168.403 L120.716 168.003 L121.673 167.601 L122.630 167.199 L123.586 166.795 L124.543 166.390 L125.500 165.983 L126.457 165.574 L127.414 165.163 L128.370 164.749 L129.327 164.334 L130.284 163.915 L131.241 163.494 L132.198 163.071 L133.154 162.644 L134.111 162.214 L135.068 161.781 L136.025 161.345 L136.981 160.905 L137.938 160.462 L138.895 160.016 L139.852 159.565 L140.809 159.111 L141.765 158.654 L142.722 158.192 L143.679 157.726 L144.636 157.257 L145.593 156.784 L146.549 156.306 L147.506 155.825 L148.463 155.339 L149.420 154.849 L150.377 154.355 L151.333 153.857 L152.290 153.355 L153.247 152.849 L154.204 152.338 L155.160 151.823 L156.117 151.305 L157.074 150.782 L158.031 150.254 L158.988 149.723 L159.944 149.188 L160.901 148.649 L161.858 148.105 L162.815 147.558 L163.772 147.007 L164.728 146.452 L165.685 145.893 L166.642 145.330 L167.599 144.764 L168.556 144.194 L169.512 143.620 L170.469 143.043 L171.426 142.462 L172.383 141.878 L173.340 141.291 L174.296 140.700 L175.253 140.106 L176.210 139.509 L177.167 138.910 L178.123 138.307 L179.080 137.702 L180.037 137.093 L180.994 136.483 L181.951 135.869 L182.907 135.254 L183.864 134.636 L184.821 134.016 L185.778 133.393 L186.735 132.769 L187.691 132.143 L188.648 131.515 L189.605 130.885 L190.562 130.254 L191.519 129.621 L192.475 128.987 L193.432 128.352 L194.389 127.716 L195.346 127.079 L196.302 126.441 L197.259 125.802 L198.216 125.162 L199.173 124.523 L200.130 123.882 L201.086 123.242 L202.043 122.601 L203.000 121.960 L203.957 121.320 L204.914 120.679 L205.870 120.039 L206.827 119.399 L207.784 118.760 L208.741 118.122 L209.698 117.484 L210.654 116.848 L211.611 116.212 L212.568 115.578 L213.525 114.945 L214.481 114.313 L215.438 113.683 L216.395 113.054 L217.352 112.427 L218.309 111.802 L219.265 111.179 L220.222 110.558 L221.179 109.939 L222.136 109.322 L223.093 108.708 L224.049 108.096 L225.006 107.487 L225.963 106.880 L226.920 106.276 L227.877 105.675 L228.833 105.077 L229.790 104.481 L230.747 103.889 L231.704 103.300 L232.660 102.714 L233.617 102.132 L234.574 101.553 L235.531 100.977 L236.488 100.405 L237.444 99.836 L238.401 99.271 L239.358 98.710 L240.315 98.152 L241.272 97.598 L242.228 97.048 L243.185 96.502 L244.142 95.960 L245.099 95.421 L246.056 94.887 L247.012 94.356 L247.969 93.830 L248.926 93.307 L249.883 92.789 L250.840 92.274 L251.796 91.764 L252.753 91.258 L253.710 90.755 L254.667 90.257 L255.623 89.763 L256.580 89.272 L257.537 88.786 L258.494 88.303 L259.451 87.824 L260.407 87.349 L261.364 86.878 L262.321 86.411 L263.278 85.947 L264.235 85.486 L265.191 85.030 L266.148 84.576 L267.105 84.126 L268.062 83.679 L269.019 83.236 L269.975 82.795 L270.932 82.357 L271.889 81.923 L272.846 81.490 L273.802 81.061 L274.759 80.633 L275.716 80.209 L276.673 79.786 L277.630 79.365 L278.586 78.946 L279.543 78.528 L280.500 78.112 L281.457 77.698 L282.414 77.284 L283.370 76.871 L284.327 76.459 L285.284 76.047 L286.241 75.636 L287.198 75.224 L288.154 74.812 L289.111 74.400 L290.068 73.987 L291.025 73.573 L291.981 73.157 L292.938 72.740 L293.895 72.321 L294.852 71.900 L295.809 71.476 L296.765 71.049 L297.722 70.619 L298.679 70.186 L299.636 69.749 L300.593 69.307 L301.549 68.861 L302.506 68.410 L303.463 67.954 L304.420 67.492 L305.377 67.024 L306.333 66.549 L307.290 66.067 L308.247 65.578 L309.204 65.081 L310.160 64.576 L311.117 64.062 L312.074 63.538 L313.031 63.005 L313.988 62.462 L314.944 61.908 L315.901 61.342 L316.858 60.765 L317.815 60.176 L318.772 59.573 L319.728 58.958 L320.685 58.328 L321.642 57.683 L322.599 57.024 L323.556 56.348 L324.512 55.656 L325.469 54.947 L326.426 54.220 L327.383 53.475 L328.340 52.711 L329.296 51.927 L330.253 51.123 L331.210 50.298 L332.167 49.451 L333.123 48.581 L334.080 47.688 L335.037 46.771 L335.994 45.829 L336.951 44.862 L337.907 43.868 L338.864 42.847 L339.821 41.798 L340.778 40.720 L341.735 39.613 L342.691 38.475 L343.648 37.306 L344.605 36.104 L345.562 34.869 L346.519 33.600" fill="none" stroke="var(--teal)" stroke-width="2.5"/>
+<circle cx="59.481" cy="207.000" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="116.889" cy="169.600" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="174.296" cy="140.700" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="231.704" cy="103.300" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="289.111" cy="74.400" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<circle cx="346.519" cy="33.600" r="4.5" fill="var(--blue)" stroke="var(--paper)" stroke-width="1.2"/>
+<path d="M88.185 181.600 L93.185 186.600 L88.185 191.600 L83.185 186.600 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
+<path d="M203.000 111.900 L208.000 116.900 L203.000 121.900 L198.000 116.900 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
+<path d="M317.815 42.200 L322.815 47.200 L317.815 52.200 L312.815 47.200 Z" fill="var(--amber)" stroke="var(--paper)" stroke-width="1.2"/>
+</svg>
+      <p class="ml-fit-metrics"><strong>MSE treino:</strong> 0,0000 s²<br><strong>MSE reservado:</strong> 0,2396 s²</p>
+      <p>Reproduz as seis medições de treinamento, mas apresenta erro maior nas observações reservadas.</p>
+    </article>
+  </div>
+  <p>O <strong>subajuste</strong> ocorre quando o modelo não captura regularidades relevantes dos dados. O <strong>sobreajuste</strong> ocorre quando ele se ajusta excessivamente às particularidades do treinamento, prejudicando seu desempenho em novos dados.</p>
+  <p>Neste exemplo, o polinômio de grau 5 zera o erro de treinamento, mas apresenta MSE maior nos dados reservados do que a reta. Portanto, <strong>o menor erro de treinamento não garante as melhores previsões em novos dados</strong>. Essa comparação ilustra o problema; não significa que modelos mais flexíveis sejam sempre piores.</p>
+
   <h3>Para que servem treino, validação e teste?</h3>
+  <p>Ao desenvolver um modelo, separamos os dados para apoiar três etapas diferentes:</p>
   <div class="ml-steps">
-    <article class="ml-step"><span class="ml-number">1</span><strong>Treinamento</strong><p>Utilizado para ajustar a função ou construir o modelo a partir dos exemplos disponíveis.</p></article>
-    <article class="ml-step"><span class="ml-number">2</span><strong>Validação</strong><p>Utilizado para comparar configurações, famílias de modelos e hiperparâmetros, sem recorrer ao teste final.</p></article>
-    <article class="ml-step"><span class="ml-number">3</span><strong>Teste</strong><p>Reservado para uma avaliação final em dados não utilizados no ajuste nem na seleção do modelo.</p></article>
+    <article class="ml-step"><span class="ml-number">1</span><strong>Treinamento</strong><p>Usado para ajustar o modelo. No exemplo da reta, os dados permitem calcular os parâmetros <code>a</code> e <code>b</code>.</p></article>
+    <article class="ml-step"><span class="ml-number">2</span><strong>Validação</strong><p>Usada para orientar escolhas, como comparar uma reta com um polinômio ou escolher o grau desse polinômio.</p></article>
+    <article class="ml-step"><span class="ml-number">3</span><strong>Teste</strong><p>Usado para avaliar o modelo após as escolhas. Seus dados ficam fora do ajuste dos parâmetros e da seleção do modelo.</p></article>
   </div>
-  <p>Em bases pequenas, a validação cruzada pode substituir uma única divisão de validação, mas o princípio permanece: o conjunto de teste final deve ser preservado durante as decisões de modelagem. A comparação desta seção usa dados de treinamento e observações reservadas; ela não inclui uma etapa de seleção por validação.</p>
-  <div class="ml-note"><p><strong>Questão:</strong> se uma função polinomial de alto grau reproduz todos os dados de treinamento e uma reta apresenta pequenos erros nesses mesmos registros, podemos concluir, apenas por isso, que a função polinomial produzirá melhores previsões? Justifique.</p></div>
+  <div class="ml-note"><p><strong>No exemplo desta seção:</strong> temos dados de treinamento e observações reservadas. Se utilizarmos essas observações para escolher entre os modelos, elas desempenham o papel de <strong>validação</strong>. Para uma avaliação final, precisaríamos de outro conjunto de <strong>teste</strong>, preservado durante essas decisões.</p></div>
 </div></section>
 
 <section class="section section-soft" id="projetos"><div class="container">
