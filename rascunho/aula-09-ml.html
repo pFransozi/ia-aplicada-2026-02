@@ -425,6 +425,7 @@
     .ml-page .ml-dam-figure figcaption{font-size:.86rem;line-height:1.6;color:var(--muted);margin-top:.9rem}
     .ml-page .ml-dam-definitions dt{font-weight:700;color:var(--ink);margin-top:1rem}
     .ml-page .ml-dam-definitions dd{margin:.35rem 0 0;line-height:1.65;color:var(--muted)}
+    .ml-page .ml-residual-legend{display:inline-block;vertical-align:middle;width:1.3rem;border-top:2px dashed var(--amber);margin-right:.35rem}
   </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page draft-lesson ml-page">
@@ -857,43 +858,75 @@
 </div></section>
 
 <section class="section section-soft" id="otimizacao"><div class="container">
-  <div class="section-heading"><p class="eyebrow">Parte IV · Aprendizagem e otimização</p><h2>Como encontrar uma função adequada dentro da família escolhida?</h2><p>Precisamos definir como avaliar os erros da função e utilizar um procedimento capaz de encontrar parâmetros que produzam resultados melhores segundo esse critério.</p></div>
-  <p>Para investigar o ajuste e a generalização em <strong>outro conjunto de dados</strong>, considere agora a estimativa do tempo médio de resposta de um serviço em função de uma medida simplificada de carga. Os valores são <strong>sintéticos</strong>, criados apenas para estudar a relação entre dados e modelos. Temos registros utilizados para ajustar o modelo e observações reservadas para avaliação.</p>
+  <div class="section-heading"><p class="eyebrow">Parte IV · Aprendizagem e otimização</p><h2>Como encontrar uma função adequada dentro da família escolhida?</h2><p>Vamos utilizar as seis medições dos lotes da Parte III para medir o erro das previsões e ajustar os parâmetros da função <code>f(x) = ax + b</code>.</p></div>
+  <h3>O erro de uma previsão</h3>
+  <p>Para um lote de quatro mil registros, o tempo observado foi de <strong>9,1 s</strong>. A função candidata <code>f(x) = 2x + 1</code> prevê <strong>9 s</strong>. Definindo o erro como a diferença entre o valor observado e a previsão:</p>
+  <div class="ml-formula">erro = y − ŷ = 9,1 − 9 = 0,1 s<br>erro² = (0,1)² = 0,01 s²</div>
+  <p>Um erro positivo indica que o tempo foi subestimado; um erro negativo indica que foi superestimado. Ao elevar a diferença ao quadrado, evitamos que erros de sinais opostos se anulem e damos maior peso aos desvios maiores.</p>
+
+  <h3>Do erro individual ao erro do conjunto</h3>
+  <p>Aplicando a mesma função candidata às seis observações, obtemos:</p>
   <div class="ml-table-wrap"><table class="ml-table">
-    <thead><tr><th>Carga (x)</th><th>Tempo observado (y, ms)</th><th>Destinação</th></tr></thead>
+    <thead><tr><th scope="col">Registros (mil)</th><th scope="col">Observado y (s)</th><th scope="col">Previsão ŷ (s)</th><th scope="col">Erro y − ŷ (s)</th><th scope="col">Erro² (s²)</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td>3</td><td>Treinamento</td></tr><tr><td>2</td><td>4</td><td>Treinamento</td></tr>
-      <tr><td>3</td><td>6</td><td>Treinamento</td></tr><tr><td>4</td><td>8</td><td>Avaliação reservada</td></tr>
-      <tr><td>5</td><td>11</td><td>Treinamento</td></tr><tr><td>6</td><td>14</td><td>Treinamento</td></tr>
-      <tr><td>7</td><td>18</td><td>Avaliação reservada</td></tr><tr><td>8</td><td>23</td><td>Treinamento</td></tr>
-    </tbody></table></div>
-  <h3>Erro de previsão</h3>
-  <p>Para cada observação, podemos calcular a diferença entre o valor observado e a previsão. Uma forma simples de avaliar o conjunto é utilizar a média dos quadrados dos erros, conhecida como <strong>erro quadrático médio (MSE)</strong>.</p>
-  <div class="ml-formula">MSE = (1/n) · Σ (yᵢ − ŷᵢ)²</div>
-  <p>Na família linear, procurar os melhores parâmetros para esse critério equivale a encontrar valores de <code>a</code> e <code>b</code> que minimizem o MSE nos dados de treinamento. Isso é um <strong>problema de otimização</strong>. Uma solução pode ser obtida analiticamente por mínimos quadrados ou estimada por procedimentos iterativos, dependendo do modelo e das condições.</p>
+      <tr><td>1</td><td>3,0</td><td>3,0</td><td>0,0</td><td>0,00</td></tr>
+      <tr><td>2</td><td>5,2</td><td>5,0</td><td>0,2</td><td>0,04</td></tr>
+      <tr><td>3</td><td>6,9</td><td>7,0</td><td>−0,1</td><td>0,01</td></tr>
+      <tr><td>4</td><td>9,1</td><td>9,0</td><td>0,1</td><td>0,01</td></tr>
+      <tr><td>5</td><td>10,8</td><td>11,0</td><td>−0,2</td><td>0,04</td></tr>
+      <tr><td>6</td><td>13,2</td><td>13,0</td><td>0,2</td><td>0,04</td></tr>
+    </tbody>
+  </table></div>
+  <p>O <strong>erro quadrático médio (MSE)</strong> é a média da última coluna. Somamos os erros ao quadrado e dividimos pela quantidade de observações:</p>
+  <div class="ml-formula">MSE = (1/n) · Σ (yᵢ − ŷᵢ)²<br>MSE = (0,00 + 0,04 + 0,01 + 0,01 + 0,04 + 0,04) / 6 ≈ 0,0233 s²</div>
+  <p>Neste exemplo, <code>n = 6</code> e o símbolo <code>Σ</code> indica a soma sobre as observações. <strong>Quanto menor o MSE, melhor o ajuste aos dados considerados, segundo esse critério.</strong> Como elevamos os erros ao quadrado, a unidade é s².</p>
+
+  <h3>Ajustar os parâmetros é um problema de otimização</h3>
+  <p>Ao alterar <code>a</code> ou <code>b</code>, modificamos as previsões e o MSE. O treinamento procura valores desses parâmetros que <strong>minimizem o erro nos dados de treinamento</strong>. Para esta regressão linear, o método dos mínimos quadrados permite calcular diretamente a reta com menor soma dos erros quadráticos — e, portanto, menor MSE.</p>
+
   <div class="ml-lab" aria-labelledby="lab-title">
     <h3 id="lab-title">Experimento: ajuste de uma reta aos dados</h3>
-    <p>Modifique os parâmetros da função <code>f(x) = ax + b</code> e observe como o erro de treinamento muda. Depois, utilize o ajuste por mínimos quadrados e compare os resultados. Os dados reservados não são utilizados para calcular a reta.</p>
+    <ol class="ml-check">
+      <li>Mantenha <code>b = 1</code> e varie <code>a</code>. Observe a inclinação da reta e o MSE.</li>
+      <li>Varie <code>b</code> e tente reduzir o erro. Observe como a reta se desloca.</li>
+      <li>Clique em <strong>Ajustar por mínimos quadrados</strong> e compare os parâmetros e o MSE com sua tentativa.</li>
+    </ol>
     <div class="ml-lab-grid">
       <div>
         <div class="ml-control"><label for="ml-a">Inclinação <code>a</code> <output id="ml-a-val" for="ml-a">2,0</output></label><input id="ml-a" type="range" min="-1" max="4" step="any" value="2"></div>
         <div class="ml-control"><label for="ml-b">Intercepto <code>b</code> <output id="ml-b-val" for="ml-b">1,0</output></label><input id="ml-b" type="range" min="-6" max="9" step="any" value="1"></div>
-        <div class="ml-results" aria-live="polite"><strong id="ml-equation">f(x) = 2,0x + 1,0</strong><p id="ml-train-error">Erro quadrático médio (treino): —</p><p id="ml-test-error">Avaliação reservada: não realizada.</p></div>
-        <div class="ml-lab-actions"><button id="ml-fit" type="button">Calcular a melhor reta no treino</button><button id="ml-test" type="button">Avaliar dados reservados</button></div>
-        <p class="ml-small">Ao modificar os parâmetros, a avaliação reservada é ocultada novamente. Em um projeto real, o conjunto de teste final não deve orientar o ajuste de parâmetros nem a escolha de modelos.</p>
+        <div class="ml-results" aria-live="polite"><strong id="ml-equation">f(x) = 2,0x + 1,0</strong><p id="ml-train-error">Erro quadrático médio (treino): —</p></div>
+        <div class="ml-lab-actions"><button id="ml-fit" type="button">Ajustar por mínimos quadrados</button><button id="ml-reset" type="button">Voltar a f(x) = 2x + 1</button></div>
+        <p class="ml-small">O ajuste automático usa apenas as seis medições da Parte III. Os cálculos utilizam os parâmetros completos; os valores exibidos são arredondados.</p>
       </div>
       <div>
-        <svg class="ml-plot" id="ml-plot" viewBox="0 0 640 385" role="img" aria-label="Dispersão com dados de treinamento, observações reservadas e uma reta ajustável."></svg>
-        <div class="ml-legend"><span><i class="ml-dot ml-dot-train"></i>Treinamento</span><span><i class="ml-dot ml-dot-test"></i>Dados reservados</span><span><i class="ml-line-legend"></i>Reta candidata</span></div>
-        <p class="ml-small">O gráfico apresenta as observações em uma mesma escala. A reta pode deixar de representar adequadamente a tendência mesmo depois de minimizado o erro da família linear.</p>
+        <svg class="ml-plot" id="ml-plot" viewBox="0 0 640 385" role="img" aria-label="Seis medições dos lotes, uma reta ajustável e segmentos verticais entre cada medição e sua previsão."></svg>
+        <div class="ml-legend"><span><i class="ml-dot ml-dot-train"></i>Medições de treinamento</span><span><i class="ml-line-legend"></i>Reta candidata</span><span><i class="ml-residual-legend"></i>Erros de previsão</span></div>
+        <p class="ml-small">Os segmentos tracejados mostram a diferença vertical entre cada ponto observado e a previsão da reta. Seu comprimento representa a magnitude do erro, em segundos.</p>
       </div>
     </div>
   </div>
-  <div class="ml-note"><p><strong>Conexão com a Aula 08:</strong> o problema também pode ser formulado como busca por parâmetros que minimizem uma função de erro. Algoritmos genéticos podem ser utilizados nessa otimização, embora não sejam necessários para resolver este pequeno problema de regressão linear.</p></div>
+  <p><strong>Conexão com a Aula 08:</strong> algoritmos genéticos também podem buscar parâmetros que minimizem uma função de erro; neste exemplo, podemos obter a solução diretamente por mínimos quadrados.</p>
+  <p>A reta ajustada minimiza o MSE nestas seis observações. Na próxima parte, examinaremos sua utilização em dados que não participaram do ajuste.</p>
 </div></section>
 
 <section class="section" id="generalizacao"><div class="container">
   <div class="section-heading"><p class="eyebrow">Parte V · Avaliação de modelos</p><h2>O melhor ajuste é necessariamente o melhor modelo?</h2><p>Não. A função que produz o menor erro nos dados de treinamento pode apresentar resultados insatisfatórios quando aplicada a observações novas.</p></div>
+  <h3>Avaliar a reta em novas observações</h3>
+  <p>Considere agora três medições <strong>sintéticas adicionais</strong> dos lotes, reservadas para avaliação. Utilizaremos a reta calculada por mínimos quadrados com as seis observações da Parte III. Seus parâmetros ficam fixos nesta comparação, independentemente das alterações feitas nos controles do experimento.</p>
+  <div class="ml-formula" id="ml-eval-equation">Reta ajustada no treinamento: —</div>
+  <div class="ml-table-wrap"><table class="ml-table" aria-label="Avaliação da reta ajustada em três observações reservadas">
+    <thead><tr><th scope="col">Registros (mil)</th><th scope="col">Observado y (s)</th><th scope="col">Previsão ŷ (s)</th><th scope="col">Erro² (s²)</th></tr></thead>
+    <tbody id="ml-eval-rows">
+      <tr><td>1,5</td><td>4,2</td><td>—</td><td>—</td></tr>
+      <tr><td>3,5</td><td>8,3</td><td>—</td><td>—</td></tr>
+      <tr><td>5,5</td><td>12,4</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="ml-lab-actions"><button id="ml-test" type="button">Avaliar a reta nos dados reservados</button></div>
+  <p id="ml-test-error" class="ml-small" aria-live="polite">Avaliação ainda não calculada.</p>
+  <p class="ml-small">Essas três observações não são utilizadas no ajuste. A comparação ilustra a diferença entre ajustar e avaliar; uma amostra tão pequena não é suficiente para validar uma aplicação real.</p>
+
   <h3>Seleção da família e ajuste dos parâmetros</h3>
   <p>Uma função linear pode ser a melhor <em>dentro da família das retas</em> segundo o MSE de treinamento, mas essa família pode ser inadequada para representar uma relação não linear. Aumentar a flexibilidade do modelo amplia as funções candidatas; ao mesmo tempo, pode facilitar o ajuste de variações específicas ou ruídos do treinamento.</p>
   <div class="ml-grid">
@@ -906,7 +939,7 @@
     <article class="ml-step"><span class="ml-number">2</span><strong>Validação</strong><p>Utilizado para comparar configurações, famílias de modelos e hiperparâmetros, sem recorrer ao teste final.</p></article>
     <article class="ml-step"><span class="ml-number">3</span><strong>Teste</strong><p>Reservado para uma avaliação final em dados não utilizados no ajuste nem na seleção do modelo.</p></article>
   </div>
-  <p>Em bases pequenas, a validação cruzada pode substituir uma única divisão de validação, mas o princípio permanece: o conjunto de teste final deve ser preservado durante as decisões de modelagem. O experimento anterior usa uma divisão didática simplificada para mostrar apenas a diferença entre ajustar e avaliar.</p>
+  <p>Em bases pequenas, a validação cruzada pode substituir uma única divisão de validação, mas o princípio permanece: o conjunto de teste final deve ser preservado durante as decisões de modelagem. A comparação desta seção usa dados de treinamento e observações reservadas; ela não inclui uma etapa de seleção por validação.</p>
   <div class="ml-note"><p><strong>Questão:</strong> se uma função polinomial de alto grau reproduz todos os dados de treinamento e uma reta apresenta pequenos erros nesses mesmos registros, podemos concluir, apenas por isso, que a função polinomial produzirá melhores previsões? Justifique.</p></div>
 </div></section>
 
@@ -921,12 +954,12 @@
     <article class="ml-step"><span class="ml-number">6</span><strong>Avaliar, integrar e monitorar</strong><p>Como verificar o desempenho final, incorporar o modelo ao software e acompanhar mudanças de dados e comportamento em uso?</p></article>
   </div>
   <p>O fluxo não é rigidamente linear. Resultados de validação podem exigir voltar à escolha de atributos ou modelos; dificuldades na operação podem exigir nova coleta e treinamento. O desenvolvimento combina decisões de modelagem estatística com práticas de engenharia de software.</p>
-  <h3>Aplicação ao experimento do tempo de resposta</h3>
+  <h3>Aplicação ao experimento dos lotes de registros</h3>
   <div class="ml-table-wrap"><table class="ml-table">
     <thead><tr><th>Etapa</th><th>Decisão no exemplo</th></tr></thead>
     <tbody>
-      <tr><td>Problema</td><td>Estimar o tempo médio de resposta a partir da carga do serviço.</td></tr>
-      <tr><td>Dados</td><td>Observações sintéticas de carga e tempo, inicialmente apresentadas em uma tabela.</td></tr>
+      <tr><td>Problema</td><td>Estimar o tempo de processamento a partir da quantidade de registros do lote.</td></tr>
+      <tr><td>Dados</td><td>Seis medições sintéticas de quantidade de registros e tempo para treinamento, além de três observações reservadas para avaliação.</td></tr>
       <tr><td>Modelagem</td><td>Investigar se uma função linear é suficiente e quais outras famílias poderiam ser consideradas.</td></tr>
       <tr><td>Ajuste</td><td>Estimar parâmetros que minimizem o erro no treinamento.</td></tr>
       <tr><td>Avaliação</td><td>Observar os erros em registros reservados, reconhecendo que os dados didáticos são insuficientes para validar uma implantação real.</td></tr>
@@ -969,61 +1002,82 @@
   const svg=document.getElementById("ml-plot");
   const aEl=document.getElementById("ml-a"),bEl=document.getElementById("ml-b");
   const aOut=document.getElementById("ml-a-val"),bOut=document.getElementById("ml-b-val");
-  const equation=document.getElementById("ml-equation");
-  const trainEl=document.getElementById("ml-train-error"),testEl=document.getElementById("ml-test-error");
+  const equation=document.getElementById("ml-equation"),trainEl=document.getElementById("ml-train-error");
   if(!svg||!aEl||!bEl)return;
-  const train=[[1,3],[2,4],[3,6],[5,11],[6,14],[8,23]];
-  const held=[[4,8],[7,18]];
-  const left=56,top=26,width=550,height=294,xmax=9,ymax=27;
-  let evaluated=false;
+  const train=[[1,3],[2,5.2],[3,6.9],[4,9.1],[5,10.8],[6,13.2]];
+  const held=[[1.5,4.2],[3.5,8.3],[5.5,12.4]];
+  const left=56,top=26,width=550,height=294,xmax=7,ymax=16;
   function pX(x){return left+x/xmax*width;}
-  function pY(y){return top+height-(y/ymax*height);}
+  function pY(y){return top+height-y/ymax*height;}
   function el(name,attrs,parent){
     const n=document.createElementNS(ns,name);
     Object.keys(attrs).forEach(k=>n.setAttribute(k,String(attrs[k])));
-    (parent||svg).appendChild(n);
-    return n;
+    (parent||svg).appendChild(n);return n;
   }
   function txt(x,y,label,attrs){
-    const n=el("text",Object.assign({"x":x,"y":y,"fill":"var(--muted)","font-size":"12","font-family":"system-ui"},attrs||{}));
+    const n=el("text",Object.assign({x:x,y:y,fill:"var(--muted)","font-size":"12","font-family":"system-ui"},attrs||{}));
     n.textContent=label;return n;
   }
-  function num(n){return n.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:3});}
-  function mse(data,a,b){return data.reduce((total,p)=>total+Math.pow(p[1]-(a*p[0]+b),2),0)/data.length;}
+  function num(n){return n.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:4});}
+  function errorNum(n){return n.toLocaleString("pt-BR",{minimumFractionDigits:4,maximumFractionDigits:4});}
+  function formula(a,b){return "f(x) = "+num(a)+"x "+(b<0?"− ":"+ ")+num(Math.abs(b));}
+  function mse(data,a,b){return data.reduce((s,p)=>s+Math.pow(p[1]-(a*p[0]+b),2),0)/data.length;}
+  function fit(data){
+    const n=data.length,sumX=data.reduce((s,p)=>s+p[0],0),sumY=data.reduce((s,p)=>s+p[1],0);
+    const sumXX=data.reduce((s,p)=>s+p[0]*p[0],0),sumXY=data.reduce((s,p)=>s+p[0]*p[1],0);
+    const a=(n*sumXY-sumX*sumY)/(n*sumXX-sumX*sumX);
+    return {a:a,b:(sumY-a*sumX)/n};
+  }
+  const fitted=fit(train);
   function draw(){
     svg.replaceChildren();
     const a=Number(aEl.value),b=Number(bEl.value);
     aOut.textContent=num(a);bOut.textContent=num(b);
-    equation.textContent="f(x) = "+num(a)+"x "+(b<0?"− ":"+ ")+num(Math.abs(b));
-    trainEl.textContent="Erro quadrático médio (treino): "+mse(train,a,b).toLocaleString("pt-BR",{maximumFractionDigits:3})+" ms²";
-    testEl.textContent=evaluated?"Erro quadrático médio (dados reservados): "+mse(held,a,b).toLocaleString("pt-BR",{maximumFractionDigits:3})+" ms²":"Avaliação reservada: não realizada.";
-    for(let y=0;y<=25;y+=5){
+    equation.textContent=formula(a,b);
+    trainEl.textContent="Erro quadrático médio (treino): "+errorNum(mse(train,a,b))+" s²";
+    for(let y=0;y<=ymax;y+=4){
       el("line",{x1:left,y1:pY(y),x2:left+width,y2:pY(y),stroke:"var(--line)","stroke-width":1});
       txt(left-10,pY(y)+4,String(y),{"text-anchor":"end"});
     }
-    for(let x=0;x<=9;x++){
+    for(let x=0;x<=xmax;x++){
       el("line",{x1:pX(x),y1:top+height,x2:pX(x),y2:top+height+5,stroke:"var(--muted)","stroke-width":1});
       txt(pX(x),top+height+20,String(x),{"text-anchor":"middle"});
     }
     el("line",{x1:left,y1:top,x2:left,y2:top+height,stroke:"var(--muted)","stroke-width":1.2});
     el("line",{x1:left,y1:top+height,x2:left+width,y2:top+height,stroke:"var(--muted)","stroke-width":1.2});
-    txt(left+width/2,top+height+45,"Carga (unidade sintética)",{"text-anchor":"middle"});
-    txt(left,top-9,"Tempo de resposta (ms)");
-    const defs=el("defs",{});const clip=el("clipPath",{id:"ml-line-clip"},defs);
+    txt(left+width/2,top+height+45,"Quantidade de registros (mil)",{"text-anchor":"middle"});
+    txt(left,top-9,"Tempo de processamento (s)");
+    const defs=el("defs",{}),clip=el("clipPath",{id:"ml-line-clip"},defs);
     el("rect",{x:left,y:top,width:width,height:height},clip);
     const group=el("g",{"clip-path":"url(#ml-line-clip)"});
-    el("line",{x1:pX(0),y1:pY(b),x2:pX(9),y2:pY(a*9+b),stroke:"var(--teal)","stroke-width":3},group);
+    train.forEach(p=>{
+      const prediction=a*p[0]+b;
+      const line=el("line",{class:"ml-residual",x1:pX(p[0]),y1:pY(p[1]),x2:pX(p[0]),y2:pY(prediction),stroke:"var(--amber)","stroke-width":2,"stroke-dasharray":"5 4"},group);
+      const title=el("title",{},line);
+      title.textContent="Observado: "+num(p[1])+" s; previsão: "+num(prediction)+" s; erro: "+num(p[1]-prediction)+" s";
+    });
+    el("line",{x1:pX(0),y1:pY(b),x2:pX(xmax),y2:pY(a*xmax+b),stroke:"var(--teal)","stroke-width":3},group);
     train.forEach(p=>el("circle",{cx:pX(p[0]),cy:pY(p[1]),r:5.5,fill:"var(--blue)",stroke:"var(--paper)","stroke-width":1.5}));
-    held.forEach(p=>el("circle",{cx:pX(p[0]),cy:pY(p[1]),r:5.8,fill:"var(--amber)",stroke:"var(--paper)","stroke-width":1.5}));
   }
-  [aEl,bEl].forEach(c=>c.addEventListener("input",()=>{evaluated=false;draw();}));
+  [aEl,bEl].forEach(c=>c.addEventListener("input",draw));
   document.getElementById("ml-fit").addEventListener("click",()=>{
-    const n=train.length,sumX=train.reduce((s,p)=>s+p[0],0),sumY=train.reduce((s,p)=>s+p[1],0),sumXX=train.reduce((s,p)=>s+p[0]*p[0],0),sumXY=train.reduce((s,p)=>s+p[0]*p[1],0);
-    const a=(n*sumXY-sumX*sumY)/(n*sumXX-sumX*sumX),b=(sumY-a*sumX)/n;
-    aEl.value=a;bEl.value=b;
-    evaluated=false;draw();
+    aEl.value=fitted.a;bEl.value=fitted.b;draw();
   });
-  document.getElementById("ml-test").addEventListener("click",()=>{evaluated=true;draw();});
+  document.getElementById("ml-reset").addEventListener("click",()=>{
+    aEl.value=2;bEl.value=1;draw();
+  });
+  document.getElementById("ml-eval-equation").textContent="Reta ajustada no treinamento: "+formula(fitted.a,fitted.b);
+  document.getElementById("ml-test").addEventListener("click",()=>{
+    const body=document.getElementById("ml-eval-rows");
+    body.replaceChildren();
+    held.forEach(p=>{
+      const prediction=fitted.a*p[0]+fitted.b,row=document.createElement("tr");
+      [num(p[0]),num(p[1]),num(prediction),errorNum(Math.pow(p[1]-prediction,2))].forEach(value=>{
+        const cell=document.createElement("td");cell.textContent=value;row.appendChild(cell);
+      });body.appendChild(row);
+    });
+    document.getElementById("ml-test-error").textContent="MSE da reta ajustada — treinamento: "+errorNum(mse(train,fitted.a,fitted.b))+" s²; dados reservados: "+errorNum(mse(held,fitted.a,fitted.b))+" s².";
+  });
   draw();
 })();
 </script>
