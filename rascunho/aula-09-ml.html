@@ -849,23 +849,8 @@
   <p>A função <code>f₂(x) = 2x + 1</code> produz a previsão mais próxima nessa observação e acompanha melhor a tendência visível no gráfico. Para avaliar o conjunto, precisaremos comparar os erros em todas as medições.</p>
   <p>A família escolhida limita as relações que podemos representar: alterar <code>a</code> e <code>b</code> sempre produz uma reta. Se os dados apresentarem uma curvatura relevante, pode ser necessário considerar outra família, como <code>f(x) = ax² + bx + c</code>.</p>
 
-  <h3>Representar a função em código</h3>
-  <p>As implementações abaixo calculam previsões. Na primeira, os coeficientes estão definidos no código; na segunda, podem ser fornecidos como argumentos. Em ambas, <code>carga</code> é a entrada expressa em milhares de registros.</p>
-  <div class="ml-grid">
-    <article class="ml-box">
-      <h4>Coeficientes definidos no código</h4>
-      <pre class="ml-code"><code>def estimar_tempo(carga):
-    return 2 * carga + 1</code></pre>
-      <p>Representa a função candidata <code>f₂(x) = 2x + 1</code>.</p>
-    </article>
-    <article class="ml-box">
-      <h4>Coeficientes ajustáveis</h4>
-      <pre class="ml-code"><code>def estimar_tempo(carga, a, b):
-    return a * carga + b</code></pre>
-      <p>Permite utilizar diferentes valores de <code>a</code> e <code>b</code>.</p>
-    </article>
-  </div>
-  <p><strong>Treinar esse modelo</strong> consiste em utilizar os exemplos de <code>D</code> para determinar os valores de <code>a</code> e <code>b</code>. Essa etapa exige um procedimento adicional: os códigos acima apenas aplicam os coeficientes que recebem ou já possuem.</p>
+  <h3>O que é aprendido no treinamento?</h3>
+  <p>Ao escolher a família <code>f(x) = ax + b</code>, definimos a forma do modelo. <strong>Treinar esse modelo significa utilizar os dados para determinar os valores de a e b</strong>. Esses parâmetros definem a reta que será utilizada para produzir previsões.</p>
 
   <h3>Como escolher os parâmetros a partir dos dados?</h3>
   <p>Escolher a família define quais funções podem ser consideradas; ajustar os parâmetros determina uma função dentro dela. Até aqui, comparamos candidatos visualmente. Para orientar o treinamento, precisamos <strong>medir a diferença entre as previsões e os valores observados</strong> e estabelecer um critério para comparar os resultados. Esse será o ponto de partida da Parte IV.</p>
