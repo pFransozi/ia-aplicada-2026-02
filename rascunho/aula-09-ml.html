@@ -111,6 +111,10 @@
     .ml-page .ml-paradigm-visual:hover,.ml-page .ml-paradigm-visual:focus-visible{border-color:var(--blue)}
     .ml-page .ml-paradigm-visual img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain}
     .ml-page .ml-paradigm-content{min-width:0}
+    .ml-page .ml-paradigm-bullets{margin:0;padding-left:1.25rem;list-style:disc}
+    .ml-page .ml-paradigm-bullets li{font-size:.95rem;line-height:1.6;margin:0 0 .65rem;color:var(--muted)}
+    .ml-page .ml-paradigm-bullets li:last-child{margin-bottom:0}
+    .ml-page .ml-paradigm-bullets strong{color:var(--ink)}
     .ml-page .ml-paradigm-content h4{font-size:1.3rem;margin:0 0 .7rem;color:var(--ink)}
     .ml-page .ml-paradigm-content p{font-size:.95rem;line-height:1.6;margin:0 0 .8rem}
     .ml-page .ml-paradigm-content p:last-child{margin-bottom:0}
@@ -596,13 +600,13 @@
       </div>
       <div class="ml-paradigm-content">
         <h4>Aprendizagem supervisionada</h4>
-        <p>O sistema recebe exemplos de entradas acompanhadas das respostas correspondentes, chamadas de <strong>rótulos ou valores-alvo</strong>. Essas respostas orientam o ajuste de um modelo capaz de produzir previsões para novas entradas.</p>
-        <p>Duas tarefas comuns são:</p>
-        <div class="ml-tasks">
-          <div class="ml-task"><strong>Classificação</strong><span>Prevê uma classe ou categoria.</span><small>Exemplo: e-mail spam ou legítimo.</small></div>
-          <div class="ml-task"><strong>Regressão</strong><span>Estima um valor numérico.</span><small>Exemplo: tempo de resposta de uma API, em ms.</small></div>
-        </div>
-        <p class="ml-paradigm-footnote">Classificação e regressão são tarefas distintas, que exigem saídas e critérios de avaliação adequados. Os diagramas apresentam exemplos ilustrativos.</p>
+        <ul class="ml-paradigm-bullets">
+          <li><strong>Dados:</strong> exemplos de entrada acompanhados de respostas conhecidas, chamadas de rótulos ou valores-alvo.</li>
+          <li><strong>Aprendizagem:</strong> as respostas orientam o ajuste do modelo para produzir previsões para novas entradas.</li>
+          <li><strong>Classificação:</strong> prevê uma classe ou categoria, como e-mail spam ou legítimo.</li>
+          <li><strong>Regressão:</strong> estima um valor numérico, como o tempo de resposta de uma API, em milissegundos.</li>
+          <li><strong>Avaliação:</strong> cada tarefa exige saídas e critérios de avaliação adequados.</li>
+        </ul>
       </div>
     </article>
     <article class="ml-paradigm-item">
@@ -616,9 +620,12 @@
       </div>
       <div class="ml-paradigm-content">
         <h4>Aprendizagem não supervisionada</h4>
-        <p>Os dados são apresentados sem respostas previamente identificadas para a tarefa. A aprendizagem é orientada pela estrutura dos próprios dados e por um critério definido pelo método, como a similaridade entre observações.</p>
-        <p>O <strong>agrupamento</strong> (clustering) é um exemplo: podemos procurar padrões de utilização de um serviço a partir de registros de atividade, sem fornecer antecipadamente a qual grupo pertence cada registro.</p>
-        <p class="ml-paradigm-footnote">O agrupamento ilustra uma aplicação, mas não esgota a aprendizagem não supervisionada: também podem ser aprendidas representações e estruturas dos dados.</p>
+        <ul class="ml-paradigm-bullets">
+          <li><strong>Dados:</strong> observações sem respostas previamente identificadas para a tarefa.</li>
+          <li><strong>Aprendizagem:</strong> explora a estrutura dos dados segundo um critério definido pelo método, como a similaridade entre observações.</li>
+          <li><strong>Agrupamento (clustering):</strong> pode identificar padrões de utilização de um serviço sem informar previamente o grupo de cada registro.</li>
+          <li><strong>Outras aplicações:</strong> aprendizagem de representações e de outras estruturas dos dados.</li>
+        </ul>
       </div>
     </article>
     <article class="ml-paradigm-item">
@@ -632,9 +639,13 @@
       </div>
       <div class="ml-paradigm-content">
         <h4>Aprendizagem por reforço</h4>
-        <p>Um agente interage com um ambiente e escolhe ações. Em resposta, recebe novas observações e sinais de <strong>recompensa</strong>, que orientam a melhoria de sua estratégia de decisão, chamada de <strong>política</strong>. O objetivo é aumentar a recompensa acumulada ao longo das interações.</p>
-        <p>Por exemplo, em uma simulação de navegação, um agente pode aprender quais ações favorecem alcançar um objetivo, considerando recompensas e consequências das decisões tomadas.</p>
-        <p class="ml-paradigm-footnote">Diferentemente dos exemplos supervisionados, não é necessário fornecer, para cada situação, uma resposta correta que o agente deva reproduzir.</p>
+        <ul class="ml-paradigm-bullets">
+          <li><strong>Interação:</strong> um agente escolhe ações em um ambiente e recebe novas observações e recompensas.</li>
+          <li><strong>Aprendizagem:</strong> as recompensas orientam a melhoria da estratégia de decisão, chamada de política.</li>
+          <li><strong>Objetivo:</strong> aumentar a recompensa acumulada ao longo das interações.</li>
+          <li><strong>Exemplo:</strong> aprender ações que favoreçam alcançar um destino em uma simulação de navegação.</li>
+          <li><strong>Informação disponível:</strong> não é necessário fornecer a ação correta para cada situação.</li>
+        </ul>
       </div>
     </article>
   </div>
