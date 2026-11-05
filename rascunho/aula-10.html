@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Aula 10 — algoritmos de Machine Learning, escolha de modelos e pipeline clássico de treinamento. Material em rascunho.">
+<title>Aula 10 · Algoritmos e pipeline de Machine Learning (rascunho)</title>
+<link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../aula-04.css">
+<link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=13">
+<script src="https://pfransozi.github.io/assets/js/ensino.js?v=9"></script>
+<style>
+.a10{--a10-line:var(--line,#d9e2ee)}.a10 .shell{max-width:1060px;margin:auto}
+.a10 .lead{font-size:1.08rem;line-height:1.8;max-width:850px}
+.a10 .section{padding:3.1rem 0}.a10 .section-heading{margin-bottom:1.4rem}
+.a10 .eyebrow{letter-spacing:.08em;text-transform:uppercase;font-size:.79rem;font-weight:700}
+.a10 .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.a10 .three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.a10 .panel{border:1px solid var(--line);border-radius:13px;background:var(--paper);padding:1.2rem;min-width:0}
+.a10 .panel h3,.a10 .panel h4{margin-top:0}.a10 .panel p:last-child{margin-bottom:0}
+.a10 .note{border-left:3px solid var(--blue);background:var(--soft);border-radius:0 10px 10px 0;padding:1rem 1.2rem;margin:1.5rem 0}
+.a10 .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:1.2rem 0}
+.a10 table{border-collapse:collapse;width:100%;min-width:710px}.a10 th,.a10 td{border-bottom:1px solid var(--line);text-align:left;vertical-align:top;padding:.78rem .9rem;line-height:1.55}
+.a10 th{background:var(--soft);color:var(--ink)}.a10 tr:last-child td{border-bottom:0}
+.a10 .tag{display:inline-block;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:.12rem .42rem;font-size:.78rem}
+.a10 .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem}
+.a10 .steps>div{padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+.a10 .steps b{display:block;color:var(--blue);font-size:1.45rem;margin-bottom:.25rem}
+.a10 .steps small{display:block;color:var(--muted);line-height:1.5}
+.a10 .mini{font-size:.86rem;color:var(--muted);line-height:1.55}
+.a10 .grid-chart{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.a10 .graph-card{border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:1rem}
+.a10 .graph-card svg{display:block;width:100%;height:auto;border-radius:8px;background:var(--soft)}
+.a10 .graph-card h4{margin:.2rem 0 .45rem}.a10 .graph-card p{margin:.55rem 0 0;font-size:.88rem}
+.a10 .exercise{counter-reset:exercise}.a10 .exercise>li{padding:.7rem 0;line-height:1.6}
+.a10 .lab{border:1px solid var(--line);border-radius:14px;padding:1.25rem;background:var(--paper);margin:1.5rem 0}
+.a10 .controls{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin:.9rem 0}
+.a10 .controls label{font-weight:600}.a10 .controls select{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:.55rem}
+.a10 .controls button{border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:8px;padding:.55rem .85rem;cursor:pointer}
+.a10 .controls button:hover{border-color:var(--blue)}
+.a10 .chart-main{width:100%;max-width:650px;height:auto;display:block;margin:auto;background:var(--paper);border:1px solid var(--line);border-radius:10px}
+.a10 .metric{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:1rem;line-height:1.65}
+.a10 .pipeline{display:grid;gap:.38rem;max-width:850px;margin:1.5rem auto}
+.a10 .pipe{display:grid;grid-template-columns:44px minmax(0,1fr);gap:1rem;align-items:center;padding:.85rem 1.1rem;background:var(--paper);border:1px solid var(--line);border-radius:10px}
+.a10 .pipe-index{font-weight:800;color:var(--blue);font-size:1.35rem}
+.a10 .pipe small{display:block;color:var(--muted);margin-top:.2rem;line-height:1.5}
+.a10 .arrow{text-align:center;color:var(--blue);line-height:1}
+.a10 .case-pills{display:flex;gap:.45rem;flex-wrap:wrap}
+.a10 .case-pills button{padding:.5rem .8rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:9px;cursor:pointer}
+.a10 .case-pills button[aria-pressed=true]{background:var(--soft);border-color:var(--blue);font-weight:700}
+.a10 pre{white-space:pre;overflow:auto;background:#101827;color:#e6edf7;border-radius:11px;padding:1.2rem;font-size:.88rem;line-height:1.6}
+.a10 code{font-size:.92em}
+.a10 .callout{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem;margin:1rem 0}
+.a10 .toc{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.a10 .toc a{font-size:.88rem;border:1px solid var(--line);border-radius:8px;padding:.45rem .75rem;color:var(--ink);background:var(--paper);text-decoration:none}
+.a10 .toc a:hover{border-color:var(--blue)}
+.a10 .hero h1{max-width:850px}.a10 .hero-grid{align-items:center}
+.a10 .hero aside{max-width:330px}
+.a10 .site-header .nav-wrap{flex-wrap:nowrap;min-height:62px;gap:.8rem}
+.a10 .site-header .main-nav{display:flex;flex-wrap:nowrap;flex-direction:row;gap:.8rem}
+.a10 .site-header .main-nav a{white-space:nowrap}
+@media(max-width:900px){.a10 .three,.a10 .grid-chart{grid-template-columns:1fr 1fr}.a10 .steps{grid-template-columns:1fr 1fr}.a10 .site-header .main-nav a:not(:last-of-type){display:none}}
+@media(max-width:690px){.a10 .two,.a10 .three,.a10 .grid-chart{grid-template-columns:1fr}.a10 .hero aside{max-width:none}.a10 .section{padding:2.1rem 0}.a10 .panel,.a10 .lab{padding:.85rem}.a10 .site-header .brand strong{white-space:normal}}
+@media print{.a10 .controls,.a10 .toc,.a10 .site-header{display:none}}
+</style>
+</head>
+<body class="teaching-page teaching-lesson lesson-page a10">
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<header class="site-header"><div class="container nav-wrap">
+<a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 10 · Algoritmos e pipeline de ML</small></span></a>
+<nav class="main-nav" aria-label="Navegação"><a href="../index.html">Página principal</a><a href="../aula-09.html">Aula 09</a><a href="#algoritmos">Algoritmos</a><a href="#pipeline">Pipeline</a><a href="#laboratorio">Laboratório</a>
+<button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button></nav>
+</div></header>
+<div class="lesson-shell lesson-page-grid"><main id="conteudo">
+<section class="hero" id="inicio"><div class="container hero-grid">
+<div><p class="eyebrow">Aula 10 · Rascunho para revisão</p>
+<h1>Algoritmos de ML: seleção de modelos e pipeline de treinamento</h1>
+<p class="hero-lead">Como diferentes algoritmos representam padrões, por que as características dos dados influenciam sua escolha e como conduzir um processo de treinamento e avaliação sem vazamento de informação.</p>
+<div class="hero-actions"><a class="button button-primary" href="#visao">Iniciar aula</a><a class="button button-secondary" href="#laboratorio">Ir ao laboratório</a></div>
+</div><aside class="guiding-card"><span>Questão orientadora</span><blockquote>Como escolher e avaliar um modelo adequado aos dados e aos requisitos de um problema?</blockquote></aside>
+</div></section>
+<section class="section section-soft" id="visao"><div class="container">
+<div class="section-heading"><p class="eyebrow">Visão da aula</p><h2>Objetivos, conteúdos e competências</h2></div>
+<div class="two"><article class="panel"><h3>Objetivos de aprendizagem</h3><ol>
+<li>Diferenciar os mecanismos básicos de aprendizagem de famílias de algoritmos clássicos.</li>
+<li>Relacionar tarefa, representação e propriedades dos dados à seleção de modelos candidatos.</li>
+<li>Construir um pipeline que separe corretamente ajuste, seleção e avaliação.</li>
+<li>Comparar resultados e justificar uma decisão técnica considerando métricas e restrições.</li></ol></article>
+<article class="panel"><h3>Conteúdo programático</h3><p>Regressão logística, k-NN, árvores, Random Forest, SVM; panorama de agrupamento e MLP; dados tabulares, escala, dimensionalidade, distribuição, desbalanceamento; baselines; treino, validação e teste; pré-processamento, pipelines, validação cruzada, métricas, seleção, persistência e inferência.</p><h3>Competências</h3><p><strong>C2 · H6:</strong> procedimentos para construção de software. <strong>C3 · H9/H10:</strong> identificar necessidades e comparar tecnologias. <strong>C11 · H38:</strong> desenvolver algoritmos. <strong>C13 · H45:</strong> avaliar decisões com evidências.</p></article></div>
+<nav class="toc" aria-label="Seções"><a href="#retomada">Retomada</a><a href="#algoritmos">Algoritmos</a><a href="#dados">Dados e escolha</a><a href="#pipeline">Pipeline</a><a href="#laboratorio">Laboratório</a><a href="#sintese">Síntese</a></nav>
+</div></section>
+<section class="section" id="retomada"><div class="container">
+<div class="section-heading"><p class="eyebrow">Parte I · Continuidade da Aula 09</p><h2>Do ajuste de uma função à escolha de uma família de modelos</h2></div>
+<p>Na Aula 09, estudamos um modelo de regressão linear para prever o tempo de processamento de lotes de registros. Escolhemos uma família de funções, ajustamos parâmetros para minimizar o erro e discutimos generalização. Agora, o problema deixa de ser apenas <em>quais parâmetros ajustar</em>: precisamos decidir <strong>qual família de modelos vale a pena experimentar</strong>.</p>
+<div class="three">
+<div class="panel"><h3>Representação</h3><p>Que relações o modelo consegue representar? Uma reta, regras hierárquicas, distâncias ou fronteiras não lineares?</p></div>
+<div class="panel"><h3>Aprendizagem</h3><p>O que o treinamento ajusta? Coeficientes, divisões, estruturas ou parâmetros de uma função?</p></div>
+<div class="panel"><h3>Generalização</h3><p>As escolhas produzem previsões úteis em exemplos que não orientaram o ajuste ou a seleção?</p></div>
+</div>
+<div class="note"><strong>Ideia central:</strong> nenhuma família é a melhor para todos os dados e requisitos. A seleção de modelos precisa ser justificada e testada.</div>
+</div></section>
+<section class="section section-soft" id="algoritmos"><div class="container">
+<div class="section-heading"><p class="eyebrow">Parte II · Repertório</p><h2>Algoritmos que representam padrões de maneiras diferentes</h2><p>Os modelos abaixo são candidatos usuais em problemas tabulares. Nesta aula, o objetivo é compreender suas hipóteses e limitações, não derivar toda a matemática de cada método.</p></div>
+<div class="table-scroll"><table><thead><tr><th>Família / exemplo</th><th>Como produz previsões</th><th>Quando investigar</th><th>Atenção</th></tr></thead><tbody>
+<tr><td><strong>Regressão linear</strong> <span class="tag">Regressão</span></td><td>Ajusta coeficientes de uma relação linear entre atributos e valor-alvo.</td><td>Baseline interpretável para variáveis numéricas.</td><td>Não representa diretamente relações curvas complexas sem transformação de atributos.</td></tr>
+<tr><td><strong>Regressão logística</strong> <span class="tag">Classificação</span></td><td>Aprende uma combinação linear dos atributos e transforma a saída em probabilidade de classe.</td><td>Baseline rápido e interpretável para classificação.</td><td>Fronteira linear no espaço de atributos original.</td></tr>
+<tr><td><strong>k-NN</strong> <span class="tag">Classificação / regressão</span></td><td>Consulta os exemplos mais próximos segundo uma medida de distância.</td><td>Relações locais; datasets de porte administrável.</td><td>Escala dos atributos e custo de inferência podem pesar muito.</td></tr>
+<tr><td><strong>Árvore de decisão</strong> <span class="tag">Classificação / regressão</span></td><td>Aprende perguntas sucessivas sobre atributos e associa regiões a previsões.</td><td>Regras e interações não lineares interpretáveis.</td><td>Árvores profundas podem sobreajustar.</td></tr>
+<tr><td><strong>Random Forest</strong> <span class="tag">Ensemble</span></td><td>Combina previsões de diversas árvores treinadas com aleatoriedade.</td><td>Baseline robusto para relações tabulares não lineares.</td><td>Menos interpretável que uma árvore única; mais custo de memória.</td></tr>
+<tr><td><strong>SVM</strong> <span class="tag">Classificação</span></td><td>Aprende uma fronteira de separação com margem; kernels podem modelar relações não lineares.</td><td>Separação entre classes, inclusive com atributos numerosos.</td><td>Escala e configuração importam; custo pode aumentar em datasets grandes.</td></tr>
+<tr><td><strong>K-Means</strong> <span class="tag">Agrupamento</span></td><td>Organiza os dados em grupos próximos a centroides.</td><td>Exploração sem rótulos conhecidos.</td><td>É outra tarefa: os grupos não são automaticamente classes verdadeiras.</td></tr>
+<tr><td><strong>MLP</strong> <span class="tag">Rede neural</span></td><td>Compõe transformações parametrizadas e ativações não lineares.</td><td>Relações complexas e dados adequados ao treinamento.</td><td>Exige cuidados com escala, capacidade, ajuste e custo computacional.</td></tr>
+</tbody></table></div>
+<h3>Experimento visual — a geometria muda a escolha</h3>
+<p>Imagine duas classes representadas em duas dimensões. Uma mesma linha reta pode ser suficiente em um cenário e insuficiente em outro.</p>
+<div class="grid-chart">
+<article class="graph-card"><h4>Separação aproximadamente linear</h4><svg id="graph-linear" viewBox="0 0 300 220" role="img" aria-label="Duas classes separadas por reta"></svg><p>Um modelo linear é um candidato inicial plausível.</p></article>
+<article class="graph-card"><h4>Fronteira por regiões</h4><svg id="graph-tree" viewBox="0 0 300 220" role="img" aria-label="Classes separadas por regiões retangulares"></svg><p>Uma árvore produz divisões alinhadas aos atributos.</p></article>
+<article class="graph-card"><h4>Separação não linear</h4><svg id="graph-curved" viewBox="0 0 300 220" role="img" aria-label="Duas classes com fronteira curva"></svg><p>Modelos não lineares podem capturar a estrutura mais diretamente.</p></article>
+</div>
+<p class="mini">Figuras sintéticas esquemáticas; não representam resultados de treinamento. A geometria ilustrada serve para comparar capacidades de representação, não para declarar um vencedor.</p>
+</div></section>
+<section class="section" id="dados"><div class="container">
+<div class="section-heading"><p class="eyebrow">Parte III · Seleção fundamentada</p><h2>O que os dados precisam nos dizer antes de escolher um modelo?</h2></div>
+<p>O primeiro passo é distinguir o <strong>objetivo</strong> (prever uma classe, um valor ou investigar grupos) da <strong>estrutura dos dados</strong> (quantidade de registros, tipos de atributos, escala, dependências, rótulos e distribuição).</p>
+<div class="table-scroll"><table><thead><tr><th>Característica observada</th><th>Questão técnica</th><th>Implicação para o experimento</th></tr></thead><tbody>
+<tr><td>Variáveis com escalas diferentes</td><td>Uma distância entre registros será dominada por determinado atributo?</td><td>Testar escalonamento para k-NN, regressão logística e SVM.</td></tr>
+<tr><td>Poucos exemplos e muitos atributos</td><td>Há informação suficiente para estimar modelos flexíveis?</td><td>Começar com baselines simples e regularização; validar com cuidado.</td></tr>
+<tr><td>Classes desbalanceadas</td><td>Acurácia alta esconde erros na classe minoritária?</td><td>Analisar matriz de confusão, precision, recall e F1.</td></tr>
+<tr><td>Dependências por tempo, equipamento ou pessoa</td><td>Registros relacionados poderiam aparecer em treino e teste?</td><td>Preferir separação temporal ou por grupos quando apropriada.</td></tr>
+<tr><td>Requisito de explicação</td><td>Precisamos apresentar razões inteligíveis para a decisão?</td><td>Comparar baselines interpretáveis com modelos mais complexos.</td></tr>
+<tr><td>Restrições de latência e memória</td><td>Qual é o custo de treinar e prever em produção?</td><td>Medir custo junto às métricas preditivas.</td></tr>
+</tbody></table></div>
+<h3>Três problemas — os mesmos algoritmos servem?</h3>
+<div class="lab" aria-label="Estudo de caso interativo"><div class="case-pills" id="case-buttons">
+<button type="button" aria-pressed="true" data-case="sensor">Sensores industriais</button>
+<button type="button" aria-pressed="false" data-case="spam">Mensagens de texto</button>
+<button type="button" aria-pressed="false" data-case="cluster">Perfis sem rótulos</button>
+</div><div id="case-detail" class="callout" aria-live="polite"></div>
+</div>
+<div class="note"><strong>Não existe regra universal do tipo “se há 500 atributos, use SVM”.</strong> As propriedades dos dados ajudam a definir modelos candidatos. A escolha final é uma decisão experimental orientada pelo problema, pelas métricas e pelas restrições.</div>
+</div></section>
+<section class="section section-soft" id="pipeline"><div class="container">
+<div class="section-heading"><p class="eyebrow">Parte IV · Engenharia do experimento</p><h2>O pipeline clássico de treinamento e avaliação</h2><p>Um pipeline não é apenas a sequência de chamadas no código: ele define quais dados podem influenciar cada decisão e como reproduzir as transformações durante a inferência.</p></div>
+<div class="pipeline">
+<div class="pipe"><span class="pipe-index">01</span><div><strong>Problema, alvo e critérios de sucesso</strong><small>Que saída será prevista? Qual erro importa? Quais requisitos de custo, explicabilidade e tempo de resposta precisam ser atendidos?</small></div></div><div class="arrow">↓</div>
+<div class="pipe"><span class="pipe-index">02</span><div><strong>Inspeção dos dados</strong><small>Origem, tipos, valores ausentes, duplicatas, distribuição dos alvos, grupos e relações temporais.</small></div></div><div class="arrow">↓</div>
+<div class="pipe"><span class="pipe-index">03</span><div><strong>Separação antes do ajuste</strong><small>Reservar teste final. Definir validação cruzada ou partição de validação, respeitando grupos e tempo quando pertinente.</small></div></div><div class="arrow">↓</div>
+<div class="pipe"><span class="pipe-index">04</span><div><strong>Pré-processamento dentro do pipeline</strong><small>Imputar, codificar ou padronizar ajustando as transformações somente no treino de cada partição.</small></div></div><div class="arrow">↓</div>
+<div class="pipe"><span class="pipe-index">05</span><div><strong>Treino e seleção dos candidatos</strong><small>Treinar algoritmos comparáveis; escolher pelo desempenho em validação, sem consultar o teste para decidir.</small></div></div><div class="arrow">↓</div>
+<div class="pipe"><span class="pipe-index">06</span><div><strong>Avaliação final</strong><small>Após a seleção, ajustar no conjunto de desenvolvimento e avaliar uma única vez em teste preservado.</small></div></div><div class="arrow">↓</div>
+<div class="pipe"><span class="pipe-index">07</span><div><strong>Persistência, integração e monitoramento</strong><small>Salvar o pipeline completo, verificar inferência, versão e limites de aplicação.</small></div></div>
+</div>
+<h3>O erro metodológico mais comum: vazamento de informação</h3>
+<div class="two">
+<div class="panel"><h3>Procedimento incorreto</h3><p><strong>Padronizar tudo → dividir → treinar → testar.</strong></p><p>A transformação aprendeu estatísticas também dos dados reservados, contaminando a avaliação.</p></div>
+<div class="panel"><h3>Procedimento correto</h3><p><strong>Dividir → ajustar transformação no treino → aplicar transformação → treinar e avaliar.</strong></p><p>Em validação cruzada, cada dobra precisa ajustar seu próprio pré-processamento. <code>Pipeline</code> automatiza essa disciplina.</p></div>
+</div>
+<h3>Métrica de avaliação depende do problema</h3>
+<div class="table-scroll"><table><thead><tr><th>Problema</th><th>Métricas iniciais</th><th>Interpretação</th></tr></thead><tbody>
+<tr><td>Regressão</td><td>MAE, RMSE</td><td>Erro médio e sensibilidade a erros grandes, na unidade do alvo.</td></tr>
+<tr><td>Classificação binária</td><td>Matriz de confusão, precision, recall, F1</td><td>Tipo de erro importa; diferentes custos de falsos positivos e negativos.</td></tr>
+<tr><td>Classificação desbalanceada</td><td>Recall, precision, F1; PR-AUC quando pertinente</td><td>Acurácia isolada pode ser enganosa.</td></tr>
+<tr><td>Agrupamento</td><td>Silhouette e análise de estabilidade (quando apropriado)</td><td>Grupos precisam fazer sentido também no domínio.</td></tr>
+</tbody></table></div>
+</div></section>
+<section class="section" id="laboratorio"><div class="container">
+<div class="section-heading"><p class="eyebrow">Parte V · Laboratório guiado</p><h2>Um dataset, quatro candidatos e uma decisão fundamentada</h2><p>Proposta de prática: classificação de falhas a partir de medidas de sensores. O notebook executável será produzido após validarmos a estrutura desta aula.</p></div>
+<div class="panel"><h3>Cenário</h3><p>Uma equipe possui registros de condições operacionais de equipamentos e um rótulo indicando a ocorrência de falha. Queremos treinar um classificador para apoiar triagem preventiva. O conjunto de dados deverá ser explicitamente identificado como real ou sintético e avaliado quanto à possibilidade de dependências entre medições do mesmo equipamento.</p><p>Para a primeira implementação, podemos usar um dataset tabular público de classificação, preservando o mesmo protocolo para todos os candidatos.</p></div>
+<div class="steps" style="margin:1.1rem 0">
+<div><b>1</b><strong>Inspecionar</strong><small>Tipos de atributos, classes e valores ausentes.</small></div>
+<div><b>2</b><strong>Separar</strong><small>Treino e teste estratificados quando adequado.</small></div>
+<div><b>3</b><strong>Comparar</strong><small>Regressão logística, k-NN, árvore e Random Forest.</small></div>
+<div><b>4</b><strong>Justificar</strong><small>Escolher um modelo e explicar critérios e limitações.</small></div>
+</div>
+<h3>Estrutura conceitual do código</h3>
+<pre><code>from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_validate
+
+modelo = Pipeline([
+    ("escala", StandardScaler()),
+    ("classificador", LogisticRegression(max_iter=1000))
+])
+
+# Separar os dados antes; o pipeline aprende a escala
+# somente no treino de cada dobra.
+resultados = cross_validate(
+    modelo, X_treino, y_treino,
+    cv=5, scoring=["accuracy", "f1_macro"]
+)</code></pre>
+<p class="mini">Trecho ilustrativo para dados numéricos completos, independentes e com partições apropriadas. Com valores ausentes ou atributos categóricos, usar imputação e transformação de colunas; com grupos ou ordem temporal, adaptar o procedimento de validação.</p>
+<h3>Simulador didático — o que uma métrica revela?</h3><p>Selecione um cenário hipotético de matriz de confusão. Os números são ilustrativos, não resultados medidos dos algoritmos acima.</p>
+<div class="lab"><div class="controls"><label for="scenario">Cenário</label><select id="scenario"><option value="a">Modelo A — favorece classe majoritária</option><option value="b">Modelo B — melhor equilíbrio</option><option value="c">Modelo C — prioriza recall</option></select></div>
+<div class="two"><div><svg id="confusion" viewBox="0 0 430 310" class="chart-main" role="img" aria-label="Matriz de confusão ilustrativa"></svg></div><div class="metric" id="metric-summary" aria-live="polite"></div></div>
+<p class="mini">Classe positiva: ocorrência de falha. FP indica falso alarme; FN indica falha não identificada. Compare sempre com os custos operacionais desses erros.</p></div>
+<h3>Exercícios para análise</h3>
+<ol class="exercise">
+<li>Por que devemos utilizar os mesmos dados de avaliação ao comparar candidatos?</li>
+<li>Em que situação a padronização altera significativamente a aplicação do k-NN?</li>
+<li>Por que uma árvore com baixo erro de treinamento não necessariamente generaliza bem?</li>
+<li>Se deixar passar uma falha custa mais do que emitir um falso alarme, qual métrica merece atenção especial? Que outros indicadores continuam necessários?</li>
+<li>Descreva como evitar vazamento de dados ao utilizar validação cruzada com imputação e padronização.</li>
+<li>Escolha um dos modelos candidatos, justificando com dados, métrica, interpretação e custo computacional. Que evidência adicional seria necessária antes da implantação?</li>
+</ol>
+</div></section>
+<section class="section section-soft" id="sintese"><div class="container">
+<div class="section-heading"><p class="eyebrow">Síntese e verificação</p><h2>O melhor modelo não é simplesmente aquele com maior número na tabela</h2></div>
+<div class="two"><div class="panel"><h3>Escolha técnica</h3><p>Identificar o objetivo, caracterizar os dados e formular uma seleção razoável de modelos candidatos.</p></div><div class="panel"><h3>Validade experimental</h3><p>Separar dados corretamente, validar sem vazamento e justificar métricas compatíveis com o risco.</p></div></div>
+<p class="lead"><strong>Resultado esperado:</strong> o estudante deve ser capaz de explicar por que escolheu um algoritmo, como realizou seu treinamento e quais evidências sustentam — ou limitam — a confiança na avaliação.</p>
+<div class="note"><strong>Para revisão do rascunho:</strong> validar seleção de algoritmos, nível de profundidade, caso de laboratório e equilíbrio entre conteúdo conceitual e prática antes de preparar o notebook definitivo.</div>
+<h3>Referências</h3><p>RUSSELL, Stuart; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Capítulo 19. LUGER, George. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Capítulos 10 e 11. HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. 2020. Capítulo 8.</p>
+</div></section>
+</main></div>
+<script>
+(function(){
+"use strict";
+const NS="http://www.w3.org/2000/svg";
+const node=(tag,attrs,root,content)=>{const el=document.createElementNS(NS,tag);Object.entries(attrs||{}).forEach(([k,v])=>el.setAttribute(k,String(v)));if(content!=null)el.textContent=content;root.appendChild(el);return el;};
+function base(svg){node("rect",{x:24,y:12,width:252,height:186,fill:"var(--paper)",rx:5},svg);for(let i=0;i<5;i++){let p=30+i*60;node("line",{x1:p,y1:12,x2:p,y2:198,stroke:"var(--line)"},svg);node("line",{x1:24,y1:17+i*44,x2:276,y2:17+i*44,stroke:"var(--line)"},svg)}}
+function dot(svg,x,y,c){node("circle",{cx:x,cy:y,r:4.5,fill:c,stroke:"var(--paper)","stroke-width":1},svg)}
+const blue="#2c79b8",amber="#d48b36";
+let seed=13;function rand(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646}
+const g1=document.getElementById("graph-linear");base(g1);
+for(let i=0;i<42;i++){let x=35+rand()*225,y=25+rand()*162;dot(g1,x,y,y>194-0.68*x?blue:amber)}
+node("line",{x1:34,y1:171,x2:266,y2:13,stroke:"var(--teal)","stroke-width":3},g1);
+const g2=document.getElementById("graph-tree");base(g2);
+node("path",{d:"M128 14 V104 H205 V199",fill:"none",stroke:"var(--teal)","stroke-width":3},g2);
+for(let i=0;i<42;i++){let x=34+rand()*228,y=24+rand()*165;let c=(x<128&&y<104)||(x<205&&x>=128&&y>104)?amber:blue;dot(g2,x,y,c)}
+const g3=document.getElementById("graph-curved");base(g3);
+for(let i=0;i<45;i++){let x=34+rand()*228,y=25+rand()*162;let boundary=105+48*Math.sin((x-35)/230*Math.PI*1.5);dot(g3,x,y,y>boundary?blue:amber)}
+let d="";for(let x=34;x<=266;x+=4){let y=105+48*Math.sin((x-35)/230*Math.PI*1.5);d+=(x===34?"M":"L")+x.toFixed(1)+" "+y.toFixed(1)+" ";}
+node("path",{d,fill:"none",stroke:"var(--teal)","stroke-width":3},g3);
+const cases={
+sensor:{title:"Sensores industriais",p:"Tarefa: classificar a ocorrência de falha com temperatura, vibração e corrente; registros numéricos, possivelmente repetidos por equipamento.",c:"Candidatos: regressão logística (baseline), árvore e Random Forest; testar k-NN com escala controlada.",q:"Ponto crítico: separar medições por equipamento ou tempo se o cenário de implantação assim exigir; o custo de uma falha não detectada pode ser maior que o de um alarme."},
+spam:{title:"Mensagens de texto",p:"Tarefa: classificar mensagens como spam ou legítimas após transformá-las em vetores com muitos atributos esparsos.",c:"Candidatos: regressão logística, Linear SVM e Naive Bayes.",q:"Ponto crítico: representar o texto, evitar duplicatas próximas entre partições e avaliar precisão e recall da classe spam."},
+cluster:{title:"Perfis sem rótulos",p:"Tarefa: identificar grupos de comportamento em dados de consumo, sem uma resposta correta previamente atribuída a cada registro.",c:"Candidato: K-Means como ponto de partida, contrastando com abordagens baseadas em densidade.",q:"Ponto crítico: agrupamento não é classificação supervisionada; escala, interpretação e estabilidade dos grupos precisam ser investigadas."}
+};
+function showCase(k){const obj=cases[k],dest=document.getElementById("case-detail");dest.replaceChildren();const h=document.createElement("h4");h.textContent=obj.title;dest.append(h);for(const line of [obj.p,obj.c,obj.q]){const p=document.createElement("p");p.textContent=line;dest.append(p)}document.querySelectorAll("[data-case]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.case===k)));}
+document.querySelectorAll("[data-case]").forEach(b=>b.addEventListener("click",()=>showCase(b.dataset.case)));showCase("sensor");
+const matrices={a:[88,2,18,12],b:[82,8,8,22],c:[66,24,3,27]};
+function fmt(v){return (100*v).toLocaleString("pt-BR",{maximumFractionDigits:1})+"%"}
+function metrics(k){const [tn,fp,fn,tp]=matrices[k];const acc=(tp+tn)/(tp+tn+fp+fn),prec=tp/(tp+fp),rec=tp/(tp+fn),f1=2*prec*rec/(prec+rec);const svg=document.getElementById("confusion");svg.replaceChildren();
+node("text",{x:221,y:25,"text-anchor":"middle",fill:"var(--ink)","font-weight":700,"font-size":15},svg,"Predito");node("text",{x:140,y:59,"text-anchor":"middle",fill:"var(--muted)","font-size":12},svg,"Normal");node("text",{x:284,y:59,"text-anchor":"middle",fill:"var(--muted)","font-size":12},svg,"Falha");
+node("text",{x:20,y:162,fill:"var(--muted)","font-size":13,transform:"rotate(-90 20 162)"},svg,"Real");
+const cells=[{x:65,y:70,n:tn,label:"VN",good:1},{x:209,y:70,n:fp,label:"FP",good:0},{x:65,y:182,n:fn,label:"FN",good:0},{x:209,y:182,n:tp,label:"VP",good:1}];
+for(const cell of cells){node("rect",{x:cell.x,y:cell.y,width:138,height:104,rx:8,fill:cell.good?"var(--teal-soft, #e5f2f0)":"var(--soft)",stroke:"var(--line)"},svg);node("text",{x:cell.x+69,y:cell.y+47,"text-anchor":"middle",fill:"var(--ink)","font-size":30,"font-weight":700},svg,String(cell.n));node("text",{x:cell.x+69,y:cell.y+76,"text-anchor":"middle",fill:"var(--muted)","font-size":13},svg,cell.label);}
+node("text",{x:52,y:125,"text-anchor":"middle",fill:"var(--muted)","font-size":12},svg,"Normal");node("text",{x:52,y:237,"text-anchor":"middle",fill:"var(--muted)","font-size":12},svg,"Falha");
+const summary=document.getElementById("metric-summary");summary.replaceChildren();const h=document.createElement("strong");h.textContent="Métricas calculadas";summary.append(h);
+for(const [label,value] of [["Acurácia",acc],["Precisão (falha)",prec],["Recall (falha)",rec],["F1 (falha)",f1]]){const p=document.createElement("p");p.textContent=label+": "+fmt(value);summary.append(p)}
+const note=document.createElement("p");note.textContent=k==="a"?"Bom desempenho na classe majoritária, mas muitas falhas não identificadas.":k==="b"?"Compromisso mais equilibrado entre falsos alarmes e falhas não identificadas.":"Mais falhas identificadas, porém com mais falsos alarmes.";summary.append(note);}
+document.getElementById("scenario").addEventListener("change",e=>metrics(e.target.value));metrics("a");
+})();
+</script>
+</body></html>
