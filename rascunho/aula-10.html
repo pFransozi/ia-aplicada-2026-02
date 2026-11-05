@@ -130,7 +130,7 @@
 <path d="M12 8 V74 H117" class="axis"/>
 <path d="M18 69 L111 15" class="model"/>
 <g class="point-a"><circle cx="24" cy="65" r="3.2"/><circle cx="39" cy="55" r="3.2"/><circle cx="53" cy="49" r="3.2"/><circle cx="70" cy="40" r="3.2"/><circle cx="90" cy="31" r="3.2"/><circle cx="106" cy="18" r="3.2"/></g>
-</svg></div></td><td>Ajusta coeficientes de uma relação linear entre atributos e valor-alvo.</td><td>Baseline interpretável para variáveis numéricas.</td><td>Não representa diretamente relações curvas complexas sem transformação de atributos.</td></tr>
+</svg></div></td><td>Ajusta coeficientes de uma relação linear entre atributos e valor-alvo.</td><td>Baseline interpretável para variáveis numéricas.</td><td><strong>Limitação:</strong> se a relação entre os atributos e o valor previsto for curva, uma reta pode errar sistematicamente. <strong>Cuidado:</strong> examine os erros e compare com modelos não lineares.</td></tr>
 <tr><td><strong>Regressão logística</strong> <span class="tag">Classificação</span></td><td><div class="algo-visual">
 <svg viewBox="0 0 126 86" role="img" aria-label="Probabilidade prevista pela curva sigmoid, de zero até um">
 <title>Regressão logística: probabilidade sigmoid</title>
@@ -139,7 +139,7 @@
 <path d="M15 69 C40 69 45 67 55 56 S70 19 80 16 S103 12 115 12" class="model"/>
 <g class="point-a"><circle cx="26" cy="69" r="3"/><circle cx="38" cy="68" r="3"/><circle cx="49" cy="63" r="3"/></g>
 <g class="point-b"><circle cx="85" cy="13" r="3"/><circle cx="99" cy="12" r="3"/><circle cx="109" cy="12" r="3"/></g>
-</svg></div></td><td>Aprende uma combinação linear dos atributos e transforma a saída em probabilidade de classe.</td><td>Baseline rápido e interpretável para classificação.</td><td>Fronteira linear no espaço de atributos original.</td></tr>
+</svg></div></td><td>Aprende uma combinação linear dos atributos e transforma a saída em probabilidade de classe.</td><td>Baseline rápido e interpretável para classificação.</td><td><strong>Limitação:</strong> nos atributos originais, separa as classes com uma fronteira linear. <strong>Cuidado:</strong> se os grupos exigirem uma fronteira curva, avalie novos atributos ou outros modelos.</td></tr>
 <tr><td><strong>k-NN</strong> <span class="tag">Classificação / regressão</span></td><td><div class="algo-visual">
 <svg viewBox="0 0 126 86" role="img" aria-label="Nova observação em destaque e seus vizinhos mais próximos">
 <title>k-NN: votação dos vizinhos mais próximos</title>
@@ -149,7 +149,7 @@
 <g class="point-b"><circle cx="56" cy="55" r="4"/><circle cx="98" cy="19" r="4"/><circle cx="102" cy="64" r="4"/></g>
 <circle cx="62" cy="42" r="5.8" class="special"/>
 <text x="62" y="45" text-anchor="middle" class="diagram-value">?</text>
-</svg></div></td><td>Consulta os exemplos mais próximos segundo uma medida de distância.</td><td>Relações locais; datasets de porte administrável.</td><td>Escala dos atributos e custo de inferência podem pesar muito.</td></tr>
+</svg></div></td><td>Consulta os exemplos mais próximos segundo uma medida de distância.</td><td>Relações locais; datasets de porte administrável.</td><td><strong>Limitação:</strong> atributos com números muito maiores podem dominar o cálculo de distância. <strong>Cuidado:</strong> padronize as escalas e considere que a previsão pode ser lenta com muitos exemplos.</td></tr>
 <tr><td><strong>Árvore de decisão</strong> <span class="tag">Classificação / regressão</span></td><td><div class="algo-visual">
 <svg viewBox="0 0 126 86" role="img" aria-label="Uma pergunta inicial que se divide em dois caminhos e termina em folhas de decisão">
 <title>Árvore de decisão: divisões sucessivas</title>
@@ -159,7 +159,7 @@
 <rect x="77" y="37" width="32" height="16" rx="4" class="edge-node"/><text x="93" y="48" text-anchor="middle" class="diagram-value">x₃?</text>
 <circle cx="18" cy="72" r="5" class="point-a"/><circle cx="47" cy="72" r="5" class="point-b"/>
 <circle cx="78" cy="72" r="5" class="point-b"/><circle cx="108" cy="72" r="5" class="point-a"/>
-</svg></div></td><td>Aprende perguntas sucessivas sobre atributos e associa regiões a previsões.</td><td>Regras e interações não lineares interpretáveis.</td><td>Árvores profundas podem sobreajustar.</td></tr>
+</svg></div></td><td>Aprende perguntas sucessivas sobre atributos e associa regiões a previsões.</td><td>Regras e interações não lineares interpretáveis.</td><td><strong>Limitação:</strong> uma árvore muito profunda pode aprender até o ruído dos dados de treino. <strong>Cuidado:</strong> limite a profundidade e compare os resultados de treino e validação.</td></tr>
 <tr><td><strong>Random Forest</strong> <span class="tag">Ensemble</span></td><td><div class="algo-visual">
 <svg viewBox="0 0 126 86" role="img" aria-label="Três árvores de decisão com previsões combinadas em um voto">
 <title>Random Forest: combinação de árvores</title>
@@ -170,7 +170,7 @@
 <rect x="38" y="54" width="28" height="15" rx="5" class="edge-node"/><text x="52" y="64" text-anchor="middle" class="diagram-value">voto</text>
 <circle cx="108" cy="58" r="6" class="point-a"/>
 <text x="61" y="81" class="diagram-label" text-anchor="middle">combinação</text>
-</svg></div></td><td>Combina previsões de diversas árvores treinadas com aleatoriedade.</td><td>Baseline robusto para relações tabulares não lineares.</td><td>Menos interpretável que uma árvore única; mais custo de memória.</td></tr>
+</svg></div></td><td>Combina previsões de diversas árvores treinadas com aleatoriedade.</td><td>Baseline robusto para relações tabulares não lineares.</td><td><strong>Limitação:</strong> combinar muitas árvores torna cada decisão mais difícil de explicar e aumenta o uso de memória. <strong>Cuidado:</strong> verifique se o ganho de desempenho compensa essa complexidade.</td></tr>
 <tr><td><strong>SVM</strong> <span class="tag">Classificação</span></td><td><div class="algo-visual">
 <svg viewBox="0 0 126 86" role="img" aria-label="Fronteira de separação linear e duas linhas paralelas marcando a margem">
 <title>SVM: fronteira de decisão com margem</title>
@@ -180,7 +180,7 @@
 <g class="point-b"><circle cx="46" cy="77" r="3.4"/><circle cx="74" cy="70" r="3.4"/><circle cx="98" cy="61" r="3.4"/></g>
 <circle cx="60" cy="28" r="5.4" class="special"/>
 <circle cx="68" cy="60" r="5.4" class="special"/>
-</svg></div></td><td>Aprende uma fronteira de separação com margem; kernels podem modelar relações não lineares.</td><td>Separação entre classes, inclusive com atributos numerosos.</td><td>Escala e configuração importam; custo pode aumentar em datasets grandes.</td></tr>
+</svg></div></td><td>Aprende uma fronteira de separação com margem; kernels podem modelar relações não lineares.</td><td>Separação entre classes, inclusive com atributos numerosos.</td><td><strong>Limitação:</strong> o resultado depende da escala dos atributos e da escolha do kernel e de seus parâmetros. <strong>Cuidado:</strong> padronize os dados e avalie o custo em conjuntos grandes, sobretudo com kernel não linear.</td></tr>
 <tr><td><strong>K-Means</strong> <span class="tag">Agrupamento</span></td><td><div class="algo-visual">
 <svg viewBox="0 0 126 86" role="img" aria-label="Três grupos de pontos em torno de centroides identificados com cruzes">
 <title>K-Means: grupos e centroides</title>
@@ -188,7 +188,7 @@
 <g class="point-b"><circle cx="87" cy="20" r="3"/><circle cx="103" cy="22" r="3"/><circle cx="96" cy="34" r="3"/><circle cx="81" cy="31" r="3"/></g>
 <g class="point-c"><circle cx="52" cy="62" r="3"/><circle cx="68" cy="65" r="3"/><circle cx="58" cy="74" r="3"/><circle cx="74" cy="75" r="3"/></g>
 <g class="model" style="stroke-width:1.8"><path d="M28 19 V35 M20 27 H36"/><path d="M93 18 V34 M85 26 H101"/><path d="M64 60 V76 M56 68 H72"/></g>
-</svg></div></td><td>Organiza os dados em grupos próximos a centroides.</td><td>Exploração sem rótulos conhecidos.</td><td>É outra tarefa: os grupos não são automaticamente classes verdadeiras.</td></tr>
+</svg></div></td><td>Organiza os dados em grupos próximos a centroides.</td><td>Exploração sem rótulos conhecidos.</td><td><strong>Limitação:</strong> é necessário escolher quantos grupos buscar, e o método favorece grupos relativamente compactos. <strong>Cuidado:</strong> ajuste a escala e não interprete os grupos como classes verdadeiras sem análise.</td></tr>
 <tr><td><strong>MLP</strong> <span class="tag">Rede neural</span></td><td><div class="algo-visual">
 <svg viewBox="0 0 126 86" role="img" aria-label="Rede neural com três neurônios de entrada, quatro na camada oculta e dois de saída">
 <title>MLP: rede multicamada totalmente conectada</title>
@@ -199,7 +199,7 @@
 <g class="point-a"><circle cx="18" cy="17" r="5"/><circle cx="18" cy="43" r="5"/><circle cx="18" cy="69" r="5"/></g>
 <g class="point-b"><circle cx="61" cy="12" r="5"/><circle cx="61" cy="32" r="5"/><circle cx="61" cy="52" r="5"/><circle cx="61" cy="72" r="5"/></g>
 <g class="point-c"><circle cx="108" cy="29" r="5"/><circle cx="108" cy="57" r="5"/></g>
-</svg></div></td><td>Compõe transformações parametrizadas e ativações não lineares.</td><td>Relações complexas e dados adequados ao treinamento.</td><td>Exige cuidados com escala, capacidade, ajuste e custo computacional.</td></tr>
+</svg></div></td><td>Compõe transformações parametrizadas e ativações não lineares.</td><td>Relações complexas e dados adequados ao treinamento.</td><td><strong>Limitação:</strong> redes flexíveis podem memorizar o treino, especialmente com poucos exemplos. <strong>Cuidado:</strong> padronize os atributos e valide a arquitetura e o treinamento antes de confiar nas previsões.</td></tr>
 </tbody></table></div>
 <p class="mini">Os oito gráficos são representações esquemáticas dos mecanismos de cada algoritmo, não resultados medidos de um experimento.</p>
 <h3>Experimento visual — a geometria muda a escolha</h3>
