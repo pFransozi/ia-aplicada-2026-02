@@ -80,6 +80,31 @@
 .a10 .algo-visual .diagram-value{fill:var(--ink);font-size:9px;font-family:inherit;font-weight:700}
 @media(max-width:690px){.a10 .algo-table{min-width:1080px}.a10 .algo-visual svg{width:120px;height:82px}}
 
+
+/* Detalhamento progressivo do fluxograma: conceitos + código executável. */
+.a10 .pipeline .pipe a{color:var(--blue);font-weight:700;text-decoration:none}
+.a10 .pipeline .pipe a:hover,.a10 .pipeline .pipe a:focus-visible{text-decoration:underline}
+.a10 .pipeline .pipe a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.a10 .pipeline-kicker{margin:1.4rem 0 .45rem;font-size:.87rem;color:var(--muted);font-weight:650}
+.a10 .pipeline-details{margin:2.2rem 0}
+.a10 .pipeline-detail{padding:1.7rem 0;border-top:1px solid var(--line);scroll-margin-top:90px}
+.a10 .pipeline-detail:last-child{border-bottom:1px solid var(--line)}
+.a10 .pipeline-detail h4{margin:0 0 .55rem;color:var(--ink);font-size:1.16rem}
+.a10 .pipeline-detail .detail-layout{display:grid;grid-template-columns:minmax(210px,.8fr) minmax(0,1.55fr);gap:1.35rem;align-items:start}
+.a10 .pipeline-detail .detail-concept p{font-size:.94rem;line-height:1.65;margin:.5rem 0}
+.a10 .pipeline-detail .detail-label{font-size:.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.035em;margin:.6rem 0}
+.a10 .pipeline-detail .detail-code{min-width:0}
+.a10 .pipeline-detail .detail-code pre{margin:0;padding:1rem 1.1rem;font-size:.84rem;line-height:1.58}
+.a10 .pipeline-detail .detail-tip{font-size:.87rem;color:var(--muted);line-height:1.6;margin:.65rem 0 0}
+.a10 .pipeline-detail .detail-heading{display:flex;gap:.7rem;align-items:center;margin-bottom:.8rem}
+.a10 .pipeline-detail .detail-no{display:inline-grid;place-items:center;width:2rem;height:2rem;flex:0 0 2rem;background:var(--soft);border:1px solid var(--line);border-radius:9px;color:var(--blue);font-weight:800}
+.a10 .pipeline-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;margin:1rem 0}
+.a10 .pipeline-split>div{border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:1rem}
+.a10 .pipeline-split small{display:block;color:var(--muted);margin-top:.25rem}
+.a10 .pipeline-split .reserved{border-style:dashed}
+@media(max-width:800px){.a10 .pipeline-detail .detail-layout{grid-template-columns:1fr}.a10 .pipeline-detail .detail-code pre{font-size:.81rem}}
+@media(max-width:520px){.a10 .pipeline-split{grid-template-columns:1fr}.a10 .pipeline-detail{padding:1.3rem 0}}
+
 </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page a10">
@@ -220,21 +245,198 @@
 <tr><td><strong>Como identificar falhas em equipamentos a partir de sensores?</strong></td><td>Existem rótulos de falha/normal e várias medidas, como temperatura e vibração. As variáveis podem interagir de forma não linear.</td><td>Comparar regressão logística, árvore de decisão e Random Forest. Verificar especialmente quantas falhas deixam de ser detectadas, além da qualidade geral da classificação.</td></tr>
 <tr><td><strong>Como classificar mensagens como spam ou legítimas?</strong></td><td>O texto precisa ser convertido em atributos; a representação pode ter milhares de dimensões, com muitos valores zero.</td><td>Experimentar regressão logística ou SVM linear. Ajustar a vetorização somente com dados de treinamento, dentro do pipeline, e comparar métricas de classificação.</td></tr>
 <tr><td><strong>Como detectar um evento raro, como defeitos pouco frequentes?</strong></td><td>Uma classe aparece muito menos que a outra. Prever sempre a classe majoritária pode gerar alta acurácia e quase nenhuma detecção do evento raro.</td><td>Examinar matriz de confusão, precisão, recall e F1, em vez de usar apenas acurácia. Considerar o custo de falsos positivos e falsos negativos; avaliar limiar e ponderação de classes na validação.</td></tr>
-<tr><td><strong>O que acontece quando os atributos têm escalas diferentes?</strong></td><td>Uma variável varia de 0 a 1 e outra de 0 a 10.000, por exemplo. Valores maiores podem dominar distâncias, mesmo sem maior relevância para o problema.</td><td>Comparar k-NN com e sem padronização, ajustada apenas no treino de cada partição. Investigar também diferentes valores de <em>k</em>. Árvores servem como contraste por serem geralmente menos sensíveis à escala.</td></tr>
-<tr><td><strong>Como avaliar dados registrados ao longo do tempo ou por um mesmo equipamento?</strong></td><td>Há medições correlacionadas, repetidas por equipamento ou ordenadas temporalmente. Uma separação aleatória pode misturar observações muito próximas.</td><td>Definir uma separação por grupos quando o objetivo for generalizar para novos equipamentos, ou temporal quando a aplicação precisar prever períodos futuros. Evitar vazamento entre treino e avaliação.</td></tr>
-<tr><td><strong>Como identificar grupos de comportamento sem classes conhecidas?</strong></td><td>Existem atributos dos registros, mas não há rótulos informando a qual categoria cada um pertence.</td><td>Experimentar K-Means como ponto de partida, examinando escala, número de grupos, qualidade e interpretação dos agrupamentos. Não tratar os grupos obtidos como classes verdadeiras.</td></tr>
-<tr><td><strong>Como treinar com atributos numéricos, categóricos e valores ausentes?</strong></td><td>O conjunto contém tipos diferentes de atributos e informações não preenchidas.</td><td>Construir um pré-processamento apropriado por coluna (imputação e codificação, quando necessárias), ajustado somente no treino de cada partição. Comparar modelos depois de assegurar um pipeline consistente.</td></tr>
+<tr><td><strong>O que acontece quando os atributos têm escalas diferentes?</strong></td<section class="section section-soft" id="pipeline"><div class="container">
+<div class="section-heading"><p class="eyebrow">Parte IV · Engenharia do experimento</p><h2>O pipeline clássico de treinamento e avaliação</h2>
+<p>Na Aula 09, vimos o fluxo conceitual. Agora, vamos relacionar cada etapa à estrutura de código de uma aplicação de Machine Learning. O objetivo não é apenas treinar um algoritmo, mas construir uma avaliação reproduzível e evitar que informações reservadas influenciem o treinamento.</p></div>
+
+<h3>Visão geral — fluxograma</h3>
+<p>O percurso abaixo resume sete etapas. Cada uma está ligada a um exemplo de implementação, apresentado na sequência.</p>
+<div class="pipeline" aria-label="Fluxograma de desenvolvimento e avaliação de Machine Learning">
+<div class="pipe"><span class="pipe-index">01</span><div><strong>Definir o problema, o alvo e a métrica</strong><small>Que resposta queremos prever e como reconheceremos um bom resultado? <a href="#pipeline-1">Ver exemplo de código</a>.</small></div></div><div class="arrow" aria-hidden="true">↓</div>
+<div class="pipe"><span class="pipe-index">02</span><div><strong>Obter e inspecionar os dados</strong><small>Examinar atributos, rótulos, distribuição e possíveis problemas de qualidade. <a href="#pipeline-2">Ver exemplo de código</a>.</small></div></div><div class="arrow" aria-hidden="true">↓</div>
+<div class="pipe"><span class="pipe-index">03</span><div><strong>Separar desenvolvimento e teste</strong><small>Proteger a avaliação final antes de ajustar qualquer transformação. <a href="#pipeline-3">Ver exemplo de código</a>.</small></div></div><div class="arrow" aria-hidden="true">↓</div>
+<div class="pipe"><span class="pipe-index">04</span><div><strong>Definir o pré-processamento</strong><small>Encapsular imputação, padronização e modelo no mesmo pipeline. <a href="#pipeline-4">Ver exemplo de código</a>.</small></div></div><div class="arrow" aria-hidden="true">↓</div>
+<div class="pipe"><span class="pipe-index">05</span><div><strong>Treinar, validar e selecionar</strong><small>Comparar modelos candidatos com a mesma validação. <a href="#pipeline-5">Ver exemplo de código</a>.</small></div></div><div class="arrow" aria-hidden="true">↓</div>
+<div class="pipe"><span class="pipe-index">06</span><div><strong>Avaliar o modelo final</strong><small>Reajustar no desenvolvimento e utilizar o teste preservado apenas no final. <a href="#pipeline-6">Ver exemplo de código</a>.</small></div></div><div class="arrow" aria-hidden="true">↓</div>
+<div class="pipe"><span class="pipe-index">07</span><div><strong>Salvar e reutilizar o pipeline</strong><small>Preservar as transformações e o classificador para inferência. <a href="#pipeline-7">Ver exemplo de código</a>.</small></div></div>
+</div>
+
+<div class="pipeline-split" aria-label="Papéis dos conjuntos de dados">
+<div><strong>Desenvolvimento: treino + validação cruzada</strong><small>É aqui que ajustamos transformações, aprendemos parâmetros e selecionamos o modelo.</small></div>
+<div class="reserved"><strong>Teste final: reservado</strong><small>Fica fora de todas essas escolhas e só é utilizado depois de selecionar o procedimento.</small></div>
+</div>
+
+<h3>Detalhamento das etapas com Python</h3>
+<p>Os trechos seguintes formam <strong>um único exemplo executável em sequência</strong>, utilizando o conjunto de dados <code>Wine</code>, distribuído com o scikit-learn. Ele contém medições químicas numéricas e três classes de vinho. O exemplo é didático e não representa um sistema de produção.</p>
+
+<div class="pipeline-details">
+<article class="pipeline-detail" id="pipeline-1">
+<div class="detail-heading"><span class="detail-no">01</span><h4>Definir o problema, o alvo e a métrica</h4></div>
+<div class="detail-layout"><div class="detail-concept">
+<p><strong>Problema:</strong> prever a classe de um vinho a partir das suas características químicas.</p>
+<p><strong>Entrada (X):</strong> medidas numéricas. <strong>Resposta (y):</strong> uma das três classes conhecidas.</p>
+<p><strong>Critério:</strong> comparar modelos pelo F1 macro, que dá o mesmo peso a cada classe. A acurácia será uma métrica complementar.</p>
+</div><div class="detail-code"><pre><code class="language-python">from sklearn.datasets import load_wine
+
+dados = load_wine(as_frame=True)
+X = dados.data.copy()       # Atributos
+y = dados.target.copy()     # Classes
+metrica_principal = "f1_macro"</code></pre>
+<p class="detail-tip">O alvo não pode ser incluído entre os atributos de entrada; isso revelaria ao modelo a própria resposta.</p></div></div>
+</article>
+
+<article class="pipeline-detail" id="pipeline-2">
+<div class="detail-heading"><span class="detail-no">02</span><h4>Obter e inspecionar os dados</h4></div>
+<div class="detail-layout"><div class="detail-concept">
+<p>Antes de treinar, precisamos conhecer as dimensões do conjunto, os tipos de variáveis, a quantidade de valores ausentes e a distribuição das classes.</p>
+<p>No exemplo, os atributos são numéricos. Em dados reais, também devemos examinar duplicatas, origem, dependências por grupo ou tempo e representatividade.</p>
+</div><div class="detail-code"><pre><code class="language-python">print("Amostras e atributos:", X.shape)
+print("Tipos dos atributos:")
+print(X.dtypes.value_counts())
+print("Ausências:", X.isna().sum().sum())
+print("Exemplos por classe:")
+print(y.value_counts().sort_index())</code></pre>
+<p class="detail-tip">A inspeção inicial descreve o dataset. Não devemos utilizar padrões descobertos no conjunto de teste para orientar a seleção do modelo.</p></div></div>
+</article>
+
+<article class="pipeline-detail" id="pipeline-3">
+<div class="detail-heading"><span class="detail-no">03</span><h4>Separar desenvolvimento e teste</h4></div>
+<div class="detail-layout"><div class="detail-concept">
+<p>Reservamos 20% das observações para a avaliação final. Os outros 80% serão usados para treinamento e validação cruzada.</p>
+<p><strong>Estratificar</strong> ajuda a preservar a proporção das classes em cada conjunto. Isso é adequado ao exemplo, em que tratamos as observações como independentes.</p>
+</div><div class="detail-code"><pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X_dev, X_teste, y_dev, y_teste = train_test_split(
+    X, y,
+    test_size=0.20,
+    stratify=y,
+    random_state=42
+)
+
+print("Desenvolvimento:", len(X_dev))
+print("Teste:", len(X_teste))</code></pre>
+<p class="detail-tip">Para dados temporais ou medições repetidas do mesmo equipamento, uma divisão aleatória pode ser inadequada; é necessário usar uma estratégia temporal ou por grupos.</p></div></div>
+</article>
+
+<article class="pipeline-detail" id="pipeline-4">
+<div class="detail-heading"><span class="detail-no">04</span><h4>Definir o pré-processamento dentro de um Pipeline</h4></div>
+<div class="detail-layout"><div class="detail-concept">
+<p>O pré-processamento transforma os atributos no formato esperado pelo modelo. Neste exemplo, imputamos eventuais valores ausentes pela mediana e padronizamos as escalas.</p>
+<p>O objeto <code>Pipeline</code> garante que essas operações sejam <strong>ajustadas apenas nos dados de treinamento de cada partição</strong>.</p>
+</div><div class="detail-code"><pre><code class="language-python">from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
+
+def criar_pipeline(estimador):
+    return Pipeline([
+        ("imputacao", SimpleImputer(strategy="median")),
+        ("escala", StandardScaler()),
+        ("modelo", estimador)
+    ])</code></pre>
+<p class="detail-tip">O Wine não contém valores ausentes no conjunto original, mas a etapa de imputação mostra a estrutura usual. Para atributos categóricos, usaríamos também codificação e, se necessário, <code>ColumnTransformer</code>. Árvores normalmente não exigem padronização, embora ela seja mantida aqui por uniformidade didática.</p></div></div>
+</article>
+
+<article class="pipeline-detail" id="pipeline-5">
+<div class="detail-heading"><span class="detail-no">05</span><h4>Treinar, validar e selecionar modelos candidatos</h4></div>
+<div class="detail-layout"><div class="detail-concept">
+<p>Comparamos quatro algoritmos utilizando <strong>as mesmas cinco partições estratificadas</strong> do conjunto de desenvolvimento.</p>
+<p>Em cada rodada, quatro partições servem para treinar e uma para validar. O pipeline ajusta novamente o pré-processamento em cada treino.</p>
+<p>Escolhemos pelo F1 macro médio de validação; os hiperparâmetros aqui foram definidos previamente para simplificar o experimento.</p>
+</div><div class="detail-code"><pre><code class="language-python">import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import StratifiedKFold, cross_validate
+
+modelos = {
+    "Logística": LogisticRegression(max_iter=2000),
+    "k-NN": KNeighborsClassifier(n_neighbors=5),
+    "Árvore": DecisionTreeClassifier(max_depth=5, random_state=42),
+    "Floresta": RandomForestClassifier(n_estimators=100, random_state=42)
+}
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+linhas = []
+
+for nome, estimador in modelos.items():
+    notas = cross_validate(
+        criar_pipeline(estimador), X_dev, y_dev,
+        cv=cv, scoring={"f1": metrica_principal, "acc": "accuracy"}
+    )
+    linhas.append({
+        "modelo": nome,
+        "f1_macro": notas["test_f1"].mean(),
+        "acuracia": notas["test_acc"].mean()
+    })
+
+comparacao = pd.DataFrame(linhas).sort_values(
+    "f1_macro", ascending=False
+)
+print(comparacao.round(3).to_string(index=False))
+melhor_nome = comparacao.iloc[0]["modelo"]</code></pre>
+<p class="detail-tip">A pontuação média orienta a escolha inicial; também vale verificar variabilidade, desempenho por classe e custo. Se formos ajustar hiperparâmetros, isso deve ocorrer dentro do processo de validação, sem consultar o teste final.</p></div></div>
+</article>
+
+<article class="pipeline-detail" id="pipeline-6">
+<div class="detail-heading"><span class="detail-no">06</span><h4>Ajustar o modelo selecionado e avaliar no teste</h4></div>
+<div class="detail-layout"><div class="detail-concept">
+<p>Depois de escolher a família de modelos, ajustamos o pipeline selecionado com <strong>todo o conjunto de desenvolvimento</strong>.</p>
+<p>Agora avaliamos no teste, que permaneceu fora da seleção. O relatório por classe e a matriz de confusão ajudam a identificar erros que uma média isolada não revela.</p>
+</div><div class="detail-code"><pre><code class="language-python">import matplotlib.pyplot as plt
+from sklearn.metrics import classification_report, ConfusionMatrixDisplay
+
+modelo_final = criar_pipeline(modelos[melhor_nome])
+modelo_final.fit(X_dev, y_dev)
+previsoes = modelo_final.predict(X_teste)
+
+print("Modelo selecionado:", melhor_nome)
+print(classification_report(
+    y_teste, previsoes,
+    target_names=dados.target_names,
+    zero_division=0
+))
+ConfusionMatrixDisplay.from_predictions(
+    y_teste, previsoes,
+    display_labels=dados.target_names
+)
+plt.tight_layout()
+plt.show()</code></pre>
+<p class="detail-tip">Se o resultado do teste não for satisfatório, devemos registrar a limitação e revisar o projeto com novo protocolo de avaliação, em vez de escolher repetidamente com base no mesmo teste.</p></div></div>
+</article>
+
+<article class="pipeline-detail" id="pipeline-7">
+<div class="detail-heading"><span class="detail-no">07</span><h4>Salvar o pipeline completo e realizar uma inferência</h4></div>
+<div class="detail-layout"><div class="detail-concept">
+<p>Salvar somente o classificador pode deixar de fora a imputação e a padronização. Por isso, persistimos <strong>o pipeline completo</strong>.</p>
+<p>Na aplicação, novos registros precisam ter os mesmos atributos, nomes de colunas e unidades esperados durante o treinamento.</p>
+</div><div class="detail-code"><pre><code class="language-python">import joblib
+
+joblib.dump(modelo_final, "modelo_vinhos.joblib")
+
+# Carregar apenas artefatos de origem confiável.
+modelo_carregado = joblib.load("modelo_vinhos.joblib")
+amostra = X_teste.iloc[[0]]  # Apenas demonstra a inferência
+print("Classe prevista:", modelo_carregado.predict(amostra))</code></pre>
+<p class="detail-tip">Em produção, documentar versões do modelo e das bibliotecas, origem dos dados, desempenho de referência e critérios para acompanhar mudanças nos dados. Arquivos <code>joblib</code> de origem desconhecida não devem ser carregados.</p></div></div>
+</article>
+</div>
+
+<h3>O erro metodológico mais comum: vazamento de informação</h3>
+<div class="two">
+<div class="panel"><h3>Procedimento incorreto</h3><p><strong>Padronizar tudo → dividir → treinar → testar.</strong></p><p>O cálculo da média e do desvio-padrão utiliza também as observações reservadas. Assim, o procedimento de avaliação deixa de simular corretamente dados novos.</p></div>
+<div class="panel"><h3>Procedimento correto</h3><p><strong>Separar → ajustar transformações em treino → validar → testar uma vez.</strong></p><p>Na validação cruzada, cada dobra ajusta sua própria imputação e padronização. O <code>Pipeline</code> permite realizar esse procedimento de forma consistente.</p></div>
+</div>
+
+<h3>Métrica de avaliação depende do problema</h3>
+<div class="table-scroll"><table><thead><tr><th>Problema</th><th>Métricas iniciais</th><th>Interpretação</th></tr></thead><tbody>
+<tr><td>Regressão</td><td>MAE, RMSE</td><td>MAE resume a magnitude média dos erros; RMSE dá mais peso aos desvios maiores. Ambos ficam na unidade do valor previsto.</td></tr>
+<tr><td>Classificação</td><td>Matriz de confusão, precision, recall, F1</td><td>Permitem examinar os tipos de erro, além da porcentagem total de acertos.</td></tr>
+<tr><td>Classes desbalanceadas</td><td>Precision, recall, F1; PR-AUC quando pertinente</td><td>Acurácia isolada pode ocultar o mau desempenho na classe rara.</td></tr>
+<tr><td>Agrupamento</td><td>Silhouette e interpretação no domínio</td><td>Uma pontuação de agrupamento não substitui a avaliação do significado dos grupos.</td></tr>
 </tbody></table></div>
-<p class="mini">As situações são exemplos didáticos. Elas sugerem candidatos e procedimentos de avaliação, não resultados garantidos para qualquer conjunto de dados.</p>
-<div class="note"><strong>Conclusão.</strong> Dados e requisitos não apontam automaticamente para um algoritmo vencedor: eles orientam a escolha dos <strong>modelos candidatos</strong>, do <strong>pré-processamento</strong> e do <strong>protocolo de avaliação</strong>. É a validação adequada que permite comparar essas alternativas com evidências. Essa é a função do pipeline apresentado a seguir.</div>
+<div class="note"><p><strong>Conclusão.</strong> Um pipeline correto torna explícitas as decisões sobre dados, transformações, modelos e validação. O modelo selecionado não é apenas o que melhor se ajusta ao treinamento: é aquele cujo desempenho em dados não utilizados no ajuste oferece evidências adequadas para a aplicação.</p></div>
 </div></section>
-<section class="section section-soft" id="pipeline"><div class="container">
-<div class="section-heading"><p class="eyebrow">Parte IV · Engenharia do experimento</p><h2>O pipeline clássico de treinamento e avaliação</h2><p>Um pipeline não é apenas a sequência de chamadas no código: ele define quais dados podem influenciar cada decisão e como reproduzir as transformações durante a inferência.</p></div>
-<div class="pipeline">
-<div class="pipe"><span class="pipe-index">01</span><div><strong>Problema, alvo e critérios de sucesso</strong><small>Que saída será prevista? Qual erro importa? Quais requisitos de custo, explicabilidade e tempo de resposta precisam ser atendidos?</small></div></div><div class="arrow">↓</div>
-<div class="pipe"><span class="pipe-index">02</span><div><strong>Inspeção dos dados</strong><small>Origem, tipos, valores ausentes, duplicatas, distribuição dos alvos, grupos e relações temporais.</small></div></div><div class="arrow">↓</div>
-<div class="pipe"><span class="pipe-index">03</span><div><strong>Separação antes do ajuste</strong><small>Reservar teste final. Definir validação cruzada ou partição de validação, respeitando grupos e tempo quando pertinente.</small></div></div><div class="arrow">↓</div>
-<div class="pipe"><span class="pipe-index">04</span><div><strong>Pré-processamento dentro do pipeline</strong><small>Imputar, codificar ou padronizar ajustando as transformações somente no treino de cada partição.</small></div></div><div class="arrow">↓</div>
+dronizar ajustando as transformações somente no treino de cada partição.</small></div></div><div class="arrow">↓</div>
 <div class="pipe"><span class="pipe-index">05</span><div><strong>Treino e seleção dos candidatos</strong><small>Treinar algoritmos comparáveis; escolher pelo desempenho em validação, sem consultar o teste para decidir.</small></div></div><div class="arrow">↓</div>
 <div class="pipe"><span class="pipe-index">06</span><div><strong>Avaliação final</strong><small>Após a seleção, ajustar no conjunto de desenvolvimento e avaliar uma única vez em teste preservado.</small></div></div><div class="arrow">↓</div>
 <div class="pipe"><span class="pipe-index">07</span><div><strong>Persistência, integração e monitoramento</strong><small>Salvar o pipeline completo, verificar inferência, versão e limites de aplicação.</small></div></div>
