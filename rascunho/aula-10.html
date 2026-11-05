@@ -60,6 +60,30 @@
 @media(max-width:900px){.a10 .three,.a10 .grid-chart{grid-template-columns:1fr 1fr}.a10 .steps{grid-template-columns:1fr 1fr}.a10 .site-header .main-nav a:not(:last-of-type){display:none}}
 @media(max-width:690px){.a10 .two,.a10 .three,.a10 .grid-chart{grid-template-columns:1fr}.a10 .hero aside{max-width:none}.a10 .section{padding:2.1rem 0}.a10 .panel,.a10 .lab{padding:.85rem}.a10 .site-header .brand strong{white-space:normal}}
 @media print{.a10 .controls,.a10 .toc,.a10 .site-header{display:none}}
+
+/* Esquemas vetoriais compactos de algoritmos; permanecem legíveis em claro/escuro. */
+.a10 .algo-table{min-width:1080px;table-layout:fixed}
+.a10 .algo-table th:nth-child(1){width:18%}
+.a10 .algo-table th:nth-child(2){width:152px}
+.a10 .algo-table th:nth-child(3){width:24%}
+.a10 .algo-table td:nth-child(2){text-align:center;vertical-align:middle}
+.a10 .algo-visual{display:flex;align-items:center;justify-content:center}
+.a10 .algo-visual svg{display:block;width:126px;height:86px;border:1px solid var(--line);border-radius:9px;background:var(--soft);overflow:hidden}
+.a10 .algo-visual .axis{stroke:var(--muted);stroke-width:1;opacity:.65}
+.a10 .algo-visual .gridline{stroke:var(--line);stroke-width:1}
+.a10 .algo-visual .model{fill:none;stroke:var(--teal);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.a10 .algo-visual .margin{fill:none;stroke:var(--teal);stroke-width:1.5;stroke-dasharray:4 3;opacity:.85}
+.a10 .algo-visual .link{stroke:var(--muted);stroke-width:1.35;opacity:.6}
+.a10 .algo-visual .point-a{fill:var(--blue);stroke:var(--paper);stroke-width:1}
+.a10 .algo-visual .point-b{fill:var(--amber);stroke:var(--paper);stroke-width:1}
+.a10 .algo-visual .point-c{fill:var(--teal);stroke:var(--paper);stroke-width:1}
+.a10 .algo-visual .centroid{fill:var(--paper);stroke:var(--ink);stroke-width:1.5}
+.a10 .algo-visual .special{fill:var(--paper);stroke:var(--violet);stroke-width:2}
+.a10 .algo-visual .edge-node{fill:var(--paper);stroke:var(--teal);stroke-width:1.6}
+.a10 .algo-visual .diagram-label{fill:var(--muted);font-size:8.5px;font-family:inherit}
+.a10 .algo-visual .diagram-value{fill:var(--ink);font-size:9px;font-family:inherit;font-weight:700}
+@media(max-width:690px){.a10 .algo-table{min-width:1080px}.a10 .algo-visual svg{width:120px;height:82px}}
+
 </style>
 </head>
 <body class="teaching-page teaching-lesson lesson-page a10">
@@ -99,16 +123,85 @@
 </div></section>
 <section class="section section-soft" id="algoritmos"><div class="container">
 <div class="section-heading"><p class="eyebrow">Parte II · Repertório</p><h2>Algoritmos que representam padrões de maneiras diferentes</h2><p>Os modelos abaixo são candidatos usuais em problemas tabulares. Nesta aula, o objetivo é compreender suas hipóteses e limitações, não derivar toda a matemática de cada método.</p></div>
-<div class="table-scroll"><table><thead><tr><th>Família / exemplo</th><th>Como produz previsões</th><th>Quando investigar</th><th>Atenção</th></tr></thead><tbody>
-<tr><td><strong>Regressão linear</strong> <span class="tag">Regressão</span></td><td>Ajusta coeficientes de uma relação linear entre atributos e valor-alvo.</td><td>Baseline interpretável para variáveis numéricas.</td><td>Não representa diretamente relações curvas complexas sem transformação de atributos.</td></tr>
-<tr><td><strong>Regressão logística</strong> <span class="tag">Classificação</span></td><td>Aprende uma combinação linear dos atributos e transforma a saída em probabilidade de classe.</td><td>Baseline rápido e interpretável para classificação.</td><td>Fronteira linear no espaço de atributos original.</td></tr>
-<tr><td><strong>k-NN</strong> <span class="tag">Classificação / regressão</span></td><td>Consulta os exemplos mais próximos segundo uma medida de distância.</td><td>Relações locais; datasets de porte administrável.</td><td>Escala dos atributos e custo de inferência podem pesar muito.</td></tr>
-<tr><td><strong>Árvore de decisão</strong> <span class="tag">Classificação / regressão</span></td><td>Aprende perguntas sucessivas sobre atributos e associa regiões a previsões.</td><td>Regras e interações não lineares interpretáveis.</td><td>Árvores profundas podem sobreajustar.</td></tr>
-<tr><td><strong>Random Forest</strong> <span class="tag">Ensemble</span></td><td>Combina previsões de diversas árvores treinadas com aleatoriedade.</td><td>Baseline robusto para relações tabulares não lineares.</td><td>Menos interpretável que uma árvore única; mais custo de memória.</td></tr>
-<tr><td><strong>SVM</strong> <span class="tag">Classificação</span></td><td>Aprende uma fronteira de separação com margem; kernels podem modelar relações não lineares.</td><td>Separação entre classes, inclusive com atributos numerosos.</td><td>Escala e configuração importam; custo pode aumentar em datasets grandes.</td></tr>
-<tr><td><strong>K-Means</strong> <span class="tag">Agrupamento</span></td><td>Organiza os dados em grupos próximos a centroides.</td><td>Exploração sem rótulos conhecidos.</td><td>É outra tarefa: os grupos não são automaticamente classes verdadeiras.</td></tr>
-<tr><td><strong>MLP</strong> <span class="tag">Rede neural</span></td><td>Compõe transformações parametrizadas e ativações não lineares.</td><td>Relações complexas e dados adequados ao treinamento.</td><td>Exige cuidados com escala, capacidade, ajuste e custo computacional.</td></tr>
+<div class="table-scroll"><table class="algo-table"><thead><tr><th>Família / exemplo</th><th>Representação visual</th><th>Como produz previsões</th><th>Quando investigar</th><th>Atenção</th></tr></thead><tbody>
+<tr><td><strong>Regressão linear</strong> <span class="tag">Regressão</span></td><td><div class="algo-visual">
+<svg viewBox="0 0 126 86" role="img" aria-label="Dispersão de valores numéricos com uma reta ajustada">
+<title>Regressão linear: ajuste de uma reta</title>
+<path d="M12 8 V74 H117" class="axis"/>
+<path d="M18 69 L111 15" class="model"/>
+<g class="point-a"><circle cx="24" cy="65" r="3.2"/><circle cx="39" cy="55" r="3.2"/><circle cx="53" cy="49" r="3.2"/><circle cx="70" cy="40" r="3.2"/><circle cx="90" cy="31" r="3.2"/><circle cx="106" cy="18" r="3.2"/></g>
+</svg></div></td><td>Ajusta coeficientes de uma relação linear entre atributos e valor-alvo.</td><td>Baseline interpretável para variáveis numéricas.</td><td>Não representa diretamente relações curvas complexas sem transformação de atributos.</td></tr>
+<tr><td><strong>Regressão logística</strong> <span class="tag">Classificação</span></td><td><div class="algo-visual">
+<svg viewBox="0 0 126 86" role="img" aria-label="Probabilidade prevista pela curva sigmoid, de zero até um">
+<title>Regressão logística: probabilidade sigmoid</title>
+<path d="M12 7 V73 H117" class="axis"/>
+<text x="3" y="14" class="diagram-label">1</text><text x="3" y="75" class="diagram-label">0</text>
+<path d="M15 69 C40 69 45 67 55 56 S70 19 80 16 S103 12 115 12" class="model"/>
+<g class="point-a"><circle cx="26" cy="69" r="3"/><circle cx="38" cy="68" r="3"/><circle cx="49" cy="63" r="3"/></g>
+<g class="point-b"><circle cx="85" cy="13" r="3"/><circle cx="99" cy="12" r="3"/><circle cx="109" cy="12" r="3"/></g>
+</svg></div></td><td>Aprende uma combinação linear dos atributos e transforma a saída em probabilidade de classe.</td><td>Baseline rápido e interpretável para classificação.</td><td>Fronteira linear no espaço de atributos original.</td></tr>
+<tr><td><strong>k-NN</strong> <span class="tag">Classificação / regressão</span></td><td><div class="algo-visual">
+<svg viewBox="0 0 126 86" role="img" aria-label="Nova observação em destaque e seus vizinhos mais próximos">
+<title>k-NN: votação dos vizinhos mais próximos</title>
+<circle cx="62" cy="42" r="23" class="margin"/>
+<g class="link"><line x1="62" y1="42" x2="53" y2="28"/><line x1="62" y1="42" x2="78" y2="36"/><line x1="62" y1="42" x2="56" y2="55"/></g>
+<g class="point-a"><circle cx="53" cy="28" r="4"/><circle cx="78" cy="36" r="4"/><circle cx="30" cy="66" r="4"/><circle cx="23" cy="34" r="4"/></g>
+<g class="point-b"><circle cx="56" cy="55" r="4"/><circle cx="98" cy="19" r="4"/><circle cx="102" cy="64" r="4"/></g>
+<circle cx="62" cy="42" r="5.8" class="special"/>
+<text x="62" y="45" text-anchor="middle" class="diagram-value">?</text>
+</svg></div></td><td>Consulta os exemplos mais próximos segundo uma medida de distância.</td><td>Relações locais; datasets de porte administrável.</td><td>Escala dos atributos e custo de inferência podem pesar muito.</td></tr>
+<tr><td><strong>Árvore de decisão</strong> <span class="tag">Classificação / regressão</span></td><td><div class="algo-visual">
+<svg viewBox="0 0 126 86" role="img" aria-label="Uma pergunta inicial que se divide em dois caminhos e termina em folhas de decisão">
+<title>Árvore de decisão: divisões sucessivas</title>
+<g class="link"><path d="M63 20 L33 39 M63 20 L93 39 M33 45 L18 67 M33 45 L47 67 M93 45 L78 67 M93 45 L108 67"/></g>
+<rect x="47" y="5" width="32" height="16" rx="4" class="edge-node"/><text x="63" y="16" text-anchor="middle" class="diagram-value">x₁?</text>
+<rect x="17" y="37" width="32" height="16" rx="4" class="edge-node"/><text x="33" y="48" text-anchor="middle" class="diagram-value">x₂?</text>
+<rect x="77" y="37" width="32" height="16" rx="4" class="edge-node"/><text x="93" y="48" text-anchor="middle" class="diagram-value">x₃?</text>
+<circle cx="18" cy="72" r="5" class="point-a"/><circle cx="47" cy="72" r="5" class="point-b"/>
+<circle cx="78" cy="72" r="5" class="point-b"/><circle cx="108" cy="72" r="5" class="point-a"/>
+</svg></div></td><td>Aprende perguntas sucessivas sobre atributos e associa regiões a previsões.</td><td>Regras e interações não lineares interpretáveis.</td><td>Árvores profundas podem sobreajustar.</td></tr>
+<tr><td><strong>Random Forest</strong> <span class="tag">Ensemble</span></td><td><div class="algo-visual">
+<svg viewBox="0 0 126 86" role="img" aria-label="Três árvores de decisão com previsões combinadas em um voto">
+<title>Random Forest: combinação de árvores</title>
+<g class="link"><path d="M21 17 L12 33 M21 17 L30 33 M52 17 L43 33 M52 17 L61 33 M83 17 L74 33 M83 17 L92 33 M21 42 L52 54 M52 42 V54 M83 42 L52 54 M61 58 L99 58"/></g>
+<g class="edge-node"><rect x="15" y="6" width="13" height="12" rx="3"/><rect x="46" y="6" width="13" height="12" rx="3"/><rect x="77" y="6" width="13" height="12" rx="3"/></g>
+<g class="point-a"><circle cx="12" cy="35" r="4"/><circle cx="61" cy="35" r="4"/><circle cx="83" cy="35" r="4"/></g>
+<g class="point-b"><circle cx="30" cy="35" r="4"/><circle cx="43" cy="35" r="4"/><circle cx="92" cy="35" r="4"/></g>
+<rect x="38" y="54" width="28" height="15" rx="5" class="edge-node"/><text x="52" y="64" text-anchor="middle" class="diagram-value">voto</text>
+<circle cx="108" cy="58" r="6" class="point-a"/>
+<text x="61" y="81" class="diagram-label" text-anchor="middle">combinação</text>
+</svg></div></td><td>Combina previsões de diversas árvores treinadas com aleatoriedade.</td><td>Baseline robusto para relações tabulares não lineares.</td><td>Menos interpretável que uma árvore única; mais custo de memória.</td></tr>
+<tr><td><strong>SVM</strong> <span class="tag">Classificação</span></td><td><div class="algo-visual">
+<svg viewBox="0 0 126 86" role="img" aria-label="Fronteira de separação linear e duas linhas paralelas marcando a margem">
+<title>SVM: fronteira de decisão com margem</title>
+<path d="M14 78 L111 14" class="model"/>
+<path d="M14 58 L96 5 M33 84 L120 26" class="margin"/>
+<g class="point-a"><circle cx="25" cy="18" r="3.4"/><circle cx="42" cy="15" r="3.4"/><circle cx="72" cy="10" r="3.4"/></g>
+<g class="point-b"><circle cx="46" cy="77" r="3.4"/><circle cx="74" cy="70" r="3.4"/><circle cx="98" cy="61" r="3.4"/></g>
+<circle cx="60" cy="28" r="5.4" class="special"/>
+<circle cx="68" cy="60" r="5.4" class="special"/>
+</svg></div></td><td>Aprende uma fronteira de separação com margem; kernels podem modelar relações não lineares.</td><td>Separação entre classes, inclusive com atributos numerosos.</td><td>Escala e configuração importam; custo pode aumentar em datasets grandes.</td></tr>
+<tr><td><strong>K-Means</strong> <span class="tag">Agrupamento</span></td><td><div class="algo-visual">
+<svg viewBox="0 0 126 86" role="img" aria-label="Três grupos de pontos em torno de centroides identificados com cruzes">
+<title>K-Means: grupos e centroides</title>
+<g class="point-a"><circle cx="24" cy="25" r="3"/><circle cx="34" cy="20" r="3"/><circle cx="29" cy="35" r="3"/><circle cx="40" cy="30" r="3"/></g>
+<g class="point-b"><circle cx="87" cy="20" r="3"/><circle cx="103" cy="22" r="3"/><circle cx="96" cy="34" r="3"/><circle cx="81" cy="31" r="3"/></g>
+<g class="point-c"><circle cx="52" cy="62" r="3"/><circle cx="68" cy="65" r="3"/><circle cx="58" cy="74" r="3"/><circle cx="74" cy="75" r="3"/></g>
+<g class="model" style="stroke-width:1.8"><path d="M28 19 V35 M20 27 H36"/><path d="M93 18 V34 M85 26 H101"/><path d="M64 60 V76 M56 68 H72"/></g>
+</svg></div></td><td>Organiza os dados em grupos próximos a centroides.</td><td>Exploração sem rótulos conhecidos.</td><td>É outra tarefa: os grupos não são automaticamente classes verdadeiras.</td></tr>
+<tr><td><strong>MLP</strong> <span class="tag">Rede neural</span></td><td><div class="algo-visual">
+<svg viewBox="0 0 126 86" role="img" aria-label="Rede neural com três neurônios de entrada, quatro na camada oculta e dois de saída">
+<title>MLP: rede multicamada totalmente conectada</title>
+<g class="link">
+<path d="M18 17 L61 12 M18 17 L61 32 M18 17 L61 52 M18 17 L61 72 M18 43 L61 12 M18 43 L61 32 M18 43 L61 52 M18 43 L61 72 M18 69 L61 12 M18 69 L61 32 M18 69 L61 52 M18 69 L61 72"/>
+<path d="M61 12 L108 29 M61 12 L108 57 M61 32 L108 29 M61 32 L108 57 M61 52 L108 29 M61 52 L108 57 M61 72 L108 29 M61 72 L108 57"/>
+</g>
+<g class="point-a"><circle cx="18" cy="17" r="5"/><circle cx="18" cy="43" r="5"/><circle cx="18" cy="69" r="5"/></g>
+<g class="point-b"><circle cx="61" cy="12" r="5"/><circle cx="61" cy="32" r="5"/><circle cx="61" cy="52" r="5"/><circle cx="61" cy="72" r="5"/></g>
+<g class="point-c"><circle cx="108" cy="29" r="5"/><circle cx="108" cy="57" r="5"/></g>
+</svg></div></td><td>Compõe transformações parametrizadas e ativações não lineares.</td><td>Relações complexas e dados adequados ao treinamento.</td><td>Exige cuidados com escala, capacidade, ajuste e custo computacional.</td></tr>
 </tbody></table></div>
+<p class="mini">Os oito gráficos são representações esquemáticas dos mecanismos de cada algoritmo, não resultados medidos de um experimento.</p>
 <h3>Experimento visual — a geometria muda a escolha</h3>
 <p>Imagine duas classes representadas em duas dimensões. Uma mesma linha reta pode ser suficiente em um cenário e insuficiente em outro.</p>
 <div class="grid-chart">
