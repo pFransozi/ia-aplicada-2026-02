@@ -90,7 +90,7 @@
 <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
 <header class="site-header"><div class="container nav-wrap">
 <a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 10 · Algoritmos e pipeline de ML</small></span></a>
-<nav class="main-nav" aria-label="Navegação"><a href="../index.html">Página principal</a><a href="../aula-09.html">Aula 09</a><a href="#algoritmos">Algoritmos</a><a href="#pipeline">Pipeline</a><a href="#laboratorio">Laboratório</a>
+<nav class="main-nav" aria-label="Navegação"><a href="../index.html">Página principal</a><a href="../aula-09.html">Aula 09</a><a href="#algoritmos">Algoritmos</a><a href="#pipeline">Pipeline</a>
 <button class="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button></nav>
 </div></header>
 <div class="lesson-shell lesson-page-grid"><main id="conteudo">
@@ -98,7 +98,7 @@
 <div><p class="eyebrow">Aula 10 · Rascunho para revisão</p>
 <h1>Algoritmos de ML: seleção de modelos e pipeline de treinamento</h1>
 <p class="hero-lead">Como diferentes algoritmos representam padrões, por que as características dos dados influenciam sua escolha e como conduzir um processo de treinamento e avaliação sem vazamento de informação.</p>
-<div class="hero-actions"><a class="button button-primary" href="#visao">Iniciar aula</a><a class="button button-secondary" href="#laboratorio">Ir ao laboratório</a></div>
+<div class="hero-actions"><a class="button button-primary" href="#visao">Iniciar aula</a><a class="button button-secondary" href="#pipeline">Ver o pipeline</a></div>
 </div><aside class="guiding-card"><span>Questão orientadora</span><blockquote>Como escolher e avaliar um modelo adequado aos dados e aos requisitos de um problema?</blockquote></aside>
 </div></section>
 <section class="section section-soft" id="visao"><div class="container">
@@ -109,7 +109,7 @@
 <li>Construir um pipeline que separe corretamente ajuste, seleção e avaliação.</li>
 <li>Comparar resultados e justificar uma decisão técnica considerando métricas e restrições.</li></ol></article>
 <article class="panel"><h3>Conteúdo programático</h3><p>Regressão logística, k-NN, árvores, Random Forest, SVM; panorama de agrupamento e MLP; dados tabulares, escala, dimensionalidade, distribuição, desbalanceamento; baselines; treino, validação e teste; pré-processamento, pipelines, validação cruzada, métricas, seleção, persistência e inferência.</p><h3>Competências</h3><p><strong>C2 · H6:</strong> procedimentos para construção de software. <strong>C3 · H9/H10:</strong> identificar necessidades e comparar tecnologias. <strong>C11 · H38:</strong> desenvolver algoritmos. <strong>C13 · H45:</strong> avaliar decisões com evidências.</p></article></div>
-<nav class="toc" aria-label="Seções"><a href="#retomada">Retomada</a><a href="#algoritmos">Algoritmos</a><a href="#dados">Dados e escolha</a><a href="#pipeline">Pipeline</a><a href="#laboratorio">Laboratório</a><a href="#sintese">Síntese</a></nav>
+<nav class="toc" aria-label="Seções"><a href="#retomada">Retomada</a><a href="#algoritmos">Algoritmos</a><a href="#dados">Dados e escolha</a><a href="#pipeline">Pipeline</a><a href="#sintese">Síntese</a></nav>
 </div></section>
 <section class="section" id="retomada"><div class="container">
 <div class="section-heading"><p class="eyebrow">Parte I · Continuidade da Aula 09</p><h2>Do ajuste de uma função à escolha de uma família de modelos</h2></div>
@@ -259,52 +259,11 @@
 <tr><td>Agrupamento</td><td>Silhouette e análise de estabilidade (quando apropriado)</td><td>Grupos precisam fazer sentido também no domínio.</td></tr>
 </tbody></table></div>
 </div></section>
-<section class="section" id="laboratorio"><div class="container">
-<div class="section-heading"><p class="eyebrow">Parte V · Laboratório guiado</p><h2>Um dataset, quatro candidatos e uma decisão fundamentada</h2><p>Proposta de prática: classificação de falhas a partir de medidas de sensores. O notebook executável será produzido após validarmos a estrutura desta aula.</p></div>
-<div class="panel"><h3>Cenário</h3><p>Uma equipe possui registros de condições operacionais de equipamentos e um rótulo indicando a ocorrência de falha. Queremos treinar um classificador para apoiar triagem preventiva. O conjunto de dados deverá ser explicitamente identificado como real ou sintético e avaliado quanto à possibilidade de dependências entre medições do mesmo equipamento.</p><p>Para a primeira implementação, podemos usar um dataset tabular público de classificação, preservando o mesmo protocolo para todos os candidatos.</p></div>
-<div class="steps" style="margin:1.1rem 0">
-<div><b>1</b><strong>Inspecionar</strong><small>Tipos de atributos, classes e valores ausentes.</small></div>
-<div><b>2</b><strong>Separar</strong><small>Treino e teste estratificados quando adequado.</small></div>
-<div><b>3</b><strong>Comparar</strong><small>Regressão logística, k-NN, árvore e Random Forest.</small></div>
-<div><b>4</b><strong>Justificar</strong><small>Escolher um modelo e explicar critérios e limitações.</small></div>
-</div>
-<h3>Estrutura conceitual do código</h3>
-<pre><code>from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_validate
-
-modelo = Pipeline([
-    ("escala", StandardScaler()),
-    ("classificador", LogisticRegression(max_iter=1000))
-])
-
-# Separar os dados antes; o pipeline aprende a escala
-# somente no treino de cada dobra.
-resultados = cross_validate(
-    modelo, X_treino, y_treino,
-    cv=5, scoring=["accuracy", "f1_macro"]
-)</code></pre>
-<p class="mini">Trecho ilustrativo para dados numéricos completos, independentes e com partições apropriadas. Com valores ausentes ou atributos categóricos, usar imputação e transformação de colunas; com grupos ou ordem temporal, adaptar o procedimento de validação.</p>
-<h3>Simulador didático — o que uma métrica revela?</h3><p>Selecione um cenário hipotético de matriz de confusão. Os números são ilustrativos, não resultados medidos dos algoritmos acima.</p>
-<div class="lab"><div class="controls"><label for="scenario">Cenário</label><select id="scenario"><option value="a">Modelo A — favorece classe majoritária</option><option value="b">Modelo B — melhor equilíbrio</option><option value="c">Modelo C — prioriza recall</option></select></div>
-<div class="two"><div><svg id="confusion" viewBox="0 0 430 310" class="chart-main" role="img" aria-label="Matriz de confusão ilustrativa"></svg></div><div class="metric" id="metric-summary" aria-live="polite"></div></div>
-<p class="mini">Classe positiva: ocorrência de falha. FP indica falso alarme; FN indica falha não identificada. Compare sempre com os custos operacionais desses erros.</p></div>
-<h3>Exercícios para análise</h3>
-<ol class="exercise">
-<li>Por que devemos utilizar os mesmos dados de avaliação ao comparar candidatos?</li>
-<li>Em que situação a padronização altera significativamente a aplicação do k-NN?</li>
-<li>Por que uma árvore com baixo erro de treinamento não necessariamente generaliza bem?</li>
-<li>Se deixar passar uma falha custa mais do que emitir um falso alarme, qual métrica merece atenção especial? Que outros indicadores continuam necessários?</li>
-<li>Descreva como evitar vazamento de dados ao utilizar validação cruzada com imputação e padronização.</li>
-<li>Escolha um dos modelos candidatos, justificando com dados, métrica, interpretação e custo computacional. Que evidência adicional seria necessária antes da implantação?</li>
-</ol>
-</div></section>
 <section class="section section-soft" id="sintese"><div class="container">
 <div class="section-heading"><p class="eyebrow">Síntese e verificação</p><h2>O melhor modelo não é simplesmente aquele com maior número na tabela</h2></div>
 <div class="two"><div class="panel"><h3>Escolha técnica</h3><p>Identificar o objetivo, caracterizar os dados e formular uma seleção razoável de modelos candidatos.</p></div><div class="panel"><h3>Validade experimental</h3><p>Separar dados corretamente, validar sem vazamento e justificar métricas compatíveis com o risco.</p></div></div>
 <p class="lead"><strong>Resultado esperado:</strong> o estudante deve ser capaz de explicar por que escolheu um algoritmo, como realizou seu treinamento e quais evidências sustentam — ou limitam — a confiança na avaliação.</p>
-<div class="note"><strong>Para revisão do rascunho:</strong> validar seleção de algoritmos, nível de profundidade, caso de laboratório e equilíbrio entre conteúdo conceitual e prática antes de preparar o notebook definitivo.</div>
+<div class="note"><strong>Para revisão do rascunho:</strong> validar seleção de algoritmos, nível de profundidade e clareza do pipeline antes da publicação da aula.</div>
 <h3>Referências</h3><p>RUSSELL, Stuart; NORVIG, Peter. <em>Artificial Intelligence: A Modern Approach</em>. 4. ed. Capítulo 19. LUGER, George. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Capítulos 10 e 11. HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. 2020. Capítulo 8.</p>
 </div></section>
 </main></div>
@@ -334,18 +293,6 @@ cluster:{title:"Perfis sem rótulos",p:"Tarefa: identificar grupos de comportame
 };
 function showCase(k){const obj=cases[k],dest=document.getElementById("case-detail");dest.replaceChildren();const h=document.createElement("h4");h.textContent=obj.title;dest.append(h);for(const line of [obj.p,obj.c,obj.q]){const p=document.createElement("p");p.textContent=line;dest.append(p)}document.querySelectorAll("[data-case]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.case===k)));}
 document.querySelectorAll("[data-case]").forEach(b=>b.addEventListener("click",()=>showCase(b.dataset.case)));showCase("sensor");
-const matrices={a:[88,2,18,12],b:[82,8,8,22],c:[66,24,3,27]};
-function fmt(v){return (100*v).toLocaleString("pt-BR",{maximumFractionDigits:1})+"%"}
-function metrics(k){const [tn,fp,fn,tp]=matrices[k];const acc=(tp+tn)/(tp+tn+fp+fn),prec=tp/(tp+fp),rec=tp/(tp+fn),f1=2*prec*rec/(prec+rec);const svg=document.getElementById("confusion");svg.replaceChildren();
-node("text",{x:221,y:25,"text-anchor":"middle",fill:"var(--ink)","font-weight":700,"font-size":15},svg,"Predito");node("text",{x:140,y:59,"text-anchor":"middle",fill:"var(--muted)","font-size":12},svg,"Normal");node("text",{x:284,y:59,"text-anchor":"middle",fill:"var(--muted)","font-size":12},svg,"Falha");
-node("text",{x:20,y:162,fill:"var(--muted)","font-size":13,transform:"rotate(-90 20 162)"},svg,"Real");
-const cells=[{x:65,y:70,n:tn,label:"VN",good:1},{x:209,y:70,n:fp,label:"FP",good:0},{x:65,y:182,n:fn,label:"FN",good:0},{x:209,y:182,n:tp,label:"VP",good:1}];
-for(const cell of cells){node("rect",{x:cell.x,y:cell.y,width:138,height:104,rx:8,fill:cell.good?"var(--teal-soft, #e5f2f0)":"var(--soft)",stroke:"var(--line)"},svg);node("text",{x:cell.x+69,y:cell.y+47,"text-anchor":"middle",fill:"var(--ink)","font-size":30,"font-weight":700},svg,String(cell.n));node("text",{x:cell.x+69,y:cell.y+76,"text-anchor":"middle",fill:"var(--muted)","font-size":13},svg,cell.label);}
-node("text",{x:52,y:125,"text-anchor":"middle",fill:"var(--muted)","font-size":12},svg,"Normal");node("text",{x:52,y:237,"text-anchor":"middle",fill:"var(--muted)","font-size":12},svg,"Falha");
-const summary=document.getElementById("metric-summary");summary.replaceChildren();const h=document.createElement("strong");h.textContent="Métricas calculadas";summary.append(h);
-for(const [label,value] of [["Acurácia",acc],["Precisão (falha)",prec],["Recall (falha)",rec],["F1 (falha)",f1]]){const p=document.createElement("p");p.textContent=label+": "+fmt(value);summary.append(p)}
-const note=document.createElement("p");note.textContent=k==="a"?"Bom desempenho na classe majoritária, mas muitas falhas não identificadas.":k==="b"?"Compromisso mais equilibrado entre falsos alarmes e falhas não identificadas.":"Mais falhas identificadas, porém com mais falsos alarmes.";summary.append(note);}
-document.getElementById("scenario").addEventListener("change",e=>metrics(e.target.value));metrics("a");
 })();
 </script>
 </body></html>
