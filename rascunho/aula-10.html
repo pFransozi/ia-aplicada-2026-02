@@ -262,15 +262,61 @@
 </div>
 </div></section>
 <section class="section" id="dados"><div class="container">
-<div class="section-heading"><p class="eyebrow">Parte III · Seleção fundamentada</p><h2>O que os dados precisam nos dizer antes de escolher um modelo?</h2>
-<p>A escolha começa pelo problema que queremos resolver. Depois, examinamos as características dos dados para definir <strong>o que testar</strong> e <strong>quais cuidados adotar</strong> no treinamento e na avaliação.</p></div>
-<div class="table-scroll"><table aria-label="Relação entre problemas técnicos, características observadas dos dados e implicações para experimentos de Machine Learning">
-<thead><tr><th>Problema ou questão técnica</th><th>Características observadas nos dados</th><th>Implicação para o experimento</th></tr></thead><tbody>
-<tr><td><strong>Como prever o tempo de processamento de um serviço?</strong></td><td>A resposta é um valor numérico contínuo; os tempos podem apresentar uma tendência aproximadamente linear ou variar de maneira mais complexa.</td><td>Usar regressão linear como <em>baseline</em>. Se a relação não for bem representada por uma reta, comparar com árvore ou Random Forest de regressão. Medir MAE ou RMSE em dados reservados.</td></tr>
-<tr><td><strong>Como identificar falhas em equipamentos a partir de sensores?</strong></td><td>Existem rótulos de falha/normal e várias medidas, como temperatura e vibração. As variáveis podem interagir de forma não linear.</td><td>Comparar regressão logística, árvore de decisão e Random Forest. Verificar especialmente quantas falhas deixam de ser detectadas, além da qualidade geral da classificação.</td></tr>
-<tr><td><strong>Como classificar mensagens como spam ou legítimas?</strong></td><td>O texto precisa ser convertido em atributos; a representação pode ter milhares de dimensões, com muitos valores zero.</td><td>Experimentar regressão logística ou SVM linear. Ajustar a vetorização somente com dados de treinamento, dentro do pipeline, e comparar métricas de classificação.</td></tr>
-<tr><td><strong>Como detectar um evento raro, como defeitos pouco frequentes?</strong></td><td>Uma classe aparece muito menos que a outra. Prever sempre a classe majoritária pode gerar alta acurácia e quase nenhuma detecção do evento raro.</td><td>Examinar matriz de confusão, precisão, recall e F1, em vez de usar apenas acurácia. Considerar o custo de falsos positivos e falsos negativos; avaliar limiar e ponderação de classes na validação.</td></tr>
-<tr><td><strong>O que acontece quan<section class="section section-soft" id="pipeline"><div class="container">
+<div class="section-heading">
+<p class="eyebrow">Parte III · Seleção fundamentada</p>
+<h2>O que os dados precisam nos dizer antes de escolher um modelo?</h2>
+<p>A escolha começa pelo problema que queremos resolver. Depois, examinamos as características dos dados para definir <strong>o que testar</strong> e <strong>quais cuidados adotar</strong> no treinamento e na avaliação.</p>
+</div>
+<div class="table-scroll">
+<table aria-label="Relação entre problemas técnicos, características dos dados e implicações para experimentos de Machine Learning">
+<thead><tr><th>Problema ou questão técnica</th><th>Características observadas nos dados</th><th>Implicação para o experimento</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Como prever o tempo de processamento de um serviço?</strong></td>
+<td>A resposta é um valor numérico contínuo; os tempos podem apresentar uma tendência aproximadamente linear ou variar de maneira mais complexa.</td>
+<td>Usar regressão linear como <em>baseline</em>. Se a relação não for bem representada por uma reta, comparar com árvore ou Random Forest de regressão. Medir MAE ou RMSE em dados reservados.</td>
+</tr>
+<tr>
+<td><strong>Como identificar falhas em equipamentos a partir de sensores?</strong></td>
+<td>Existem rótulos de falha/normal e várias medidas, como temperatura e vibração. As variáveis podem interagir de forma não linear.</td>
+<td>Comparar regressão logística, árvore de decisão e Random Forest. Verificar especialmente quantas falhas deixam de ser detectadas, além da qualidade geral da classificação.</td>
+</tr>
+<tr>
+<td><strong>Como classificar mensagens como spam ou legítimas?</strong></td>
+<td>O texto precisa ser convertido em atributos; a representação pode ter milhares de dimensões, com muitos valores zero.</td>
+<td>Experimentar regressão logística ou SVM linear. Ajustar a vetorização somente com dados de treinamento, dentro do pipeline, e comparar métricas de classificação.</td>
+</tr>
+<tr>
+<td><strong>Como detectar um evento raro, como defeitos pouco frequentes?</strong></td>
+<td>Uma classe aparece muito menos que a outra. Prever sempre a classe majoritária pode gerar alta acurácia e quase nenhuma detecção do evento raro.</td>
+<td>Examinar matriz de confusão, precisão, recall e F1, em vez de usar apenas acurácia. Considerar o custo de falsos positivos e falsos negativos; avaliar limiar e ponderação de classes na validação.</td>
+</tr>
+<tr>
+<td><strong>O que acontece quando os atributos têm escalas diferentes?</strong></td>
+<td>Uma variável varia de 0 a 1 e outra de 0 a 10.000, por exemplo. Valores maiores podem dominar distâncias, mesmo sem maior relevância para o problema.</td>
+<td>Comparar k-NN com e sem padronização, ajustada apenas no treino de cada partição. Investigar também diferentes valores de <em>k</em>. Árvores servem como contraste por serem geralmente menos sensíveis à escala.</td>
+</tr>
+<tr>
+<td><strong>Como avaliar dados registrados ao longo do tempo ou por um mesmo equipamento?</strong></td>
+<td>Há medições correlacionadas, repetidas por equipamento ou ordenadas temporalmente. Uma separação aleatória pode misturar observações muito próximas.</td>
+<td>Definir uma separação por grupos quando o objetivo for generalizar para novos equipamentos, ou temporal quando a aplicação precisar prever períodos futuros. Evitar vazamento entre treino e avaliação.</td>
+</tr>
+<tr>
+<td><strong>Como identificar grupos de comportamento sem classes conhecidas?</strong></td>
+<td>Existem atributos dos registros, mas não há rótulos informando a qual categoria cada um pertence.</td>
+<td>Experimentar K-Means como ponto de partida, examinando escala, número de grupos, qualidade e interpretação dos agrupamentos. Não tratar os grupos obtidos como classes verdadeiras.</td>
+</tr>
+<tr>
+<td><strong>Como treinar com atributos numéricos, categóricos e valores ausentes?</strong></td>
+<td>O conjunto contém tipos diferentes de atributos e informações não preenchidas.</td>
+<td>Construir um pré-processamento apropriado por coluna (imputação e codificação, quando necessárias), ajustado somente no treino de cada partição. Comparar modelos depois de assegurar um pipeline consistente.</td>
+</tr>
+</tbody></table>
+</div>
+<p class="mini">As situações são exemplos didáticos. Elas sugerem candidatos e procedimentos de avaliação, não resultados garantidos para qualquer conjunto de dados.</p>
+<div class="note"><strong>Conclusão.</strong> Dados e requisitos não apontam automaticamente para um algoritmo vencedor: eles orientam a escolha dos <strong>modelos candidatos</strong>, do <strong>pré-processamento</strong> e do <strong>protocolo de avaliação</strong>. É a validação adequada que permite comparar essas alternativas com evidências. Essa é a função do pipeline apresentado a seguir.</div>
+</div></section>
+<section class="section section-soft" id="pipeline"><div class="container">
 <div class="section-heading"><p class="eyebrow">Parte IV · Engenharia do experimento</p><h2>O pipeline clássico de treinamento e avaliação</h2>
 <p>Um projeto de ML não termina em <code>model.fit()</code>. Precisamos definir o problema, preparar os dados, comparar alternativas e verificar o desempenho de maneira confiável. Abaixo está o percurso completo; em seguida, implementaremos as etapas em um exemplo contínuo.</p></div>
 <h3 class="ml-group-title">Visão geral do processo</h3>
