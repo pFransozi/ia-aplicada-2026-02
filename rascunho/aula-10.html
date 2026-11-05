@@ -43,12 +43,8 @@
 .a10 .pipe-index{font-weight:800;color:var(--blue);font-size:1.35rem}
 .a10 .pipe small{display:block;color:var(--muted);margin-top:.2rem;line-height:1.5}
 .a10 .arrow{text-align:center;color:var(--blue);line-height:1}
-.a10 .case-pills{display:flex;gap:.45rem;flex-wrap:wrap}
-.a10 .case-pills button{padding:.5rem .8rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:9px;cursor:pointer}
-.a10 .case-pills button[aria-pressed=true]{background:var(--soft);border-color:var(--blue);font-weight:700}
 .a10 pre{white-space:pre;overflow:auto;background:#101827;color:#e6edf7;border-radius:11px;padding:1.2rem;font-size:.88rem;line-height:1.6}
 .a10 code{font-size:.92em}
-.a10 .callout{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem;margin:1rem 0}
 .a10 .toc{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
 .a10 .toc a{font-size:.88rem;border:1px solid var(--line);border-radius:8px;padding:.45rem .75rem;color:var(--ink);background:var(--paper);text-decoration:none}
 .a10 .toc a:hover{border-color:var(--blue)}
@@ -216,24 +212,21 @@
 </div>
 </div></section>
 <section class="section" id="dados"><div class="container">
-<div class="section-heading"><p class="eyebrow">Parte III · Seleção fundamentada</p><h2>O que os dados precisam nos dizer antes de escolher um modelo?</h2></div>
-<p>O primeiro passo é distinguir o <strong>objetivo</strong> (prever uma classe, um valor ou investigar grupos) da <strong>estrutura dos dados</strong> (quantidade de registros, tipos de atributos, escala, dependências, rótulos e distribuição).</p>
-<div class="table-scroll"><table><thead><tr><th>Característica observada</th><th>Questão técnica</th><th>Implicação para o experimento</th></tr></thead><tbody>
-<tr><td>Variáveis com escalas diferentes</td><td>Uma distância entre registros será dominada por determinado atributo?</td><td>Testar escalonamento para k-NN, regressão logística e SVM.</td></tr>
-<tr><td>Poucos exemplos e muitos atributos</td><td>Há informação suficiente para estimar modelos flexíveis?</td><td>Começar com baselines simples e regularização; validar com cuidado.</td></tr>
-<tr><td>Classes desbalanceadas</td><td>Acurácia alta esconde erros na classe minoritária?</td><td>Analisar matriz de confusão, precision, recall e F1.</td></tr>
-<tr><td>Dependências por tempo, equipamento ou pessoa</td><td>Registros relacionados poderiam aparecer em treino e teste?</td><td>Preferir separação temporal ou por grupos quando apropriada.</td></tr>
-<tr><td>Requisito de explicação</td><td>Precisamos apresentar razões inteligíveis para a decisão?</td><td>Comparar baselines interpretáveis com modelos mais complexos.</td></tr>
-<tr><td>Restrições de latência e memória</td><td>Qual é o custo de treinar e prever em produção?</td><td>Medir custo junto às métricas preditivas.</td></tr>
+<div class="section-heading"><p class="eyebrow">Parte III · Seleção fundamentada</p><h2>O que os dados precisam nos dizer antes de escolher um modelo?</h2>
+<p>A escolha começa pelo problema que queremos resolver. Depois, examinamos as características dos dados para definir <strong>o que testar</strong> e <strong>quais cuidados adotar</strong> no treinamento e na avaliação.</p></div>
+<div class="table-scroll"><table aria-label="Relação entre problemas técnicos, características observadas dos dados e implicações para experimentos de Machine Learning">
+<thead><tr><th>Problema ou questão técnica</th><th>Características observadas nos dados</th><th>Implicação para o experimento</th></tr></thead><tbody>
+<tr><td><strong>Como prever o tempo de processamento de um serviço?</strong></td><td>A resposta é um valor numérico contínuo; os tempos podem apresentar uma tendência aproximadamente linear ou variar de maneira mais complexa.</td><td>Usar regressão linear como <em>baseline</em>. Se a relação não for bem representada por uma reta, comparar com árvore ou Random Forest de regressão. Medir MAE ou RMSE em dados reservados.</td></tr>
+<tr><td><strong>Como identificar falhas em equipamentos a partir de sensores?</strong></td><td>Existem rótulos de falha/normal e várias medidas, como temperatura e vibração. As variáveis podem interagir de forma não linear.</td><td>Comparar regressão logística, árvore de decisão e Random Forest. Verificar especialmente quantas falhas deixam de ser detectadas, além da qualidade geral da classificação.</td></tr>
+<tr><td><strong>Como classificar mensagens como spam ou legítimas?</strong></td><td>O texto precisa ser convertido em atributos; a representação pode ter milhares de dimensões, com muitos valores zero.</td><td>Experimentar regressão logística ou SVM linear. Ajustar a vetorização somente com dados de treinamento, dentro do pipeline, e comparar métricas de classificação.</td></tr>
+<tr><td><strong>Como detectar um evento raro, como defeitos pouco frequentes?</strong></td><td>Uma classe aparece muito menos que a outra. Prever sempre a classe majoritária pode gerar alta acurácia e quase nenhuma detecção do evento raro.</td><td>Examinar matriz de confusão, precisão, recall e F1, em vez de usar apenas acurácia. Considerar o custo de falsos positivos e falsos negativos; avaliar limiar e ponderação de classes na validação.</td></tr>
+<tr><td><strong>O que acontece quando os atributos têm escalas diferentes?</strong></td><td>Uma variável varia de 0 a 1 e outra de 0 a 10.000, por exemplo. Valores maiores podem dominar distâncias, mesmo sem maior relevância para o problema.</td><td>Comparar k-NN com e sem padronização, ajustada apenas no treino de cada partição. Investigar também diferentes valores de <em>k</em>. Árvores servem como contraste por serem geralmente menos sensíveis à escala.</td></tr>
+<tr><td><strong>Como avaliar dados registrados ao longo do tempo ou por um mesmo equipamento?</strong></td><td>Há medições correlacionadas, repetidas por equipamento ou ordenadas temporalmente. Uma separação aleatória pode misturar observações muito próximas.</td><td>Definir uma separação por grupos quando o objetivo for generalizar para novos equipamentos, ou temporal quando a aplicação precisar prever períodos futuros. Evitar vazamento entre treino e avaliação.</td></tr>
+<tr><td><strong>Como identificar grupos de comportamento sem classes conhecidas?</strong></td><td>Existem atributos dos registros, mas não há rótulos informando a qual categoria cada um pertence.</td><td>Experimentar K-Means como ponto de partida, examinando escala, número de grupos, qualidade e interpretação dos agrupamentos. Não tratar os grupos obtidos como classes verdadeiras.</td></tr>
+<tr><td><strong>Como treinar com atributos numéricos, categóricos e valores ausentes?</strong></td><td>O conjunto contém tipos diferentes de atributos e informações não preenchidas.</td><td>Construir um pré-processamento apropriado por coluna (imputação e codificação, quando necessárias), ajustado somente no treino de cada partição. Comparar modelos depois de assegurar um pipeline consistente.</td></tr>
 </tbody></table></div>
-<h3>Três problemas — os mesmos algoritmos servem?</h3>
-<div class="lab" aria-label="Estudo de caso interativo"><div class="case-pills" id="case-buttons">
-<button type="button" aria-pressed="true" data-case="sensor">Sensores industriais</button>
-<button type="button" aria-pressed="false" data-case="spam">Mensagens de texto</button>
-<button type="button" aria-pressed="false" data-case="cluster">Perfis sem rótulos</button>
-</div><div id="case-detail" class="callout" aria-live="polite"></div>
-</div>
-<div class="note"><strong>Não existe regra universal do tipo “se há 500 atributos, use SVM”.</strong> As propriedades dos dados ajudam a definir modelos candidatos. A escolha final é uma decisão experimental orientada pelo problema, pelas métricas e pelas restrições.</div>
+<p class="mini">As situações são exemplos didáticos. Elas sugerem candidatos e procedimentos de avaliação, não resultados garantidos para qualquer conjunto de dados.</p>
+<div class="note"><strong>Conclusão.</strong> Dados e requisitos não apontam automaticamente para um algoritmo vencedor: eles orientam a escolha dos <strong>modelos candidatos</strong>, do <strong>pré-processamento</strong> e do <strong>protocolo de avaliação</strong>. É a validação adequada que permite comparar essas alternativas com evidências. Essa é a função do pipeline apresentado a seguir.</div>
 </div></section>
 <section class="section section-soft" id="pipeline"><div class="container">
 <div class="section-heading"><p class="eyebrow">Parte IV · Engenharia do experimento</p><h2>O pipeline clássico de treinamento e avaliação</h2><p>Um pipeline não é apenas a sequência de chamadas no código: ele define quais dados podem influenciar cada decisão e como reproduzir as transformações durante a inferência.</p></div>
@@ -286,13 +279,6 @@ const g3=document.getElementById("graph-curved");base(g3);
 for(let i=0;i<45;i++){let x=34+rand()*228,y=25+rand()*162;let boundary=105+48*Math.sin((x-35)/230*Math.PI*1.5);dot(g3,x,y,y>boundary?blue:amber)}
 let d="";for(let x=34;x<=266;x+=4){let y=105+48*Math.sin((x-35)/230*Math.PI*1.5);d+=(x===34?"M":"L")+x.toFixed(1)+" "+y.toFixed(1)+" ";}
 node("path",{d,fill:"none",stroke:"var(--teal)","stroke-width":3},g3);
-const cases={
-sensor:{title:"Sensores industriais",p:"Tarefa: classificar a ocorrência de falha com temperatura, vibração e corrente; registros numéricos, possivelmente repetidos por equipamento.",c:"Candidatos: regressão logística (baseline), árvore e Random Forest; testar k-NN com escala controlada.",q:"Ponto crítico: separar medições por equipamento ou tempo se o cenário de implantação assim exigir; o custo de uma falha não detectada pode ser maior que o de um alarme."},
-spam:{title:"Mensagens de texto",p:"Tarefa: classificar mensagens como spam ou legítimas após transformá-las em vetores com muitos atributos esparsos.",c:"Candidatos: regressão logística, Linear SVM e Naive Bayes.",q:"Ponto crítico: representar o texto, evitar duplicatas próximas entre partições e avaliar precisão e recall da classe spam."},
-cluster:{title:"Perfis sem rótulos",p:"Tarefa: identificar grupos de comportamento em dados de consumo, sem uma resposta correta previamente atribuída a cada registro.",c:"Candidato: K-Means como ponto de partida, contrastando com abordagens baseadas em densidade.",q:"Ponto crítico: agrupamento não é classificação supervisionada; escala, interpretação e estabilidade dos grupos precisam ser investigadas."}
-};
-function showCase(k){const obj=cases[k],dest=document.getElementById("case-detail");dest.replaceChildren();const h=document.createElement("h4");h.textContent=obj.title;dest.append(h);for(const line of [obj.p,obj.c,obj.q]){const p=document.createElement("p");p.textContent=line;dest.append(p)}document.querySelectorAll("[data-case]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.case===k)));}
-document.querySelectorAll("[data-case]").forEach(b=>b.addEventListener("click",()=>showCase(b.dataset.case)));showCase("sensor");
 })();
 </script>
 </body></html>
