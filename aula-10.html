@@ -21,6 +21,13 @@
 .a10 .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:1.2rem 0}
 .a10 table{border-collapse:collapse;width:100%;min-width:710px}.a10 th,.a10 td{border-bottom:1px solid var(--line);text-align:left;vertical-align:top;padding:.78rem .9rem;line-height:1.55}
 .a10 th{background:var(--soft);color:var(--ink)}.a10 tr:last-child td{border-bottom:0}
+.a10 #matriz-de-confusao{scroll-margin-top:5.5rem}
+.a10 .matrix-table{max-width:35rem}
+.a10 .matrix-table table{min-width:0}
+.a10 .matrix-table th,.a10 .matrix-table td{padding:.55rem .65rem;text-align:center}
+.a10 .matrix-table tbody th{text-align:left}
+.a10 .matrix-table tr:last-child th{border-bottom:0}
+.a10 .matrix-table .matrix-error{background:var(--ensino-accent-soft,var(--amber-soft));font-weight:700}
 .a10 .tag{display:inline-block;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:.12rem .42rem;font-size:.78rem}
 .a10 .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem}
 .a10 .steps>div{padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
@@ -507,6 +514,43 @@ print("Nova previsão:", modelo_carregado.predict(nova_amostra))</code></pre>
 <tr><td>Classes desbalanceadas</td><td>Recall, precisão, F1; PR-AUC quando pertinente</td><td>Desempenho na classe rara, que a acurácia pode esconder.</td></tr>
 <tr><td>Agrupamento</td><td>Silhouette e análise de domínio</td><td>Separação dos grupos e utilidade de sua interpretação.</td></tr>
 </tbody></table></div>
+<h4 id="matriz-de-confusao">Matriz de confusão no exemplo Wine</h4>
+<p>Uma matriz de confusão cruza as <strong>classes reais nas linhas</strong> com as <strong>classes previstas nas colunas</strong>. Cada célula indica quantas amostras tiveram aquela combinação. Os acertos estão na diagonal.</p>
+<p>Na execução de referência do bloco anterior, a regressão logística foi selecionada na validação e avaliada em 36 amostras de teste.</p>
+<div class="table-scroll matrix-table" role="region" aria-label="Matriz de confusão do teste Wine" tabindex="0">
+  <table aria-label="Contagens por classe real e classe prevista">
+    <thead><tr><th scope="col">Real / prevista</th><th scope="col">Classe 0</th><th scope="col">Classe 1</th><th scope="col">Classe 2</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Classe 0</th><td><strong>12</strong></td><td>0</td><td>0</td></tr>
+      <tr><th scope="row">Classe 1</th><td>0</td><td><strong>14</strong></td><td>0</td></tr>
+      <tr><th scope="row">Classe 2</th><td>0</td><td class="matrix-error">1</td><td><strong>9</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+<p>A célula destacada mostra que uma amostra da <strong>classe 2</strong> foi prevista como <strong>classe 1</strong>. A acurácia é a proporção de acertos entre todas as amostras, ou seja, (12 + 14 + 9) ÷ 36 = <strong>97,2%</strong>.</p>
+
+<h4>Como calcular as métricas por classe</h4>
+<p>Para medir a capacidade de identificar a classe 2, tratamos essa classe como positiva e reunimos as classes 0 e 1 como negativas. As contagens da matriz ficam assim.</p>
+<ul>
+  <li><strong>9 verdadeiros positivos (VP)</strong> — amostras da classe 2 previstas como classe 2.</li>
+  <li><strong>1 falso negativo (FN)</strong> — amostra da classe 2 prevista como outra classe.</li>
+  <li><strong>0 falsos positivos (FP)</strong> — amostras de outras classes previstas como classe 2.</li>
+  <li><strong>26 verdadeiros negativos (VN)</strong> — amostras de outras classes previstas como alguma classe diferente de 2.</li>
+</ul>
+<div class="table-scroll" role="region" aria-label="Cálculo das métricas da classe 2" tabindex="0">
+  <table>
+    <thead><tr><th scope="col">Métrica</th><th scope="col">O que mede</th><th scope="col">Fórmula</th><th scope="col">Classe 2 no teste</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Precisão</th><td>Entre as previsões da classe 2, quantas estavam corretas?</td><td>VP ÷ (VP + FP)</td><td>9 ÷ 9 = <strong>100%</strong></td></tr>
+      <tr><th scope="row">Recall (sensibilidade)</th><td>Entre as amostras reais da classe 2, quantas foram identificadas?</td><td>VP ÷ (VP + FN)</td><td>9 ÷ 10 = <strong>90%</strong></td></tr>
+      <tr><th scope="row">Especificidade</th><td>Entre as amostras das demais classes, quantas ficaram fora da classe 2 na previsão?</td><td>VN ÷ (VN + FP)</td><td>26 ÷ 26 = <strong>100%</strong></td></tr>
+      <tr><th scope="row">F1</th><td>Média harmônica da precisão e do recall.</td><td>2 × VP ÷ (2 × VP + FP + FN)</td><td>18 ÷ 19 ≈ <strong>94,7%</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Todas as previsões da classe 2 estavam corretas, o que explica a precisão de 100%. O modelo encontrou nove das dez amostras reais dessa classe, o que explica o recall de 90%.</p>
+<p>O <strong>F1 macro</strong> faz a média do F1 de cada classe com peso igual. Neste teste, os valores das classes 0, 1 e 2 são aproximadamente 1,000, 0,966 e 0,947. A média é <strong>0,971</strong>, exibida como <code>0.97</code> na linha <code>macro avg</code> do relatório.</p>
+
 <p>O desempenho da validação orienta a escolha; o teste fornece uma avaliação final da solução escolhida. Em uma aplicação real, considerar também latência, memória, interpretabilidade e custos dos erros.</p>
 </div></div></section>
 <section class="section section-soft" id="sintese"><div class="container">
