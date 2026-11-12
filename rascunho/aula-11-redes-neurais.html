@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Do cálculo de um neurônio à avaliação de uma rede neural na classificação de vinhos.">
+  <title>Aula 11 · Introdução às redes neurais artificiais</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../aula-04.css">
+  <link rel="stylesheet" href="https://pfransozi.github.io/assets/css/ensino.css?v=13">
+  <script src="https://pfransozi.github.io/assets/js/ensino.js?v=9"></script>
+  <style>
+    .a11 .lesson-columns,
+    .a11 .neuron-lab,
+    .a11 .neuron-result { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .a11 .panel { border: 1px solid var(--line); border-radius: 10px; background: var(--paper); padding: 1.15rem; min-width: 0; }
+    .a11 .panel > :first-child { margin-top: 0; }
+    .a11 .panel > :last-child { margin-bottom: 0; }
+    .a11 .neuron-lab { align-items: center; margin-block: 1.2rem; }
+    .a11 .neuron-lab figure { margin: 0; min-width: 0; }
+    .a11 .neuron-lab canvas { display: block; width: 100%; height: auto; border-radius: 8px; background: var(--soft); }
+    .a11 .neuron-lab figcaption { margin-top: .5rem; font-size: .9rem; color: var(--muted); }
+    .a11 .neuron-controls label { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; font-weight: 650; }
+    .a11 .neuron-controls output { font-variant-numeric: tabular-nums; }
+    .a11 .neuron-controls input { width: 100%; margin: .45rem 0 .9rem; accent-color: var(--ensino-accent); }
+    .a11 .neuron-result { grid-column: 1 / -1; }
+    .a11 .neuron-result p { margin: 0; padding: .75rem .9rem; border-radius: 8px; background: var(--soft); }
+    .a11 .neuron-result span { display: block; font-variant-numeric: tabular-nums; }
+    .a11 .lesson-action { font: inherit; font-size: .9rem; font-weight: 650; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 7px; padding: .42rem .75rem; cursor: pointer; }
+    .a11 .lesson-action:hover { background: var(--soft); }
+    .a11 .lesson-action:focus-visible, .a11 input:focus-visible { outline: 2px solid var(--ensino-accent); outline-offset: 3px; }
+    .a11 .architecture { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.65rem; list-style: none; margin: 1.2rem 0; padding: 0; }
+    .a11 .architecture li { position: relative; margin: 0; padding: .9rem; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); }
+    .a11 .architecture strong, .a11 .architecture small { display: block; }
+    .a11 .architecture small { color: var(--muted); }
+    .a11 .architecture .layer-count { font-size: 1.6rem; line-height: 1.25; font-weight: 700; color: var(--ensino-accent-strong); }
+    .a11 .architecture .layer-arrow { position: absolute; inset-inline-end: -1.45rem; top: 50%; transform: translateY(-50%); color: var(--muted); }
+    .a11 .self-check { margin: 1rem 0; border-left: 3px solid var(--ensino-accent); padding: .65rem 1rem; background: var(--soft); }
+    .a11 .self-check summary { cursor: pointer; font-weight: 650; }
+    .a11 .self-check p { margin: .55rem 0 0; }
+    .a11 .table-scroll { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--line); border-radius: 8px; }
+    .a11 .table-scroll table { width: 100%; border-collapse: collapse; text-align: left; }
+    .a11 .table-scroll th, .a11 .table-scroll td { padding: .65rem .8rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .a11 .table-scroll th { background: var(--soft); }
+    .a11 .table-scroll tbody tr:last-child > * { border-bottom: 0; }
+    .a11 .code-example { margin: 1rem 0 1.4rem; }
+    .a11 .code-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .35rem; }
+    .a11 .code-toolbar span { font-size: .86rem; color: var(--muted); }
+    .a11 .code-example pre { max-width: 100%; overflow: auto; margin: 0; padding: .9rem; background: var(--ensino-code-bg); color: var(--ensino-code-text); border: 1px solid var(--line); border-radius: 8px; }
+    .a11 .code-example pre code { background: transparent; color: inherit; padding: 0; }
+    @media (max-width: 640px) {
+      .a11 .lesson-columns, .a11 .neuron-lab, .a11 .neuron-result, .a11 .architecture { grid-template-columns: minmax(0, 1fr); }
+      .a11 .architecture .layer-arrow { top: auto; bottom: -1.6rem; inset-inline-end: 50%; transform: translateX(50%) rotate(90deg); }
+    }
+  </style>
+</head>
+<body class="teaching-page teaching-lesson lesson-page a11">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html"><span><strong>IA Aplicada</strong><small>Aula 11 · Redes neurais artificiais</small></span></a>
+      <nav class="main-nav" aria-label="Navegação">
+        <a href="index.html">Rascunhos</a>
+        <a href="../aula-10.html">Aula 10</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Alternar tema" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button>
+      </nav>
+    </div>
+  </header>
+  <div class="lesson-shell lesson-page-grid">
+    <aside class="lesson-toc" aria-label="Índice da aula">
+      <div class="lesson-toc-head"><span class="lesson-toc-label">Nesta página</span></div>
+      <nav aria-label="Seções da aula">
+        <a href="#visao">Visão da aula</a>
+        <a href="#neuronio">Neurônio artificial</a>
+        <a href="#camadas">Camadas</a>
+        <a href="#treinamento">Treinamento</a>
+        <a href="#pratica">Prática com Wine</a>
+        <a href="#verificacao">Verificação</a>
+      </nav>
+    </aside>
+    <main id="conteudo">
+      <section class="hero" id="inicio">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Aula 11 · Rascunho em revisão</p>
+            <h1>Introdução às redes neurais artificiais</h1>
+            <p class="hero-lead">Calcule a saída de um neurônio, acompanhe como uma rede ajusta seus pesos e compare uma MLP com a regressão logística no experimento Wine da Aula 10.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#visao">Iniciar aula</a>
+              <a class="button button-secondary" href="#pratica">Ir à prática</a>
+            </div>
+          </div>
+          <aside class="guiding-card">
+            <span>Questão orientadora</span>
+            <blockquote>Como uma rede combina os atributos de uma amostra para prever sua classe?</blockquote>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="visao">
+        <div class="container">
+          <div class="section-heading"><h2>Objetivos, conteúdos e competências</h2></div>
+          <div class="lesson-columns">
+            <article class="panel">
+              <h3>Objetivos de aprendizagem</h3>
+              <ol>
+                <li>Calcular a saída de um neurônio a partir de suas entradas, pesos, viés e função de ativação.</li>
+                <li>Descrever o papel das camadas e explicar como a perda orienta o ajuste dos parâmetros.</li>
+                <li>Comparar uma rede neural com a regressão logística e justificar a escolha usando resultados de validação.</li>
+              </ol>
+            </article>
+            <article class="panel">
+              <h3>Conteúdo programático</h3>
+              <p>Neurônio artificial, ativação ReLU, camadas de uma MLP, classificação multiclasse, perda, retropropagação e validação.</p>
+              <h3>Competências e habilidades</h3>
+              <ul>
+                <li><strong>C2 · H6</strong> — aplicar procedimentos de construção e avaliação de soluções computacionais.</li>
+                <li><strong>C3 · H10</strong> — avaliar alternativas de modelagem para o mesmo problema.</li>
+                <li><strong>C11 · H38</strong> — desenvolver e analisar algoritmos usados em problemas de engenharia.</li>
+                <li><strong>C13 · H45</strong> — sustentar uma decisão técnica com resultados experimentais.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="neuronio">
+        <div class="container">
+          <div class="section-heading"><p class="eyebrow">Parte I · Neurônio artificial</p><h2>Dos atributos à ativação</h2></div>
+          <p>Na <a href="../aula-10.html#pipeline">Aula 10</a>, usamos medições químicas para identificar a classe de um vinho. Vamos usar duas dessas medições para acompanhar o cálculo de um neurônio da camada oculta. As entradas são valores padronizados, e os pesos abaixo foram escolhidos para o exemplo.</p>
+          <p>O neurônio multiplica cada entrada <var>x</var> pelo peso correspondente <var>w</var>, soma os produtos e acrescenta um <strong>viés</strong> <var>b</var>. O viés desloca a soma e altera o ponto em que a unidade começa a ativar. Aplicamos então a função <strong>ReLU</strong>, que devolve zero quando a soma é zero ou negativa e a própria soma quando ela é positiva.</p>
+          <p><strong>Soma ponderada</strong> <var>z</var> = <var>w</var><sub>1</sub><var>x</var><sub>1</sub> + <var>w</var><sub>2</sub><var>x</var><sub>2</sub> + <var>b</var>. <strong>Saída</strong> <var>a</var> = ReLU(<var>z</var>) = max(0, <var>z</var>).</p>
+
+          <div class="panel neuron-lab">
+            <div class="neuron-controls">
+              <h3>Experimente com duas entradas</h3>
+              <p>Varie as medições com os pesos <strong>0,8</strong> e <strong>−0,6</strong> e o viés <strong>−0,5</strong> fixos.</p>
+              <label for="alcool">Álcool padronizado <output id="alcool-valor" for="alcool">2,0</output></label>
+              <input id="alcool" type="range" min="-2" max="3" step="0.1" value="2">
+              <label for="acido">Ácido málico padronizado <output id="acido-valor" for="acido">1,0</output></label>
+              <input id="acido" type="range" min="-2" max="3" step="0.1" value="1">
+              <button class="lesson-action" id="restaurar-neuronio" type="button">Voltar ao exemplo</button>
+            </div>
+            <figure>
+              <canvas id="grafico-relu" width="420" height="235" role="img" aria-label="Gráfico da ReLU com soma z de 0,5 e saída a de 0,5.">A ReLU vale zero para z menor ou igual a zero e vale z para z positivo.</canvas>
+              <figcaption>O ponto indica a soma <var>z</var> e a saída <var>a</var> do neurônio.</figcaption>
+            </figure>
+            <div class="neuron-result" aria-live="polite" aria-atomic="true">
+              <p><strong>Soma ponderada</strong><span id="resultado-soma">z = 0,8 × (2,0) − 0,6 × (1,0) − 0,5 = 0,5</span></p>
+              <p><strong>Saída do neurônio</strong><span id="resultado-ativacao">a = ReLU(0,5) = 0,5</span></p>
+            </div>
+          </div>
+
+          <p>Mantenha o ácido málico em 1,0. Antes de mover o controle, calcule a saída que o neurônio produzirá se o valor do álcool passar para 1,0.</p>
+          <details class="self-check">
+            <summary>Conferir o cálculo</summary>
+            <p>Com as duas entradas em 1,0, a soma é 0,8 − 0,6 − 0,5 = −0,3. A ReLU produz zero.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="section" id="camadas">
+        <div class="container">
+          <div class="section-heading"><p class="eyebrow">Parte II · Arquitetura</p><h2>Como os neurônios formam uma rede</h2></div>
+          <p>Em um <strong>perceptron multicamadas</strong> (MLP), cada neurônio de uma camada densa recebe as saídas da camada anterior. Na prática com Wine, cada neurônio oculto recebe as 13 medições, tem seus próprios pesos e viés e produz uma ativação. A camada de saída combina as oito ativações para gerar um escore por classe.</p>
+          <ol class="architecture" aria-label="Arquitetura da MLP usada com Wine">
+            <li><span class="layer-count">13</span><strong>Entradas</strong><small>Medições químicas padronizadas.</small><span class="layer-arrow" aria-hidden="true">→</span></li>
+            <li><span class="layer-count">8</span><strong>Neurônios ocultos</strong><small>Soma ponderada, viés e ReLU em cada neurônio.</small><span class="layer-arrow" aria-hidden="true">→</span></li>
+            <li><span class="layer-count">3</span><strong>Saídas</strong><small>Um escore para cada classe.</small></li>
+          </ol>
+          <p>Na saída, a <strong>softmax</strong> converte os três escores em probabilidades que somam 1. O modelo prevê a classe de maior probabilidade. A regressão logística multiclasse calcula os escores diretamente dos atributos. A MLP calcula os escores a partir das ativações produzidas pela camada oculta.</p>
+          <p>Uma sequência de somas ponderadas com vieses ainda pode ser escrita como uma única transformação afim. Com a ReLU, cada neurônio pode contribuir em uma região das entradas e produzir zero em outra. Combinar essas regiões permite à MLP representar fronteiras de decisão não lineares.</p>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="treinamento">
+        <div class="container">
+          <div class="section-heading"><p class="eyebrow">Parte III · Treinamento</p><h2>Como a rede ajusta os pesos</h2></div>
+          <p>O treinamento começa com valores iniciais para os parâmetros. A rede calcula as probabilidades, compara a previsão com a classe observada e obtém uma <strong>perda</strong>. Na classificação multiclasse, a perda por amostra aumenta à medida que diminui a probabilidade atribuída à classe correta.</p>
+          <div class="table-scroll" role="region" aria-label="Exemplo de perda para uma amostra da classe 1" tabindex="0">
+            <table>
+              <thead><tr><th scope="col">Probabilidade da classe 1, que é a correta</th><th scope="col">Perda da amostra</th></tr></thead>
+              <tbody><tr><td>0,75</td><td>−ln(0,75) ≈ 0,29</td></tr><tr><td>0,10</td><td>−ln(0,10) ≈ 2,30</td></tr></tbody>
+            </table>
+          </div>
+          <ol>
+            <li><strong>Passagem para frente.</strong> Calcular as ativações, os escores e a perda para os exemplos de treino.</li>
+            <li><strong>Retropropagação.</strong> Calcular os gradientes da perda em relação aos pesos e vieses, da saída para as camadas anteriores.</li>
+            <li><strong>Otimização.</strong> Usar os gradientes para atualizar os parâmetros ao longo do treinamento.</li>
+          </ol>
+          <p>Os pesos e vieses são <strong>parâmetros</strong> ajustados no treino. O número de neurônios ocultos é um <strong>hiperparâmetro</strong> definido antes do ajuste. Uma rede maior pode se ajustar melhor ao treino e piorar em dados novos. Comparamos o desempenho na validação para investigar esse efeito.</p>
+          <p>Na prática, a entropia cruzada compõe a função que a MLP minimiza no treino. Na validação, usamos o <strong>F1 macro</strong>, que calcula o F1 de cada classe e faz a média dando o mesmo peso a cada uma.</p>
+        </div>
+      </section>
+
+      <section class="section" id="pratica">
+        <div class="container">
+          <div class="section-heading"><p class="eyebrow">Parte IV · Prática guiada</p><h2>Regressão logística e MLP no Wine</h2></div>
+          <p>Execute os blocos em ordem, em três células de um notebook Python. O experimento usa as mesmas 178 amostras, a mesma divisão estratificada e as mesmas cinco partições de validação da Aula 10. Assim, os dois modelos são comparados nas mesmas condições.</p>
+
+          <h3>1. Preparar os dados e reservar o teste</h3>
+          <p>Os dados de desenvolvimento serão usados no treino e na validação cruzada. As 36 amostras de teste ficam reservadas até a escolha do modelo.</p>
+          <div class="code-example">
+            <div class="code-toolbar"><span>Python · Dados</span><button class="lesson-action" type="button" data-copiar="codigo-dados">Copiar código</button></div>
+            <pre><code id="codigo-dados">from sklearn.datasets import load_wine
+from sklearn.model_selection import train_test_split, StratifiedKFold
+
+X, y = load_wine(return_X_y=True, as_frame=True)
+X_dev, X_teste, y_dev, y_teste = train_test_split(
+    X, y, test_size=0.20, stratify=y, random_state=42
+)
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+
+print(f"Desenvolvimento: {len(X_dev)} | Teste: {len(X_teste)}")</code></pre>
+          </div>
+
+          <h3>2. Comparar os modelos na validação</h3>
+          <p>O pipeline ajusta a imputação e a padronização apenas no treino de cada partição. A tupla <code>(8,)</code> define uma camada oculta de oito neurônios. O otimizador L-BFGS usa os gradientes calculados pela retropropagação.</p>
+          <div class="code-example">
+            <div class="code-toolbar"><span>Python · Validação</span><button class="lesson-action" type="button" data-copiar="codigo-validacao">Copiar código</button></div>
+            <pre><code id="codigo-validacao">from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_validate
+from sklearn.neural_network import MLPClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+
+def criar_pipeline(estimador):
+    return Pipeline([
+        ("imputacao", SimpleImputer(strategy="median")),
+        ("escala", StandardScaler()),
+        ("modelo", estimador),
+    ])
+
+candidatos = {
+    "Regressão logística": LogisticRegression(max_iter=2000),
+    "MLP": MLPClassifier(
+        hidden_layer_sizes=(8,), activation="relu", solver="lbfgs",
+        max_iter=1000, random_state=42
+    ),
+}
+
+f1_medios = {}
+avaliacoes = {}
+for nome, estimador in candidatos.items():
+    avaliacao = cross_validate(
+        criar_pipeline(estimador), X_dev, y_dev,
+        cv=cv, scoring="f1_macro", return_estimator=True
+    )
+    avaliacoes[nome] = avaliacao
+    f1 = avaliacao["test_score"]
+    f1_medios[nome] = f1.mean()
+    print(f"{nome}: F1 macro médio {f1.mean():.3f} | DP {f1.std():.3f}")
+
+rede = avaliacoes["MLP"]["estimator"][0].named_steps["modelo"]
+print("Dimensões das matrizes de pesos:", [w.shape for w in rede.coefs_])</code></pre>
+          </div>
+          <p>Os resultados de referência são <strong>0,980</strong> para a regressão logística e <strong>0,965</strong> para a MLP no F1 macro médio. O DP indica a variação da métrica entre as partições. A rede treinada na primeira partição tem matrizes de pesos <strong>(13, 8)</strong> e <strong>(8, 3)</strong>. Relacione esses valores com o diagrama das camadas. Os resultados podem variar com a versão da biblioteca.</p>
+          <p>Antes de executar o bloco seguinte, identifique qual modelo a regra do maior F1 macro médio seleciona. Use as médias e os desvios padrão para descrever o que observou nesta comparação.</p>
+
+          <h3>3. Avaliar o modelo escolhido no teste</h3>
+          <p>Ajuste novamente o modelo selecionado usando todos os dados de desenvolvimento. Use o teste para registrar seu desempenho final e localizar seus erros.</p>
+          <div class="code-example">
+            <div class="code-toolbar"><span>Python · Teste final</span><button class="lesson-action" type="button" data-copiar="codigo-teste">Copiar código</button></div>
+            <pre><code id="codigo-teste">from sklearn.metrics import confusion_matrix, f1_score
+
+selecionado = max(f1_medios, key=f1_medios.get)
+pipeline_final = criar_pipeline(candidatos[selecionado])
+pipeline_final.fit(X_dev, y_dev)
+y_previsto = pipeline_final.predict(X_teste)
+
+print("Modelo selecionado:", selecionado)
+print(f"F1 macro no teste: {f1_score(y_teste, y_previsto, average='macro'):.3f}")
+print("Matriz de confusão (linhas reais, colunas previstas):")
+print(confusion_matrix(y_teste, y_previsto, labels=[0, 1, 2]))</code></pre>
+          </div>
+          <p>Identifique os erros na matriz. Para cada célula fora da diagonal com contagem positiva, indique a classe real e a classe prevista.</p>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="verificacao">
+        <div class="container">
+          <div class="section-heading"><h2>Verificação da aprendizagem</h2></div>
+          <ol>
+            <li>A soma ponderada de um neurônio, já com o viés, vale −0,4. Qual é sua saída após a ReLU? Como ela muda se a soma passar para 0,4?</li>
+            <li>Que elementos da arquitetura explicam as formas (13, 8) e (8, 3) das matrizes de pesos?</li>
+            <li>Como você compararia uma MLP de quatro neurônios ocultos com a de oito antes de executar o teste final?</li>
+          </ol>
+          <h3>Referências</h3>
+          <ul>
+            <li>HURBANS, Rishal. <em>Grokking Artificial Intelligence Algorithms</em>. Manning, 2020. Capítulo 9.</li>
+            <li>LUGER, George F. <em>Artificial Intelligence: Structures and Strategies for Complex Problem Solving</em>. 6. ed. Pearson, 2009. Capítulo 11, seções 11.1 a 11.3.</li>
+            <li>SCIKIT-LEARN. <a href="https://scikit-learn.org/stable/modules/neural_networks_supervised.html">Redes neurais supervisionadas</a> e <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html">referência de MLPClassifier</a>.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer class="site-footer"><div class="container">Inteligência Artificial Aplicada · Engenharia de Software · 2026/2</div></footer>
+  <script>
+    (() => {
+      const alcool = document.getElementById("alcool");
+      const acido = document.getElementById("acido");
+      const valorAlcool = document.getElementById("alcool-valor");
+      const valorAcido = document.getElementById("acido-valor");
+      const resultadoSoma = document.getElementById("resultado-soma");
+      const resultadoAtivacao = document.getElementById("resultado-ativacao");
+      const grafico = document.getElementById("grafico-relu");
+      const contexto = grafico.getContext("2d");
+      const formato = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+
+      function desenharRelu(z, a) {
+        if (!contexto) return;
+        const cores = getComputedStyle(document.body);
+        const cor = nome => cores.getPropertyValue(nome).trim();
+        const x = valor => 40 + (valor + 4) * 42;
+        const y = valor => 198 - valor * 42;
+        function linha(pontos, corLinha, largura = 1) {
+          contexto.beginPath();
+          contexto.moveTo(x(pontos[0][0]), y(pontos[0][1]));
+          for (const [px, py] of pontos.slice(1)) contexto.lineTo(x(px), y(py));
+          contexto.strokeStyle = corLinha;
+          contexto.lineWidth = largura;
+          contexto.stroke();
+        }
+        contexto.clearRect(0, 0, grafico.width, grafico.height);
+        contexto.font = "15px system-ui";
+        contexto.fillStyle = cor("--muted");
+        contexto.textAlign = "center";
+        for (const valor of [-4, -2, 0, 2, 4]) {
+          linha([[valor, 0], [valor, 4]], cor("--line"));
+          contexto.fillText(String(valor), x(valor), y(0) + 21);
+        }
+        contexto.textAlign = "right";
+        for (const valor of [1, 2, 3, 4]) {
+          linha([[-4, valor], [4, valor]], cor("--line"));
+          contexto.fillText(String(valor), x(-4) - 8, y(valor) + 5);
+        }
+        linha([[0, 0], [0, 4]], cor("--muted"));
+        contexto.fillText("a", x(-4) - 8, 18);
+        contexto.fillText("z", x(4) + 22, y(0) + 5);
+        linha([[-4, 0], [0, 0], [4, 4]], cor("--ensino-accent-strong"), 3);
+        contexto.beginPath();
+        contexto.arc(x(z), y(a), 6, 0, 2 * Math.PI);
+        contexto.fillStyle = cor("--ensino-accent-strong");
+        contexto.fill();
+        contexto.strokeStyle = cor("--paper");
+        contexto.lineWidth = 2;
+        contexto.stroke();
+      }
+
+      function atualizarNeuronio() {
+        const x1 = alcool.valueAsNumber;
+        const x2 = acido.valueAsNumber;
+        const z = Math.round((0.8 * x1 - 0.6 * x2 - 0.5) * 100) / 100;
+        const a = Math.max(0, z);
+        const f = valor => formato.format(valor === 0 ? 0 : valor);
+        valorAlcool.value = f(x1);
+        valorAcido.value = f(x2);
+        resultadoSoma.textContent = `z = 0,8 × (${f(x1)}) − 0,6 × (${f(x2)}) − 0,5 = ${f(z)}`;
+        resultadoAtivacao.textContent = `a = ReLU(${f(z)}) = ${f(a)}`;
+        grafico.setAttribute("aria-label", `Gráfico da ReLU com soma z de ${f(z)} e saída a de ${f(a)}.`);
+        desenharRelu(z, a);
+      }
+
+      alcool.addEventListener("input", atualizarNeuronio);
+      acido.addEventListener("input", atualizarNeuronio);
+      document.getElementById("restaurar-neuronio").addEventListener("click", () => {
+        alcool.value = alcool.defaultValue;
+        acido.value = acido.defaultValue;
+        atualizarNeuronio();
+      });
+      new MutationObserver(atualizarNeuronio).observe(document.documentElement, { attributeFilter: ["data-theme"] });
+      atualizarNeuronio();
+
+      for (const botao of document.querySelectorAll("[data-copiar]")) {
+        botao.addEventListener("click", async () => {
+          const codigo = document.getElementById(botao.dataset.copiar);
+          try {
+            await navigator.clipboard.writeText(codigo.textContent);
+            botao.textContent = "Copiado";
+          } catch {
+            const selecao = window.getSelection();
+            const intervalo = document.createRange();
+            intervalo.selectNodeContents(codigo);
+            selecao.removeAllRanges();
+            selecao.addRange(intervalo);
+            botao.textContent = "Código selecionado";
+          }
+          window.setTimeout(() => { botao.textContent = "Copiar código"; }, 2000);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
